@@ -18,14 +18,34 @@ export type Resultado = { ok: boolean; mensaje: string; id?: string };
 export type DatosEmpresa = {
   nombre: string;
   slug: string;
-  nit: string;
-  sector: string;
-  ciudad: string;
-  direccion: string;
-  contacto: string;
-  correo: string;
-  telefono: string;
+  // Todos los demás son opcionales: si el formulario no envía alguno,
+  // se guarda como null en vez de reventar. (Causa del error de 'trim'
+  // sobre undefined.)
+  nit?: string;
+  sector?: string;
+  ciudad?: string;
+  direccion?: string;
+  contacto?: string;
+  correo?: string;
+  telefono?: string;
 };
+
+/**
+ * Normaliza un texto opcional del formulario.
+ * Tolera undefined/null (campo ausente) y devuelve null si queda vacío.
+ * No exportada: en un archivo 'use server' solo los exports deben ser
+ * async; los ayudantes internos pueden ser síncronos.
+ */
+function limpiar(
+  valor: string | undefined | null,
+  caja: 'alta' | 'baja' | 'igual' = 'igual'
+): string | null {
+  let t = (valor ?? '').trim();
+  if (!t) return null;
+  if (caja === 'alta') t = t.toUpperCase();
+  else if (caja === 'baja') t = t.toLowerCase();
+  return t;
+}
 
 /** Cambia la empresa en contexto. Un año de vigencia: es preferencia, no sesión. */
 export async function seleccionarEmpresa(id: string): Promise<void> {
@@ -42,9 +62,10 @@ export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
   const perfil = await obtenerPerfil();
   if (!perfil) return { ok: false, mensaje: 'Sesión no válida.' };
 
-  const slug = datos.slug.trim().toLowerCase();
+  const nombre = (datos.nombre ?? '').trim();
+  const slug = (datos.slug ?? '').trim().toLowerCase();
 
-  if (!datos.nombre.trim()) return { ok: false, mensaje: 'El nombre es obligatorio.' };
+  if (!nombre) return { ok: false, mensaje: 'El nombre es obligatorio.' };
   if (!/^[a-z0-9-]{3,40}$/.test(slug)) {
     return {
       ok: false,
@@ -64,17 +85,17 @@ export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
     .insert({
       org_id: perfil.organizacion.id,
       slug,
-      nombre: datos.nombre.trim().toUpperCase(),
-      nit: datos.nit.trim() || null,
-      sector: datos.sector.trim().toUpperCase() || null,
-      ciudad: datos.ciudad.trim().toUpperCase() || null,
-      direccion: datos.direccion.trim().toUpperCase() || null,
-      contacto: datos.contacto.trim().toUpperCase() || null,
-      correo: datos.correo.trim().toLowerCase() || null,
-      telefono: datos.telefono.trim() || null,
+      nombre: nombre.toUpperCase(),
+      nit: limpiar(datos.nit),
+      sector: limpiar(datos.sector, 'alta'),
+      ciudad: limpiar(datos.ciudad, 'alta'),
+      direccion: limpiar(datos.direccion, 'alta'),
+      contacto: limpiar(datos.contacto, 'alta'),
+      correo: limpiar(datos.correo, 'baja'),
+      telefono: limpiar(datos.telefono),
       // Nomenclatura inicial a partir del nombre; editable después
       nomenclatura:
-        datos.nombre.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() +
+        nombre.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() +
         '-01-' + new Date().getFullYear(),
     })
     .select('id')
@@ -88,27 +109,28 @@ export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
   }
 
   revalidatePath('/panel', 'layout');
-  return { ok: true, mensaje: `${datos.nombre} agregada.`, id: data.id };
+  return { ok: true, mensaje: `${nombre} agregada.`, id: data.id };
 }
 
 export async function actualizarEmpresa(
   id: string,
   datos: Omit<DatosEmpresa, 'slug'>
 ): Promise<Resultado> {
-  if (!datos.nombre.trim()) return { ok: false, mensaje: 'El nombre es obligatorio.' };
+  const nombre = (datos.nombre ?? '').trim();
+  if (!nombre) return { ok: false, mensaje: 'El nombre es obligatorio.' };
 
   const supabase = await crearClienteServidor();
   const { error } = await supabase
     .from('empresas')
     .update({
-      nombre: datos.nombre.trim().toUpperCase(),
-      nit: datos.nit.trim() || null,
-      sector: datos.sector.trim().toUpperCase() || null,
-      ciudad: datos.ciudad.trim().toUpperCase() || null,
-      direccion: datos.direccion.trim().toUpperCase() || null,
-      contacto: datos.contacto.trim().toUpperCase() || null,
-      correo: datos.correo.trim().toLowerCase() || null,
-      telefono: datos.telefono.trim() || null,
+      nombre: nombre.toUpperCase(),
+      nit: limpiar(datos.nit),
+      sector: limpiar(datos.sector, 'alta'),
+      ciudad: limpiar(datos.ciudad, 'alta'),
+      direccion: limpiar(datos.direccion, 'alta'),
+      contacto: limpiar(datos.contacto, 'alta'),
+      correo: limpiar(datos.correo, 'baja'),
+      telefono: limpiar(datos.telefono),
     })
     .eq('id', id);
 

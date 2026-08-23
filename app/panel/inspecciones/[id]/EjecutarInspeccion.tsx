@@ -19,6 +19,7 @@ import {
   responderCriterio, cerrarInspeccion, eliminarBorradorInspeccion,
   type DetalleInspeccion, type ResultadoCriterio,
 } from '@/lib/acciones-ejecutar-inspeccion';
+import { generarAccionesInspeccion } from '@/lib/acciones-plan';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
 
@@ -513,12 +514,35 @@ export default function EjecutarInspeccion({
                 Documento firmado con el membrete de la empresa, el detalle por
                 sección y los hallazgos con su evidencia.
               </p>
-              <a
-                href={`/api/pdf-inspeccion/${insp.id}`}
-                style={{ ...s.btn, background: color, marginTop: 14, display: 'inline-block' }}
-              >
-                Descargar PDF
-              </a>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
+                <a
+                  href={`/api/pdf-inspeccion/${insp.id}`}
+                  style={{ ...s.btn, background: color, display: 'inline-block' }}
+                >
+                  Descargar PDF
+                </a>
+                {hallazgos.length > 0 && (
+                  <button
+                    onClick={() => {
+                      startTransition(async () => {
+                        const r = await generarAccionesInspeccion(insp.id, insp.inspector);
+                        setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+                        if (r.ok) router.push('/panel/acciones');
+                      });
+                    }}
+                    disabled={pendiente}
+                    style={s.btnSec}
+                  >
+                    {pendiente ? 'Generando…' : `Generar ${hallazgos.length} acción(es)`}
+                  </button>
+                )}
+              </div>
+              {hallazgos.length > 0 && (
+                <p style={{ ...s.nota, marginTop: 10 }}>
+                  Convierte cada hallazgo en una acción del plan, con responsable
+                  y fecha límite. Los que ya tengan acción no se duplican.
+                </p>
+              )}
             </section>
           )}
         </>

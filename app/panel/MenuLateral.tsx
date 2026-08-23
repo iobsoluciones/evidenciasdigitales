@@ -44,6 +44,8 @@ const MODULOS: Modulo[] = [
     enlaces: [
       { href: '/panel/inspecciones', texto: 'Inspecciones' },
       { href: '/panel/inspecciones/plantillas', texto: 'Listas de verificación' },
+      { href: '/panel/acciones', texto: 'Plan de acción' },
+      { href: '/panel/inspecciones/indicadores', texto: 'Indicadores' },
     ],
   },
 ];
