@@ -1,0 +1,225 @@
+'use client';
+
+/**
+ * COMPARTIR: código QR del registro y enlace de firma del capacitador
+ * ---------------------------------------------------------------
+ * El enlace de firma puede copiarse o enviarse por correo, igual que
+ * en el sistema de Apps Script.
+ */
+import { useState, useRef, useEffect, useTransition } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
+import { crearClienteNavegador } from '@/lib/supabase/cliente';
+import { enviarEnlaceFirma } from '@/lib/acciones-correo';
+
+/** [MODIFICAR AQUI] Tamaño del QR en pantalla. No bajar de 100 px. */
+const TAMANO_QR = 130;
+
+export default function CompartirCapacitacion({
+  capacitacionId,
+  slug,
+  instructor,
+  color,
+}: {
+  capacitacionId: string;
+  slug: string;
+  instructor: string;
+  color: string;
+}) {
+  const supabase = crearClienteNavegador();
+  const contenedorQR = useRef<HTMLDivElement>(null);
+  const [pendiente, startTransition] = useTransition();
+
+  const [urlFirma, setUrlFirma] = useState('');
+  const [correo, setCorreo] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+
+  // La URL se calcula DESPUÉS del montaje. Si se hiciera durante el
+  // render, el servidor la generaría vacía y el navegador con valor:
+  // React marcaría un error de hidratación.
+  const [urlRegistro, setUrlRegistro] = useState('');
+  useEffect(() => {
+    setUrlRegistro(`${window.location.origin}/r/${slug}`);
+  }, [slug]);
+
+  function descargarQR() {
+    const canvas = contenedorQR.current?.querySelector('canvas');
+    if (!canvas) return;
+    const enlace = document.createElement('a');
+    enlace.href = canvas.toDataURL('image/png');
+    enlace.download = `QR_${slug}.png`;
+    enlace.click();
+    setAviso({ tipo: 'ok', texto: 'Código QR descargado.' });
+  }
+
+  function copiar(texto: string, textoAviso: string) {
+    navigator.clipboard.writeText(texto).then(
+      () => setAviso({ tipo: 'ok', texto: textoAviso }),
+      () => setAviso({ tipo: 'error', texto: 'No se pudo copiar. Selecciónalo manualmente.' })
+    );
+  }
+
+  function generarEnlaceFirma(forzar = false) {
+    startTransition(async () => {
+      const { data, error } = await supabase.rpc('generar_token_firma', {
+        p_id: capacitacionId,
+        p_forzar: forzar,
+      });
+
+      if (error) {
+        setAviso({ tipo: 'error', texto: error.message });
+        return;
+      }
+
+      const r = data as { ok: boolean; token?: string; error?: string };
+      if (!r.ok) {
+        setAviso({ tipo: 'error', texto: r.error ?? 'No se pudo generar el enlace.' });
+        return;
+      }
+
+      setUrlFirma(`${window.location.origin}/f/${capacitacionId}?token=${r.token}`);
+      if (forzar) {
+        setAviso({ tipo: 'ok', texto: 'Enlace regenerado. El anterior quedó invalidado.' });
+      }
+    });
+  }
+
+  function enviarPorCorreo() {
+    if (!correo.trim()) {
+      setAviso({ tipo: 'error', texto: 'Escribe el correo del capacitador.' });
+      return;
+    }
+    startTransition(async () => {
+      const r = await enviarEnlaceFirma(capacitacionId, correo, mensaje);
+      setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+      if (r.ok) {
+        setCorreo('');
+        setMensaje('');
+      }
+    });
+  }
+
+  return (
+    <section style={est.tarjeta}>
+      <h2 style={est.h2}>Compartir</h2>
+
+      <div style={est.columnas}>
+        {/* ---------- QR de registro ---------- */}
+        <div>
+          <h3 style={est.h3}>Registro de asistentes</h3>
+          <div ref={contenedorQR} style={est.cajaQR}>
+            {urlRegistro && (
+              <QRCodeCanvas value={urlRegistro} size={TAMANO_QR} level="H" fgColor={color} />
+            )}
+          </div>
+          <p style={est.nota}>Los asistentes escanean este código para registrarse.</p>
+          <div style={est.fila}>
+            <button onClick={descargarQR} style={{ ...est.btn, background: color, color: '#fff' }}>
+              Descargar QR
+            </button>
+            <button
+              onClick={() => copiar(urlRegistro, 'Enlace de registro copiado.')}
+              style={est.btnSec}
+            >
+              Copiar enlace
+            </button>
+          </div>
+          <p style={est.url}>{urlRegistro || '—'}</p>
+        </div>
+
+        {/* ---------- Firma del capacitador ---------- */}
+        <div>
+          <h3 style={est.h3}>Firma del capacitador</h3>
+
+          {!urlFirma ? (
+            <>
+              <p style={est.nota}>
+                Genera un enlace personal para que {instructor} registre su firma.
+                Sin ese enlace nadie puede firmar, aunque conozca el código.
+              </p>
+              <button
+                onClick={() => generarEnlaceFirma(false)}
+                disabled={pendiente}
+                style={{ ...est.btn, background: color, color: '#fff' }}
+              >
+                {pendiente ? 'Generando…' : 'Generar enlace de firma'}
+              </button>
+            </>
+          ) : (
+            <>
+              <p style={est.url}>{urlFirma}</p>
+              <div style={est.fila}>
+                <button
+                  onClick={() => copiar(urlFirma, 'Enlace de firma copiado.')}
+                  style={{ ...est.btn, background: color, color: '#fff' }}
+                >
+                  Copiar
+                </button>
+                <button
+                  onClick={() => generarEnlaceFirma(true)}
+                  disabled={pendiente}
+                  style={est.btnSec}
+                >
+                  Generar uno nuevo
+                </button>
+              </div>
+
+              {/* ---------- Envío por correo ---------- */}
+              <div style={est.bloqueCorreo}>
+                <label style={est.label}>Enviar por correo</label>
+                <input
+                  type="email"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
+                  placeholder="capacitador@empresa.com"
+                  style={est.input}
+                />
+                <textarea
+                  value={mensaje}
+                  onChange={(e) => setMensaje(e.target.value)}
+                  placeholder="Mensaje adicional (opcional)"
+                  rows={2}
+                  style={{ ...est.input, marginTop: 8, resize: 'vertical' }}
+                />
+                <button
+                  onClick={enviarPorCorreo}
+                  disabled={pendiente}
+                  style={{ ...est.btn, background: color, color: '#fff', marginTop: 8, width: '100%' }}
+                >
+                  {pendiente ? 'Enviando…' : 'Enviar enlace por correo'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {aviso && (
+        <div style={{
+          ...est.aviso,
+          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
+          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+        }}>
+          {aviso.texto}
+        </div>
+      )}
+    </section>
+  );
+}
+
+const est: Record<string, React.CSSProperties> = {
+  tarjeta: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  h2: { fontSize: 15, margin: '0 0 14px' },
+  h3: { fontSize: 12, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4, margin: '0 0 10px' },
+  columnas: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 26 },
+  cajaQR: { border: '1px dashed #cbd5e1', borderRadius: 10, padding: 12, background: '#f8fafc', display: 'flex', justifyContent: 'center', minHeight: 80 },
+  nota: { fontSize: 11.5, color: '#6b7280', margin: '8px 0' },
+  url: { fontSize: 11, color: '#374151', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, padding: 10, wordBreak: 'break-all', margin: '8px 0' },
+  fila: { display: 'flex', gap: 8, flexWrap: 'wrap' },
+  btn: { border: 'none', padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
+  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
+  bloqueCorreo: { marginTop: 16, paddingTop: 14, borderTop: '1px solid #e5e7eb' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6 },
+  input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13 },
+};
