@@ -58,6 +58,46 @@ export async function seleccionarEmpresa(id: string): Promise<void> {
   revalidatePath('/panel', 'layout');
 }
 
+/**
+ * Comprueba si el identificador publico esta libre, mirando TODA la
+ * base y no solo las empresas propias.
+ *
+ * Hace falta una funcion SECURITY DEFINER porque RLS solo deja ver las
+ * empresas de la propia organizacion: un slug que ya ocupa otro
+ * consultor pareceria libre hasta el momento de insertar. Devuelve
+ * ademas una alternativa, para no dejar al usuario adivinando.
+ */
+export async function verificarSlugEmpresa(
+  slug: string
+): Promise<{ libre: boolean; sugerencia: string | null; motivo?: string }> {
+  const limpio = (slug ?? '').trim().toLowerCase();
+
+  if (!/^[a-z0-9-]{3,40}$/.test(limpio)) {
+    return {
+      libre: false,
+      sugerencia: null,
+      motivo: 'Solo minúsculas, números y guiones (3 a 40 caracteres).',
+    };
+  }
+
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('slug_empresa_libre', { p_slug: limpio });
+
+  if (error) {
+    return { libre: false, sugerencia: null, motivo: error.message };
+  }
+
+  if (data === true) return { libre: true, sugerencia: null };
+
+  const { data: alterna } = await supabase.rpc('sugerir_slug_empresa', { p_base: limpio });
+
+  return {
+    libre: false,
+    sugerencia: (alterna as string | null) ?? null,
+    motivo: 'Ya está en uso.',
+  };
+}
+
 export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
   const perfil = await obtenerPerfil();
   if (!perfil) return { ok: false, mensaje: 'Sesión no válida.' };
@@ -74,6 +114,21 @@ export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
   }
 
   const supabase = await crearClienteServidor();
+
+  // El identificador se comprueba contra TODA la base (ver
+  // verificarSlugEmpresa): si lo tiene otra organizacion, RLS no lo
+  // deja ver y el insert reventaria con un 23505 sin explicar nada.
+  const { data: libre } = await supabase.rpc('slug_empresa_libre', { p_slug: slug });
+
+  if (libre !== true) {
+    const { data: alterna } = await supabase.rpc('sugerir_slug_empresa', { p_base: slug });
+    return {
+      ok: false,
+      mensaje: alterna
+        ? `El identificador "${slug}" ya está en uso. Puedes usar "${alterna}".`
+        : `El identificador "${slug}" ya está en uso. Elige otro.`,
+    };
+  }
 
   // El límite lo valida la base según el plan contratado
   const { data: limite } = await supabase.rpc('puede_crear_empresa');
@@ -102,8 +157,14 @@ export async function crearEmpresa(datos: DatosEmpresa): Promise<Resultado> {
     .single();
 
   if (error) {
+    // Red de seguridad: entre la comprobacion y el insert alguien pudo
+    // registrar el mismo slug. La restriccion UNIQUE global es la que
+    // de verdad garantiza que no haya dos enlaces publicos iguales.
     if (error.code === '23505') {
-      return { ok: false, mensaje: 'Ese identificador ya está en uso por otra empresa.' };
+      return {
+        ok: false,
+        mensaje: `El identificador "${slug}" acaba de ser tomado. Elige otro.`,
+      };
     }
     return { ok: false, mensaje: error.message };
   }

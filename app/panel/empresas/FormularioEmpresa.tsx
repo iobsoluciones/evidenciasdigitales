@@ -7,10 +7,10 @@
  * versión, color— pertenecen a la empresa porque el acta es un
  * documento de SU sistema de gestión, no del consultor.
  */
-import { useState, useTransition } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { crearEmpresa, actualizarEmpresa } from '@/lib/acciones-empresas';
+import { crearEmpresa, actualizarEmpresa, verificarSlugEmpresa } from '@/lib/acciones-empresas';
 import type { Empresa } from '@/lib/empresa-activa';
 
 const SECTORES = [
@@ -39,6 +39,37 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
   });
 
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+
+  /**
+   * Estado del identificador publico. Se comprueba contra toda la base
+   * mientras se escribe: el slug es unico a nivel global (el enlace
+   * /r/{slug} no tiene sesion), asi que puede chocar con la empresa de
+   * otro consultor, que RLS no deja ver. Descubrirlo al enviar, con el
+   * formulario entero lleno, era la peor forma de enterarse.
+   */
+  const [slugEstado, setSlugEstado] = useState<
+    { estado: 'inicial' | 'verificando' | 'libre' | 'ocupado'; motivo?: string; sugerencia?: string | null }
+  >({ estado: 'inicial' });
+
+  useEffect(() => {
+    if (edicion) return;                 // en edicion el slug no se toca
+    const valor = f.slug.trim();
+    if (!valor) { setSlugEstado({ estado: 'inicial' }); return; }
+
+    setSlugEstado({ estado: 'verificando' });
+
+    // Se espera a que deje de teclear para no consultar en cada letra
+    const t = setTimeout(async () => {
+      const r = await verificarSlugEmpresa(valor);
+      setSlugEstado(
+        r.libre
+          ? { estado: 'libre' }
+          : { estado: 'ocupado', motivo: r.motivo, sugerencia: r.sugerencia }
+      );
+    }, 450);
+
+    return () => clearTimeout(t);
+  }, [f.slug, edicion]);
 
   /** Al escribir el nombre se sugiere el identificador, solo en alta. */
   function alEscribirNombre(v: string) {
@@ -103,10 +134,40 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
               }}
             />
           </div>
+          {!edicion && slugEstado.estado === 'ocupado' && (
+            <p style={{ ...s.ayuda, color: '#9B1C1C' }}>
+              {slugEstado.motivo === 'Ya está en uso.'
+                ? 'Ese identificador ya lo usa otra empresa. El enlace público es único en todo el sistema.'
+                : slugEstado.motivo}
+              {slugEstado.sugerencia && (
+                <>
+                  {' '}
+                  <button
+                    type="button"
+                    onClick={() => setF({ ...f, slug: slugEstado.sugerencia! })}
+                    style={s.usarSugerencia}
+                  >
+                    Usar “{slugEstado.sugerencia}”
+                  </button>
+                </>
+              )}
+            </p>
+          )}
+
+          {!edicion && slugEstado.estado === 'libre' && (
+            <p style={{ ...s.ayuda, color: '#15803D' }}>
+              Disponible. El enlace será /r/{f.slug}
+            </p>
+          )}
+
+          {!edicion && slugEstado.estado === 'verificando' && (
+            <p style={s.ayuda}>Comprobando disponibilidad…</p>
+          )}
+
           <p style={s.ayuda}>
             {edicion
               ? 'No se puede cambiar: los códigos QR ya impresos dejarían de funcionar.'
-              : 'Aparece en el enlace que escanean los asistentes de esta empresa.'}
+              : 'Aparece en el enlace que escanean los asistentes de esta empresa. Es único en todo el sistema, no solo entre tus empresas.'}
           </p>
         </div>
 
@@ -190,7 +251,17 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
       )}
 
       <div style={{ display: 'flex', gap: 10 }}>
-        <button onClick={guardar} disabled={pendiente} style={s.btn}>
+        {/* Con el identificador ocupado el alta va a rebotar igual:
+            mejor no dejar enviar el formulario entero para nada. */}
+        <button
+          onClick={guardar}
+          disabled={pendiente || (!edicion && slugEstado.estado === 'ocupado')}
+          style={{
+            ...s.btn,
+            opacity: !edicion && slugEstado.estado === 'ocupado' ? 0.5 : 1,
+            cursor: !edicion && slugEstado.estado === 'ocupado' ? 'not-allowed' : 'pointer',
+          }}
+        >
           {pendiente ? 'Guardando…' : edicion ? 'Guardar cambios' : 'Agregar empresa'}
         </button>
         <Link href="/panel/empresas" style={s.btnSec}>Cancelar</Link>
@@ -237,6 +308,11 @@ const s: Record<string, React.CSSProperties> = {
   },
   ayuda: { fontSize: 11, color: '#8A929C', margin: '5px 0 0' },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 14 },
+  usarSugerencia: {
+    background: 'none', border: 'none', padding: 0,
+    color: '#14263F', fontWeight: 700, fontSize: 'inherit',
+    fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'underline',
+  },
   slugFila: { display: 'flex', alignItems: 'stretch' },
   slugPrefijo: {
     background: '#F4F4F0', border: '1px solid #DFDFD8', borderRight: 'none',
