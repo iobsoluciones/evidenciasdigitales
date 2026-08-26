@@ -112,8 +112,14 @@ export default function VistaCalendario({
   }
 
   function abrirEdicion(ev: EventoCalendario) {
-    // Las capacitaciones reales no se editan aquí: se editan en su ficha
-    if (ev.origen === 'capacitacion') return;
+    // Las capacitaciones reales no se editan aqui, pero el clic tampoco
+    // puede quedarse mudo: se abre su ficha, que es donde si se editan.
+    // Antes hacia `return` a secas, de modo que en un calendario con
+    // capacitaciones y sin anotaciones ningun clic hacia nada.
+    if (ev.origen === 'capacitacion') {
+      router.push(`/panel/capacitaciones/${ev.id}`);
+      return;
+    }
     setEditando(ev.id);
     setF({
       titulo: ev.titulo,
@@ -277,7 +283,8 @@ export default function VistaCalendario({
           <span style={{ ...s.punto, background: '#fff', borderWidth: 1.5, borderStyle: 'solid', borderColor: color }} /> Anotación de agenda
         </span>
         <span style={s.leyendaNota}>
-          Clic en un día para anotar; clic en una anotación para editarla.
+          Clic en un día para anotar; en una anotación para editarla; en una
+          capacitación para abrir su ficha.
         </span>
       </div>
 
@@ -533,12 +540,12 @@ function Mes({
                     background: ev.origen === 'capacitacion' ? ev.color : '#fff',
                     color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
                     borderWidth: 1, borderStyle: 'solid', borderColor: ev.color,
-                    cursor: ev.origen === 'agenda' ? 'pointer' : 'default',
+                    cursor: 'pointer',
                   }}
                   title={`${ev.titulo}${ev.empresa ? ' · ' + ev.empresa : ''}${ev.hora ? ' · ' + ev.hora : ''}` +
                     (ev.origen === 'agenda'
                       ? ' — clic para editar esta anotación'
-                      : ' — capacitación creada; se edita en su ficha')}
+                      : ' — clic para abrir su ficha')}
                 >
                   {ev.hora && <span style={m.hora}>{ev.hora}</span>}
                   {ev.titulo}
