@@ -5,6 +5,7 @@
 import { obtenerPerfil } from '@/lib/sesion';
 import { obtenerPerfilProfesional, obtenerTrayectoria } from '@/lib/acciones-perfil';
 import EditorPerfil from './EditorPerfil';
+import CambiarClave from './CambiarClave';
 
 export default async function PaginaPerfil() {
   const sesion = await obtenerPerfil();
@@ -29,6 +30,13 @@ export default async function PaginaPerfil() {
         nombreSesion={sesion.nombre}
         correoSesion={sesion.correo}
         orgId={sesion.organizacion.id}
+        color={sesion.organizacion.color_primario}
+      />
+
+      {/* Acceso a la cuenta: no es parte de la hoja de vida, pero es
+          donde el usuario viene a buscar "lo mio". */}
+      <CambiarClave
+        correo={sesion.correo}
         color={sesion.organizacion.color_primario}
       />
     </>
