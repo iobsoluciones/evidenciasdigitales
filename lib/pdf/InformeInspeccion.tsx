@@ -59,10 +59,26 @@ export type DatosInforme = {
 
   respuestas: RespuestaInforme[];
 
+  /**
+   * Acciones abiertas desde los hallazgos de esta inspeccion. Sin
+   * ellas el informe documenta el diagnostico y omite el tratamiento,
+   * que es justo lo que una auditoria pregunta despues.
+   */
+  acciones: AccionInforme[];
+
   firmaInspector: Buffer | null;
   firmaAcompanante: Buffer | null;
 
   generadoEl: string;
+};
+
+export type AccionInforme = {
+  codigo: string;
+  hallazgo: string;
+  accion: string;
+  responsable: string;
+  severidad: string;
+  fechaLimite: string;
 };
 
 const TIPOS: Record<string, string> = {
@@ -226,6 +242,31 @@ export function InformeInspeccion({ d }: { d: DatosInforme }) {
           </View>
         )}
 
+        {/* ============ PLAN DE ACCIÓN ============ */}
+        {d.acciones.length > 0 && (
+          <View style={s.plan} break={d.acciones.length > 6}>
+            <Text style={s.tituloBloque}>PLAN DE ACCIÓN</Text>
+
+            <View style={s.thead}>
+              <Text style={[s.th, { width: '12%' }]}>CÓD.</Text>
+              <Text style={[s.th, { width: '26%' }]}>HALLAZGO</Text>
+              <Text style={[s.th, { width: '30%' }]}>ACCIÓN</Text>
+              <Text style={[s.th, { width: '20%' }]}>RESPONSABLE</Text>
+              <Text style={[s.th, { width: '12%' }]}>LÍMITE</Text>
+            </View>
+
+            {d.acciones.map((a) => (
+              <View key={a.codigo} style={s.fila} wrap={false}>
+                <Text style={[s.td, { width: '12%' }]}>{a.codigo}</Text>
+                <Text style={[s.td, { width: '26%' }]}>{a.hallazgo}</Text>
+                <Text style={[s.td, { width: '30%' }]}>{a.accion}</Text>
+                <Text style={[s.td, { width: '20%' }]}>{a.responsable}</Text>
+                <Text style={[s.td, { width: '12%' }]}>{a.fechaLimite}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
         {/* ============ FIRMAS ============ */}
         <View style={s.zonaFirmas} wrap={false}>
           <View style={s.columnaFirma}>
@@ -326,6 +367,7 @@ function estilos(color: string) {
     textoObs: { fontSize: 8, color: '#374151', lineHeight: 1.5 },
 
     evidencia: { marginTop: 16 },
+    plan: { marginTop: 16 },
     galeria: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     foto: { width: '47%' },
     imagen: {

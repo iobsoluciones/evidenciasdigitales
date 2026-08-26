@@ -13,6 +13,7 @@ import { crearClienteServidor } from '../supabase/servidor';
 import {
   InformeInspeccion,
   type DatosInforme, type RespuestaInforme, type CampoEncabezado,
+  type AccionInforme,
 } from './InformeInspeccion';
 
 export type ResultadoInforme =
@@ -85,6 +86,26 @@ export async function generarInformeInspeccion(
     .eq('id', i.empresa_id as string)
     .maybeSingle();
 
+  // PLAN DE ACCION: las acciones abiertas desde los hallazgos de esta
+  // inspeccion. Se leen directo de la tabla (RLS ya acota por org) en
+  // vez de por RPC, porque solo hacen falta seis campos.
+  const { data: accionesBD } = await supabase
+    .from('acciones_correctivas')
+    .select('codigo, hallazgo, accion, responsable, severidad, fecha_limite')
+    .eq('inspeccion_id', inspeccionId)
+    .order('codigo');
+
+  const acciones: AccionInforme[] = (accionesBD ?? []).map((a) => ({
+    codigo: String(a.codigo),
+    hallazgo: String(a.hallazgo),
+    accion: String(a.accion),
+    responsable: String(a.responsable),
+    severidad: String(a.severidad),
+    // Fecha sola, sin hora: fecha_limite es un date y new Date() lo
+    // interpretaria en UTC, corriendo el dia en Colombia.
+    fechaLimite: String(a.fecha_limite).split('T')[0],
+  }));
+
   const respuestasRPC = d.respuestas ?? [];
 
   // Fotos: solo las de los incumplimientos (las demás no tienen)
@@ -145,6 +166,7 @@ export async function generarInformeInspeccion(
     criticosFallidos: resumen.criticos_fallidos,
 
     respuestas,
+    acciones,
 
     firmaInspector,
     firmaAcompanante,
