@@ -52,6 +52,8 @@ export type Trayectoria = {
   personas: number;
   asistencias: number;
   horas: number;
+  /** Promedio de los puntajes de evaluación; null si aún no hay ninguna. */
+  promedio: number | null;
   desde: string | null;
   temas: string[];
 };

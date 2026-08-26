@@ -29,7 +29,8 @@ export default function EditorPerfil({
   color,
 }: {
   perfil: PerfilProfesional | null;
-  trayectoria: Trayectoria;
+  /** obtenerTrayectoria() puede devolver null si la RPC falla. */
+  trayectoria: Trayectoria | null;
   nombreSesion: string;
   correoSesion: string;
   orgId: string;
@@ -173,6 +174,7 @@ export default function EditorPerfil({
   return (
     <>
       {/* ---------- Trayectoria verificable ---------- */}
+      {trayectoria && (
       <section style={{ ...e.card, borderLeftWidth: 3, borderLeftColor: color }}>
         <h2 style={e.h2}>Trayectoria en el sistema</h2>
         <p style={e.nota}>
@@ -190,6 +192,7 @@ export default function EditorPerfil({
           />
         </div>
       </section>
+      )}
 
       {/* ---------- Acciones ---------- */}
       <section style={e.card}>

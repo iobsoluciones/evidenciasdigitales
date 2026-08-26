@@ -180,8 +180,10 @@ export function HojaDeVida({ d }: { d: DatosPerfil }) {
                 <View style={s.lineaFirma} />
                 <Text style={s.nombreFirma}>{d.nombre.toUpperCase()}</Text>
                 {d.profesion && <Text style={s.profesionFirma}>{d.profesion}</Text>}
-                {d.licencia && (
-                  <Text style={s.licenciaFirma}>LICENCIA SST {d.licencia}</Text>
+                {/* El campo es licenciaSst; con `d.licencia` este bloque
+                    nunca se pintaba y la licencia no salia bajo la firma. */}
+                {d.licenciaSst && (
+                  <Text style={s.licenciaFirma}>LICENCIA SST {d.licenciaSst}</Text>
                 )}
               </View>
             )}
