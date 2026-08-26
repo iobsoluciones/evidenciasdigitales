@@ -186,9 +186,27 @@ export async function cambiarEstado(
   estado: 'inactiva' | 'cerrada'
 ): Promise<Resultado> {
   const supabase = await crearClienteServidor();
+
+  // CONGELADO AL EMITIR: cerrar es el momento en que el acta deja de
+  // poder cambiar, asi que es aqui donde se fija el diseño vigente del
+  // encabezado. Fijarlo al crear haria que una capacitacion programada
+  // hace semanas saliera con un diseño que ya no se usa.
+  let diseno: Record<string, unknown> | undefined;
+  if (estado === 'cerrada') {
+    const { data: cap } = await supabase
+      .from('capacitaciones')
+      .select('empresas(encabezado_config)')
+      .eq('id', id)
+      .maybeSingle();
+
+    const cfg = (cap?.empresas as { encabezado_config?: Record<string, unknown> } | null)
+      ?.encabezado_config;
+    if (cfg && Object.keys(cfg).length > 0) diseno = cfg;
+  }
+
   const { error } = await supabase
     .from('capacitaciones')
-    .update({ estado })
+    .update(diseno ? { estado, encabezado_config: diseno } : { estado })
     .eq('id', id);
 
   if (error) return { ok: false, mensaje: error.message };

@@ -14,7 +14,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { DocumentoAsistencia, type DatosPdf } from './DocumentoAsistencia';
-import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverEncabezado } from './resolverEncabezado';
 
 export type ResultadoPdf =
   | { ok: true; buffer: Buffer; nombreArchivo: string; tema: string; codigo: string }
@@ -75,7 +75,7 @@ export async function generarPdfAsistencia(
   // pertenece al sistema de gestión de ese cliente.
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('logo_url, nombre')
+    .select('logo_url, nombre, encabezado_config')
     .eq('id', cap.empresa_id)
     .maybeSingle();
 
@@ -115,8 +115,10 @@ export async function generarPdfAsistencia(
     logo,
     // Congelados en la capacitacion; si es antigua, los actuales
     camposExtra: (cap.campos_encabezado ?? perfil.organizacion.campos_encabezado ?? []) as Array<{ etiqueta: string; valor: string }>,
-    // Congelado al crear la capacitacion, no el vigente de la empresa.
-    encabezadoConfig: (cap.encabezado_config ?? null) as EncabezadoConfig | null,
+    // Se congela al EMITIR, no al crear: mientras la capacitacion no
+    // este cerrada toma el diseño vigente de la empresa.
+    encabezadoConfig: resolverEncabezado(
+      cap.encabezado_config, empresa?.encabezado_config, cap.estado === 'cerrada'),
 
     codigo: cap.codigo,
     tema: cap.tema,

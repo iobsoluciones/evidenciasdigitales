@@ -7,7 +7,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { InformeEvaluacion, type DatosInforme, type CampoEncabezado } from './InformeEvaluacion';
-import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverEncabezado } from './resolverEncabezado';
 
 export type ResultadoInforme =
   | { ok: true; buffer: Buffer; nombreArchivo: string }
@@ -66,6 +66,17 @@ export async function generarInformeEvaluacion(
     ? await descargarUrl(perfil.organizacion.logo_url)
     : null;
 
+  // La vista no expone encabezado_config, asi que el diseño se lee de
+  // la tabla; y el vigente, de la empresa, para cuando aun no se emite.
+  const { data: docCfg } = await supabase
+    .from('capacitaciones')
+    .select('encabezado_config, empresas(encabezado_config)')
+    .eq('id', capacitacionId)
+    .maybeSingle();
+
+  const empresaCfg = (docCfg?.empresas as { encabezado_config?: unknown } | null)
+    ?.encabezado_config;
+
   // Campos extra: los congelados en la capacitación, o los actuales
   const extra = (cap.campos_encabezado ?? perfil.organizacion.campos_encabezado ?? []) as CampoEncabezado[];
 
@@ -76,8 +87,9 @@ export async function generarInformeEvaluacion(
     colorPrimario: perfil.organizacion.color_primario || '#1e3a8a',
     logo,
     camposExtra: Array.isArray(extra) ? extra : [],
-    // Congelado en la capacitacion, igual que sus campos.
-    encabezadoConfig: (cap.encabezado_config ?? null) as EncabezadoConfig | null,
+    // Congelado al emitir; en borrador, el vigente de la empresa.
+    encabezadoConfig: resolverEncabezado(
+      docCfg?.encabezado_config, empresaCfg, cap.estado === 'cerrada'),
 
     codigo: cap.codigo,
     tema: cap.tema,

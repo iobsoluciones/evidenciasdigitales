@@ -15,7 +15,7 @@ import {
   type DatosInforme, type RespuestaInforme, type CampoEncabezado,
   type AccionInforme,
 } from './InformeInspeccion';
-import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverEncabezado } from './resolverEncabezado';
 
 export type ResultadoInforme =
   | { ok: true; buffer: Buffer; nombreArchivo: string; codigo: string }
@@ -83,7 +83,7 @@ export async function generarInformeInspeccion(
   // Membrete de la empresa
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('nombre, nit, direccion, logo_url, color_primario')
+    .select('nombre, nit, direccion, logo_url, color_primario, encabezado_config')
     .eq('id', i.empresa_id as string)
     .maybeSingle();
 
@@ -148,9 +148,11 @@ export async function generarInformeInspeccion(
     versionDoc: String(i.version_doc ?? 'V1'),
     colorPrimario: empresa?.color_primario ?? '#14263F',
     camposExtra: (i.campos_encabezado ?? []) as CampoEncabezado[],
-    // Congelado al crear la inspeccion: si la empresa rediseña su
-    // encabezado despues, este informe conserva el suyo.
-    encabezadoConfig: (i.encabezado_config ?? null) as EncabezadoConfig | null,
+    // Ya esta cerrada (se valida arriba), asi que manda el congelado.
+    // El vigente solo cubre las inspecciones anteriores a esta funcion,
+    // que no llegaron a guardar ninguno.
+    encabezadoConfig: resolverEncabezado(
+      i.encabezado_config, empresa?.encabezado_config, true),
 
     nombre: String(i.nombre),
     tipo: String(i.tipo),

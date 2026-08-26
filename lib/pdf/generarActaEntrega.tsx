@@ -6,7 +6,7 @@
 import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { ActaEntrega, type DatosActa, type ItemActa, type CampoEncabezado } from './ActaEntrega';
-import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverEncabezado } from './resolverEncabezado';
 
 export type ResultadoActa =
   | { ok: true; buffer: Buffer; nombreArchivo: string; codigo: string; nombres: string }
@@ -51,7 +51,7 @@ export async function generarActaEntrega(entregaId: string): Promise<ResultadoAc
   // Datos de la empresa para el membrete
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('nombre, nit, direccion, logo_url, color_primario')
+    .select('nombre, nit, direccion, logo_url, color_primario, encabezado_config')
     .eq('id', e.empresa_id as string)
     .maybeSingle();
 
@@ -73,8 +73,9 @@ export async function generarActaEntrega(entregaId: string): Promise<ResultadoAc
     versionDoc: String(e.version_doc ?? 'V1'),
     colorPrimario: empresa?.color_primario ?? '#14263F',
     camposExtra: (e.campos_encabezado ?? []) as CampoEncabezado[],
-    // Congelado al crear la entrega, no el vigente de la empresa.
-    encabezadoConfig: (e.encabezado_config ?? null) as EncabezadoConfig | null,
+    // Congelado al firmar; mientras es borrador, el vigente.
+    encabezadoConfig: resolverEncabezado(
+      e.encabezado_config, empresa?.encabezado_config, e.estado === 'firmada'),
 
     nombres: String(e.nombres),
     identificacion: String(e.identificacion),
