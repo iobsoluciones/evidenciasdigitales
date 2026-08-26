@@ -234,7 +234,56 @@ export async function cambiarEstado(
   return { ok: true, mensaje: `Capacitación marcada como ${estado}.` };
 }
 
+/**
+ * Motivo por el que una capacitacion NO se puede eliminar, o null si
+ * si se puede. Se exporta para que la interfaz explique el bloqueo con
+ * las mismas reglas que aplica el servidor.
+ */
+export async function motivoNoEliminable(id: string): Promise<string | null> {
+  const supabase = await crearClienteServidor();
+
+  const { data: cap } = await supabase
+    .from('capacitaciones')
+    .select('firma_instructor_url')
+    .eq('id', id)
+    .maybeSingle();
+
+  if (!cap) return 'La capacitación ya no existe.';
+
+  // 1. Registros de asistencia
+  const { count } = await supabase
+    .from('participantes')
+    .select('id', { count: 'exact', head: true })
+    .eq('capacitacion_id', id);
+
+  if ((count ?? 0) > 0) {
+    return `Tiene ${count} registro(s) de asistencia. Un acta con asistentes es ` +
+           'evidencia del SG-SST y no se borra.';
+  }
+
+  // 2. Firma del instructor: sin asistentes pero firmada significa que
+  //    la capacitacion SI se ejecuto, aunque no se registrara nadie.
+  //    La firma del responsable tecnico no cuenta: es una copia que el
+  //    sistema hace sola al activar, no un acto de nadie.
+  if (cap.firma_instructor_url) {
+    return 'El instructor ya firmó: la capacitación se ejecutó aunque no se ' +
+           'registrara ningún asistente.';
+  }
+
+  return null;
+}
+
+/**
+ * Elimina una capacitacion sin rastro de ejecucion.
+ *
+ * Las condiciones se comprueban AQUI y no solo en la interfaz: es la
+ * frontera de confianza, y borrar evidencia documental por un boton
+ * mal habilitado no tiene vuelta atras.
+ */
 export async function eliminarCapacitacion(id: string): Promise<Resultado> {
+  const motivo = await motivoNoEliminable(id);
+  if (motivo) return { ok: false, mensaje: 'No se puede eliminar. ' + motivo };
+
   const supabase = await crearClienteServidor();
   const { error } = await supabase.from('capacitaciones').delete().eq('id', id);
 
@@ -246,6 +295,8 @@ export async function eliminarCapacitacion(id: string): Promise<Resultado> {
   }
 
   revalidatePath('/panel/capacitaciones');
+  revalidatePath('/panel/calendario');
+  revalidatePath('/panel');
   return { ok: true, mensaje: 'Capacitación eliminada.' };
 }
 

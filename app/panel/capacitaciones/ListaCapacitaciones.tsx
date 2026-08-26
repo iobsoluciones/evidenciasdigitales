@@ -14,6 +14,7 @@ import QrRegistro from './QrRegistro';
 import { fmtFecha, colorParticipacion, MESES, aDatetimeLocal } from '@/lib/tipos';
 import {
   crearCapacitacion,
+  eliminarCapacitacion,
   crearDesdePlantilla,
   actualizarCapacitacion,
   activarCapacitacion,
@@ -106,6 +107,7 @@ export default function ListaCapacitaciones({
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [form, setForm] = useState(VACIO);
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+  const [confirmandoBorrado, setConfirmandoBorrado] = useState(false);
 
   // Alta desde plantilla: solo pide fechas
   const [modoPlantilla, setModoPlantilla] = useState(false);
@@ -180,6 +182,7 @@ export default function ListaCapacitaciones({
 
   function abrirEditar(c: Capacitacion) {
     setEditandoId(c.id);
+    setConfirmandoBorrado(false);
     setForm({
       tema: c.tema,
       descripcion: c.descripcion ?? '',
@@ -195,6 +198,22 @@ export default function ListaCapacitaciones({
     });
     setAviso(null);
     setAbierto(true);
+  }
+
+  function borrar() {
+    if (!editandoId) return;
+    startTransition(async () => {
+      const r = await eliminarCapacitacion(editandoId);
+      if (r.ok) {
+        setAbierto(false);
+        setConfirmandoBorrado(false);
+        setEditandoId(null);
+        setAviso({ tipo: 'ok', texto: r.mensaje });
+        router.refresh();
+      } else {
+        setAviso({ tipo: 'error', texto: r.mensaje });
+      }
+    });
   }
 
   function guardar() {
@@ -631,6 +650,65 @@ export default function ListaCapacitaciones({
               </button>
               <button onClick={() => setAbierto(false)} style={{ ...est.btnSec, flex: 1 }}>Cancelar</button>
             </div>
+
+            {/* ---------- Eliminar ---------- */}
+            {/* Solo desde aqui, y solo si no queda rastro de que la
+                capacitacion se haya ejecutado. El servidor vuelve a
+                comprobarlo: esto es comodidad, no la garantia. */}
+            {(() => {
+              const c = capacitaciones.find((x) => x.id === editandoId);
+              if (!c) return null;
+
+              const bloqueo =
+                c.registrados > 0
+                  ? `Tiene ${c.registrados} registro(s) de asistencia. Un acta con ` +
+                    'asistentes es evidencia del SG-SST y no se borra.'
+                  : c.instructor_firmo
+                  ? 'El instructor ya firmó: la capacitación se ejecutó aunque no se ' +
+                    'registrara ningún asistente.'
+                  : null;
+
+              return (
+                <div style={est.zonaBorrado}>
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <strong style={{ fontSize: 12.5 }}>Eliminar capacitación</strong>
+                    <p style={est.notaBorrado}>
+                      {bloqueo ?? 'No tiene asistentes ni firmas, así que puede borrarse sin perder evidencia. No se puede deshacer.'}
+                    </p>
+                  </div>
+
+                  {bloqueo ? (
+                    <span style={{ ...est.btnBorrar, opacity: 0.45, cursor: 'not-allowed' }}>
+                      Eliminar
+                    </span>
+                  ) : confirmandoBorrado ? (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={borrar}
+                        disabled={pendiente}
+                        style={{ ...est.btnBorrar, background: '#9B1C1C', color: '#fff', borderColor: '#9B1C1C' }}
+                      >
+                        {pendiente ? 'Eliminando…' : 'Sí, eliminar'}
+                      </button>
+                      <button
+                        onClick={() => setConfirmandoBorrado(false)}
+                        style={est.btnBorrar}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmandoBorrado(true)}
+                      disabled={pendiente}
+                      style={est.btnBorrar}
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </div>
+              );
+            })()}
             </>
             )}
           </div>
@@ -661,6 +739,22 @@ const est: Record<string, React.CSSProperties> = {
   btnPrimario: { background: '#1e3a8a', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnExcel: { background: '#15803d', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
   btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  zonaBorrado: {
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    gap: 12, flexWrap: 'wrap', marginTop: 20, paddingTop: 16,
+    borderTop: '1px solid #F1F1EC',
+  },
+  notaBorrado: {
+    fontSize: 11.5, color: '#8A929C', margin: '3px 0 0',
+    lineHeight: 1.5, maxWidth: 380,
+  },
+  btnBorrar: {
+    background: '#fff', color: '#9B1C1C',
+    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4C7C7',
+    padding: '8px 14px', borderRadius: 6, fontSize: 12.5,
+    fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+    whiteSpace: 'nowrap', display: 'inline-block',
+  },
   btnMini: { background: '#eff6ff', borderWidth: 1, borderStyle: 'solid', borderColor: '#dbeafe', color: '#1e3a8a', padding: '5px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' },
   btnVerde: { background: '#f0fdf4', borderColor: '#dcfce7', color: '#15803d' },
   aviso: { padding: '10px 14px', borderRadius: 8, fontSize: 13, marginBottom: 16 },
