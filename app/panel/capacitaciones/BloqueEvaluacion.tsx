@@ -24,11 +24,18 @@ export default function BloqueEvaluacion({
   esEvaluada,
   estadisticas,
   color,
+  habilitada = true,
 }: {
   capacitacionId: string;
   esEvaluada: boolean;
   estadisticas: Estadisticas | null;
   color: string;
+  /**
+   * Se marca al crear la capacitacion. Sin esa marca no se crea la
+   * evaluacion desde aqui: la decision de si lleva evaluacion vive en
+   * la ficha, no en este boton.
+   */
+  habilitada?: boolean;
 }) {
   const hayResultados = (estadisticas?.evaluados ?? 0) > 0;
 
@@ -45,16 +52,32 @@ export default function BloqueEvaluacion({
               Informe PDF
             </a>
           )}
-          <Link
-            href={`/panel/capacitaciones/${capacitacionId}/evaluacion`}
-            style={{ ...e.btn, background: color }}
-          >
-            {esEvaluada ? 'Editar evaluación' : 'Crear evaluación'}
-          </Link>
+          {habilitada ? (
+            <Link
+              href={`/panel/capacitaciones/${capacitacionId}/evaluacion`}
+              style={{ ...e.btn, background: color }}
+            >
+              {esEvaluada ? 'Editar evaluación' : 'Crear evaluación'}
+            </Link>
+          ) : (
+            <span
+              title="Marca «lleva evaluación» al editar la capacitación"
+              style={{ ...e.btn, background: '#C5C5BD', cursor: 'not-allowed' }}
+            >
+              Crear evaluación
+            </span>
+          )}
         </div>
       </div>
 
-      {!esEvaluada && (
+      {!esEvaluada && !habilitada && (
+        <p style={e.deshabilitada}>
+          Esta capacitación se creó sin evaluación. Si quieres medir el
+          aprendizaje, márcala como evaluada al editarla.
+        </p>
+      )}
+
+      {!esEvaluada && habilitada && (
         <p style={e.vacio}>
           Esta capacitación no tiene evaluación. Créala para medir el
           aprendizaje y detectar en qué temas hay más desconocimiento.
@@ -162,6 +185,10 @@ const e: Record<string, React.CSSProperties> = {
   nota: { fontSize: 11.5, color: '#6b7280', margin: '0 0 12px' },
   btn: { color: '#fff', padding: '9px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600, textDecoration: 'none' },
   vacio: { fontSize: 12.5, color: '#6b7280', lineHeight: 1.6, margin: 0 },
+  deshabilitada: {
+    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
+    padding: '10px 12px', borderRadius: 5, margin: 0, lineHeight: 1.5,
+  },
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(110px,1fr))', gap: 12, marginBottom: 6 },
   kpi: { background: '#f8fafc', borderRadius: 10, padding: 12, textAlign: 'center' },
   kpiL: { fontSize: 10.5, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },

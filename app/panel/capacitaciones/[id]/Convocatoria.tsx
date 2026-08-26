@@ -21,11 +21,18 @@ export default function Convocatoria({
   empleados,
   color,
   soloLectura = false,
+  habilitada = true,
 }: {
   capacitacionId: string;
   empleados: EmpleadoConvocable[];
   color: string;
   soloLectura?: boolean;
+  /**
+   * Convocar solo tiene sentido si la capacitacion valida contra la
+   * base de empleados: sin esa marca cualquiera puede registrarse, asi
+   * que la lista de convocados no mide nada.
+   */
+  habilitada?: boolean;
 }) {
   const router = useRouter();
   const [pendiente, startTransition] = useTransition();
@@ -140,11 +147,30 @@ export default function Convocatoria({
           </p>
         </div>
         {!soloLectura && (
-          <button onClick={() => setAbierto(!abierto)} style={e.btnSec}>
+          <button
+            onClick={() => habilitada && setAbierto(!abierto)}
+            disabled={!habilitada}
+            title={habilitada
+              ? undefined
+              : 'Marca «validar contra la base de empleados» al editar la capacitación'}
+            style={{
+              ...e.btnSec,
+              opacity: habilitada ? 1 : 0.45,
+              cursor: habilitada ? 'pointer' : 'not-allowed',
+            }}
+          >
             {abierto ? 'Cerrar' : convocadosActuales > 0 ? 'Modificar' : 'Convocar'}
           </button>
         )}
       </div>
+
+      {!habilitada && (
+        <p style={e.deshabilitada}>
+          Esta capacitación acepta registros libres, así que no se convoca a
+          nadie en concreto. Actívalo marcando «validar contra la base de
+          empleados» al editarla.
+        </p>
+      )}
 
       {aviso && (
         <div style={{
@@ -325,6 +351,10 @@ const e: Record<string, React.CSSProperties> = {
     fontSize: 12, cursor: 'pointer', textDecoration: 'underline',
   },
 
+  deshabilitada: {
+    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
+    padding: '10px 12px', borderRadius: 5, margin: '0 0 4px', lineHeight: 1.5,
+  },
   barraBusqueda: {
     display: 'flex', alignItems: 'center', gap: 10,
     margin: '0 0 12px', flexWrap: 'wrap',

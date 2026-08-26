@@ -117,10 +117,14 @@ export default async function DetalleCapacitacion({
         </div>
       )}
 
+      {/* Convocar y evaluar dependen de lo que se marco al crear: sin
+          esas marcas los botones quedan inertes en vez de ofrecer algo
+          que no corresponde a esta capacitacion. */}
       <Convocatoria
         capacitacionId={c.id}
         empleados={convocables}
         color={colorMarca}
+        habilitada={Boolean(c.validar_empleados)}
       />
 
       <BotonPlantilla
@@ -135,6 +139,7 @@ export default async function DetalleCapacitacion({
         esEvaluada={c.tiene_evaluacion ?? c.es_evaluada ?? false}
         estadisticas={estadisticas}
         color={colorMarca}
+        habilitada={Boolean(c.es_evaluada) || Boolean(c.tiene_evaluacion)}
       />
 
       <section style={est.tarjeta}>

@@ -17,6 +17,11 @@ export type Capacitacion = {
   empresa_nombre: string;
   empresa_slug: string;
   es_evaluada: boolean;
+  /** Marcadas al crear; deciden qué se habilita en el detalle. */
+  validar_empleados: boolean;
+  incluir_firma_profesional: boolean;
+  /** La vista añade si YA existe una evaluación creada. */
+  tiene_evaluacion?: boolean;
   /** Control documental congelado al crear el acta (no cambia despues). */
   nomenclatura: string | null;
   version_doc: string | null;

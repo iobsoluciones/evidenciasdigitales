@@ -601,7 +601,10 @@ export default function ListaCapacitaciones({
             </label>
             <p style={{ fontSize: 11, color: '#8A929C', margin: '2px 0 0' }}>
               {!tieneFirmaPropia
-                ? 'Registra tu firma en Mi perfil para poder anexarla.'
+                ? <>Aún no tienes firma registrada.{' '}
+                    <Link href="/panel/perfil" style={{ color: '#14263F', fontWeight: 600 }}>
+                      Regístrala en Mi perfil
+                    </Link>{' '}para poder anexarla.</>
                 : form.incluirFirmaProfesional
                 ? 'El acta llevará tu nombre, profesión y firma junto a la del instructor.'
                 : 'El acta solo llevará la firma de quien dicta la capacitación.'}
