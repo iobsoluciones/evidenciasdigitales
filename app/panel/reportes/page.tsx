@@ -55,9 +55,6 @@ export default async function PaginaReportes() {
         color={color}
       />
 
-      {/* ---------- Kardex ---------- */}
-      <BloqueKardex articulos={articulosKardex} color={color} />
-
       {/* ---------- Los demás ---------- */}
       <div style={s.grid}>
         <Tarjeta
@@ -97,6 +94,12 @@ export default async function PaginaReportes() {
           color={color}
         />
       </div>
+
+      {/* ---------- Kardex, al final ---------- */}
+      {/* Es el unico que exige elegir un articulo antes de descargar:
+          arriba obligaba a pasar por un formulario para llegar a los
+          reportes de un clic. */}
+      <BloqueKardex articulos={articulosKardex} color={color} />
 
       <p style={s.nota}>
         Los reportes se generan en el momento de descargarlos: siempre
