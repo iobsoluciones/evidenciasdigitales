@@ -18,6 +18,7 @@
 import {
   Document, Page, Text, View, Image, StyleSheet,
 } from '@react-pdf/renderer';
+import { EncabezadoDoc, type EncabezadoConfig } from './EncabezadoDoc';
 
 export type DatosPdf = {
   organizacion: string;
@@ -29,6 +30,8 @@ export type DatosPdf = {
   logo: Buffer | null;
   /** Campos extra que cada empresa configura en su encabezado. */
   camposExtra: Array<{ etiqueta: string; valor: string }>;
+  /** Diseño del encabezado, congelado al emitir. */
+  encabezadoConfig: EncabezadoConfig | null;
 
   codigo: string;
   tema: string;
@@ -82,21 +85,27 @@ export function DocumentoAsistencia({ d }: { d: DatosPdf }) {
       <Page size="LETTER" style={s.pagina}>
 
         {/* ============ ENCABEZADO (solo primera hoja) ============ */}
-        {d.logo && (
-          <View style={s.logoCaja}>
-            <Image src={d.logo} style={s.logo} />
-          </View>
-        )}
-
-        <Text style={s.tituloDoc}>{d.tituloDoc.toUpperCase()}</Text>
-
-        <Text style={s.control}>
-          VERSIÓN: {d.versionDoc}   •   FECHA DE CREACIÓN: {d.fechaCreacionDoc}
-          {'   •   '}NOMENCLATURA: {d.nomenclatura}
-          {d.camposExtra.map((c) => `   •   ${c.etiqueta}: ${c.valor}`).join('')}
-        </Text>
-
-        <Text style={s.empresa}>{d.organizacion.toUpperCase()}</Text>
+        {/* Diseño elegido por la empresa y congelado al crear el acta.
+            La fecha de creación documental viaja como un campo más
+            para no perderla en las plantillas que no la contemplan. */}
+        <EncabezadoDoc d={{
+          config: d.encabezadoConfig,
+          logo: d.logo,
+          titulo: d.tituloDoc,
+          nomenclatura: d.nomenclatura,
+          versionDoc: d.versionDoc,
+          codigo: d.codigo,
+          campos: [
+            ...(d.fechaCreacionDoc
+              ? [{ etiqueta: 'FECHA DE CREACIÓN', valor: d.fechaCreacionDoc }]
+              : []),
+            ...d.camposExtra,
+          ],
+          empresa: d.organizacion,
+          nit: null,
+          direccion: null,
+          color: d.colorPrimario,
+        }} />
 
         {/* ============ DATOS + DESCRIPCIÓN (dos columnas) ============ */}
         <View style={s.dosColumnas}>

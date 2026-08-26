@@ -254,6 +254,66 @@ export async function guardarLogoEmpresa(id: string, url: string | null): Promis
   return { ok: true, mensaje: url ? 'Logo actualizado.' : 'Logo eliminado.' };
 }
 
+/**
+ * Diseño del encabezado de los documentos de una empresa.
+ *
+ * Solo lo permiten los planes que lo tengan habilitado: el Básico usa
+ * el estándar. Se comprueba EN EL SERVIDOR y no solo ocultando la UI,
+ * que es lo unico que impide saltarselo.
+ *
+ * El cambio afecta a los documentos que se emitan a partir de ahora:
+ * los ya emitidos llevan su diseño congelado.
+ */
+export async function guardarDisenoEncabezado(
+  id: string,
+  config: {
+    plantilla: string;
+    logo_posicion: string;
+    mostrar_nit: boolean;
+    mostrar_direccion: boolean;
+    mostrar_codigo: boolean;
+  }
+): Promise<Resultado> {
+  const perfil = await obtenerPerfil();
+  if (!perfil) return { ok: false, mensaje: 'Sesión no válida.' };
+
+  if (!['linea', 'tabla', 'lateral'].includes(config.plantilla)) {
+    return { ok: false, mensaje: 'Plantilla de encabezado no válida.' };
+  }
+  if (!['izquierda', 'centro', 'derecha'].includes(config.logo_posicion)) {
+    return { ok: false, mensaje: 'Posición del logo no válida.' };
+  }
+
+  const supabase = await crearClienteServidor();
+
+  const { data: plan } = await supabase
+    .from('planes')
+    .select('nombre, encabezado_personalizable')
+    .eq('codigo', perfil.organizacion.plan)
+    .maybeSingle();
+
+  if (!plan?.encabezado_personalizable) {
+    return {
+      ok: false,
+      mensaje: `El plan ${plan?.nombre ?? 'actual'} usa el encabezado estándar. ` +
+               'Diseñar el encabezado está disponible desde el plan Pro.',
+    };
+  }
+
+  const { error } = await supabase
+    .from('empresas')
+    .update({ encabezado_config: config })
+    .eq('id', id);
+
+  if (error) return { ok: false, mensaje: error.message };
+
+  revalidatePath('/panel', 'layout');
+  return {
+    ok: true,
+    mensaje: 'Diseño guardado. Se aplica a los documentos que emitas desde ahora.',
+  };
+}
+
 export async function guardarCamposEncabezadoEmpresa(
   id: string,
   campos: Array<{ etiqueta: string; valor: string }>

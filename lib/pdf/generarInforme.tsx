@@ -7,6 +7,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { InformeEvaluacion, type DatosInforme, type CampoEncabezado } from './InformeEvaluacion';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoInforme =
   | { ok: true; buffer: Buffer; nombreArchivo: string }
@@ -75,6 +76,8 @@ export async function generarInformeEvaluacion(
     colorPrimario: perfil.organizacion.color_primario || '#1e3a8a',
     logo,
     camposExtra: Array.isArray(extra) ? extra : [],
+    // Congelado en la capacitacion, igual que sus campos.
+    encabezadoConfig: (cap.encabezado_config ?? null) as EncabezadoConfig | null,
 
     codigo: cap.codigo,
     tema: cap.tema,

@@ -10,6 +10,7 @@
 import {
   Document, Page, Text, View, Image, StyleSheet,
 } from '@react-pdf/renderer';
+import { EncabezadoDoc, type EncabezadoConfig } from './EncabezadoDoc';
 
 export type CampoEncabezado = { etiqueta: string; valor: string };
 
@@ -20,6 +21,8 @@ export type DatosInforme = {
   colorPrimario: string;
   logo: Buffer | null;
   camposExtra: CampoEncabezado[];
+  /** Diseño del encabezado de la empresa. */
+  encabezadoConfig: EncabezadoConfig | null;
 
   codigo: string;
   tema: string;
@@ -52,20 +55,19 @@ export function InformeEvaluacion({ d }: { d: DatosInforme }) {
       <Page size="LETTER" style={s.pagina}>
 
         {/* ============ ENCABEZADO ============ */}
-        {d.logo && (
-          <View style={s.logoCaja}>
-            <Image src={d.logo} style={s.logo} />
-          </View>
-        )}
-
-        <Text style={s.titulo}>INFORME DE RESULTADOS DE EVALUACIÓN</Text>
-
-        <Text style={s.control}>
-          VERSIÓN: {d.versionDoc}   •   NOMENCLATURA: {d.nomenclatura}
-          {d.camposExtra.map((c) => `   •   ${c.etiqueta}: ${c.valor}`).join('')}
-        </Text>
-
-        <Text style={s.empresa}>{d.organizacion.toUpperCase()}</Text>
+        <EncabezadoDoc d={{
+          config: d.encabezadoConfig,
+          logo: d.logo,
+          titulo: 'INFORME DE RESULTADOS DE EVALUACIÓN',
+          nomenclatura: d.nomenclatura,
+          versionDoc: d.versionDoc,
+          codigo: d.codigo,
+          campos: d.camposExtra,
+          empresa: d.organizacion,
+          nit: null,
+          direccion: null,
+          color: d.colorPrimario,
+        }} />
 
         {/* ============ DATOS ============ */}
         <View style={s.bloqueDatos}>

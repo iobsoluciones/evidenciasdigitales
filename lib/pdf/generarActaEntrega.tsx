@@ -6,6 +6,7 @@
 import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { ActaEntrega, type DatosActa, type ItemActa, type CampoEncabezado } from './ActaEntrega';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoActa =
   | { ok: true; buffer: Buffer; nombreArchivo: string; codigo: string; nombres: string }
@@ -72,6 +73,8 @@ export async function generarActaEntrega(entregaId: string): Promise<ResultadoAc
     versionDoc: String(e.version_doc ?? 'V1'),
     colorPrimario: empresa?.color_primario ?? '#14263F',
     camposExtra: (e.campos_encabezado ?? []) as CampoEncabezado[],
+    // Congelado al crear la entrega, no el vigente de la empresa.
+    encabezadoConfig: (e.encabezado_config ?? null) as EncabezadoConfig | null,
 
     nombres: String(e.nombres),
     identificacion: String(e.identificacion),

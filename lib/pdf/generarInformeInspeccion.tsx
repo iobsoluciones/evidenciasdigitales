@@ -15,6 +15,7 @@ import {
   type DatosInforme, type RespuestaInforme, type CampoEncabezado,
   type AccionInforme,
 } from './InformeInspeccion';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoInforme =
   | { ok: true; buffer: Buffer; nombreArchivo: string; codigo: string }
@@ -147,6 +148,9 @@ export async function generarInformeInspeccion(
     versionDoc: String(i.version_doc ?? 'V1'),
     colorPrimario: empresa?.color_primario ?? '#14263F',
     camposExtra: (i.campos_encabezado ?? []) as CampoEncabezado[],
+    // Congelado al crear la inspeccion: si la empresa rediseña su
+    // encabezado despues, este informe conserva el suyo.
+    encabezadoConfig: (i.encabezado_config ?? null) as EncabezadoConfig | null,
 
     nombre: String(i.nombre),
     tipo: String(i.tipo),

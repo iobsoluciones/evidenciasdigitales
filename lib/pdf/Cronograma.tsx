@@ -6,6 +6,7 @@
  * hizo y qué quedó pendiente.
  */
 import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import { EncabezadoDoc, type EncabezadoConfig } from './EncabezadoDoc';
 
 export type CampoEncabezado = { etiqueta: string; valor: string };
 
@@ -28,6 +29,8 @@ export type DatosCronograma = {
   colorPrimario: string;
   logo: Buffer | null;
   camposExtra: CampoEncabezado[];
+  /** Diseño del encabezado de la empresa. */
+  encabezadoConfig: EncabezadoConfig | null;
 
   periodo: string;
   elaboradoPor: string;
@@ -55,15 +58,20 @@ export function Cronograma({ d }: { d: DatosCronograma }) {
     <Document title={`Cronograma ${d.empresa}`} author={d.empresa}>
       <Page size="LETTER" style={s.pagina}>
 
-        {d.logo && <View style={s.logoCaja}><Image src={d.logo} style={s.logo} /></View>}
-
-        <Text style={s.titulo}>CRONOGRAMA DE CAPACITACIONES</Text>
-        <Text style={s.control}>
-          VERSIÓN: {d.versionDoc}   •   NOMENCLATURA: {d.nomenclatura}
-          {d.camposExtra.map((c) => `   •   ${c.etiqueta}: ${c.valor}`).join('')}
-        </Text>
-
-        <Text style={s.empresa}>{d.empresa.toUpperCase()}</Text>
+        {/* ============ ENCABEZADO ============ */}
+        <EncabezadoDoc d={{
+          config: d.encabezadoConfig,
+          logo: d.logo,
+          titulo: 'CRONOGRAMA DE CAPACITACIONES',
+          nomenclatura: d.nomenclatura,
+          versionDoc: d.versionDoc,
+          codigo: null,
+          campos: d.camposExtra,
+          empresa: d.empresa,
+          nit: null,
+          direccion: null,
+          color: d.colorPrimario,
+        }} />
 
         <View style={s.datos}>
           <Text style={s.dato}>

@@ -8,10 +8,12 @@
  */
 import Link from 'next/link';
 import { obtenerPerfil } from '@/lib/sesion';
+import { crearClienteServidor } from '@/lib/supabase/servidor';
 import { empresaActiva } from '@/lib/empresa-activa';
 import { listarCatalogos } from '@/lib/acciones-catalogos';
 import EditorMembrete from './EditorMembrete';
 import CamposEncabezado from './CamposEncabezado';
+import DisenoEncabezado from './DisenoEncabezado';
 import CargaLogo from './CargaLogo';
 import GestorCatalogos from './GestorCatalogos';
 import {
@@ -34,6 +36,16 @@ export default async function PaginaConfiguracion() {
       </div>
     );
   }
+
+  // Que planes pueden diseñar su encabezado lo dice la tabla de planes,
+  // no una lista en el codigo: cambiar la oferta no deberia exigir un
+  // despliegue.
+  const supabase = await crearClienteServidor();
+  const { data: plan } = await supabase
+    .from('planes')
+    .select('nombre, encabezado_personalizable')
+    .eq('codigo', perfil.organizacion.plan)
+    .maybeSingle();
 
   const catalogos = await listarCatalogos();
   const [plEvaluacion, plCapacitacion] = await Promise.all([
@@ -70,6 +82,17 @@ export default async function PaginaConfiguracion() {
           esAdmin={esAdmin}
         />
       </div>
+
+      <DisenoEncabezado
+        key={`diseno-${empresa.id}`}
+        empresaId={empresa.id}
+        configActual={empresa.encabezado_config ?? {}}
+        puedePersonalizar={Boolean(plan?.encabezado_personalizable)}
+        nombrePlan={plan?.nombre ?? '—'}
+        empresaNombre={empresa.nombre}
+        color={empresa.color_primario}
+        esAdmin={esAdmin}
+      />
 
       <CamposEncabezado
         key={`campos-${empresa.id}`}

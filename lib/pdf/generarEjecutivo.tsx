@@ -8,6 +8,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { ReporteEjecutivo, type DatosEjecutivo, type CampoEncabezado } from './ReporteEjecutivo';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoEjecutivo =
   | { ok: true; buffer: Buffer; nombreArchivo: string; empresa: string }
@@ -104,6 +105,8 @@ export async function generarReporteEjecutivo(
     colorPrimario: empresa.color_primario ?? '#14263F',
     logo,
     camposExtra: (empresa.campos_encabezado ?? []) as CampoEncabezado[],
+    // Vigente: el reporte ejecutivo se regenera, no es evidencia firmada.
+    encabezadoConfig: (empresa.encabezado_config ?? null) as EncabezadoConfig | null,
 
     periodo: `Últimos ${meses} meses · corte ${new Date().toLocaleDateString('es-CO', { dateStyle: 'medium' })}`,
     elaboradoPor: perfil.nombre,

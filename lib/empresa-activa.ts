@@ -34,6 +34,8 @@ export type Empresa = {
   version_doc: string;
   color_primario: string;
   campos_encabezado: Array<{ etiqueta: string; valor: string }>;
+  /** Diseño del encabezado de sus documentos. {} = estándar. */
+  encabezado_config: Record<string, unknown>;
   activa: boolean;
 };
 

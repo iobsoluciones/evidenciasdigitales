@@ -7,6 +7,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { Cronograma, type DatosCronograma, type CampoEncabezado } from './Cronograma';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoCronograma =
   | { ok: true; buffer: Buffer; nombreArchivo: string; empresa: string }
@@ -79,6 +80,12 @@ export async function generarCronograma(
     camposExtra: todasLasEmpresas
       ? []
       : ((empresa!.campos_encabezado ?? []) as CampoEncabezado[]),
+    // Vigente, no congelado: el cronograma se regenera cada vez y no
+    // es una evidencia firmada. Con varias empresas no hay un diseño
+    // unico posible, asi que se usa el estandar.
+    encabezadoConfig: todasLasEmpresas
+      ? null
+      : ((empresa!.encabezado_config ?? null) as EncabezadoConfig | null),
 
     periodo: `${fmt(desde)} — ${fmt(hasta)}`,
     elaboradoPor: perfil.nombre,

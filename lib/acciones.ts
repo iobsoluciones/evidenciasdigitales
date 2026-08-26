@@ -98,6 +98,9 @@ export async function crearCapacitacion(datos: DatosCapacitacion): Promise<Resul
       nomenclatura: perfil.organizacion.nomenclatura,
       version_doc: perfil.organizacion.version_doc,
       titulo_doc: perfil.organizacion.titulo_doc,
+      // El diseño del encabezado es de la EMPRESA y se congela aqui:
+      // si lo rediseña despues, esta acta conserva el suyo.
+      encabezado_config: empresa.encabezado_config ?? {},
     })
     .select('id')
     .single();
@@ -344,6 +347,7 @@ export async function crearDesdePlantilla(
       version_doc: empresa.version_doc,
       titulo_doc: empresa.titulo_doc,
       campos_encabezado: empresa.campos_encabezado ?? [],
+      encabezado_config: empresa.encabezado_config ?? {},
     })
     .select('id')
     .single();

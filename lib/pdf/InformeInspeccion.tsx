@@ -15,6 +15,7 @@
  * conformidad.
  */
 import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import { EncabezadoDoc, type EncabezadoConfig } from './EncabezadoDoc';
 
 export type CampoEncabezado = { etiqueta: string; valor: string };
 
@@ -40,6 +41,8 @@ export type DatosInforme = {
   versionDoc: string;
   colorPrimario: string;
   camposExtra: CampoEncabezado[];
+  /** Diseño del encabezado, congelado al emitir. */
+  encabezadoConfig: EncabezadoConfig | null;
 
   nombre: string;
   tipo: string;
@@ -117,24 +120,21 @@ export function InformeInspeccion({ d }: { d: DatosInforme }) {
       <Page size="LETTER" style={s.pagina}>
 
         {/* ============ ENCABEZADO ============ */}
-        <View style={s.encabezado}>
-          {d.logo && <Image src={d.logo} style={s.logo} />}
-          <Text style={s.titulo}>{d.titulo}</Text>
-          <Text style={s.control}>
-            VERSIÓN: {d.versionDoc}   •   NOMENCLATURA: {d.nomenclatura}
-            {d.camposExtra.map((c) => `   •   ${c.etiqueta}: ${c.valor}`).join('')}
-          </Text>
-        </View>
-
-        {/* ============ EMPRESA ============ */}
-        <View style={s.bloqueEmpresa}>
-          <Text style={s.empresa}>{d.empresa.toUpperCase()}</Text>
-          <Text style={s.datosEmpresa}>
-            {d.nit ? `NIT ${d.nit}` : ''}
-            {d.nit && d.direccion ? '   •   ' : ''}
-            {d.direccion ?? ''}
-          </Text>
-        </View>
+        {/* El diseño lo decide la empresa (plantilla, logo, qué datos
+            se muestran) y viene CONGELADO en el documento. */}
+        <EncabezadoDoc d={{
+          config: d.encabezadoConfig,
+          logo: d.logo,
+          titulo: d.titulo,
+          nomenclatura: d.nomenclatura,
+          versionDoc: d.versionDoc,
+          codigo: d.codigo,
+          campos: d.camposExtra,
+          empresa: d.empresa,
+          nit: d.nit,
+          direccion: d.direccion,
+          color: d.colorPrimario,
+        }} />
 
         {/* ============ VEREDICTO ============ */}
         {/* Lo primero: cumple o no, y por qué. */}

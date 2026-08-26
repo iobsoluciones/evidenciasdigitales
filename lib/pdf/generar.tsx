@@ -14,6 +14,7 @@ import { renderToBuffer } from '@react-pdf/renderer';
 import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { DocumentoAsistencia, type DatosPdf } from './DocumentoAsistencia';
+import type { EncabezadoConfig } from './EncabezadoDoc';
 
 export type ResultadoPdf =
   | { ok: true; buffer: Buffer; nombreArchivo: string; tema: string; codigo: string }
@@ -114,6 +115,8 @@ export async function generarPdfAsistencia(
     logo,
     // Congelados en la capacitacion; si es antigua, los actuales
     camposExtra: (cap.campos_encabezado ?? perfil.organizacion.campos_encabezado ?? []) as Array<{ etiqueta: string; valor: string }>,
+    // Congelado al crear la capacitacion, no el vigente de la empresa.
+    encabezadoConfig: (cap.encabezado_config ?? null) as EncabezadoConfig | null,
 
     codigo: cap.codigo,
     tema: cap.tema,
