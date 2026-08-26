@@ -25,6 +25,14 @@ export type Empleado = {
   activo: boolean;
 };
 
+/** Retirado con su participacion historica, para el panel de auditoria. */
+export type EmpleadoRetirado = Empleado & {
+  fecha_retiro: string | null;
+  asistencias: number;
+  promedio: number | null;
+  ultima: string | null;
+};
+
 export type Resultado = { ok: boolean; mensaje: string };
 
 export type ResultadoCarga = {
@@ -67,6 +75,30 @@ export async function agregarEmpleado(datos: {
   if (!datos.nombres.trim()) return { ok: false, mensaje: 'El nombre es obligatorio.' };
 
   const supabase = await crearClienteServidor();
+
+  // VALIDACION DE DOCUMENTO: la restriccion UNIQUE (empresa_id,
+  // identificacion) ya impide el duplicado, pero el mensaje que
+  // devuelve no ayuda cuando el choque es contra alguien RETIRADO:
+  // esa persona no aparece en la lista y el usuario no entiende por
+  // que "ya existe". Se consulta antes para poder decir cual es el
+  // caso y a donde ir.
+  const { data: existente } = await supabase
+    .from('empleados')
+    .select('id, nombres, activo')
+    .eq('empresa_id', empresa.id)
+    .eq('identificacion', id)
+    .maybeSingle();
+
+  if (existente) {
+    return existente.activo
+      ? { ok: false, mensaje: `La identificacion ${id} ya pertenece a ${existente.nombres}.` }
+      : {
+          ok: false,
+          mensaje: `La identificacion ${id} pertenece a ${existente.nombres}, que esta retirado. ` +
+                   'Reincorporalo desde Empleados retirados para conservar su historial.',
+        };
+  }
+
   const { error } = await supabase.from('empleados').insert({
     org_id: perfil.organizacion.id,
     empresa_id: empresa.id,
@@ -139,13 +171,55 @@ export async function retirarEmpleado(id: string): Promise<Resultado> {
   const supabase = await crearClienteServidor();
   const { error } = await supabase
     .from('empleados')
-    .update({ activo: false })
+    .update({ activo: false, fecha_retiro: new Date().toISOString() })
     .eq('id', id);
 
   if (error) return { ok: false, mensaje: error.message };
 
+  revalidatePath('/panel/empleados');
+  revalidatePath('/panel/empleados/retirados');
   revalidatePath('/panel/configuracion');
-  return { ok: true, mensaje: 'Empleado retirado de la base.' };
+  return { ok: true, mensaje: 'Empleado retirado. Queda en Empleados retirados con su historial.' };
+}
+
+/** Empleados retirados de la empresa activa, con su participacion historica. */
+export async function listarEmpleadosRetirados(): Promise<EmpleadoRetirado[]> {
+  const empresa = await empresaActiva();
+  if (!empresa) return [];
+
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('empleados_con_participacion', {
+    p_empresa: empresa.id,
+    p_activos: false,
+  });
+
+  if (error) {
+    console.error('listarEmpleadosRetirados:', error.message);
+    return [];
+  }
+
+  return (data ?? []) as EmpleadoRetirado[];
+}
+
+/**
+ * Vuelve a dar de alta a alguien que fue recontratado.
+ * Se reactiva el registro existente en vez de crear uno nuevo: asi la
+ * persona conserva el historial de capacitaciones y dotacion que ya
+ * tenia, que es justo lo que una auditoria va a pedir.
+ */
+export async function reincorporarEmpleado(id: string): Promise<Resultado> {
+  const supabase = await crearClienteServidor();
+  const { error } = await supabase
+    .from('empleados')
+    .update({ activo: true, fecha_retiro: null })
+    .eq('id', id);
+
+  if (error) return { ok: false, mensaje: error.message };
+
+  revalidatePath('/panel/empleados');
+  revalidatePath('/panel/empleados/retirados');
+  revalidatePath('/panel/configuracion');
+  return { ok: true, mensaje: 'Empleado reincorporado con su historial.' };
 }
 
 /**
@@ -190,7 +264,10 @@ export async function cargarEmpleados(
       cargo: String(f.cargo ?? '').trim() || null,
       area: String(f.area ?? '').trim() || null,
       ciudad: String(f.ciudad ?? '').trim() || null,
-      activo: true,
+      // 'activo' se omite a proposito: en un alta nueva toma el default
+      // (true) y en una fila que ya existe el upsert no lo toca, de modo
+      // que volver a subir la plantilla NO reincorpora a un retirado a
+      // sus espaldas. Reincorporar es una decision explicita.
     });
   });
 

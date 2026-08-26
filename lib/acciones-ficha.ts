@@ -20,6 +20,7 @@ export type EmpleadoParticipacion = {
   area: string | null;
   ciudad: string | null;
   activo: boolean;
+  fecha_retiro: string | null;
   asistencias: number;
   promedio: number | null;
   ultima: string | null;
@@ -54,6 +55,7 @@ export async function listarEmpleadosConParticipacion(): Promise<EmpleadoPartici
   const supabase = await crearClienteServidor();
   const { data } = await supabase.rpc('empleados_con_participacion', {
     p_empresa: empresa.id,
+    p_activos: true,   // explicito: la funcion tambien sabe listar retirados
   });
 
   return (data ?? []) as EmpleadoParticipacion[];
