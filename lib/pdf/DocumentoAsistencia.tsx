@@ -94,7 +94,6 @@ export function DocumentoAsistencia({ d }: { d: DatosPdf }) {
           titulo: d.tituloDoc,
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: d.codigo,
           campos: [
             ...(d.fechaCreacionDoc
               ? [{ etiqueta: 'FECHA DE CREACIÓN', valor: d.fechaCreacionDoc }]

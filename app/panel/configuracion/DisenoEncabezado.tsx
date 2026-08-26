@@ -20,7 +20,6 @@ type Config = {
   logo_posicion: 'izquierda' | 'centro' | 'derecha';
   mostrar_nit: boolean;
   mostrar_direccion: boolean;
-  mostrar_codigo: boolean;
 };
 
 const ESTANDAR: Config = {
@@ -28,7 +27,6 @@ const ESTANDAR: Config = {
   logo_posicion: 'centro',
   mostrar_nit: true,
   mostrar_direccion: true,
-  mostrar_codigo: true,
 };
 
 const PLANTILLAS: Array<{ v: Config['plantilla']; t: string; d: string }> = [
@@ -148,11 +146,6 @@ export default function DisenoEncabezado({
 
         <div style={e.casillas}>
           <Casilla
-            marcada={c.mostrar_codigo} bloqueada={bloqueado}
-            onCambio={(v) => setC({ ...c, mostrar_codigo: v })}
-            texto="Mostrar el código del documento"
-          />
-          <Casilla
             marcada={c.mostrar_nit} bloqueada={bloqueado}
             onCambio={(v) => setC({ ...c, mostrar_nit: v })}
             texto="Mostrar el NIT de la empresa"
@@ -221,8 +214,7 @@ function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c
         </div>
         <div style={{ ...v.celda, width: '26%', alignItems: 'flex-start', gap: 2, padding: 4 }}>
           {barra('90%', 2.5)}
-          {barra('75%', 2.5)}
-          {barra('60%', 2.5)}
+          {barra('70%', 2.5)}
         </div>
       </div>
     );

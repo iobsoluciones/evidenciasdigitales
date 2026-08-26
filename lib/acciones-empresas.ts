@@ -271,7 +271,6 @@ export async function guardarDisenoEncabezado(
     logo_posicion: string;
     mostrar_nit: boolean;
     mostrar_direccion: boolean;
-    mostrar_codigo: boolean;
   }
 ): Promise<Resultado> {
   const perfil = await obtenerPerfil();

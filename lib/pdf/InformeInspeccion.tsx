@@ -128,7 +128,6 @@ export function InformeInspeccion({ d }: { d: DatosInforme }) {
           titulo: d.titulo,
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: d.codigo,
           campos: d.camposExtra,
           empresa: d.empresa,
           nit: d.nit,

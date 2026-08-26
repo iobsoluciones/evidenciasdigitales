@@ -76,7 +76,6 @@ export function ReporteEjecutivo({ d }: { d: DatosEjecutivo }) {
           titulo: 'REPORTE EJECUTIVO DE CAPACITACIÓN',
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: null,
           campos: d.camposExtra,
           empresa: d.empresa,
           nit: null,

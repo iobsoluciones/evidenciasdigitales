@@ -83,7 +83,6 @@ export function ActaEntrega({ d }: { d: DatosActa }) {
           titulo: d.titulo,
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: d.codigo,
           campos: d.camposExtra,
           empresa: d.empresa,
           nit: d.nit,

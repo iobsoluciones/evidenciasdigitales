@@ -25,7 +25,6 @@ export type EncabezadoConfig = {
   logo_posicion?: 'izquierda' | 'centro' | 'derecha';
   mostrar_nit?: boolean;
   mostrar_direccion?: boolean;
-  mostrar_codigo?: boolean;
 };
 
 /** Config vacía = encabezado estándar, que es lo que ve el plan Básico. */
@@ -34,7 +33,6 @@ export const ENCABEZADO_ESTANDAR: Required<EncabezadoConfig> = {
   logo_posicion: 'centro',
   mostrar_nit: true,
   mostrar_direccion: true,
-  mostrar_codigo: true,
 };
 
 export function normalizarEncabezado(c: EncabezadoConfig | null | undefined) {
@@ -47,7 +45,6 @@ export type DatosEncabezado = {
   titulo: string;
   nomenclatura: string;
   versionDoc: string;
-  codigo?: string | null;
   campos: CampoEncabezado[];
   empresa: string;
   nit?: string | null;
@@ -60,10 +57,12 @@ export function EncabezadoDoc({ d }: { d: DatosEncabezado }) {
   const s = estilos(d.color);
 
   const extras = d.campos.map((x) => `${x.etiqueta}: ${x.valor}`);
+  // El codigo del documento NO va en el encabezado: ya viaja en el pie
+  // de todas las paginas, que es donde sirve para identificar una hoja
+  // suelta. Repetirlo arriba solo gastaba linea.
   const control = [
     `VERSIÓN: ${d.versionDoc}`,
     `NOMENCLATURA: ${d.nomenclatura}`,
-    ...(c.mostrar_codigo && d.codigo ? [`CÓDIGO: ${d.codigo}`] : []),
     ...extras,
   ].join('   •   ');
 
@@ -89,9 +88,6 @@ export function EncabezadoDoc({ d }: { d: DatosEncabezado }) {
         </View>
 
         <View style={s.celdaControl}>
-          {c.mostrar_codigo && d.codigo && (
-            <Text style={s.lineaControl}>CÓDIGO: {d.codigo}</Text>
-          )}
           <Text style={s.lineaControl}>NOMENCLATURA: {d.nomenclatura}</Text>
           <Text style={s.lineaControl}>VERSIÓN: {d.versionDoc}</Text>
           {d.campos.map((x) => (

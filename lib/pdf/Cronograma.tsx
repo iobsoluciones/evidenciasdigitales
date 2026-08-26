@@ -65,7 +65,6 @@ export function Cronograma({ d }: { d: DatosCronograma }) {
           titulo: 'CRONOGRAMA DE CAPACITACIONES',
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: null,
           campos: d.camposExtra,
           empresa: d.empresa,
           nit: null,

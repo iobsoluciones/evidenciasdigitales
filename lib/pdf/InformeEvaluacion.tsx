@@ -61,7 +61,6 @@ export function InformeEvaluacion({ d }: { d: DatosInforme }) {
           titulo: 'INFORME DE RESULTADOS DE EVALUACIÓN',
           nomenclatura: d.nomenclatura,
           versionDoc: d.versionDoc,
-          codigo: d.codigo,
           campos: d.camposExtra,
           empresa: d.organizacion,
           nit: null,
