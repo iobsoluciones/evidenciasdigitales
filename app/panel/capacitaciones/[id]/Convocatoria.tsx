@@ -36,16 +36,53 @@ export default function Convocatoria({
     () => new Set(empleados.filter((e) => e.convocado).map((e) => e.id))
   );
 
+  /**
+   * Areas contraidas por defecto. Con una nomina larga, desplegarlo
+   * todo obliga a recorrer cientos de nombres para marcar cuatro: el
+   * area es el criterio con el que se convoca de verdad.
+   */
+  const [expandidas, setExpandidas] = useState<Set<string>>(new Set());
+  const [busqueda, setBusqueda] = useState('');
+
+  const texto = busqueda.trim().toLowerCase();
+  const buscando = texto.length > 0;
+
+  // Total por area SIN filtrar: el contador debe seguir diciendo la
+  // verdad sobre el area aunque la busqueda oculte a parte de ella.
+  const totalPorArea = useMemo(() => {
+    const mapa = new Map<string, number>();
+    for (const e of empleados) mapa.set(e.area, (mapa.get(e.area) ?? 0) + 1);
+    return mapa;
+  }, [empleados]);
+
   // Agrupa por área conservando el orden que trae la consulta
   const porArea = useMemo(() => {
     const mapa = new Map<string, EmpleadoConvocable[]>();
     for (const e of empleados) {
+      if (buscando) {
+        const blob = `${e.nombres} ${e.identificacion} ${e.cargo ?? ''} ${e.area}`.toLowerCase();
+        if (!blob.includes(texto)) continue;
+      }
       const lista = mapa.get(e.area) ?? [];
       lista.push(e);
       mapa.set(e.area, lista);
     }
     return Array.from(mapa.entries());
-  }, [empleados]);
+  }, [empleados, buscando, texto]);
+
+  // Buscando se abre todo lo que coincide: esconder el resultado tras
+  // un clic mas seria pedirle al usuario que busque dos veces.
+  const estaExpandida = (area: string) => buscando || expandidas.has(area);
+
+  function alternarExpandida(area: string) {
+    setExpandidas((s) => {
+      const n = new Set(s);
+      if (n.has(area)) n.delete(area); else n.add(area);
+      return n;
+    });
+  }
+
+  const totalVisibles = porArea.reduce((n, [, lista]) => n + lista.length, 0);
 
   const convocadosActuales = empleados.filter((e) => e.convocado).length;
   const hayCambios =
@@ -136,32 +173,77 @@ export default function Convocatoria({
             </div>
           </div>
 
+          <div style={e.barraBusqueda}>
+            <input
+              value={busqueda}
+              onChange={(ev) => setBusqueda(ev.target.value)}
+              placeholder="Buscar por nombre, cédula, cargo o área…"
+              style={e.buscador}
+            />
+            {buscando ? (
+              <span style={e.resultado}>
+                {totalVisibles} de {empleados.length}
+                <button onClick={() => setBusqueda('')} style={e.enlace}>Limpiar</button>
+              </span>
+            ) : (
+              <button
+                onClick={() =>
+                  setExpandidas(
+                    expandidas.size === porArea.length
+                      ? new Set()
+                      : new Set(porArea.map(([a]) => a))
+                  )
+                }
+                style={e.enlace}
+              >
+                {expandidas.size === porArea.length ? 'Contraer todo' : 'Desplegar todo'}
+              </button>
+            )}
+          </div>
+
           <div style={e.areas}>
             {porArea.map(([area, lista]) => {
               const marcados = lista.filter((x) => elegidos.has(x.id)).length;
               const todos = marcados === lista.length;
               const algunos = marcados > 0 && !todos;
 
+              const abierta = estaExpandida(area);
+              const totalArea = totalPorArea.get(area) ?? lista.length;
+
               return (
                 <div key={area} style={e.area}>
-                  <label style={e.encabezadoArea}>
+                  {/* El checkbox marca el area entera; el resto de la
+                      fila despliega. Antes todo era un label, asi que
+                      cualquier clic marcaba a todo el mundo. */}
+                  <div style={e.encabezadoArea}>
                     <input
                       type="checkbox"
                       checked={todos}
                       ref={(el) => { if (el) el.indeterminate = algunos; }}
                       onChange={() => alternarArea(area, lista)}
-                      style={{ marginRight: 9, width: 15, height: 15 }}
+                      title={`Marcar toda el área ${area}`}
+                      style={{ marginRight: 9, width: 15, height: 15, flexShrink: 0 }}
                     />
-                    <span style={{ fontWeight: 600, flex: 1 }}>{area}</span>
-                    <span style={{
-                      ...e.contador,
-                      background: todos ? '#DCFCE7' : algunos ? '#FEF9C3' : '#EFEFEA',
-                      color: todos ? '#15803D' : algunos ? '#8A6100' : '#8A929C',
-                    }}>
-                      {marcados}/{lista.length}
-                    </span>
-                  </label>
+                    <button
+                      onClick={() => alternarExpandida(area)}
+                      style={e.botonArea}
+                      aria-expanded={abierta}
+                    >
+                      <span style={{ ...e.flecha, transform: abierta ? 'rotate(90deg)' : 'none' }}>
+                        ›
+                      </span>
+                      <span style={{ fontWeight: 600, flex: 1, textAlign: 'left' }}>{area}</span>
+                      <span style={{
+                        ...e.contador,
+                        background: todos ? '#DCFCE7' : algunos ? '#FEF9C3' : '#EFEFEA',
+                        color: todos ? '#15803D' : algunos ? '#8A6100' : '#8A929C',
+                      }}>
+                        {marcados}/{buscando ? `${lista.length} de ${totalArea}` : lista.length}
+                      </span>
+                    </button>
+                  </div>
 
+                  {abierta && (
                   <div style={e.personas}>
                     {lista.map((em) => (
                       <label
@@ -186,9 +268,16 @@ export default function Convocatoria({
                       </label>
                     ))}
                   </div>
+                  )}
                 </div>
               );
             })}
+
+            {porArea.length === 0 && (
+              <p style={e.sinResultados}>
+                Ningún empleado coincide con “{busqueda}”.
+              </p>
+            )}
           </div>
 
           <div style={e.acciones}>
@@ -236,6 +325,32 @@ const e: Record<string, React.CSSProperties> = {
     fontSize: 12, cursor: 'pointer', textDecoration: 'underline',
   },
 
+  barraBusqueda: {
+    display: 'flex', alignItems: 'center', gap: 10,
+    margin: '0 0 12px', flexWrap: 'wrap',
+  },
+  buscador: {
+    flex: '1 1 240px', minWidth: 200, padding: '8px 11px',
+    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    borderRadius: 4, fontSize: 13, fontFamily: 'inherit', color: '#14263F',
+  },
+  resultado: {
+    fontSize: 12, color: '#5B6470', display: 'flex',
+    alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
+  },
+  botonArea: {
+    display: 'flex', alignItems: 'center', gap: 8, flex: 1,
+    background: 'none', border: 'none', padding: 0,
+    font: 'inherit', fontSize: 13, color: '#14263F', cursor: 'pointer',
+  },
+  flecha: {
+    display: 'inline-block', fontSize: 15, color: '#8A929C',
+    transition: 'transform .15s', width: 10, flexShrink: 0,
+  },
+  sinResultados: {
+    fontSize: 12.5, color: '#5B6470', textAlign: 'center',
+    padding: '22px 0', margin: 0,
+  },
   areas: { display: 'grid', gap: 12, maxHeight: 420, overflowY: 'auto' },
   area: { border: '1px solid #EFEFEA', borderRadius: 6, overflow: 'hidden' },
   encabezadoArea: {
