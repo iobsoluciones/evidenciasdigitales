@@ -15,9 +15,10 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-  crearEvento, actualizarEvento, eliminarEvento,
+  crearEvento, actualizarEvento, eliminarEvento, vincularAnotacion,
   type EventoCalendario, type TipoEvento,
 } from '@/lib/acciones-agenda';
+import { crearCapacitacion } from '@/lib/acciones';
 import type { Empresa } from '@/lib/empresa-activa';
 
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -36,6 +37,24 @@ const VACIO = {
   titulo: '', fecha: '', hora: '', tipo: 'capacitacion' as TipoEvento, notas: '',
 };
 
+/** Campos minimos para que `crearCapacitacion` valide sin rebotar. */
+const CAP_VACIA = {
+  tema: '', descripcion: '', instructor: '', empresa: '',
+  esEmpresaPropia: false, esEvaluada: false,
+  validarEmpleados: false, incluirFirmaProfesional: false,
+  fecha_inicio: '', fecha_fin: '', esperados: '',
+};
+
+/** 'aaaa-mm-dd' + 'hh:mm' -> valor de un input datetime-local. */
+function aLocal(fecha: string, hora: string, horasMas = 0) {
+  const base = new Date(`${fecha}T${hora || '08:00'}:00`);
+  if (Number.isNaN(base.getTime())) return '';
+  base.setHours(base.getHours() + horasMas);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${base.getFullYear()}-${p(base.getMonth() + 1)}-${p(base.getDate())}` +
+         `T${p(base.getHours())}:${p(base.getMinutes())}`;
+}
+
 export default function VistaCalendario({
   eventos, empresas, empresaActiva, mesInicio, verTodas, color,
 }: {
@@ -52,6 +71,13 @@ export default function VistaCalendario({
   const [editando, setEditando] = useState<string | null>(null);
   const [f, setF] = useState(VACIO);
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+
+  // Alta de capacitacion REAL desde el calendario. `desdeAnotacion`
+  // guarda la anotacion de origen para vincularla despues y que el dia
+  // no muestre el plan y el documento a la vez.
+  const [capAbierta, setCapAbierta] = useState(false);
+  const [cap, setCap] = useState(CAP_VACIA);
+  const [desdeAnotacion, setDesdeAnotacion] = useState<string | null>(null);
 
   const base = new Date(mesInicio + 'T12:00:00');
 
@@ -100,6 +126,50 @@ export default function VistaCalendario({
     setAbierto(true);
   }
 
+  /** Abre el alta de capacitacion, opcionalmente partiendo de una anotacion. */
+  function abrirCapacitacion(desde?: EventoCalendario) {
+    const hoy = new Date().toISOString().slice(0, 10);
+    const fecha = desde?.fecha ?? hoy;
+    const hora = desde?.hora ?? '08:00';
+
+    setDesdeAnotacion(desde?.id ?? null);
+    setCap({
+      ...CAP_VACIA,
+      tema: desde?.titulo ?? '',
+      descripcion: desde?.detalle ?? '',
+      fecha_inicio: aLocal(fecha, hora),
+      fecha_fin: aLocal(fecha, hora, 2),   // dos horas por defecto
+    });
+    setAviso(null);
+    setAbierto(false);
+    setCapAbierta(true);
+  }
+
+  function guardarCapacitacion() {
+    startTransition(async () => {
+      const r = await crearCapacitacion(cap);
+
+      if (!r.ok) {
+        setAviso({ tipo: 'error', texto: r.mensaje });
+        return;
+      }
+
+      // Si nacio de una anotacion, se ata para no duplicar el dia.
+      // Que la vinculacion falle no invalida la capacitacion, que ya
+      // quedo creada: se avisa sin perder ese hecho.
+      let texto = r.mensaje + ' Ya aparece en el listado y en el calendario.';
+      if (desdeAnotacion && r.id) {
+        const v = await vincularAnotacion(desdeAnotacion, r.id);
+        if (!v.ok) texto += ' La anotación de origen sigue visible: ' + v.mensaje;
+      }
+
+      setAviso({ tipo: 'ok', texto });
+      setCapAbierta(false);
+      setDesdeAnotacion(null);
+      router.refresh();
+    });
+  }
+
   function guardar() {
     startTransition(async () => {
       const r = editando
@@ -135,15 +205,29 @@ export default function VistaCalendario({
             {verTodas
               ? 'Todas las empresas a tu cargo'
               : empresaActiva?.nombre ?? 'Sin empresa seleccionada'}
-            {' · planeación, no crea capacitaciones'}
+            {' · planeación y alta de capacitaciones'}
           </p>
         </div>
         <div style={s.acciones}>
           <button onClick={alternarTodas} style={s.btnSec}>
             {verTodas ? 'Ver solo la empresa activa' : 'Ver todas las empresas'}
           </button>
-          <button onClick={() => abrirNuevo()} style={{ ...s.btn, background: color }}>
+          <button onClick={() => abrirNuevo()} style={s.btnSec}>
             + Anotación
+          </button>
+          <button
+            onClick={() => abrirCapacitacion()}
+            disabled={!empresaActiva}
+            title={empresaActiva
+              ? 'Crea la capacitación real, con su código y su acta'
+              : 'Selecciona una empresa para crear capacitaciones'}
+            style={{
+              ...s.btn,
+              background: empresaActiva ? color : '#C5C5BD',
+              cursor: empresaActiva ? 'pointer' : 'not-allowed',
+            }}
+          >
+            + Capacitación
           </button>
         </div>
       </div>
@@ -197,6 +281,96 @@ export default function VistaCalendario({
         </span>
       </div>
 
+      {/* ---------- Modal: capacitación real ---------- */}
+      {capAbierta && (
+        <div style={s.velo} onClick={(ev) => { if (ev.target === ev.currentTarget) setCapAbierta(false); }}>
+          <div style={s.modal}>
+            <h2 style={s.modalTitulo}>Nueva capacitación</h2>
+            <p style={s.modalSub}>
+              {desdeAnotacion
+                ? 'Nace de una anotación: al crearla, el día mostrará la capacitación en vez del plan.'
+                : 'Se crea inactiva. Actívala desde su ficha cuando vayas a registrar asistencia.'}
+              {empresaActiva ? ` Empresa: ${empresaActiva.nombre}.` : ''}
+            </p>
+
+            <label style={s.label}>Tema</label>
+            <input
+              value={cap.tema}
+              onChange={(ev) => setCap({ ...cap, tema: ev.target.value })}
+              placeholder="TRABAJO EN ALTURAS"
+              style={{ ...s.input, textTransform: 'uppercase' }}
+            />
+
+            <label style={s.label}>Instructor</label>
+            <input
+              value={cap.instructor}
+              onChange={(ev) => setCap({ ...cap, instructor: ev.target.value })}
+              placeholder="Nombre de quien dicta"
+              style={s.input}
+            />
+
+            <div style={s.dos}>
+              <div>
+                <label style={s.label}>Inicio</label>
+                <input type="datetime-local" value={cap.fecha_inicio}
+                  onChange={(ev) => setCap({ ...cap, fecha_inicio: ev.target.value })}
+                  style={s.input} />
+              </div>
+              <div>
+                <label style={s.label}>Fin</label>
+                <input type="datetime-local" value={cap.fecha_fin}
+                  onChange={(ev) => setCap({ ...cap, fecha_fin: ev.target.value })}
+                  style={s.input} />
+              </div>
+            </div>
+
+            <label style={s.label}>Participantes esperados (opcional)</label>
+            <input
+              value={cap.esperados}
+              inputMode="numeric"
+              onChange={(ev) => setCap({ ...cap, esperados: ev.target.value.replace(/[^0-9]/g, '') })}
+              placeholder="20"
+              style={s.input}
+            />
+
+            <label style={s.label}>Descripción (opcional)</label>
+            <textarea value={cap.descripcion} rows={2}
+              onChange={(ev) => setCap({ ...cap, descripcion: ev.target.value })}
+              style={{ ...s.input, resize: 'vertical' }} />
+
+            <label style={s.check}>
+              <input
+                type="checkbox"
+                checked={cap.validarEmpleados}
+                onChange={(ev) => setCap({ ...cap, validarEmpleados: ev.target.checked })}
+              />
+              Solo pueden registrarse empleados de la base
+            </label>
+            <label style={s.check}>
+              <input
+                type="checkbox"
+                checked={cap.esEvaluada}
+                onChange={(ev) => setCap({ ...cap, esEvaluada: ev.target.checked })}
+              />
+              Lleva evaluación
+            </label>
+
+            <p style={s.notaModal}>
+              El resto de opciones (evaluación, firma profesional) se ajustan
+              después en la ficha de la capacitación.
+            </p>
+
+            <div style={s.modalAcciones}>
+              <button onClick={guardarCapacitacion} disabled={pendiente}
+                style={{ ...s.btn, background: pendiente ? '#C5C5BD' : color, flex: 1 }}>
+                {pendiente ? 'Creando…' : 'Crear capacitación'}
+              </button>
+              <button onClick={() => setCapAbierta(false)} style={s.btnSec}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ---------- Modal ---------- */}
       {abierto && (
         <div style={s.velo} onClick={(e) => { if (e.target === e.currentTarget) setAbierto(false); }}>
@@ -242,6 +416,33 @@ export default function VistaCalendario({
             <textarea value={f.notas} rows={3}
               onChange={(e) => setF({ ...f, notas: e.target.value })}
               style={{ ...s.input, resize: 'vertical' }} />
+
+            {/* Solo si la anotacion es de la empresa activa: crearCapacitacion
+                trabaja siempre sobre esa empresa, y convertir una anotacion
+                ajena emitiria el documento en la empresa equivocada. */}
+            {editando && (() => {
+              const ev = eventos.find((x) => x.id === editando);
+              if (!ev || !empresaActiva) return null;
+
+              if (ev.empresaId !== empresaActiva.id) {
+                return (
+                  <p style={s.notaModal}>
+                    Para convertirla en capacitación, cambia la empresa activa a{' '}
+                    <strong>{ev.empresa}</strong>.
+                  </p>
+                );
+              }
+
+              return (
+                <button
+                  onClick={() => abrirCapacitacion(ev)}
+                  disabled={pendiente}
+                  style={s.convertir}
+                >
+                  Convertir en capacitación real →
+                </button>
+              );
+            })()}
 
             <div style={s.modalAcciones}>
               <button onClick={guardar} disabled={pendiente}
@@ -334,7 +535,10 @@ function Mes({
                     borderWidth: 1, borderStyle: 'solid', borderColor: ev.color,
                     cursor: ev.origen === 'agenda' ? 'pointer' : 'default',
                   }}
-                  title={`${ev.titulo}${ev.empresa ? ' · ' + ev.empresa : ''}${ev.hora ? ' · ' + ev.hora : ''}`}
+                  title={`${ev.titulo}${ev.empresa ? ' · ' + ev.empresa : ''}${ev.hora ? ' · ' + ev.hora : ''}` +
+                    (ev.origen === 'agenda'
+                      ? ' — clic para editar esta anotación'
+                      : ' — capacitación creada; se edita en su ficha')}
                 >
                   {ev.hora && <span style={m.hora}>{ev.hora}</span>}
                   {ev.titulo}
@@ -357,6 +561,20 @@ const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
   sub: { fontSize: 13, color: '#5B6470', margin: 0 },
   acciones: { display: 'flex', gap: 10, flexWrap: 'wrap' },
+  convertir: {
+    display: 'block', width: '100%', marginTop: 14,
+    background: '#F4F7FB', color: '#14263F',
+    borderWidth: 1, borderStyle: 'solid', borderColor: '#D3DEEC',
+    borderRadius: 4, padding: '9px 12px', fontSize: 12.5,
+    fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+  },
+  check: {
+    display: 'flex', alignItems: 'center', gap: 8,
+    fontSize: 12.5, color: '#14263F', marginTop: 10, cursor: 'pointer',
+  },
+  notaModal: {
+    fontSize: 11.5, color: '#8A929C', margin: '14px 0 0', lineHeight: 1.5,
+  },
   btn: { color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnSec: { background: '#fff', color: '#14263F', border: '1px solid #DFDFD8', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
   btnBorrar: { background: '#fff', color: '#9B1C1C', border: '1px solid #F5C6C6', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },

@@ -105,6 +105,8 @@ export async function crearCapacitacion(datos: DatosCapacitacion): Promise<Resul
   if (errIns) return { ok: false, mensaje: errIns.message };
 
   revalidatePath('/panel/capacitaciones');
+  // El calendario la muestra en cuanto existe: se puede crear desde alli.
+  revalidatePath('/panel/calendario');
   return { ok: true, mensaje: `Capacitación ${codigo} creada.`, id: data.id };
 }
 

@@ -14,7 +14,13 @@ import { revalidatePath } from 'next/cache';
 import { crearClienteServidor } from './supabase/servidor';
 import { obtenerPerfil } from './sesion';
 
-export type TipoEvento = 'capacitacion' | 'inspeccion' | 'entrega' | 'reunion' | 'otro';
+/**
+ * Debe coincidir EXACTAMENTE con el CHECK 'tipo_agenda' de la tabla:
+ * capacitacion, inspeccion, entrega, auditoria, otro. Antes decia
+ * 'reunion' (que la base rechaza) y omitia 'auditoria' (que el
+ * formulario si ofrece), asi que el tipo mentia en ambas direcciones.
+ */
+export type TipoEvento = 'capacitacion' | 'inspeccion' | 'entrega' | 'auditoria' | 'otro';
 
 /**
  * Evento del calendario. `origen` distingue las dos naturalezas:
@@ -130,6 +136,29 @@ export async function actualizarEvento(
 
   revalidatePath('/panel/calendario');
   return { ok: true, mensaje: 'Anotación actualizada.' };
+}
+
+/**
+ * Ata la anotacion a la capacitacion real que nacio de ella.
+ * La funcion `calendario` ignora las anotaciones con capacitacion_id,
+ * de modo que el dia deja de mostrar el plan y la capacitacion a la
+ * vez: queda solo el documento real, sin perder el rastro de que
+ * aquello se habia planeado.
+ */
+export async function vincularAnotacion(
+  idAgenda: string,
+  idCapacitacion: string
+): Promise<Resultado> {
+  const supabase = await crearClienteServidor();
+  const { error } = await supabase
+    .from('agenda')
+    .update({ capacitacion_id: idCapacitacion })
+    .eq('id', idAgenda);
+
+  if (error) return { ok: false, mensaje: error.message };
+
+  revalidatePath('/panel/calendario');
+  return { ok: true, mensaje: 'Anotación vinculada.' };
 }
 
 export async function eliminarEvento(id: string): Promise<Resultado> {
