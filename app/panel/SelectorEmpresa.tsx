@@ -7,7 +7,7 @@
  * servidor, no solo la vista: las consultas se rehacen filtradas.
  */
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { seleccionarEmpresa } from '@/lib/acciones-empresas';
 import type { Empresa } from '@/lib/empresa-activa';
 
@@ -19,6 +19,7 @@ export default function SelectorEmpresa({
   activa: Empresa | null;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [pendiente, startTransition] = useTransition();
   const [abierto, setAbierto] = useState(false);
 
@@ -28,6 +29,11 @@ export default function SelectorEmpresa({
     setAbierto(false);
     startTransition(async () => {
       await seleccionarEmpresa(id);
+      // Volver a la raiz del modulo actual (p. ej. /panel/capacitaciones),
+      // ya filtrada por la nueva empresa. Evita quedarse en un detalle que
+      // pertenece a la empresa anterior.
+      const raizModulo = pathname.split('/').slice(0, 3).join('/') || '/panel';
+      router.push(raizModulo);
       router.refresh();
     });
   }
