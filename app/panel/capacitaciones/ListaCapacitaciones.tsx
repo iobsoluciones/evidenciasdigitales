@@ -371,7 +371,11 @@ export default function ListaCapacitaciones({
                           Editar
                         </button>
 
-                        {activa ? (
+                        {/* Convocar exige capacitacion activa Y que valide
+                            contra la base de empleados: la misma regla que
+                            en el detalle, para que el boton no prometa aqui
+                            lo que alli esta bloqueado. */}
+                        {activa && c.validar_empleados ? (
                           <Link
                             href={`/panel/capacitaciones/${c.id}/convocatoria`}
                             style={{ ...est.btnMini, textDecoration: 'none', display: 'inline-block' }}
@@ -380,7 +384,9 @@ export default function ListaCapacitaciones({
                           </Link>
                         ) : (
                           <span
-                            title="Actívala para poder convocar"
+                            title={!activa
+                              ? 'Actívala para poder convocar'
+                              : 'Marca «validar contra la base de empleados» para poder convocar'}
                             style={{ ...est.btnMini, opacity: 0.45, cursor: 'not-allowed' }}
                           >
                             Convocar
