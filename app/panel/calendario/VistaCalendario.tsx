@@ -37,10 +37,16 @@ const VACIO = {
   titulo: '', fecha: '', hora: '', tipo: 'capacitacion' as TipoEvento, notas: '',
 };
 
-/** Campos minimos para que `crearCapacitacion` valide sin rebotar. */
+/**
+ * Campos minimos para `crearCapacitacion`.
+ * esEmpresaPropia arranca en true, igual que el formulario del modulo
+ * de Capacitaciones: la accion toma entonces el nombre de la empresa
+ * activa. Con false y `empresa` vacio rebotaba pidiendo la empresa
+ * capacitada, que este modal no llegaba a preguntar.
+ */
 const CAP_VACIA = {
   tema: '', descripcion: '', instructor: '', empresa: '',
-  esEmpresaPropia: false, esEvaluada: false,
+  esEmpresaPropia: true, esEvaluada: false,
   validarEmpleados: false, incluirFirmaProfesional: false,
   fecha_inicio: '', fecha_fin: '', esperados: '',
 };
@@ -344,6 +350,23 @@ export default function VistaCalendario({
             <textarea value={cap.descripcion} rows={2}
               onChange={(ev) => setCap({ ...cap, descripcion: ev.target.value })}
               style={{ ...s.input, resize: 'vertical' }} />
+
+            <label style={s.check}>
+              <input
+                type="checkbox"
+                checked={cap.esEmpresaPropia}
+                onChange={(ev) => setCap({ ...cap, esEmpresaPropia: ev.target.checked })}
+              />
+              La capacitada es {empresaActiva?.nombre ?? 'la empresa activa'}
+            </label>
+            {!cap.esEmpresaPropia && (
+              <input
+                value={cap.empresa}
+                onChange={(ev) => setCap({ ...cap, empresa: ev.target.value })}
+                placeholder="Nombre de la empresa capacitada (contratista, visitante…)"
+                style={{ ...s.input, marginTop: 8, textTransform: 'uppercase' }}
+              />
+            )}
 
             <label style={s.check}>
               <input
