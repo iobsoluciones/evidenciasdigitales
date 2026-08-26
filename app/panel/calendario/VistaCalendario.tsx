@@ -1,8 +1,13 @@
 'use client';
 
 /**
- * CALENDARIO DE PLANEACIÓN — tres meses
+ * CALENDARIO DE PLANEACIÓN — un mes o una semana
  * ---------------------------------------------------------------
+ * Un solo mes por pantalla: con dos lado a lado cada celda quedaba tan
+ * estrecha que el nombre de la capacitacion se cortaba a los pocos
+ * caracteres. La vista de semana da el paso siguiente para los dias
+ * cargados: siete celdas altas donde cabe todo el detalle.
+ *
  * Muestra dos fuentes distinguibles:
  *   - Capacitaciones ya creadas (punto sólido)
  *   - Anotaciones de agenda (punto hueco)
@@ -62,13 +67,15 @@ function aLocal(fecha: string, hora: string, horasMas = 0) {
 }
 
 export default function VistaCalendario({
-  eventos, empresas, empresaActiva, mesInicio, verTodas, color,
+  eventos, empresas, empresaActiva, mesInicio, verTodas, porSemana, color,
 }: {
   eventos: EventoCalendario[];
   empresas: Empresa[];
   empresaActiva: Empresa | null;
+  /** Primer dia del rango: 1 del mes, o lunes de la semana. */
   mesInicio: string;
   verTodas: boolean;
+  porSemana: boolean;
   color: string;
 }) {
   const router = useRouter();
@@ -87,6 +94,15 @@ export default function VistaCalendario({
 
   const base = new Date(mesInicio + 'T12:00:00');
 
+  // "12 — 18 de Agosto 2026" en semana; "Agosto 2026" en mes.
+  const rotuloRango = (() => {
+    if (!porSemana) return `${MESES[base.getMonth()]} ${base.getFullYear()}`;
+    const fin = new Date(base.getFullYear(), base.getMonth(), base.getDate() + 6);
+    return base.getMonth() === fin.getMonth()
+      ? `${base.getDate()} — ${fin.getDate()} de ${MESES[base.getMonth()]} ${base.getFullYear()}`
+      : `${base.getDate()} ${MESES[base.getMonth()]} — ${fin.getDate()} ${MESES[fin.getMonth()]} ${fin.getFullYear()}`;
+  })();
+
   /** Agrupa por día para pintar cada celda sin recorrer todo el arreglo. */
   const porDia = new Map<string, EventoCalendario[]>();
   for (const e of eventos) {
@@ -95,19 +111,35 @@ export default function VistaCalendario({
     porDia.set(e.fecha, lista);
   }
 
-  function navegar(delta: number) {
-    const d = new Date(base.getFullYear(), base.getMonth() + delta, 1);
+  /** Fecha local en aaaa-mm-dd; toISOString correria el dia en Colombia. */
+  function iso(d: Date) {
+    const p = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  }
+
+  function irA(desde: string, opciones?: { semana?: boolean; todas?: boolean }) {
     const params = new URLSearchParams();
-    params.set('desde', d.toISOString().slice(0, 10));
-    if (verTodas) params.set('todas', '1');
+    params.set('desde', desde);
+    if (opciones?.semana ?? porSemana) params.set('modo', 'semana');
+    if (opciones?.todas ?? verTodas) params.set('todas', '1');
     router.push(`/panel/calendario?${params}`);
   }
 
+  /** Un mes o una semana, segun lo que se este viendo. */
+  function navegar(delta: number) {
+    const d = porSemana
+      ? new Date(base.getFullYear(), base.getMonth(), base.getDate() + delta * 7)
+      : new Date(base.getFullYear(), base.getMonth() + delta, 1);
+    irA(iso(d));
+  }
+
   function alternarTodas() {
-    const params = new URLSearchParams();
-    params.set('desde', mesInicio);
-    if (!verTodas) params.set('todas', '1');
-    router.push(`/panel/calendario?${params}`);
+    irA(mesInicio, { todas: !verTodas });
+  }
+
+  /** Al cambiar de modo se conserva el dia que se estaba mirando. */
+  function cambiarModo(semana: boolean) {
+    irA(mesInicio, { semana });
   }
 
   function abrirNuevo(fecha?: string) {
@@ -246,12 +278,35 @@ export default function VistaCalendario({
 
       {/* ---------- Navegación ---------- */}
       <div style={s.navegacion}>
-        <button onClick={() => navegar(-1)} style={s.flecha} aria-label="Mes anterior">‹</button>
-        <span style={s.rango}>
-          {MESES[base.getMonth()]} — {MESES[(base.getMonth() + 1) % 12]} {base.getFullYear()}
-        </span>
-        <button onClick={() => navegar(1)} style={s.flecha} aria-label="Mes siguiente">›</button>
+        <button onClick={() => navegar(-1)} style={s.flecha}
+          aria-label={porSemana ? 'Semana anterior' : 'Mes anterior'}>‹</button>
+        <span style={s.rango}>{rotuloRango}</span>
+        <button onClick={() => navegar(1)} style={s.flecha}
+          aria-label={porSemana ? 'Semana siguiente' : 'Mes siguiente'}>›</button>
         <button onClick={() => router.push('/panel/calendario')} style={s.hoy}>Hoy</button>
+
+        <div style={s.selectorModo}>
+          <button
+            onClick={() => cambiarModo(false)}
+            style={{
+              ...s.botonModo,
+              background: porSemana ? 'transparent' : color,
+              color: porSemana ? '#5B6470' : '#fff',
+            }}
+          >
+            Mes
+          </button>
+          <button
+            onClick={() => cambiarModo(true)}
+            style={{
+              ...s.botonModo,
+              background: porSemana ? color : 'transparent',
+              color: porSemana ? '#fff' : '#5B6470',
+            }}
+          >
+            Semana
+          </button>
+        </div>
       </div>
 
       {aviso && (
@@ -264,21 +319,23 @@ export default function VistaCalendario({
         </div>
       )}
 
-      {/* ---------- Dos meses: actual y siguiente ---------- */}
-      {/* Dos en vez de tres da el ancho suficiente para leer el
-          nombre de cada capacitacion dentro de la celda. */}
-      <div style={s.meses}>
-        {[0, 1].map((offset) => (
-          <Mes
-            key={offset}
-            anio={base.getFullYear()}
-            mes={base.getMonth() + offset}
-            porDia={porDia}
-            onDia={abrirNuevo}
-            onEvento={abrirEdicion}
-          />
-        ))}
-      </div>
+      {/* ---------- El periodo ---------- */}
+      {porSemana ? (
+        <Semana
+          lunes={base}
+          porDia={porDia}
+          onDia={abrirNuevo}
+          onEvento={abrirEdicion}
+        />
+      ) : (
+        <Mes
+          anio={base.getFullYear()}
+          mes={base.getMonth()}
+          porDia={porDia}
+          onDia={abrirNuevo}
+          onEvento={abrirEdicion}
+        />
+      )}
 
       {/* ---------- Leyenda ---------- */}
       <div style={s.leyenda}>
@@ -492,6 +549,86 @@ export default function VistaCalendario({
 }
 
 /* ---------------------------------------------------------------
+   Una semana: siete columnas altas. Aqui no hace falta recortar el
+   texto ni limitar cuantos eventos se ven, que es justo lo que la
+   vista de mes no puede permitirse.
+   --------------------------------------------------------------- */
+function Semana({
+  lunes, porDia, onDia, onEvento,
+}: {
+  lunes: Date;
+  porDia: Map<string, EventoCalendario[]>;
+  onDia: (fecha: string) => void;
+  onEvento: (e: EventoCalendario) => void;
+}) {
+  const hoy = new Date();
+
+  const dias = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() + i);
+    const p = (n: number) => String(n).padStart(2, '0');
+    return {
+      fecha: d,
+      iso: `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`,
+      esHoy: hoy.getFullYear() === d.getFullYear()
+          && hoy.getMonth() === d.getMonth()
+          && hoy.getDate() === d.getDate(),
+      finDeSemana: i >= 5,
+    };
+  });
+
+  return (
+    <div style={m.mes}>
+      <div style={w.rejilla}>
+        {dias.map((d, i) => {
+          const eventos = porDia.get(d.iso) ?? [];
+          return (
+            <div
+              key={d.iso}
+              onClick={() => onDia(d.iso)}
+              style={{
+                ...w.columna,
+                background: d.esHoy ? '#FEF9E7' : d.finDeSemana ? '#FAFAF8' : '#fff',
+                borderColor: d.esHoy ? '#E8C766' : '#EFEFEA',
+              }}
+              title="Clic para anotar"
+            >
+              <div style={w.cabecera}>
+                <span style={w.diaSemana}>{DIAS[i]}</span>
+                <span style={{ ...w.numero, fontWeight: d.esHoy ? 700 : 500 }}>
+                  {d.fecha.getDate()}
+                </span>
+              </div>
+
+              {eventos.length === 0 ? (
+                <p style={w.libre}>—</p>
+              ) : (
+                eventos.map((ev) => (
+                  <div
+                    key={ev.id}
+                    onClick={(e) => { e.stopPropagation(); onEvento(ev); }}
+                    style={{
+                      ...w.evento,
+                      background: ev.origen === 'capacitacion' ? ev.color : '#fff',
+                      color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
+                      borderWidth: 1, borderStyle: 'solid', borderColor: ev.color,
+                    }}
+                  >
+                    {ev.hora && <div style={w.hora}>{ev.hora}</div>}
+                    <div style={w.titulo}>{ev.titulo}</div>
+                    {ev.codigo && <div style={w.codigo}>{ev.codigo}</div>}
+                    {ev.empresa && <div style={w.empresa}>{ev.empresa}</div>}
+                  </div>
+                ))
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------
    Un mes: rejilla de 7 columnas empezando en lunes.
    --------------------------------------------------------------- */
 function Mes({
@@ -591,6 +728,15 @@ const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
   sub: { fontSize: 13, color: '#5B6470', margin: 0 },
   acciones: { display: 'flex', gap: 10, flexWrap: 'wrap' },
+  selectorModo: {
+    display: 'inline-flex', gap: 2, marginLeft: 'auto',
+    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    borderRadius: 5, padding: 2, background: '#fff',
+  },
+  botonModo: {
+    border: 'none', borderRadius: 4, padding: '6px 14px',
+    fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+  },
   convertir: {
     display: 'block', width: '100%', marginTop: 14,
     background: '#F4F7FB', color: '#14263F',
@@ -616,7 +762,6 @@ const s: Record<string, React.CSSProperties> = {
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
 
-  meses: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(390px,1fr))', gap: 20 },
 
   leyenda: { display: 'flex', gap: 20, alignItems: 'center', marginTop: 18, flexWrap: 'wrap', fontSize: 11.5, color: '#5B6470' },
   leyendaItem: { display: 'flex', alignItems: 'center', gap: 7 },
@@ -639,16 +784,42 @@ const m: Record<string, React.CSSProperties> = {
   anio: { color: '#8A929C', fontWeight: 400 },
   rejilla: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 2 },
   diaSemana: { fontSize: 9.5, color: '#8A929C', textAlign: 'center', padding: '3px 0', fontWeight: 600 },
-  celdaVacia: { minHeight: 82 },
+  celdaVacia: { minHeight: 116 },
   celda: {
-    minHeight: 82, borderWidth: 1, borderStyle: 'solid', borderRadius: 3,
-    padding: 4, cursor: 'pointer', overflow: 'hidden',
+    minHeight: 116, borderWidth: 1, borderStyle: 'solid', borderRadius: 3,
+    padding: 5, cursor: 'pointer', overflow: 'hidden',
   },
-  numero: { fontSize: 11, color: '#5B6470', marginBottom: 3 },
+  numero: { fontSize: 12, color: '#5B6470', marginBottom: 4 },
   evento: {
-    fontSize: 9, padding: '3px 4px', borderRadius: 2, marginBottom: 2,
-    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.35,
-  },
+    // Con un solo mes cabe el nombre completo en dos lineas en vez de
+    // cortarlo con puntos suspensivos a los pocos caracteres.
+    fontSize: 10.5, padding: '4px 6px', borderRadius: 3, marginBottom: 3,
+    lineHeight: 1.3, overflow: 'hidden', wordBreak: 'break-word',
+    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+  } as React.CSSProperties,
   hora: { fontWeight: 700, marginRight: 4 },
-  mas: { fontSize: 9, color: '#8A929C', paddingLeft: 4 },
+  mas: { fontSize: 10, color: '#8A929C', paddingLeft: 4 },
+};
+
+/* Vista de semana: columnas altas, sin recortes. */
+const w: Record<string, React.CSSProperties> = {
+  rejilla: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4 },
+  columna: {
+    minHeight: 320, borderWidth: 1, borderStyle: 'solid', borderRadius: 4,
+    padding: 8, cursor: 'pointer',
+  },
+  cabecera: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+    marginBottom: 8, paddingBottom: 6, borderBottom: '1px solid #EFEFEA',
+  },
+  diaSemana: { fontSize: 10, color: '#8A929C', fontWeight: 600, letterSpacing: .5 },
+  numero: { fontSize: 15, color: '#14263F' },
+  libre: { fontSize: 11, color: '#C5C5BD', textAlign: 'center', margin: '18px 0 0' },
+  evento: {
+    padding: '7px 8px', borderRadius: 4, marginBottom: 6, cursor: 'pointer',
+  },
+  hora: { fontSize: 10, fontWeight: 700, opacity: .85, marginBottom: 2 },
+  titulo: { fontSize: 11.5, fontWeight: 600, lineHeight: 1.3, wordBreak: 'break-word' },
+  codigo: { fontSize: 9.5, opacity: .8, marginTop: 3, fontFamily: 'ui-monospace,monospace' },
+  empresa: { fontSize: 9.5, opacity: .75, marginTop: 2 },
 };
