@@ -126,50 +126,48 @@ export async function generarKardex(
   }
 
   // ---------- Hoja 2: Kardex ----------
-  // Con saldo corrido y una fila de apertura por artículo, para que se
-  // vea de dónde parte cada serie.
-  const kardex: Array<Record<string, unknown>> = [];
-  let articuloPrevio = '';
+  /**
+   * Una tabla plana y cronológica, sin filas de título por elemento ni
+   * líneas en blanco entre grupos.
+   *
+   * Antes se intercalaba una fila "— MOVIMIENTOS —" por artículo, que
+   * convertía la hoja en un informe impreso: rompía el autofiltro, el
+   * ordenamiento por columna y cualquier tabla dinámica, que es
+   * justamente para lo que se exporta a Excel. Agrupar por elemento es
+   * ahora cosa del filtro, no del archivo.
+   *
+   * El saldo sigue siendo el del ELEMENTO tras ese movimiento —así lo
+   * calcula la función— y por eso la columna lo dice: en una lista
+   * cronológica que mezcla artículos, un "Saldo" a secas se leería
+   * como un total del inventario.
+   */
+  const movimientos = [...k.movimientos].sort(
+    (a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
+  );
 
-  for (const m of k.movimientos) {
-    if (m.articulo_id !== articuloPrevio) {
-      if (articuloPrevio !== '') kardex.push({});   // línea en blanco entre artículos
-      kardex.push({
-        'Código': m.codigo,
-        'Elemento': m.nombre.toUpperCase(),
-        'Fecha': '',
-        'Tipo': '— MOVIMIENTOS —',
-        'Documento': '',
-        'Tercero': '',
-        'Motivo': '',
-        'Entrada': '',
-        'Salida': '',
-        'Saldo': '',
-      });
-      articuloPrevio = m.articulo_id;
-    }
-
-    kardex.push({
-      'Código': m.codigo,
-      'Elemento': m.nombre,
-      'Fecha': fechaHora(m.fecha),
-      'Tipo': TIPOS[m.tipo] ?? m.tipo.toUpperCase(),
-      'Documento': m.documento ?? '',
-      'Tercero': m.tercero ?? '',
-      'Motivo': m.motivo ?? '',
-      'Entrada': m.entrada ?? '',
-      'Salida': m.salida ?? '',
-      'Saldo': m.saldo,
-    });
-  }
+  const kardex = movimientos.map((m) => ({
+    'Fecha': fechaHora(m.fecha),
+    'Código': m.codigo,
+    'Elemento': m.nombre,
+    'Tipo': TIPOS[m.tipo] ?? m.tipo.toUpperCase(),
+    'Documento': m.documento ?? '',
+    'Tercero': m.tercero ?? '',
+    'Motivo': m.motivo ?? '',
+    'Entrada': m.entrada ?? '',
+    'Salida': m.salida ?? '',
+    'Saldo del elemento': m.saldo,
+  }));
 
   if (kardex.length > 0) {
     const hoja = XLSX.utils.json_to_sheet(kardex);
     hoja['!cols'] = [
-      { wch: 13 }, { wch: 34 }, { wch: 17 }, { wch: 16 },
+      { wch: 17 }, { wch: 13 }, { wch: 34 }, { wch: 16 },
       { wch: 12 }, { wch: 26 }, { wch: 32 },
-      { wch: 10 }, { wch: 10 }, { wch: 10 },
+      { wch: 10 }, { wch: 10 }, { wch: 17 },
     ];
+    hoja['!autofilter'] = { ref: `A1:J${kardex.length + 1}` };
+    // Encabezado siempre visible al recorrer meses de movimientos
+    hoja['!freeze'] = { xSplit: 0, ySplit: 1 };
     XLSX.utils.book_append_sheet(libro, hoja, 'Kardex');
   }
 

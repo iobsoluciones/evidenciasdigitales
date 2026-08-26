@@ -68,12 +68,23 @@ export default async function PaginaReportes() {
         />
 
         <Tarjeta
-          titulo="Matriz de capacitaciones"
-          texto="Quién recibió qué formación y dónde quedan huecos, por empleado y capacitación."
+          titulo="Reporte de matriz"
+          texto="Quién recibió qué formación y quién tiene su dotación al día, por empleado. Cada libro trae la rejilla y una hoja plana para filtrar y cruzar."
           acciones={[
-            { texto: 'Abrir matriz', href: '/panel/matriz', principal: true },
+            { texto: 'Capacitaciones (Excel)', href: '/api/excel/matriz-capacitaciones', principal: true },
+            { texto: 'Dotación (Excel)', href: '/api/excel/matriz-dotacion' },
           ]}
-          color={color}
+          color="#15803D"
+        />
+
+        <Tarjeta
+          titulo="Inspecciones y plan de acción"
+          texto="Inspecciones con su veredicto, los hallazgos criterio por criterio y el estado de cada acción correctiva."
+          acciones={[
+            { texto: 'Descargar Excel', href: '/api/excel/inspecciones', principal: true },
+            { texto: 'Ver indicadores', href: '/panel/inspecciones/indicadores' },
+          ]}
+          color="#15803D"
         />
 
         <Tarjeta
