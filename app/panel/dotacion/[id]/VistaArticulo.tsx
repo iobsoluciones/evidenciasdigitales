@@ -20,6 +20,7 @@ import {
 } from '@/lib/acciones-dotacion';
 import CargaFoto from '../CargaFoto';
 import CargaUnidades from './CargaUnidades';
+import type { InspeccionDeUnidad } from '@/lib/acciones-inspecciones';
 
 const ESTADOS: Array<{ v: EstadoUnidad; t: string; color: string }> = [
   { v: 'disponible', t: 'Disponible', color: '#15803D' },
@@ -35,10 +36,13 @@ const UNIDAD_VACIA = {
 
 export default function VistaArticulo({
   ficha,
+  inspecciones,
   orgId,
   color,
 }: {
   ficha: Ficha;
+  /** Inspecciones practicadas sobre las unidades de este articulo. */
+  inspecciones: InspeccionDeUnidad[];
   orgId: string;
   color: string;
 }) {
@@ -105,6 +109,15 @@ export default function VistaArticulo({
     new Date(iso).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
 
   const unidades = ficha.unidades ?? [];
+
+  // Inspecciones indexadas por unidad, de la mas reciente a la mas
+  // antigua (la accion ya las devuelve ordenadas).
+  const inspeccionesPorUnidad = new Map<string, InspeccionDeUnidad[]>();
+  for (const ins of inspecciones) {
+    const lista = inspeccionesPorUnidad.get(ins.unidadId) ?? [];
+    lista.push(ins);
+    inspeccionesPorUnidad.set(ins.unidadId, lista);
+  }
 
   return (
     <>
@@ -322,6 +335,54 @@ export default function VistaArticulo({
                       <div style={e.asignado}>Con {u.asignado_a}</div>
                     )}
 
+                    {/* Historial de inspecciones de ESTA unidad. Junto al
+                        de entregas es lo que sustenta una auditoria de
+                        alturas: no basta con haber entregado el arnes,
+                        hay que probar que se revisa. */}
+                    {(() => {
+                      const suyas = inspeccionesPorUnidad.get(u.id) ?? [];
+                      if (suyas.length === 0) return null;
+                      const ultima = suyas[0];
+                      return (
+                        <div style={e.inspecciones}>
+                          <div style={e.inspeccionesTitulo}>
+                            Inspecciones ({suyas.length})
+                          </div>
+                          {suyas.slice(0, 3).map((ins) => (
+                            <Link
+                              key={ins.id}
+                              href={`/panel/inspecciones/${ins.id}`}
+                              style={e.inspeccionFila}
+                            >
+                              <span style={e.inspeccionFecha}>
+                                {new Date(ins.fecha).toLocaleDateString('es-CO')}
+                              </span>
+                              <span style={e.inspeccionCodigo}>{ins.codigo}</span>
+                              {ins.estado === 'cerrada' ? (
+                                <span style={{
+                                  ...e.inspeccionVeredicto,
+                                  color: ins.cumple ? '#15803D' : '#9B1C1C',
+                                }}>
+                                  {ins.puntaje !== null ? `${ins.puntaje}%` : '—'}
+                                  {ins.cumple === false ? ' · NO CUMPLE' : ''}
+                                </span>
+                              ) : (
+                                <span style={{ ...e.inspeccionVeredicto, color: '#8A6100' }}>
+                                  Borrador
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                          {suyas.length > 3 && (
+                            <div style={e.inspeccionMas}>
+                              +{suyas.length - 3} anteriores · última{' '}
+                              {new Date(ultima.fecha).toLocaleDateString('es-CO')}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+
                     {editandoUnidad === u.id ? (
                       <div style={{ marginTop: 10 }}>
                         <CargaFoto
@@ -494,6 +555,26 @@ const e: Record<string, React.CSSProperties> = {
   placa: { fontSize: 13, fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace' },
   serial: { fontSize: 10, color: '#A3AAB3', fontFamily: 'ui-monospace,monospace' },
   chipEstado: { fontSize: 9.5, padding: '3px 8px', borderRadius: 999, fontWeight: 600, whiteSpace: 'nowrap' },
+  inspecciones: {
+    marginTop: 10, paddingTop: 9,
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#F1F1EC',
+  },
+  inspeccionesTitulo: {
+    fontSize: 10, letterSpacing: .5, textTransform: 'uppercase',
+    color: '#8A929C', fontWeight: 600, marginBottom: 5,
+  },
+  inspeccionFila: {
+    display: 'flex', alignItems: 'baseline', gap: 7,
+    fontSize: 11, color: '#14263F', textDecoration: 'none',
+    padding: '3px 0',
+  },
+  inspeccionFecha: { color: '#5B6470', whiteSpace: 'nowrap' },
+  inspeccionCodigo: {
+    fontFamily: 'ui-monospace,monospace', fontSize: 10, color: '#8A929C',
+    flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+  },
+  inspeccionVeredicto: { fontWeight: 600, whiteSpace: 'nowrap' },
+  inspeccionMas: { fontSize: 10.5, color: '#8A929C', marginTop: 4 },
   asignado: { fontSize: 11, color: '#0369A1', marginTop: 6 },
 
   zonaFotoUnidad: {

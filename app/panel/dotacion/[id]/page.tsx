@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import { obtenerPerfil } from '@/lib/sesion';
 import { empresaActiva } from '@/lib/empresa-activa';
 import { obtenerFichaArticulo } from '@/lib/acciones-dotacion';
+import { inspeccionesDeUnidades } from '@/lib/acciones-inspecciones';
 import VistaArticulo from './VistaArticulo';
 
 export default async function PaginaArticulo({
@@ -22,6 +23,12 @@ export default async function PaginaArticulo({
 
   if (!ficha.ok || !ficha.articulo || !perfil || !empresa) notFound();
 
+  // Historial de inspecciones de cada unidad: es lo que una auditoria
+  // de alturas pide junto al de entregas y mantenimientos.
+  const inspecciones = await inspeccionesDeUnidades(
+    (ficha.unidades ?? []).map((u) => u.id)
+  );
+
   return (
     <>
       <Link href="/panel/dotacion" style={{ fontSize: 13, color: '#5B6470', textDecoration: 'none' }}>
@@ -31,6 +38,7 @@ export default async function PaginaArticulo({
       <VistaArticulo
         key={`articulo-${id}`}
         ficha={ficha}
+        inspecciones={inspecciones}
         orgId={perfil.organizacion.id}
         color={empresa.color_primario}
       />

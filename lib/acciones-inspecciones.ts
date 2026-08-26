@@ -58,6 +58,56 @@ export type DetallePlantilla = {
 
 export type Resultado = { ok: boolean; mensaje: string; id?: string };
 
+/** Inspeccion practicada sobre una unidad concreta del inventario. */
+export type InspeccionDeUnidad = {
+  unidadId: string;
+  id: string;
+  codigo: string;
+  nombre: string;
+  fecha: string;
+  puntaje: number | null;
+  cumple: boolean | null;
+  estado: string;
+};
+
+/**
+ * Historial de inspecciones de un conjunto de unidades.
+ *
+ * Al crear una inspeccion de equipo ya se guardaba tipo_objeto='unidad'
+ * con su objeto_id, pero ese dato no se leia en ninguna parte: la ficha
+ * del arnes no mostraba sus inspecciones. Es lo que pide una auditoria
+ * de trabajo en alturas, junto al historial de entregas.
+ */
+export async function inspeccionesDeUnidades(
+  unidadIds: string[]
+): Promise<InspeccionDeUnidad[]> {
+  if (unidadIds.length === 0) return [];
+
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase
+    .from('inspecciones')
+    .select('id, codigo, nombre, fecha, puntaje, cumple, estado, objeto_id')
+    .eq('tipo_objeto', 'unidad')
+    .in('objeto_id', unidadIds)
+    .order('fecha', { ascending: false });
+
+  if (error) {
+    console.error('inspeccionesDeUnidades:', error.message);
+    return [];
+  }
+
+  return (data ?? []).map((r) => ({
+    unidadId: String(r.objeto_id),
+    id: String(r.id),
+    codigo: String(r.codigo),
+    nombre: String(r.nombre),
+    fecha: String(r.fecha),
+    puntaje: r.puntaje === null ? null : Number(r.puntaje),
+    cumple: r.cumple as boolean | null,
+    estado: String(r.estado),
+  }));
+}
+
 export async function listarPlantillasInspeccion(): Promise<PlantillaInspeccion[]> {
   const supabase = await crearClienteServidor();
   const { data } = await supabase.rpc('listar_plantillas_inspeccion');
