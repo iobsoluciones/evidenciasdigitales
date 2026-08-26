@@ -10,6 +10,12 @@
 import { crearClienteServidor } from '@/lib/supabase/servidor';
 import FormularioRegistro from './FormularioRegistro';
 
+// Esta página nunca debe cachearse: si una capacitación se activa,
+// tiene que reflejarse en el instante. force-dynamic lo garantiza en
+// producción (Vercel), donde por defecto Next puede cachear rutas.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type CapPublica = {
   id: string;
   org_id: string;
@@ -34,7 +40,27 @@ export default async function PaginaRegistro({
   const { slug } = await params;
   const supabase = await crearClienteServidor();
 
-  const { data } = await supabase.rpc('capacitacion_activa_publica', { p_slug: slug });
+  const { data, error } = await supabase.rpc('capacitacion_activa_publica', { p_slug: slug });
+
+  // Un error aquí NO es lo mismo que "no hay capacitación activa": suele
+  // ser configuración del despliegue (variables de entorno ausentes) o
+  // red. Se registra para verlo en los logs de Vercel y se muestra un
+  // mensaje distinto, para no confundir al asistente ni al diagnóstico.
+  if (error) {
+    console.error('[registro-publico] Error al consultar capacitación:', {
+      slug, mensaje: error.message, detalle: error,
+    });
+    return (
+      <Marco>
+        <h1 style={est.titulo}>Sistema de Registro de Asistencia</h1>
+        <div style={est.mensaje}>
+          No se pudo consultar la información en este momento. Intenta de nuevo
+          en unos minutos.
+        </div>
+      </Marco>
+    );
+  }
+
   const cap = (data?.[0] ?? null) as CapPublica | null;
 
   if (!cap) {
