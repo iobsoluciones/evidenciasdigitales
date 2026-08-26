@@ -191,22 +191,40 @@ export async function cambiarEstado(
   // poder cambiar, asi que es aqui donde se fija el diseño vigente del
   // encabezado. Fijarlo al crear haria que una capacitacion programada
   // hace semanas saliera con un diseño que ya no se usa.
-  let diseno: Record<string, unknown> | undefined;
+  const extra: Record<string, unknown> = {};
+
   if (estado === 'cerrada') {
     const { data: cap } = await supabase
       .from('capacitaciones')
-      .select('empresas(encabezado_config)')
+      .select('org_id, incluir_firma_profesional, firma_prof_url, empresas(encabezado_config)')
       .eq('id', id)
       .maybeSingle();
 
     const cfg = (cap?.empresas as { encabezado_config?: Record<string, unknown> } | null)
       ?.encabezado_config;
-    if (cfg && Object.keys(cfg).length > 0) diseno = cfg;
+    if (cfg && Object.keys(cfg).length > 0) extra.encabezado_config = cfg;
+
+    // La firma del responsable se congela aqui si aun no lo estaba:
+    // activar_capacitacion solo la copia en el momento de activar, y
+    // la casilla puede marcarse despues.
+    if (cap?.incluir_firma_profesional && !cap.firma_prof_url) {
+      const { data: prof } = await supabase
+        .from('perfil_profesional')
+        .select('nombre, profesion, firma_url')
+        .eq('org_id', cap.org_id)
+        .maybeSingle();
+
+      if (prof?.firma_url) {
+        extra.firma_prof_url = prof.firma_url;
+        extra.firma_prof_nombre = prof.nombre;
+        extra.firma_prof_profesion = prof.profesion;
+      }
+    }
   }
 
   const { error } = await supabase
     .from('capacitaciones')
-    .update(diseno ? { estado, encabezado_config: diseno } : { estado })
+    .update({ estado, ...extra })
     .eq('id', id);
 
   if (error) return { ok: false, mensaje: error.message };

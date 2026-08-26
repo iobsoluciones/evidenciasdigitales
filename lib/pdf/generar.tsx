@@ -79,6 +79,34 @@ export async function generarPdfAsistencia(
     .eq('id', cap.empresa_id)
     .maybeSingle();
 
+  /**
+   * FIRMA DEL RESPONSABLE TECNICO
+   * La copia congelada la hace `activar_capacitacion`, pero solo en ese
+   * instante: si se marca la casilla —o se registra la firma— cuando la
+   * capacitacion YA estaba activa, esa copia no llega a ocurrir y el
+   * acta salia sin firma sin avisar de nada.
+   *
+   * Mientras no este cerrada se usa la del perfil vigente; al cerrarla
+   * queda congelada, igual que el encabezado.
+   */
+  let profUrl = cap.firma_prof_url as string | null;
+  let profNombre = cap.firma_prof_nombre as string | null;
+  let profProfesion = cap.firma_prof_profesion as string | null;
+
+  if (cap.incluir_firma_profesional && !profUrl) {
+    const { data: perfilProf } = await supabase
+      .from('perfil_profesional')
+      .select('nombre, profesion, firma_url')
+      .eq('org_id', perfil.organizacion.id)
+      .maybeSingle();
+
+    if (perfilProf?.firma_url) {
+      profUrl = perfilProf.firma_url as string;
+      profNombre = profNombre ?? (perfilProf.nombre as string | null);
+      profProfesion = profProfesion ?? (perfilProf.profesion as string | null);
+    }
+  }
+
   // Descarga de imágenes en paralelo: mucho más rápido que en serie
   const [logo, firmaInstructor, firmaProfesional, ...firmas] = await Promise.all([
     empresa?.logo_url
@@ -87,9 +115,9 @@ export async function generarPdfAsistencia(
     cap.firma_instructor_url
       ? descargarDeStorage(supabase, 'firmas', cap.firma_instructor_url)
       : Promise.resolve(null),
-    // Firma congelada del consultor, si pidió anexarla
-    cap.firma_prof_url
-      ? descargarDeStorage(supabase, 'firmas', cap.firma_prof_url)
+    // Firma del consultor: la congelada, o la vigente si aún no lo está
+    profUrl
+      ? descargarDeStorage(supabase, 'firmas', profUrl)
       : Promise.resolve(null),
     ...lista.map((p) =>
       p.firma_url
@@ -141,8 +169,8 @@ export async function generarPdfAsistencia(
 
     firmaInstructor,
     firmaProfesional,
-    profNombre: cap.firma_prof_nombre ?? null,
-    profProfesion: cap.firma_prof_profesion ?? null,
+    profNombre,
+    profProfesion,
     generadoEl: new Date().toLocaleString('es-CO', {
       dateStyle: 'short', timeStyle: 'short',
     }),
