@@ -37,6 +37,42 @@ export type PlantillaResumen = {
   veces_usada: number;
 };
 
+/**
+ * ESTADO MOSTRADO — derivado, no almacenado
+ * ---------------------------------------------------------------
+ * La base solo guarda activa / inactiva / cerrada (CHECK
+ * estado_cap_valido), asi que 'programada' no es un valor almacenable:
+ * se deriva en lectura, igual que el plan de accion calcula lo vencido
+ * al listar en vez de persistirlo.
+ *
+ * Los estados reales se respetan tal cual. 'activa' significa "acepta
+ * registros por el enlace publico" y no es un momento del calendario,
+ * asi que la fecha no lo reescribe. La fecha solo desambigua las
+ * INACTIVAS, que es donde no dice nada por si sola: ya paso (cerrada)
+ * o esta por venir (programada).
+ */
+function estadoMostrado(
+  c: { estado: string; fecha_inicio: string; fecha_fin: string },
+  ahora: number
+): { texto: string; fondo: string; color: string } {
+  if (c.estado === 'activa') {
+    return { texto: 'Activa', fondo: '#dcfce7', color: '#15803d' };
+  }
+  if (c.estado === 'cerrada') {
+    return { texto: 'Cerrada', fondo: '#f1f5f9', color: '#6b7280' };
+  }
+
+  // Inactiva: la fecha dice si ya paso o si esta por venir.
+  const inicio = new Date(c.fecha_inicio).getTime();
+  const fin = new Date(c.fecha_fin).getTime();
+
+  if (fin < ahora) return { texto: 'Cerrada', fondo: '#f1f5f9', color: '#6b7280' };
+  if (inicio > ahora) return { texto: 'Programada', fondo: '#EFF6FF', color: '#1D4ED8' };
+
+  // Hoy cae dentro del rango: sigue siendo su estado real.
+  return { texto: 'Inactiva', fondo: '#f1f5f9', color: '#6b7280' };
+}
+
 export default function ListaCapacitaciones({
   capacitaciones,
   nombreOrganizacion,
@@ -71,6 +107,24 @@ export default function ListaCapacitaciones({
   const anios = useMemo(() => {
     const s = new Set(capacitaciones.map((c) => new Date(c.fecha_inicio).getFullYear()));
     return Array.from(s).sort((a, b) => b - a);
+  }, [capacitaciones]);
+
+  // Un unico instante por render: asi todas las filas se clasifican
+  // contra la misma referencia y no se contradicen entre si.
+  const ahora = Date.now();
+
+  /**
+   * LA SIGUIENTE a la fecha actual: la primera que esta por ocurrir,
+   * que es la que hay que preparar. Si no queda ninguna por delante no
+   * se resalta nada: destacar una ya pasada solo despistaria.
+   */
+  const proximaId = useMemo(() => {
+    const ahora = Date.now();
+    const futuras = capacitaciones
+      .filter((c) => new Date(c.fecha_inicio).getTime() >= ahora)
+      .sort((a, b) => +new Date(a.fecha_inicio) - +new Date(b.fecha_inicio));
+
+    return futuras.length > 0 ? futuras[0].id : null;
   }, [capacitaciones]);
 
   const filtradas = useMemo(() => {
@@ -245,22 +299,32 @@ export default function ListaCapacitaciones({
               {filtradas.map((c) => {
                 const col = colorParticipacion(c.porcentaje_participacion);
                 const activa = c.estado === 'activa';
+                const vista = estadoMostrado(c, ahora);
+                const esProxima = proximaId === c.id;
                 return (
-                  <tr key={c.id}>
+                  <tr
+                    key={c.id}
+                    style={esProxima ? est.filaProxima : undefined}
+                  >
                     <td style={est.td}>
                       <Link href={`/panel/capacitaciones/${c.id}`} style={{ color: '#3b82f6', fontWeight: 600 }}>
                         {c.codigo}
                       </Link>
                     </td>
-                    <td style={est.td}>{c.tema}</td>
+                    <td style={est.td}>
+                      {c.tema}
+                      {esProxima && (
+                        <span style={est.pillProxima}>Siguiente</span>
+                      )}
+                    </td>
                     <td style={est.td}>{fmtFecha(c.fecha_inicio)}</td>
                     <td style={est.td}>
                       <span style={{
                         ...est.pill,
-                        background: activa ? '#dcfce7' : '#f1f5f9',
-                        color: activa ? '#15803d' : '#6b7280',
+                        background: vista.fondo,
+                        color: vista.color,
                       }}>
-                        {c.estado}
+                        {vista.texto}
                       </span>
                     </td>
                     <td style={est.td}>{c.registrados}</td>
@@ -564,6 +628,16 @@ const est: Record<string, React.CSSProperties> = {
   input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
   th: { background: '#f8fafc', color: '#6b7280', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' },
   td: { padding: '10px 8px', borderBottom: '1px solid #e5e7eb', verticalAlign: 'middle' },
+  filaProxima: {
+    background: '#FEFCE8',
+    boxShadow: 'inset 3px 0 0 #E8C766',
+  },
+  pillProxima: {
+    marginLeft: 8, padding: '2px 8px', borderRadius: 10,
+    background: '#E8C766', color: '#4A3A00',
+    fontSize: 10.5, fontWeight: 700, letterSpacing: .3,
+    textTransform: 'uppercase', whiteSpace: 'nowrap',
+  },
   pill: { padding: '3px 9px', borderRadius: 999, fontSize: 11, fontWeight: 600, display: 'inline-block' },
   btnPrimario: { background: '#1e3a8a', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnExcel: { background: '#15803d', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
