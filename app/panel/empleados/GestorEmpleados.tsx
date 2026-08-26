@@ -73,7 +73,9 @@ export default function GestorEmpleados({
   const filtrados = empleados.filter((e) => {
     if (filtroArea && e.area !== filtroArea) return false;
     if (!busqueda) return true;
-    return `${e.identificacion} ${e.nombres} ${e.cargo ?? ''} ${e.area ?? ''}`
+    // Todos los datos del empleado, no solo el nombre: se busca tanto
+    // por cedula como por cargo, area o ciudad.
+    return `${e.identificacion} ${e.nombres} ${e.cargo ?? ''} ${e.area ?? ''} ${e.ciudad ?? ''}`
       .toLowerCase().includes(busqueda.toLowerCase());
   });
 
@@ -299,12 +301,14 @@ export default function GestorEmpleados({
         <span style={e.conteo}>
           {filtrados.length} de {empleados.length} empleados
         </span>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {/* Selector de area y buscador en la misma linea: se usan juntos
+            para acotar la nomina, y separarlos obligaba a saltar la vista. */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           {areas.length > 0 && (
             <select
               value={filtroArea}
               onChange={(ev) => { setFiltroArea(ev.target.value); setPagina(0); }}
-              style={{ ...e.input, maxWidth: 190 }}
+              style={{ ...e.input, width: 'auto', minWidth: 160, maxWidth: 190 }}
             >
               <option value="">Todas las áreas</option>
               {areas.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -313,8 +317,9 @@ export default function GestorEmpleados({
           <input
             value={busqueda}
             onChange={(ev) => { setBusqueda(ev.target.value); setPagina(0); }}
-            placeholder="Buscar…"
-            style={{ ...e.input, maxWidth: 200 }}
+            placeholder="Buscar por cédula, nombre, cargo o área…"
+            title="Busca en cualquier dato del empleado: identificación, nombre, cargo o área."
+            style={{ ...e.input, width: 'auto', minWidth: 240, maxWidth: 280 }}
           />
         </div>
       </div>
