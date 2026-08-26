@@ -46,6 +46,7 @@ export default function VistaPlantillasInspeccion({
   const router = useRouter();
   const [pendiente, startTransition] = useTransition();
   const [tipo, setTipo] = useState<TipoInspeccion | ''>('');
+  const [busqueda, setBusqueda] = useState('');
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
 
   // Dos vistas, como en el inventario: tarjetas para hojear el banco,
@@ -74,7 +75,17 @@ export default function VistaPlantillasInspeccion({
   }
 
   const lista = useMemo(() => {
-    const filtradas = tipo ? plantillas.filter((p) => p.tipo === tipo) : plantillas;
+    const porTipo = tipo ? plantillas.filter((p) => p.tipo === tipo) : plantillas;
+
+    // La busqueda cubre tambien norma y secciones: con once listas base
+    // se busca tanto por "extintores" como por "NTC 2885" o por la
+    // seccion que se recuerda haber incluido.
+    const texto = busqueda.trim().toLowerCase();
+    const filtradas = texto
+      ? porTipo.filter((p) =>
+          [p.nombre, p.norma ?? '', p.descripcion ?? '', ...p.secciones]
+            .join(' ').toLowerCase().includes(texto))
+      : porTipo;
 
     const dir = descendente ? -1 : 1;
     const copia = [...filtradas];
@@ -88,7 +99,7 @@ export default function VistaPlantillasInspeccion({
       }
     });
     return copia;
-  }, [plantillas, tipo, orden, descendente]);
+  }, [plantillas, tipo, busqueda, orden, descendente]);
 
   function sembrar() {
     startTransition(async () => {
@@ -145,6 +156,15 @@ export default function VistaPlantillasInspeccion({
             {t.t} ({conteo(t.v)})
           </button>
         ))}
+
+        {plantillas.length > 0 && (
+          <input
+            value={busqueda}
+            onChange={(ev) => setBusqueda(ev.target.value)}
+            placeholder="Buscar por nombre, norma o sección…"
+            style={e.buscador}
+          />
+        )}
 
         {plantillas.length > 0 && (
           <div style={e.selectorVista}>
@@ -204,6 +224,21 @@ export default function VistaPlantillasInspeccion({
             style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 14, border: 'none', cursor: 'pointer' }}
           >
             {pendiente ? 'Cargando…' : 'Cargar las 11 listas base'}
+          </button>
+        </div>
+      ) : lista.length === 0 ? (
+        <div style={e.vacio}>
+          <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 600 }}>
+            Sin resultados
+          </p>
+          <p style={e.explicacion}>
+            Ninguna lista coincide con la búsqueda{tipo ? ' y el tipo seleccionados' : ''}.
+          </p>
+          <button
+            onClick={() => { setBusqueda(''); setTipo(''); }}
+            style={{ ...e.btn, background: color, marginTop: 14, border: 'none', cursor: 'pointer' }}
+          >
+            Quitar filtros
           </button>
         </div>
       ) : vista === 'lista' ? (
@@ -385,6 +420,13 @@ const e: Record<string, React.CSSProperties> = {
   filtro: {
     padding: '7px 14px', borderRadius: 4, fontSize: 12.5, fontWeight: 600,
     borderWidth: 1, borderStyle: 'solid', cursor: 'pointer', fontFamily: 'inherit',
+  },
+
+  buscador: {
+    padding: '7px 12px', borderRadius: 4, fontSize: 12.5,
+    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    fontFamily: 'inherit', color: '#14263F', minWidth: 240, flex: '1 1 240px',
+    maxWidth: 320, background: '#fff',
   },
 
   // Selector de vista (tarjetas / lista), igual que el inventario
