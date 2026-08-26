@@ -13,6 +13,9 @@ export type Capacitacion = {
   instructor: string;
   empresa: string;
   es_empresa_propia: boolean;
+  empresa_id: string;
+  empresa_nombre: string;
+  empresa_slug: string;
   es_evaluada: boolean;
   /** Control documental congelado al crear el acta (no cambia despues). */
   nomenclatura: string | null;

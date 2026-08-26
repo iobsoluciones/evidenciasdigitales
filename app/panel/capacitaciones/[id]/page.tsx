@@ -84,7 +84,7 @@ export default async function DetalleCapacitacion({
 
       <CompartirCapacitacion
         capacitacionId={c.id}
-        slug={perfil.organizacion.slug}
+        slug={c.empresa_slug}
         instructor={c.instructor}
         color={perfil.organizacion.color_primario}
       />
