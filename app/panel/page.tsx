@@ -23,6 +23,8 @@ export type EmpresaResumen = {
   empleados: number;
   activas: number;
   ultima: string | null;
+  /** Siguiente capacitacion por ocurrir; null si no hay ninguna programada. */
+  proxima: string | null;
   participacion: number | null;
 };
 

@@ -142,14 +142,19 @@ export default function TarjetasEmpresas({
                     </div>
                   )}
 
+                  {/* Tres datos, no cuatro: "participantes" era un acumulado
+                      de asistencias de todas las capacitaciones, que puesto
+                      al lado de "empleados" se leia como si sobraran
+                      personas. El porcentaje ya resume esa relacion. */}
                   <dl style={s.datos}>
                     <Dato k="Empleados" v={String(e.empleados ?? 0)} />
                     <Dato k="Capacitaciones" v={String(e.capacitaciones)} />
-                    <Dato k="Participantes" v={String(e.participantes)} />
                     <Dato k="Participación" v={p === null ? '—' : `${p}%`} color={tono} />
                   </dl>
 
-                  <div style={s.ultima}>Última: {fmt(e.ultima)}</div>
+                  <div style={s.ultima}>
+                    Próxima: {e.proxima ? fmt(e.proxima) : 'sin programar'}
+                  </div>
 
                   <button onClick={() => entrar(e.id)} disabled={pendiente} style={s.btnEntrar}>
                     Gestionar
