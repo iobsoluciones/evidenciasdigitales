@@ -23,9 +23,10 @@ import { obtenerPerfil } from './sesion';
 export type TipoEvento = 'capacitacion' | 'inspeccion' | 'entrega' | 'auditoria' | 'otro';
 
 /**
- * Evento del calendario. `origen` distingue las dos naturalezas:
+ * Evento del calendario. `origen` distingue las tres naturalezas:
  *   'capacitacion' → documento real, no editable desde aquí
  *   'agenda'       → anotación de planeación, editable
+ *   'programacion' → inspección programada, se gestiona en su cronograma
  */
 export type EventoCalendario = {
   id: string;
@@ -37,7 +38,7 @@ export type EventoCalendario = {
   empresa: string;
   empresaId: string;
   color: string;
-  origen: 'capacitacion' | 'agenda';
+  origen: 'capacitacion' | 'agenda' | 'programacion';
   codigo: string | null;
   estado: string | null;
 };
@@ -70,7 +71,8 @@ export async function obtenerCalendario(
     empresa: String(r.empresa ?? ''),
     empresaId: String(r.empresa_id ?? ''),
     color: String(r.color ?? '#14263F'),
-    origen: r.es_capacitacion ? 'capacitacion' : 'agenda',
+    origen: r.es_programacion ? 'programacion'
+          : r.es_capacitacion ? 'capacitacion' : 'agenda',
     codigo: (r.codigo as string | null) ?? null,
     estado: (r.estado as string | null) ?? null,
   }));

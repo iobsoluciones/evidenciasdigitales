@@ -158,6 +158,11 @@ export default function VistaCalendario({
       router.push(`/panel/capacitaciones/${ev.id}`);
       return;
     }
+    // Las inspecciones programadas se gestionan en su cronograma
+    if (ev.origen === 'programacion') {
+      router.push('/panel/inspecciones/programadas');
+      return;
+    }
     setEditando(ev.id);
     setF({
       titulo: ev.titulo,
@@ -344,6 +349,9 @@ export default function VistaCalendario({
         </span>
         <span style={s.leyendaItem}>
           <span style={{ ...s.punto, background: '#fff', borderWidth: 1.5, borderStyle: 'solid', borderColor: color }} /> Anotación de agenda
+        </span>
+        <span style={s.leyendaItem}>
+          <span style={{ ...s.punto, background: '#fff', borderWidth: 1.5, borderStyle: 'dashed', borderColor: color }} /> Inspección programada
         </span>
         <span style={s.leyendaNota}>
           Clic en un día para anotar; en una anotación para editarla; en una
@@ -610,7 +618,8 @@ function Semana({
                       ...w.evento,
                       background: ev.origen === 'capacitacion' ? ev.color : '#fff',
                       color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
-                      borderWidth: 1, borderStyle: 'solid', borderColor: ev.color,
+                      borderWidth: 1, borderColor: ev.color,
+                      borderStyle: ev.origen === 'programacion' ? 'dashed' : 'solid',
                     }}
                   >
                     {ev.hora && <div style={w.hora}>{ev.hora}</div>}
@@ -699,12 +708,17 @@ function Mes({
                     ...m.evento,
                     background: ev.origen === 'capacitacion' ? ev.color : '#fff',
                     color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
-                    borderWidth: 1, borderStyle: 'solid', borderColor: ev.color,
+                    borderWidth: 1, borderColor: ev.color,
+                    // Punteado para lo programado: es un compromiso,
+                    // no un documento todavia.
+                    borderStyle: ev.origen === 'programacion' ? 'dashed' : 'solid',
                     cursor: 'pointer',
                   }}
                   title={`${ev.titulo}${ev.empresa ? ' · ' + ev.empresa : ''}${ev.hora ? ' · ' + ev.hora : ''}` +
                     (ev.origen === 'agenda'
                       ? ' — clic para editar esta anotación'
+                      : ev.origen === 'programacion'
+                      ? ' — inspección programada; clic para ver el cronograma'
                       : ' — clic para abrir su ficha')}
                 >
                   {ev.hora && <span style={m.hora}>{ev.hora}</span>}

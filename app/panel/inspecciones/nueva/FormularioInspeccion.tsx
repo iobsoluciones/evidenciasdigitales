@@ -28,11 +28,14 @@ const TIPOS: Record<string, string> = {
 
 export default function FormularioInspeccion({
   plantillas,
+  plantillaInicial = '',
   unidades,
   inspectorPorDefecto,
   color,
 }: {
   plantillas: PlantillaInspeccion[];
+  /** Preseleccionada al venir del cronograma. */
+  plantillaInicial?: string;
   unidades: Unidad[];
   inspectorPorDefecto: string;
   color: string;
@@ -40,7 +43,11 @@ export default function FormularioInspeccion({
   const router = useRouter();
   const [pendiente, startTransition] = useTransition();
 
-  const [plantillaId, setPlantillaId] = useState('');
+  const [plantillaId, setPlantillaId] = useState(
+    // Solo si existe: un id invalido en la URL dejaria el select en un
+    // valor que no esta entre las opciones.
+    plantillas.some((p) => p.id === plantillaInicial) ? plantillaInicial : ''
+  );
   const [inspector, setInspector] = useState(inspectorPorDefecto);
   const [acompanante, setAcompanante] = useState('');
   const [unidadId, setUnidadId] = useState('');

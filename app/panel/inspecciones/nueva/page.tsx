@@ -8,7 +8,14 @@ import { listarPlantillasInspeccion } from '@/lib/acciones-inspecciones';
 import { unidadesParaInspeccion } from '@/lib/acciones-ejecutar-inspeccion';
 import FormularioInspeccion from './FormularioInspeccion';
 
-export default async function PaginaNuevaInspeccion() {
+export default async function PaginaNuevaInspeccion({
+  searchParams,
+}: {
+  searchParams: Promise<{ plantilla?: string }>;
+}) {
+  // El cronograma enlaza aqui con ?plantilla=… para que ejecutar una
+  // inspeccion programada no obligue a volver a elegir la lista.
+  const { plantilla } = await searchParams;
   const perfil = await obtenerPerfil();
   const empresa = await empresaActiva();
   if (!perfil || !empresa) return null;
@@ -29,6 +36,7 @@ export default async function PaginaNuevaInspeccion() {
 
       <FormularioInspeccion
         plantillas={plantillas}
+        plantillaInicial={plantilla ?? ''}
         unidades={unidades}
         inspectorPorDefecto={perfil.nombre}
         color={empresa.color_primario}

@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { empresaActiva } from '@/lib/empresa-activa';
 import { listarInspecciones } from '@/lib/acciones-ejecutar-inspeccion';
+import { listarProgramaciones } from '@/lib/acciones-programacion';
 import ListaInspecciones from './ListaInspecciones';
 
 export default async function PaginaInspecciones() {
@@ -20,7 +21,14 @@ export default async function PaginaInspecciones() {
     );
   }
 
-  const inspecciones = await listarInspecciones();
+  const [inspecciones, programaciones] = await Promise.all([
+    listarInspecciones(),
+    listarProgramaciones(),
+  ]);
+
+  // Aviso visual del cronograma: es el "recordatorio" de la fase 8.
+  const vencidas = programaciones.filter((p) => p.estado_real === 'vencida').length;
+  const proximas = programaciones.filter((p) => p.estado_real === 'proxima').length;
 
   return (
     <>
@@ -31,12 +39,27 @@ export default async function PaginaInspecciones() {
             Realizadas en <strong>{empresa.nombre}</strong>.
           </p>
         </div>
-        <Link
-          href="/panel/inspecciones/nueva"
-          style={{ ...s.btn, background: empresa.color_primario }}
-        >
-          + Nueva inspección
-        </Link>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Link href="/panel/inspecciones/programadas" style={s.btnSec}>
+            Cronograma
+            {vencidas > 0 && (
+              <span style={{ ...s.pastilla, background: '#FEE2E2', color: '#9B1C1C' }}>
+                {vencidas} vencida{vencidas !== 1 ? 's' : ''}
+              </span>
+            )}
+            {vencidas === 0 && proximas > 0 && (
+              <span style={{ ...s.pastilla, background: '#FEF9C3', color: '#8A6100' }}>
+                {proximas} esta semana
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/panel/inspecciones/nueva"
+            style={{ ...s.btn, background: empresa.color_primario }}
+          >
+            + Nueva inspección
+          </Link>
+        </div>
       </div>
 
       <ListaInspecciones
@@ -49,6 +72,15 @@ export default async function PaginaInspecciones() {
 }
 
 const s: Record<string, React.CSSProperties> = {
+  btnSec: {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    padding: '9px 15px', borderRadius: 4, fontSize: 13, fontWeight: 600,
+    textDecoration: 'none',
+  },
+  pastilla: {
+    borderRadius: 10, padding: '1px 8px', fontSize: 11, fontWeight: 700,
+  },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 16, flexWrap: 'wrap', marginBottom: 20,
