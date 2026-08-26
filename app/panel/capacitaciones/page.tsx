@@ -56,6 +56,9 @@ export default async function PaginaCapacitaciones() {
     <ListaCapacitaciones
       capacitaciones={(data ?? []) as Capacitacion[]}
       nombreOrganizacion={empresa.nombre}
+      empresaSlug={empresa.slug}
+      empresaNombre={empresa.nombre}
+      color={empresa.color_primario}
       plantillas={plantillas}
       tieneFirmaPropia={Boolean(perfilProf?.firma_url)}
     />

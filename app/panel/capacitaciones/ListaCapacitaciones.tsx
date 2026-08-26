@@ -10,6 +10,7 @@ import { useState, useMemo, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import type { Capacitacion } from '@/lib/tipos';
+import QrRegistro from './QrRegistro';
 import { fmtFecha, colorParticipacion, MESES, aDatetimeLocal } from '@/lib/tipos';
 import {
   crearCapacitacion,
@@ -76,11 +77,19 @@ function estadoMostrado(
 export default function ListaCapacitaciones({
   capacitaciones,
   nombreOrganizacion,
+  empresaSlug,
+  empresaNombre,
+  color,
   plantillas = [],
   tieneFirmaPropia = false,
 }: {
   capacitaciones: Capacitacion[];
   nombreOrganizacion: string;
+  /** Slug de la EMPRESA: el enlace publico es el mismo para todas sus
+   *  capacitaciones, por eso el QR vive aqui y no en cada detalle. */
+  empresaSlug: string;
+  empresaNombre: string;
+  color: string;
   plantillas?: PlantillaResumen[];
   /** Si el consultor no ha registrado su firma, la casilla se
    *  deshabilita con la explicación en vez de fallar al activar. */
@@ -232,6 +241,7 @@ export default function ListaCapacitaciones({
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {/* Exportación completa: capacitaciones, participantes y
               resumen por persona en un solo libro */}
+          <QrRegistro slug={empresaSlug} empresaNombre={empresaNombre} color={color} />
           <a href="/api/excel/todo" style={est.btnExcel}>Exportar todo a Excel</a>
           <button onClick={abrirNueva} style={est.btnPrimario}>+ Nueva capacitación</button>
         </div>

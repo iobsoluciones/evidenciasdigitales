@@ -6,51 +6,26 @@
  * El enlace de firma puede copiarse o enviarse por correo, igual que
  * en el sistema de Apps Script.
  */
-import { useState, useRef, useEffect, useTransition } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { useState, useTransition } from 'react';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import { enviarEnlaceFirma } from '@/lib/acciones-correo';
 
-/** [MODIFICAR AQUI] Tamaño del QR en pantalla. No bajar de 100 px. */
-const TAMANO_QR = 130;
-
 export default function CompartirCapacitacion({
   capacitacionId,
-  slug,
   instructor,
   color,
 }: {
   capacitacionId: string;
-  slug: string;
   instructor: string;
   color: string;
 }) {
   const supabase = crearClienteNavegador();
-  const contenedorQR = useRef<HTMLDivElement>(null);
   const [pendiente, startTransition] = useTransition();
 
   const [urlFirma, setUrlFirma] = useState('');
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
-
-  // La URL se calcula DESPUÉS del montaje. Si se hiciera durante el
-  // render, el servidor la generaría vacía y el navegador con valor:
-  // React marcaría un error de hidratación.
-  const [urlRegistro, setUrlRegistro] = useState('');
-  useEffect(() => {
-    setUrlRegistro(`${window.location.origin}/r/${slug}`);
-  }, [slug]);
-
-  function descargarQR() {
-    const canvas = contenedorQR.current?.querySelector('canvas');
-    if (!canvas) return;
-    const enlace = document.createElement('a');
-    enlace.href = canvas.toDataURL('image/png');
-    enlace.download = `QR_${slug}.png`;
-    enlace.click();
-    setAviso({ tipo: 'ok', texto: 'Código QR descargado.' });
-  }
 
   function copiar(texto: string, textoAviso: string) {
     navigator.clipboard.writeText(texto).then(
@@ -101,35 +76,14 @@ export default function CompartirCapacitacion({
 
   return (
     <section style={est.tarjeta}>
-      <h2 style={est.h2}>Compartir</h2>
+      {/* El QR y el enlace de registro NO estan aqui: son los mismos
+          para todas las capacitaciones de la empresa, asi que viven en
+          la cabecera del listado. Lo de esta pantalla es el enlace de
+          firma, que si es unico de esta capacitacion. */}
+      <h2 style={est.h2}>Firma del capacitador</h2>
 
-      <div style={est.columnas}>
-        {/* ---------- QR de registro ---------- */}
+      <div>
         <div>
-          <h3 style={est.h3}>Registro de asistentes</h3>
-          <div ref={contenedorQR} style={est.cajaQR}>
-            {urlRegistro && (
-              <QRCodeCanvas value={urlRegistro} size={TAMANO_QR} level="H" fgColor={color} />
-            )}
-          </div>
-          <p style={est.nota}>Los asistentes escanean este código para registrarse.</p>
-          <div style={est.fila}>
-            <button onClick={descargarQR} style={{ ...est.btn, background: color, color: '#fff' }}>
-              Descargar QR
-            </button>
-            <button
-              onClick={() => copiar(urlRegistro, 'Enlace de registro copiado.')}
-              style={est.btnSec}
-            >
-              Copiar enlace
-            </button>
-          </div>
-          <p style={est.url}>{urlRegistro || '—'}</p>
-        </div>
-
-        {/* ---------- Firma del capacitador ---------- */}
-        <div>
-          <h3 style={est.h3}>Firma del capacitador</h3>
 
           {!urlFirma ? (
             <>
