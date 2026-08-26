@@ -48,6 +48,46 @@ export default function VistaAcciones({
     [acciones, filtro]
   );
 
+  /**
+   * AGRUPACION POR INSPECCION: un hallazgo no se entiende solo. Ver
+   * juntas las acciones que salieron de la misma visita permite cerrar
+   * el ciclo de esa inspeccion, que es como lo revisa una auditoria.
+   * Las acciones creadas a mano no tienen inspeccion y van al final.
+   */
+  const grupos = useMemo(() => {
+    const mapa = new Map<string, {
+      clave: string;
+      inspeccionId: string | null;
+      codigo: string | null;
+      objeto: string | null;
+      acciones: Accion[];
+    }>();
+
+    for (const a of lista) {
+      const clave = a.inspeccion_id ?? '__sin_inspeccion__';
+      let g = mapa.get(clave);
+      if (!g) {
+        g = {
+          clave,
+          inspeccionId: a.inspeccion_id,
+          codigo: a.inspeccion_codigo,
+          objeto: a.inspeccion_objeto,
+          acciones: [],
+        };
+        mapa.set(clave, g);
+      }
+      g.acciones.push(a);
+    }
+
+    // Las sueltas al final; el resto por codigo de inspeccion descendente
+    // (lo mas reciente primero, igual que el listado de inspecciones).
+    return [...mapa.values()].sort((x, y) => {
+      if (x.inspeccionId === null) return 1;
+      if (y.inspeccionId === null) return -1;
+      return (y.codigo ?? '').localeCompare(x.codigo ?? '');
+    });
+  }, [lista]);
+
   const cuenta = (e: EstadoAccion) => acciones.filter((a) => a.estado_real === e).length;
   const vencidas = cuenta('vencida');
 
@@ -110,8 +150,40 @@ export default function VistaAcciones({
           </p>
         </div>
       ) : (
-        <div style={e.grid}>
-          {lista.map((a) => {
+        <div style={e.grupos}>
+          {grupos.map((g) => {
+            const vencidasGrupo = g.acciones.filter((a) => a.estado_real === 'vencida').length;
+            const abiertasGrupo = g.acciones.filter((a) => a.estado_real !== 'cerrada').length;
+
+            return (
+              <section key={g.clave} style={e.grupo}>
+                <header style={e.grupoCabecera}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+                    {g.inspeccionId ? (
+                      <Link href={`/panel/inspecciones/${g.inspeccionId}`} style={e.grupoTitulo}>
+                        {g.codigo ?? 'Inspección'}
+                      </Link>
+                    ) : (
+                      <span style={{ ...e.grupoTitulo, color: '#5B6470' }}>Sin inspección</span>
+                    )}
+                    <span style={e.grupoObjeto}>
+                      {g.inspeccionId
+                        ? (g.objeto ?? 'Sin objeto registrado')
+                        : 'Acciones creadas manualmente'}
+                    </span>
+                  </div>
+
+                  <div style={e.grupoConteos}>
+                    <span>{g.acciones.length} acción{g.acciones.length !== 1 ? 'es' : ''}</span>
+                    {abiertasGrupo > 0 && <span>· {abiertasGrupo} sin cerrar</span>}
+                    {vencidasGrupo > 0 && (
+                      <span style={{ color: '#9B1C1C', fontWeight: 600 }}>· {vencidasGrupo} vencida{vencidasGrupo !== 1 ? 's' : ''}</span>
+                    )}
+                  </div>
+                </header>
+
+                <div style={e.grid}>
+          {g.acciones.map((a) => {
             const sev = SEVERIDAD[a.severidad];
             const est = ESTADO[a.estado_real];
             const abierta = expandida === a.id;
@@ -145,11 +217,7 @@ export default function VistaAcciones({
 
                 <div style={e.meta}>
                   <span><strong>Responsable:</strong> {a.responsable}</span>
-                  {a.inspeccion_codigo && (
-                    <Link href={`/panel/inspecciones/${a.inspeccion_id}`} style={e.origen}>
-                      {a.inspeccion_codigo}{a.inspeccion_objeto ? ` · ${a.inspeccion_objeto}` : ''}
-                    </Link>
-                  )}
+                  <span style={e.limite}>Límite {fmt(a.fecha_limite)}</span>
                 </div>
 
                 {a.estado_real === 'cerrada' ? (
@@ -187,6 +255,10 @@ export default function VistaAcciones({
                   </>
                 )}
               </article>
+            );
+          })}
+                </div>
+              </section>
             );
           })}
         </div>
@@ -390,6 +462,24 @@ const e: Record<string, React.CSSProperties> = {
   },
 
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: 14 },
+
+  // Agrupacion por inspeccion
+  grupos: { display: 'flex', flexDirection: 'column', gap: 22 },
+  grupo: {
+    borderLeftWidth: 2, borderLeftStyle: 'solid', borderLeftColor: '#E4E4DF',
+    paddingLeft: 14,
+  },
+  grupoCabecera: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+    gap: 12, flexWrap: 'wrap', marginBottom: 10,
+  },
+  grupoTitulo: {
+    fontSize: 13.5, fontWeight: 700, color: '#14263F',
+    textDecoration: 'none', fontFamily: 'ui-monospace,monospace',
+  },
+  grupoObjeto: { fontSize: 12, color: '#5B6470' },
+  grupoConteos: { fontSize: 11.5, color: '#8A929C', display: 'flex', gap: 5, flexWrap: 'wrap' },
+  limite: { color: '#8A929C' },
   tarjeta: {
     background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
     borderRadius: 8, padding: 16,
