@@ -14,7 +14,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  * Rutas que NO requieren sesion iniciada.
  * '/' es la pagina publica de producto y '/registro' el autoservicio.
  */
-const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f'];
+const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i'];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });

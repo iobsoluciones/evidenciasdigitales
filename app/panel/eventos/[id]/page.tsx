@@ -93,12 +93,7 @@ export default async function PaginaEvento({
         {String(ev.descripcion)}
       </section>
 
-      <Investigacion
-        key={id}
-        detalle={d}
-        orgId={perfil.organizacion.id}
-        color={color}
-      />
+      <Investigacion key={id} detalle={d} color={color} />
     </div>
   );
 }

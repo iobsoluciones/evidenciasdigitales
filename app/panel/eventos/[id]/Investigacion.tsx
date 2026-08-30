@@ -13,13 +13,12 @@
  * básica evita el siguiente accidente. Por eso las acciones se generan
  * SOLO desde las básicas.
  */
-import { useRef, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
-import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import {
   guardarInvestigacion, guardarEquipo, guardarTestigos,
   cerrarInvestigacion, generarAccionesEvento, actualizarEvento,
+  enviarEnlaceFirma, obtenerEnlaceFirma,
   type Causa, type Metodologia, type RolEquipo, type DetalleEvento,
 } from '@/lib/acciones-eventos';
 
@@ -46,22 +45,21 @@ const NOMBRE_CLASE: Record<string, string> = {
   otro: 'Otro',
 };
 
-type Miembro = { nombre: string; cargo: string; rol: RolEquipo; firma_url: string | null };
+type Miembro = {
+  id?: string; nombre: string; cargo: string; rol: RolEquipo;
+  correo: string; firma_url: string | null; enlace_activo?: boolean;
+};
 type Testigo = { nombre: string; identificacion: string; version: string };
 
 export default function Investigacion({
   detalle,
-  orgId,
   color,
 }: {
   detalle: DetalleEvento;
-  orgId: string;
   color: string;
 }) {
   const router = useRouter();
-  const supabase = crearClienteNavegador();
   const [pendiente, startTransition] = useTransition();
-  const firmaRef = useRef<LienzoFirmaRef>(null);
 
   const ev = (detalle.evento ?? {}) as Record<string, unknown>;
   const inv = (detalle.investigacion ?? {}) as Record<string, unknown>;
@@ -88,11 +86,12 @@ export default function Investigacion({
   const [equipo, setEquipo] = useState<Miembro[]>(
     (detalle.equipo ?? []).length
       ? (detalle.equipo ?? []).map((m) => ({
-          nombre: m.nombre, cargo: m.cargo ?? '', rol: m.rol, firma_url: m.firma_url,
+          id: m.id, nombre: m.nombre, cargo: m.cargo ?? '', rol: m.rol,
+          correo: m.correo ?? '', firma_url: m.firma_url, enlace_activo: m.enlace_activo,
         }))
-      : [{ nombre: '', cargo: '', rol: 'responsable_sst', firma_url: null }]
+      : [{ nombre: '', cargo: '', rol: 'responsable_sst', correo: '', firma_url: null }]
   );
-  const [firmando, setFirmando] = useState<number | null>(null);
+  const [enlace, setEnlace] = useState<string | null>(null);
 
   const [testigos, setTestigos] = useState<Testigo[]>(
     (detalle.testigos ?? []).map((t) => ({
@@ -108,29 +107,6 @@ export default function Investigacion({
 
   function ok(texto: string) { setAviso({ tipo: 'ok', texto }); }
   function mal(texto: string) { setAviso({ tipo: 'error', texto }); }
-
-  /* ---------- Firma de un miembro del equipo ---------- */
-  async function subirFirma(i: number) {
-    if (!firmaRef.current?.tieneFirma()) {
-      mal('Dibuja la firma antes de guardarla.');
-      return;
-    }
-    const blob = await firmaRef.current.obtenerBlob();
-    if (!blob) { mal('No se pudo leer la firma.'); return; }
-
-    // Toda ruta de Storage empieza por org_id: lo exige la política de lectura.
-    const ruta = `${orgId}/eventos/firma-${eventoId}-${i}-${Date.now()}.png`;
-    const { error } = await supabase.storage
-      .from('firmas')
-      .upload(ruta, blob, { contentType: 'image/png', upsert: true });
-
-    if (error) { mal('No se pudo subir la firma: ' + error.message); return; }
-
-    setEquipo((p) => p.map((m, j) => (j === i ? { ...m, firma_url: ruta } : m)));
-    setFirmando(null);
-    firmaRef.current.limpiar();
-    ok('Firma capturada. Guarda el equipo para conservarla.');
-  }
 
   /* ---------- Acciones ---------- */
   const accion = (fn: () => Promise<{ ok: boolean; mensaje: string }>) => {
@@ -248,47 +224,78 @@ export default function Investigacion({
               </div>
             </div>
 
+            <div style={s.fila}>
+              <div style={{ flex: '1 1 220px' }}>
+                <label style={s.label}>Correo para enviarle el enlace de firma</label>
+                <input
+                  type="email"
+                  value={m.correo}
+                  onChange={(e) => setEquipo((p) => p.map((x, j) => j === i ? { ...x, correo: e.target.value } : x))}
+                  style={s.input}
+                  placeholder="nombre@empresa.com"
+                  disabled={cerrada || Boolean(m.firma_url)}
+                />
+              </div>
+            </div>
+
             <div style={s.filaFirma}>
-              <span style={{ ...s.estadoFirma, color: m.firma_url ? '#1E6B3A' : '#9A3412' }}>
-                {m.firma_url ? '✓ Firmado' : 'Sin firma'}
+              <span style={{ ...s.estadoFirma, color: m.firma_url ? '#1E6B3A' : m.enlace_activo ? '#9A3412' : '#5B6470' }}>
+                {m.firma_url
+                  ? '✓ Firmado'
+                  : m.enlace_activo
+                    ? 'Enlace enviado, pendiente de firma'
+                    : 'Sin firma'}
               </span>
-              {!cerrada && (
+
+              {!cerrada && !m.firma_url && m.id && (
                 <>
                   <button
-                    onClick={() => setFirmando(firmando === i ? null : i)}
+                    onClick={() => accion(() => enviarEnlaceFirma(m.id!, eventoId))}
+                    disabled={pendiente}
                     style={s.botonPlano}
                     type="button"
                   >
-                    {firmando === i ? 'Cancelar' : m.firma_url ? 'Volver a firmar' : 'Firmar'}
+                    {m.enlace_activo ? 'Reenviar por correo' : 'Enviar enlace por correo'}
                   </button>
-                  {equipo.length > 1 && (
-                    <button
-                      onClick={() => setEquipo((p) => p.filter((_, j) => j !== i))}
-                      style={{ ...s.botonPlano, color: '#9B1C1C' }}
-                      type="button"
-                    >
-                      Quitar
-                    </button>
-                  )}
+                  <button
+                    onClick={() => {
+                      setAviso(null);
+                      startTransition(async () => {
+                        const r = await obtenerEnlaceFirma(m.id!);
+                        if (r.ok) { setEnlace(r.mensaje); router.refresh(); }
+                        else mal(r.mensaje);
+                      });
+                    }}
+                    disabled={pendiente}
+                    style={s.botonPlano}
+                    type="button"
+                  >
+                    Copiar enlace
+                  </button>
                 </>
               )}
-            </div>
 
-            {firmando === i && (
-              <div style={s.zonaFirma}>
-                <LienzoFirma ref={firmaRef} color={color} />
-                <button onClick={() => subirFirma(i)} style={{ ...s.botonLleno, background: color }} type="button">
-                  Guardar firma
+              {!cerrada && !m.id && (
+                <span style={s.pista}>Guarda el equipo para poder enviarle el enlace.</span>
+              )}
+
+              {!cerrada && equipo.length > 1 && (
+                <button
+                  onClick={() => setEquipo((p) => p.filter((_, j) => j !== i))}
+                  style={{ ...s.botonPlano, color: '#9B1C1C' }}
+                  type="button"
+                >
+                  Quitar
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
 
         {!cerrada && (
           <div style={s.acciones}>
             <button
-              onClick={() => setEquipo((p) => [...p, { nombre: '', cargo: '', rol: 'copasst', firma_url: null }])}
+              onClick={() => setEquipo((p) => [...p, { nombre: '', cargo: '', rol: 'copasst', correo: '', firma_url: null }])}
               style={s.botonPlano}
               type="button"
             >
@@ -473,6 +480,17 @@ export default function Investigacion({
         </div>
       </section>
 
+      {enlace && (
+        <div style={s.enlaceCaja}>
+          <div style={s.enlaceTitulo}>Enlace de firma</div>
+          <input readOnly value={enlace} style={{ ...s.input, fontSize: 12 }} onFocus={(e) => e.target.select()} />
+          <p style={s.nota}>
+            Cópialo y envíalo por el medio que prefieras. Es personal y deja de
+            funcionar apenas esa persona firme.
+          </p>
+        </div>
+      )}
+
       {aviso && (
         <div style={{
           ...s.aviso,
@@ -587,7 +605,12 @@ const s: Record<string, React.CSSProperties> = {
   },
   filaFirma: { display: 'flex', alignItems: 'center', gap: 12, marginTop: 10, flexWrap: 'wrap' },
   estadoFirma: { fontSize: 12, fontWeight: 600 },
-  zonaFirma: { marginTop: 10, display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-start' },
+  pista: { fontSize: 11.5, color: '#8A929C' },
+  enlaceCaja: {
+    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    padding: '14px 18px', marginBottom: 14,
+  },
+  enlaceTitulo: { fontSize: 13, fontWeight: 700, marginBottom: 8 },
 
   causas: { marginTop: 16, paddingTop: 14, borderTop: '1px solid #F0F0EC' },
   causasDestacadas: {

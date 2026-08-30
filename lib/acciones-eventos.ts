@@ -55,7 +55,11 @@ export type DetalleEvento = {
   error?: string;
   evento?: Record<string, unknown>;
   investigacion?: Record<string, unknown>;
-  equipo?: Array<{ id: string; nombre: string; cargo: string | null; rol: RolEquipo; firma_url: string | null }>;
+  equipo?: Array<{
+    id: string; nombre: string; cargo: string | null; rol: RolEquipo;
+    correo: string | null; firma_url: string | null; firmado_en: string | null;
+    enlace_activo: boolean;
+  }>;
   testigos?: Array<{ id: string; nombre: string; identificacion: string | null; version: string | null }>;
   acciones?: Array<{ id: string; codigo: string; accion: string; responsable: string; fecha_limite: string; estado: string }>;
   empresa?: Record<string, unknown>;
@@ -178,36 +182,57 @@ export async function guardarInvestigacion(
   return { ok: true, mensaje: 'Investigación guardada.' };
 }
 
+/**
+ * Guarda el equipo conservando lo ya emitido.
+ *
+ * NO se puede borrar e insertar: eso destruiría las firmas ya
+ * capturadas y, peor, invalidaría los enlaces de firma que ya se
+ * enviaron por correo. Se actualiza por id, se insertan los nuevos y
+ * solo se borran los que el usuario quitó de la lista.
+ */
 export async function guardarEquipo(
   eventoId: string,
-  miembros: Array<{ nombre: string; cargo: string; rol: RolEquipo; firma_url: string | null }>
+  miembros: Array<{
+    id?: string; nombre: string; cargo: string; rol: RolEquipo; correo: string;
+  }>
 ): Promise<Resultado> {
   const empresa = await empresaActiva();
   if (!empresa) return { ok: false, mensaje: 'No hay empresa seleccionada.' };
 
   const supabase = await crearClienteServidor();
+  const validos = miembros.filter((m) => m.nombre?.trim());
 
-  // Se reemplaza el equipo completo: es una lista corta y editarla por
-  // partes obligaría a llevar ids en el cliente sin ganar nada.
-  const { error: errBorrar } = await supabase
-    .from('evento_equipo')
-    .delete()
-    .eq('evento_id', eventoId);
+  const campos = (m: (typeof validos)[number]) => ({
+    nombre: m.nombre.trim().toUpperCase(),
+    cargo: m.cargo?.trim() || null,
+    rol: m.rol,
+    correo: m.correo?.trim().toLowerCase() || null,
+  });
+
+  // 1. Los que el usuario quitó
+  const conservar = validos.map((m) => m.id).filter(Boolean) as string[];
+  let borrar = supabase.from('evento_equipo').delete().eq('evento_id', eventoId);
+  if (conservar.length > 0) borrar = borrar.not('id', 'in', `(${conservar.join(',')})`);
+  const { error: errBorrar } = await borrar;
   if (errBorrar) return { ok: false, mensaje: errBorrar.message };
 
-  const filas = miembros
-    .filter((m) => m.nombre?.trim())
-    .map((m) => ({
-      evento_id: eventoId,
-      org_id: empresa.org_id,
-      nombre: m.nombre.trim().toUpperCase(),
-      cargo: m.cargo?.trim() || null,
-      rol: m.rol,
-      firma_url: m.firma_url,
-    }));
+  // 2. Los que ya existían: se actualizan sin tocar firma ni token
+  for (const m of validos.filter((x) => x.id)) {
+    const { error } = await supabase
+      .from('evento_equipo')
+      .update(campos(m))
+      .eq('id', m.id!);
+    if (error) return { ok: false, mensaje: error.message };
+  }
 
-  if (filas.length > 0) {
-    const { error } = await supabase.from('evento_equipo').insert(filas);
+  // 3. Los nuevos
+  const nuevos = validos.filter((x) => !x.id).map((m) => ({
+    evento_id: eventoId,
+    org_id: empresa.org_id,
+    ...campos(m),
+  }));
+  if (nuevos.length > 0) {
+    const { error } = await supabase.from('evento_equipo').insert(nuevos);
     if (error) return { ok: false, mensaje: error.message };
   }
 
@@ -297,4 +322,121 @@ export async function generarAccionesEvento(
       ? `${r.creadas} acción(es) creada(s) en el plan de acción.`
       : 'No había causas nuevas: no se creó ninguna acción.',
   };
+}
+
+/**
+ * ENLACE DE FIRMA REMOTA
+ * ---------------------------------------------------------------
+ * El responsable del SG-SST, el representante del COPASST y el jefe
+ * inmediato casi nunca están en el mismo sitio, y menos el mismo día.
+ * Exigir que firmen los tres en una pantalla es la razón por la que
+ * una investigación se queda sin cerrar.
+ *
+ * El correo lleva una descripción BREVE del evento: quien firma tiene
+ * que saber qué está firmando antes de abrir el enlace.
+ */
+export async function enviarEnlaceFirma(
+  miembroId: string,
+  eventoId: string
+): Promise<Resultado> {
+  const supabase = await crearClienteServidor();
+
+  const { data: miembro, error: errM } = await supabase
+    .from('evento_equipo')
+    .select('nombre, correo, rol, firma_url')
+    .eq('id', miembroId)
+    .maybeSingle();
+
+  if (errM) return { ok: false, mensaje: errM.message };
+  if (!miembro) return { ok: false, mensaje: 'Integrante no encontrado.' };
+  if (miembro.firma_url) return { ok: false, mensaje: 'Este integrante ya firmó.' };
+  if (!miembro.correo) {
+    return { ok: false, mensaje: 'Escribe el correo del integrante y guarda el equipo antes de enviar.' };
+  }
+
+  const { data, error } = await supabase.rpc('generar_token_firma_evento', {
+    p_miembro: miembroId,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const t = data as { ok: boolean; error?: string; token?: string };
+  if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
+
+  const detalle = await obtenerEvento(eventoId);
+  const ev = (detalle.evento ?? {}) as Record<string, unknown>;
+  const empresa = (detalle.empresa ?? {}) as Record<string, unknown>;
+
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? '';
+  const enlace = `${base}/i/${t.token}`;
+
+  const fecha = ev.fecha_evento
+    ? new Date(String(ev.fecha_evento)).toLocaleString('es-CO', { dateStyle: 'long', timeStyle: 'short' })
+    : '';
+
+  const esc = (v: unknown) =>
+    String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  const { enviarCorreo } = await import('./correo');
+  const envio = await enviarCorreo({
+    para: miembro.correo,
+    asunto: `Firma requerida — investigación ${esc(ev.codigo)}`,
+    html: `
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#14263F;max-width:560px;">
+  <p>Buen día, ${esc(miembro.nombre)}.</p>
+  <p>
+    Usted hace parte del equipo que investiga el siguiente evento en
+    <strong>${esc(empresa.nombre)}</strong>. Se requiere su firma para cerrar la
+    investigación dentro del plazo legal de 15 días.
+  </p>
+
+  <table style="width:100%;border-collapse:collapse;background:#F7F7F4;border:1px solid #E4E4DF;margin:16px 0;">
+    <tr><td style="padding:8px 12px;color:#5B6470;width:120px;">Consecutivo</td>
+        <td style="padding:8px 12px;"><strong>${esc(ev.codigo)}</strong></td></tr>
+    <tr><td style="padding:8px 12px;color:#5B6470;">Fecha</td>
+        <td style="padding:8px 12px;">${esc(fecha)}</td></tr>
+    ${ev.lugar ? `<tr><td style="padding:8px 12px;color:#5B6470;">Lugar</td>
+        <td style="padding:8px 12px;">${esc(ev.lugar)}</td></tr>` : ''}
+    ${ev.nombres ? `<tr><td style="padding:8px 12px;color:#5B6470;">Trabajador</td>
+        <td style="padding:8px 12px;">${esc(ev.nombres)}</td></tr>` : ''}
+  </table>
+
+  <p style="background:#fff;border-left:3px solid #14263F;padding:10px 14px;color:#374151;">
+    ${esc(ev.descripcion)}
+  </p>
+
+  <p style="margin:24px 0;">
+    <a href="${enlace}"
+       style="background:#14263F;color:#fff;padding:12px 26px;border-radius:8px;
+              text-decoration:none;font-weight:600;display:inline-block;">
+      Revisar y firmar
+    </a>
+  </p>
+
+  <p style="font-size:11px;color:#8A929C;border-top:1px solid #E4E4DF;padding-top:12px;">
+    El enlace es personal y deja de funcionar apenas usted firme.
+    Si no reconoce este evento, ignore este mensaje.
+  </p>
+</div>`.trim(),
+    registro: { tipo: 'otro' },
+  });
+
+  if (!envio.ok) return { ok: false, mensaje: envio.mensaje };
+
+  revalidatePath(`/panel/eventos/${eventoId}`);
+  return { ok: true, mensaje: `Enlace enviado a ${miembro.correo}.` };
+}
+
+/** Para copiar el enlace a mano cuando no hay correo (WhatsApp). */
+export async function obtenerEnlaceFirma(miembroId: string): Promise<Resultado> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('generar_token_firma_evento', {
+    p_miembro: miembroId,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const t = data as { ok: boolean; error?: string; token?: string };
+  if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
+
+  const base = process.env.NEXT_PUBLIC_APP_URL ?? '';
+  return { ok: true, mensaje: `${base}/i/${t.token}` };
 }
