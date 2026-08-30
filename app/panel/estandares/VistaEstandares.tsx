@@ -18,10 +18,14 @@ import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import {
   crearConjunto, duplicarConjunto, importarConjunto, eliminarConjunto,
+  actualizarConjunto, guardarItem, eliminarItem,
   type ConjuntoResumen, type ItemConjunto, type FilaImportada,
 } from '@/lib/acciones-conjuntos';
 
 const CICLOS = ['planear', 'hacer', 'verificar', 'actuar'];
+
+/** Solo dígitos con coma o punto: evita que un texto entre como peso. */
+const NUMERO = /^[0-9]*[.,]?[0-9]*$/;
 
 const EJEMPLO: FilaImportada[] = [
   { codigo: '1.1.1', ciclo: 'planear', capitulo: 'Recursos',
@@ -48,6 +52,17 @@ export default function VistaEstandares({
   const [errores, setErrores] = useState<string[]>([]);
   const [creando, setCreando] = useState(false);
   const [nuevo, setNuevo] = useState({ nombre: '', norma: '', descripcion: '' });
+  // Duplicar pide los datos nuevos ANTES de copiar: una copia que
+  // conserva el nombre y la norma del original no sirve de nada.
+  const [duplicando, setDuplicando] = useState<{
+    id: string; nombre: string; norma: string; descripcion: string;
+  } | null>(null);
+  const [editandoCab, setEditandoCab] = useState(false);
+  const [cab, setCab] = useState({ nombre: '', norma: '', descripcion: '' });
+  const [fila, setFila] = useState<{
+    id?: string; codigo: string; ciclo: string;
+    capitulo: string; nombre: string; peso: string;
+  } | null>(null);
 
   const c = detalle?.conjunto;
   const items = detalle?.items ?? [];
@@ -125,6 +140,42 @@ export default function VistaEstandares({
         </div>
       )}
 
+      {/* ---------- Duplicar con datos propios ---------- */}
+      {duplicando && (
+        <section style={s.bloque}>
+          <div style={s.h2}>Datos de la copia</div>
+          <p style={s.nota}>
+            Se copian los estándares del original; el nombre y la norma son de la
+            copia. Después puedes editar, agregar o quitar estándares uno por uno.
+          </p>
+          <div style={s.formNuevo}>
+            <input value={duplicando.nombre} placeholder="Nombre del conjunto"
+              onChange={(e) => setDuplicando({ ...duplicando, nombre: e.target.value })}
+              style={{ ...s.input, flex: '2 1 220px' }} />
+            <input value={duplicando.norma} placeholder="Norma"
+              onChange={(e) => setDuplicando({ ...duplicando, norma: e.target.value })}
+              style={{ ...s.input, flex: '2 1 200px' }} />
+          </div>
+          <input value={duplicando.descripcion} placeholder="Descripción (a quién aplica)"
+            onChange={(e) => setDuplicando({ ...duplicando, descripcion: e.target.value })}
+            style={{ ...s.input, width: '100%', marginTop: 8 }} />
+          <div style={s.acciones}>
+            <button type="button" style={s.botonPlano} onClick={() => setDuplicando(null)}>
+              Cancelar
+            </button>
+            <button type="button" disabled={pendiente}
+              style={{ ...s.botonLleno, background: color }}
+              onClick={() => {
+                correr(() => duplicarConjunto(
+                  duplicando.id, duplicando.nombre, duplicando.norma, duplicando.descripcion));
+                setDuplicando(null);
+              }}>
+              Duplicar
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* ---------- Conjuntos ---------- */}
       <div style={s.rejilla}>
         {conjuntos.map((x) => (
@@ -150,7 +201,12 @@ export default function VistaEstandares({
             <div style={s.tarjetaAcciones}>
               <a href={`/panel/estandares?id=${x.id}`} style={s.botonMini}>Ver</a>
               <button type="button" style={s.botonMini} disabled={pendiente}
-                onClick={() => correr(() => duplicarConjunto(x.id, `${x.nombre} (copia)`))}>
+                onClick={() => setDuplicando({
+                  id: x.id,
+                  nombre: `${x.nombre} (copia)`,
+                  norma: x.norma ?? '',
+                  descripcion: x.descripcion ?? '',
+                })}>
                 Duplicar
               </button>
               {!x.es_sistema && (
@@ -198,8 +254,36 @@ export default function VistaEstandares({
       {c && (
         <section style={s.bloque}>
           <div style={s.detalleCab}>
-            <div>
-              <h2 style={s.h2}>{c.nombre}</h2>
+            <div style={{ flex: '1 1 260px' }}>
+              {editandoCab && !c.es_sistema ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input value={cab.nombre} placeholder="Nombre del conjunto"
+                    onChange={(e) => setCab({ ...cab, nombre: e.target.value })} style={s.input} />
+                  <input value={cab.norma} placeholder="Norma (ej. Res. 0312/2019, art. 9)"
+                    onChange={(e) => setCab({ ...cab, norma: e.target.value })} style={s.input} />
+                  <input value={cab.descripcion} placeholder="Descripción: a quién aplica"
+                    onChange={(e) => setCab({ ...cab, descripcion: e.target.value })} style={s.input} />
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button type="button" style={s.botonPlano} onClick={() => setEditandoCab(false)}>
+                      Cancelar
+                    </button>
+                    <button type="button" disabled={pendiente}
+                      style={{ ...s.botonSec, borderColor: color, color }}
+                      onClick={() => {
+                        correr(() => actualizarConjunto(c.id, cab.nombre, cab.norma, cab.descripcion));
+                        setEditandoCab(false);
+                      }}>
+                      Guardar datos
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h2 style={s.h2}>{c.nombre}</h2>
+                  {c.norma && <div style={s.norma}>{c.norma}</div>}
+                  {c.descripcion && <p style={s.desc}>{c.descripcion}</p>}
+                </>
+              )}
               <p style={s.sub}>
                 {c.estandares} estándares ·{' '}
                 <strong style={{ color: suma100 ? '#1E6B3A' : '#9A3412' }}>
@@ -208,8 +292,19 @@ export default function VistaEstandares({
                 {c.es_sistema && ' · no editable'}
               </p>
             </div>
-            {!c.es_sistema && (
+            {!c.es_sistema && !editandoCab && (
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button type="button" style={s.botonMini}
+                  onClick={() => {
+                    setCab({
+                      nombre: c.nombre,
+                      norma: c.norma ?? '',
+                      descripcion: c.descripcion ?? '',
+                    });
+                    setEditandoCab(true);
+                  }}>
+                  Editar datos
+                </button>
                 <button type="button" onClick={descargarPlantilla} style={s.botonMini}>
                   Descargar plantilla
                 </button>
@@ -240,6 +335,62 @@ export default function VistaEstandares({
             </div>
           )}
 
+          {!c.es_sistema && (
+            <div style={{ marginBottom: 12 }}>
+              {!fila ? (
+                <button type="button" style={s.botonMini}
+                  onClick={() => setFila({
+                    codigo: '', ciclo: 'planear', capitulo: '', nombre: '', peso: '',
+                  })}>
+                  + Agregar estándar
+                </button>
+              ) : (
+                <div style={s.editorFila}>
+                  <div style={s.formNuevo}>
+                    <input value={fila.codigo} placeholder="Código"
+                      onChange={(e) => setFila({ ...fila, codigo: e.target.value })}
+                      style={{ ...s.input, flex: '0 1 100px' }} />
+                    <select value={fila.ciclo}
+                      onChange={(e) => setFila({ ...fila, ciclo: e.target.value })}
+                      style={{ ...s.input, flex: '0 1 130px' }}>
+                      {CICLOS.map((x) => <option key={x} value={x}>{x}</option>)}
+                    </select>
+                    <input value={fila.capitulo} placeholder="Capítulo"
+                      onChange={(e) => setFila({ ...fila, capitulo: e.target.value })}
+                      style={{ ...s.input, flex: '1 1 150px' }} />
+                    <input value={fila.peso} placeholder="Peso" inputMode="decimal"
+                      onChange={(e) => NUMERO.test(e.target.value)
+                        && setFila({ ...fila, peso: e.target.value })}
+                      style={{ ...s.input, flex: '0 1 80px' }} />
+                  </div>
+                  <input value={fila.nombre} placeholder="Nombre del estándar"
+                    onChange={(e) => setFila({ ...fila, nombre: e.target.value })}
+                    style={{ ...s.input, width: '100%', marginTop: 8 }} />
+                  <div style={s.acciones}>
+                    <button type="button" style={s.botonPlano} onClick={() => setFila(null)}>
+                      Cancelar
+                    </button>
+                    <button type="button" disabled={pendiente}
+                      style={{ ...s.botonSec, borderColor: color, color }}
+                      onClick={() => {
+                        correr(() => guardarItem(c.id, {
+                          id: fila.id,
+                          codigo: fila.codigo,
+                          ciclo: fila.ciclo,
+                          capitulo: fila.capitulo,
+                          nombre: fila.nombre,
+                          peso: Number(fila.peso.replace(',', '.')) || 0,
+                        }));
+                        setFila(null);
+                      }}>
+                      {fila.id ? 'Guardar cambios' : 'Agregar'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {items.length === 0 ? (
             <p style={s.nota}>
               El conjunto está vacío. Descarga la plantilla, llénala con los
@@ -252,7 +403,7 @@ export default function VistaEstandares({
               <table style={s.tabla}>
                 <thead>
                   <tr>
-                    {['Código', 'Ciclo', 'Capítulo', 'Estándar', 'Peso'].map((h, i) => (
+                    {['Código', 'Ciclo', 'Capítulo', 'Estándar', 'Peso', ''].map((h, i) => (
                       <th key={i} style={s.th}>{h}</th>
                     ))}
                   </tr>
@@ -265,6 +416,24 @@ export default function VistaEstandares({
                       <td style={s.td}>{i.capitulo}</td>
                       <td style={s.td}>{i.nombre}</td>
                       <td style={s.tdPeso}>{i.peso}</td>
+                      <td style={s.td}>
+                        {!c.es_sistema && (
+                          <div style={{ display: 'flex', gap: 4 }}>
+                            <button type="button" style={s.botonMini}
+                              onClick={() => setFila({
+                                id: i.id, codigo: i.codigo, ciclo: i.ciclo,
+                                capitulo: i.capitulo, nombre: i.nombre, peso: String(i.peso),
+                              })}>
+                              Editar
+                            </button>
+                            <button type="button" disabled={pendiente}
+                              style={{ ...s.botonMini, color: '#9B1C1C' }}
+                              onClick={() => correr(() => eliminarItem(i.id))}>
+                              Quitar
+                            </button>
+                          </div>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -302,6 +471,11 @@ const s: Record<string, React.CSSProperties> = {
     padding: '2px 8px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: .4,
   },
   norma: { fontSize: 11.5, color: '#8A929C' },
+  desc: { fontSize: 12, color: '#5B6470', margin: '4px 0 0', lineHeight: 1.5 },
+  editorFila: {
+    background: '#F7F7F4', border: '1px solid #E4E4DF',
+    borderRadius: 9, padding: '12px 14px',
+  },
   cifras: {
     display: 'flex', justifyContent: 'space-between', fontSize: 12,
     color: '#5B6470', marginTop: 2, fontVariantNumeric: 'tabular-nums',

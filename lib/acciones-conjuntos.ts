@@ -91,11 +91,20 @@ export async function crearConjunto(
   return { ok: true, mensaje: 'Conjunto creado. Ahora importa o agrega sus estándares.', id: r.id };
 }
 
-/** Duplicar el del sistema evita transcribir 60 filas para cambiar 10. */
-export async function duplicarConjunto(id: string, nombre: string): Promise<Res> {
+/**
+ * Duplicar el del sistema evita transcribir 60 filas para cambiar 10.
+ * Recibe ya el nombre y la norma nuevos: una copia que se queda con los
+ * datos del original no sirve de nada.
+ */
+export async function duplicarConjunto(
+  id: string, nombre: string, norma = '', descripcion = ''
+): Promise<Res> {
   const supabase = await crearClienteServidor();
   const { data, error } = await supabase.rpc('duplicar_conjunto_estandares', {
-    p_conjunto: id, p_nombre: nombre || null,
+    p_conjunto: id,
+    p_nombre: nombre || null,
+    p_norma: norma || null,
+    p_descripcion: descripcion || null,
   });
   if (error) return { ok: false, mensaje: error.message };
 
@@ -149,4 +158,66 @@ export async function eliminarConjunto(id: string): Promise<Res> {
 
   revalidatePath('/panel/estandares');
   return { ok: true, mensaje: 'Conjunto eliminado.' };
+}
+
+/** Cabecera del conjunto: nombre, norma y descripción. */
+export async function actualizarConjunto(
+  id: string, nombre: string, norma: string, descripcion: string
+): Promise<Res> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('actualizar_conjunto_estandares', {
+    p_conjunto: id, p_nombre: nombre,
+    p_norma: norma || null, p_descripcion: descripcion || null,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const r = data as { ok: boolean; error?: string };
+  if (!r.ok) return { ok: false, mensaje: r.error ?? 'No se pudo actualizar.' };
+
+  revalidatePath('/panel/estandares');
+  return { ok: true, mensaje: 'Conjunto actualizado.' };
+}
+
+/**
+ * Una fila a la vez. Importar reemplaza todo el conjunto; esto permite
+ * corregir un peso o quitar un estándar sin rehacer el archivo entero,
+ * que es lo que se hace al adaptar una copia.
+ */
+export async function guardarItem(
+  conjuntoId: string,
+  datos: {
+    id?: string; codigo: string; ciclo: string;
+    capitulo: string; nombre: string; peso: number;
+  }
+): Promise<Res> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('guardar_item_conjunto', {
+    p_conjunto: conjuntoId,
+    p_codigo: datos.codigo,
+    p_ciclo: datos.ciclo,
+    p_nombre: datos.nombre,
+    p_peso: datos.peso,
+    p_capitulo: datos.capitulo || null,
+    p_orden: null,
+    p_id: datos.id ?? null,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const r = data as { ok: boolean; error?: string; peso_total?: number };
+  if (!r.ok) return { ok: false, mensaje: r.error ?? 'No se pudo guardar.' };
+
+  revalidatePath('/panel/estandares');
+  return { ok: true, mensaje: `Estándar guardado. El conjunto suma ${r.peso_total} puntos.` };
+}
+
+export async function eliminarItem(id: string): Promise<Res> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('eliminar_item_conjunto', { p_id: id });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const r = data as { ok: boolean; error?: string; peso_total?: number };
+  if (!r.ok) return { ok: false, mensaje: r.error ?? 'No se pudo eliminar.' };
+
+  revalidatePath('/panel/estandares');
+  return { ok: true, mensaje: `Estándar eliminado. El conjunto suma ${r.peso_total} puntos.` };
 }
