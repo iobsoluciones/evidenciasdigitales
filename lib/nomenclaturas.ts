@@ -17,6 +17,8 @@ export type TipoDocumento =
   | 'inspeccion'
   | 'investigacion'
   | 'plan_anual'
+  | 'autoevaluacion'
+  | 'comite'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -57,6 +59,16 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'plan_anual',
     etiqueta: 'Plan anual de trabajo',
     detalle: 'Plan anual del SG-SST, firmado por el empleador.',
+  },
+  {
+    tipo: 'autoevaluacion',
+    etiqueta: 'Autoevaluación de estándares',
+    detalle: 'Autoevaluación anual de la Resolución 0312.',
+  },
+  {
+    tipo: 'comite',
+    etiqueta: 'Actas de comités',
+    detalle: 'COPASST, Vigía en SST y Comité de Convivencia Laboral.',
   },
   {
     tipo: 'reporte',
