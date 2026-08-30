@@ -14,7 +14,14 @@
  * que la nomenclatura y la versión. Rediseñar el encabezado no puede
  * cambiar el aspecto de un acta ya firmada.
  */
-import { View, Text, Image, StyleSheet } from '@react-pdf/renderer';
+import { View, Text, Image, StyleSheet, Font } from '@react-pdf/renderer';
+
+// react-pdf parte las palabras con guion cuando no caben en la columna,
+// y en estos documentos eso produce «CARLOS RAMÍREZ TOR-RES» o
+// «MODERADAMENTE ACEPT-ABLE»: nombres propios y rótulos partidos a la
+// mitad. Se prefiere una línea corta a una palabra rota. Va aquí porque
+// todos los documentos pasan por este encabezado.
+Font.registerHyphenationCallback((palabra) => [palabra]);
 
 export type CampoEncabezado = { etiqueta: string; valor: string };
 

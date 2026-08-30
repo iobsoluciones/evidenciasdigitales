@@ -189,6 +189,26 @@ específicas para `anon`.
 | `evento_testigos` | Testigos y su versión |
 | `examenes_medicos` | Concepto de aptitud y restricciones. **Nunca el diagnóstico** |
 
+### Planeación y verificación (Fase 2)
+
+| Tabla | Contenido |
+|---|---|
+| `peligros` | Matriz GTC 45. `np`, `nr`, `nivel` y aceptabilidad son **columnas generadas**: se calculan en la base, así que dos pantallas no pueden discrepar |
+| `peligro_controles` | Enlaza un peligro con el artículo, la capacitación o la plantilla de inspección que lo controla. Es lo que permite justificar *por qué ese EPP* |
+| `plan_anual` | Plan anual de trabajo. `estado` borrador/aprobado, firma del empleador |
+| `plan_actividades` | `meses_programados` y `meses_ejecutados` como `int[]`: el cronograma es el documento |
+| `estandar_conjuntos` | Conjuntos de estándares. **`org_id NULL` = del sistema**, de solo lectura por RLS |
+| `estandar_items` | Las filas de cada conjunto: código, ciclo, capítulo, nombre, peso |
+| `autoevaluaciones` | Una por año y empresa, sobre un conjunto copiado |
+| `autoevaluacion_items` | Resultado por estándar, con justificación del «no aplica» |
+
+### Comités (Fase 3)
+
+| Tabla | Contenido |
+|---|---|
+| `comites` | `tipo` = copasst \| vigia \| convivencia \| **brigada**. Periodo, acta, estado |
+| `comite_miembros` | Empleado o persona externa; `parte`, `suplente`, `rol`, **`frente`** (solo brigada), foto, `activo` y `motivo_salida` |
+
 ### Núcleo
 
 | Tabla | Contenido |
@@ -374,6 +394,9 @@ códigos indistinguibles en la misma acta.
 | Cronograma | `Cronograma` | `/api/pdf-cronograma/[empresaId]` |
 | Reporte ejecutivo | `ReporteEjecutivo` | `/api/pdf-ejecutivo/[empresaId]` |
 | Hoja de vida | `HojaDeVida` | `/api/pdf-perfil` |
+| Informe de investigación | `InformeInvestigacion` | `/api/pdf-investigacion/[id]` |
+| Organigrama del comité | `Organigrama` | `/api/pdf-organigrama/[id]` |
+| Autoevaluación | `InformeAutoevaluacion` | `/api/pdf-autoevaluacion/[id]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se
@@ -386,6 +409,14 @@ El código del documento no va en el encabezado — ya aparece en el pie.
 > 2. Las fuentes estándar usan codificación **WinAnsi**. Un carácter fuera de ese
 >    juego —la flecha `→` (U+2192)— **no se dibuja y no avisa**. El bullet `•`
 >    (U+2022) sí está y funciona.
+> 3. react-pdf **parte palabras con guion** cuando no caben en la columna, y
+>    produce «CARLOS RAMÍREZ TOR-RES» en un organigrama. Se desactiva con
+>    `Font.registerHyphenationCallback((p) => [p])`, puesto en `EncabezadoDoc`
+>    porque todos los documentos pasan por ahí.
+
+El **organigrama** y la **autoevaluación** se envían además por correo con el PDF
+adjunto (`enviarOrganigrama`, `enviarAutoevaluacion`), según la regla de firma y
+soporte del §5.21 de CLAUDE.md.
 
 ### Excel (SheetJS)
 
@@ -502,6 +533,19 @@ caracteres a mano, que es como se han perdido versiones antes.
 | Carpeta del proyecto | Se llama `evidenciasdigitales`; la marca es **Rúbrica** |
 
 ---
+
+## 11b. Bugs de producción encontrados (agosto de 2026)
+
+Los dos primeros llevaban meses en producción sin que nadie los notara, porque el
+flujo que rompían —la firma remota de entregas— nunca se había ejecutado entero.
+
+| Bug | Causa | Arreglo |
+|---|---|---|
+| `generar_token_entrega` fallaba: «`gen_random_bytes` does not exist» | pgcrypto vive en el esquema `extensions`, y las funciones fijan `search_path = 'public'` | Calificar el esquema: `extensions.gen_random_bytes`. **No** ensanchar el `search_path`, que abriría superficie |
+| `/d/[token]` redirigía a `/login` | Faltaba `/d` en `RUTAS_PUBLICAS` del middleware | Añadido. Lección: un flujo público se rompe en varios sitios a la vez |
+| El enlace de firma salía sin dominio | `NEXT_PUBLIC_APP_URL` se incrusta en el build y no estaba en `.env.local` | `lib/url-base.ts` lo reconstruye de las cabeceras de la petición |
+| Los correos «se enviaban» y no llegaban | `RESEND_FROM = onboarding@resend.dev` es el remitente de prueba: la API acepta y solo entrega al dueño de la cuenta | Se detecta el modo prueba y se muestra el enlace copiable siempre. **Pendiente verificar un dominio en Resend** |
+| `guardarEquipo` borraba e insertaba de nuevo todo el equipo investigador | Habría destruido firmas capturadas e invalidado enlaces ya enviados | Actualiza por id, inserta lo nuevo, borra solo lo quitado |
 
 ## 12. Protocolo de verificación pre-entrega
 

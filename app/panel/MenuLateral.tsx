@@ -3,9 +3,9 @@
 /**
  * MENÚ LATERAL
  * ---------------------------------------------------------------
- * Encabezado: el profesional. Debajo, un acceso permanente a la
- * gestión de empresas —que es la vista de cartera— y luego los
- * módulos, que operan siempre sobre la empresa activa.
+ * Encabezado: el profesional. Debajo, un acceso permanente al panel
+ * principal —cartera de empresas, semáforo y bandeja de pendientes— y
+ * luego los módulos, que operan siempre sobre la empresa activa.
  */
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -136,7 +136,7 @@ export default function MenuLateral({
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">▦</span>
-            Gestión de empresas
+            Panel principal
           </Link>
 
           <Link

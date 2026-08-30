@@ -12,11 +12,21 @@
  * La regla que más puntos cuesta en una visita: un estándar marcado
  * «no aplica» sin justificar se puntúa en cero. Aquí se pide la
  * justificación en el momento de marcarlo, no después.
+ *
+ * Dos decisiones de pantalla, ambas por lo mismo —diligenciar 60
+ * estándares seguidos:
+ *  · El aviso de guardado es FLOTANTE, no una franja dentro del flujo.
+ *    Si empujara el contenido, cada respuesta movería la pregunta
+ *    siguiente justo antes de que el dedo llegue.
+ *  · Los ciclos vienen PLEGADOS. Sesenta estándares abiertos son una
+ *    lista imposible de recorrer; plegados se ve el avance de cada
+ *    ciclo y se entra a uno a la vez.
  */
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  crearAutoevaluacion, responderEstandar, cerrarAutoevaluacion, generarPlanMejoramiento,
+  crearAutoevaluacion, responderEstandar, cerrarAutoevaluacion,
+  generarPlanMejoramiento, enviarAutoevaluacion,
   type DetalleAuto, type ItemEstandar, type Resultado_, type ResumenAuto, type Criterio,
 } from '@/lib/acciones-autoevaluacion';
 
@@ -63,6 +73,19 @@ export default function VistaAutoevaluacion({
   const [conjunto, setConjunto] = useState(conjuntos[0]?.id ?? '');
   const [justificando, setJustificando] = useState<{ id: string; texto: string } | null>(null);
   const [responsable, setResponsable] = useState('');
+  const [abiertos, setAbiertos] = useState<string[]>([]);
+  const [enviando, setEnviando] = useState(false);
+  const [correo, setCorreo] = useState({ para: '', mensaje: '' });
+
+  // El aviso de acierto se retira solo; el de error espera a que se lea.
+  useEffect(() => {
+    if (aviso?.tipo !== 'ok') return;
+    const t = setTimeout(() => setAviso(null), 2600);
+    return () => clearTimeout(t);
+  }, [aviso]);
+
+  const alternar = (ciclo: string) =>
+    setAbiertos((p) => (p.includes(ciclo) ? p.filter((x) => x !== ciclo) : [...p, ciclo]));
 
   const a = detalle?.autoevaluacion;
   const items = detalle?.items ?? [];
@@ -181,12 +204,29 @@ export default function VistaAutoevaluacion({
 
       {aviso && <Aviso a={aviso} />}
 
+      {/* Cerrada: el documento ya existe y hay que poder sacarlo. */}
+      {cerrada && (
+        <div style={s.cerrada}>
+          <strong>Autoevaluación cerrada.</strong> Ya es el soporte que pide un
+          auditor: descárgala o envíala por correo. Si el criterio no es
+          aceptable, el plan de mejoramiento hay que comunicarlo a la ARL.
+        </div>
+      )}
+
       {/* ---------- Acciones ---------- */}
       <div style={s.barra}>
         <span style={s.meta}>
           {a.codigo} · {a.alcance} estándares · {cerrada ? 'cerrada' : 'en diligenciamiento'}
         </span>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <a href={`/api/pdf-autoevaluacion/${a.id}`} target="_blank" rel="noopener"
+            style={{ ...s.botonSec, borderColor: '#E4E4DF', color: '#5B6470', textDecoration: 'none' }}>
+            Descargar PDF
+          </a>
+          <button type="button" onClick={() => setEnviando(true)}
+            style={{ ...s.botonSec, borderColor: '#E4E4DF', color: '#5B6470' }}>
+            Enviar por correo
+          </button>
           {detalle?.requiere_plan && (
             <>
               <input value={responsable} onChange={(e) => setResponsable(e.target.value)}
@@ -214,14 +254,56 @@ export default function VistaAutoevaluacion({
         </div>
       </div>
 
+      {enviando && (
+        <section style={s.bloque}>
+          <h3 style={s.h3}>Enviar el informe</h3>
+          <label style={s.label}>Destinatarios</label>
+          <input value={correo.para} style={s.input}
+            placeholder="gerencia@empresa.com, arl@aseguradora.com"
+            onChange={(e) => setCorreo({ ...correo, para: e.target.value })} />
+          <p style={s.ayuda}>Separa varios con coma.</p>
+          <label style={{ ...s.label, marginTop: 10 }}>Mensaje</label>
+          <textarea rows={2} value={correo.mensaje} style={{ ...s.input, resize: 'vertical' }}
+            onChange={(e) => setCorreo({ ...correo, mensaje: e.target.value })} />
+          <div style={s.acciones}>
+            <button type="button" style={s.botonPlano} onClick={() => setEnviando(false)}>
+              Cancelar
+            </button>
+            <button type="button" disabled={pendiente}
+              style={{ ...s.botonLleno, background: color }}
+              onClick={() => {
+                correr(() => enviarAutoevaluacion(a.id, correo.para, correo.mensaje));
+                setEnviando(false);
+              }}>
+              Enviar
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* ---------- Estándares ---------- */}
       {Object.keys(CICLOS).map((ciclo) => {
         const del = items.filter((i) => i.ciclo === ciclo);
         if (del.length === 0) return null;
+        const faltan = del.filter((i) => i.resultado === 'sin_evaluar').length;
+        const abierto = abiertos.includes(ciclo);
         return (
           <section key={ciclo} style={s.bloque}>
-            <h3 style={s.h3}>{CICLOS[ciclo]}</h3>
-            {del.map((i) => (
+            <button type="button" onClick={() => alternar(ciclo)} style={s.cabecera}
+              aria-expanded={abierto}>
+              <span style={{ ...s.chevron, color }}>{abierto ? '\u25be' : '\u25b8'}</span>
+              <span style={s.h3Boton}>{CICLOS[ciclo]}</span>
+              <span style={{
+                ...s.avance,
+                background: faltan === 0 ? '#E6F4EA' : '#FFF7ED',
+                color: faltan === 0 ? '#1E6B3A' : '#9A3412',
+              }}>
+                {faltan === 0
+                  ? `${del.length} evaluados`
+                  : `${del.length - faltan} de ${del.length} · faltan ${faltan}`}
+              </span>
+            </button>
+            {abierto && del.map((i) => (
               <div key={i.id} style={s.item}>
                 <div style={s.itemCab}>
                   <span style={s.itemCodigo}>{i.codigo}</span>
@@ -290,12 +372,17 @@ export default function VistaAutoevaluacion({
   );
 }
 
+/**
+ * Flotante a propósito: si ocupara sitio en el flujo, cada respuesta
+ * desplazaría la pregunta siguiente al aparecer y al desaparecer.
+ */
 function Aviso({ a }: { a: { tipo: 'ok' | 'error'; texto: string } }) {
   return (
-    <div style={{
+    <div role="status" aria-live="polite" style={{
       ...s.aviso,
       background: a.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
       color: a.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+      border: `1px solid ${a.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
     }}>{a.texto}</div>
   );
 }
@@ -369,7 +456,27 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: 'inherit', background: '#fff', color: '#14263F',
   },
   ayuda: { fontSize: 11.5, color: '#8A929C', margin: '5px 0 0', lineHeight: 1.5 },
-  aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
+  aviso: {
+    position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
+    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    boxShadow: '0 6px 20px rgba(20,38,63,.16)',
+  },
+  cerrada: {
+    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 10,
+    padding: '12px 15px', fontSize: 13, color: '#374151',
+    lineHeight: 1.6, marginBottom: 12,
+  },
+  cabecera: {
+    display: 'flex', alignItems: 'center', gap: 10, width: '100%',
+    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+    textAlign: 'left',
+  },
+  chevron: { fontSize: 12, width: 12, flexShrink: 0 },
+  h3Boton: { fontSize: 14, fontWeight: 700, color: '#14263F', flex: 1 },
+  avance: {
+    fontSize: 11, fontWeight: 600, borderRadius: 20,
+    padding: '3px 10px', whiteSpace: 'nowrap',
+  },
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
     background: 'none', border: 'none', color: '#5B6470',

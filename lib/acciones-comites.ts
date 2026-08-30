@@ -15,14 +15,26 @@
  * OJO: la norma habla de TRABAJADORES DE LA EMPRESA. Si el cliente
  * tiene contratistas el número puede diferir del de empleados
  * registrados, así que el sistema PROPONE y el consultor confirma.
+ *
+ * La BRIGADA DE EMERGENCIA vive aquí porque se conforma igual —un grupo
+ * de personas nombradas por un periodo, con un acta y un organigrama—,
+ * pero se valida distinto: el Decreto 1072 (art. 2.2.4.6.25, num. 9) no
+ * fija número ni paridad, exige conformarla, capacitarla y dotarla
+ * «acorde con su nivel de riesgo». Por eso lo que la aplicación calcula
+ * para la brigada son RECOMENDACIONES separadas de las fallas: mezclarlas
+ * sería presentar como exigencia legal algo que es criterio técnico.
  */
 import { revalidatePath } from 'next/cache';
 import { crearClienteServidor } from './supabase/servidor';
 import { empresaActiva } from './empresa-activa';
 
-export type TipoComite = 'copasst' | 'vigia' | 'convivencia';
-export type Parte = 'empleador' | 'trabajadores';
-export type RolComite = 'presidente' | 'secretario' | 'integrante';
+export type TipoComite = 'copasst' | 'vigia' | 'convivencia' | 'brigada';
+export type Parte = 'empleador' | 'trabajadores' | 'brigada';
+export type RolComite =
+  | 'presidente' | 'secretario' | 'integrante'   // COPASST y convivencia
+  | 'jefe' | 'brigadista';                       // brigada de emergencia
+/** Frentes de la brigada. Null en los demás comités. */
+export type Frente = 'primeros_auxilios' | 'incendios' | 'evacuacion';
 
 export type Miembro = {
   id: string;
@@ -34,22 +46,28 @@ export type Miembro = {
   parte: Parte;
   suplente: boolean;
   rol: RolComite;
+  frente: Frente | null;
   activo: boolean;
   motivo_salida: string | null;
 };
 
 export type Validacion = {
   ok: boolean;
+  /** Solo cuentan las fallas: las recomendaciones no reprueban. */
   conforme: boolean;
   fallas: string[];
+  recomendaciones: string[];
   requerido: {
     trabajadores: number; tipo_correcto: string;
-    principales: number; suplentes: number; norma: string; nota: string;
+    principales: number; suplentes: number; sugeridos: number;
+    norma: string; nota: string;
   };
   actual: {
     empleador_principales: number; empleador_suplentes: number;
     trabajadores_principales: number; trabajadores_suplentes: number;
     presidente: number; secretario: number;
+    total: number; jefe: number;
+    primeros_auxilios: number; incendios: number; evacuacion: number;
   };
 };
 
@@ -132,7 +150,8 @@ export async function guardarMiembro(
   datos: {
     id?: string; empleadoId: string | null; nombre: string;
     identificacion: string; cargo: string; parte: Parte;
-    suplente: boolean; rol: RolComite; fotoUrl?: string | null;
+    suplente: boolean; rol: RolComite;
+    frente?: Frente | '' | null; fotoUrl?: string | null;
   }
 ): Promise<Res> {
   const supabase = await crearClienteServidor();
@@ -147,6 +166,7 @@ export async function guardarMiembro(
     p_cargo: datos.cargo || null,
     p_foto: datos.fotoUrl ?? null,
     p_id: datos.id ?? null,
+    p_frente: datos.frente || null,
   });
   if (error) return { ok: false, mensaje: error.message };
 

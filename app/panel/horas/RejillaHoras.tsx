@@ -10,6 +10,12 @@
  *
  * Se guarda el año completo de una vez porque así se diligencia en la
  * práctica: el consultor recibe la nómina del año y la transcribe.
+ *
+ * Un mes ya guardado queda BLOQUEADO. Estas horas son el denominador de
+ * los indicadores del art. 30: si se tocan sin querer, la frecuencia y
+ * la severidad de todo el año cambian sin que nadie lo note. Para
+ * corregir hay que pedirlo mes por mes, que es justo la fricción que
+ * separa una corrección de un tropiezo con el teclado.
  */
 import { useState, useTransition } from 'react';
 import { guardarAnioHoras, type MesHoras } from '@/lib/acciones-horas';
@@ -50,10 +56,14 @@ export default function RejillaHoras({
 }) {
   const [pendiente, startTransition] = useTransition();
   const [filas, setFilas] = useState<Fila[]>(() => aFilas(datos));
+  const [bloqueadas, setBloqueadas] = useState<number[]>(
+    () => datos.filter((d) => d.registrado).map((d) => d.mes)
+  );
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
   const [hecho, setHecho] = useState(false);
 
   function cambiar(mes: number, campo: keyof Omit<Fila, 'mes'>, valor: string) {
+    if (bloqueadas.includes(mes)) return;
     setHecho(false);
     // Solo dígitos, coma y punto: evita que un texto se convierta en 0
     // silenciosamente al guardar.
@@ -87,6 +97,11 @@ export default function RejillaHoras({
       setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
       if (r.ok) {
         setHecho(true);
+        // Lo que acaba de guardarse vuelve a quedar bajo llave.
+        setBloqueadas(
+          filas.filter((f) => f.horas !== '' || f.trabajadores !== '' || f.dias !== '')
+            .map((f) => f.mes)
+        );
         setTimeout(() => setHecho(false), 2600);
       }
     });
@@ -109,17 +124,22 @@ export default function RejillaHoras({
               <th style={e.th}>Horas trabajadas</th>
               <th style={e.th}>Trabajadores</th>
               <th style={e.th}>Días programados</th>
+              <th style={{ ...e.th, textAlign: 'center' }}>Estado</th>
             </tr>
           </thead>
           <tbody>
-            {filas.map((f) => (
+            {filas.map((f) => {
+              const bloqueada = bloqueadas.includes(f.mes);
+              const est = bloqueada ? { ...e.input, ...e.inputBloqueado } : e.input;
+              return (
               <tr key={f.mes}>
                 <td style={e.tdMes}>{MESES[f.mes - 1]}</td>
                 <td style={e.td}>
                   <input
                     value={f.horas}
                     onChange={(ev) => cambiar(f.mes, 'horas', ev.target.value)}
-                    style={e.input}
+                    readOnly={bloqueada}
+                    style={est}
                     inputMode="decimal"
                     placeholder="—"
                     aria-label={`Horas trabajadas de ${MESES[f.mes - 1]}`}
@@ -129,7 +149,8 @@ export default function RejillaHoras({
                   <input
                     value={f.trabajadores}
                     onChange={(ev) => cambiar(f.mes, 'trabajadores', ev.target.value)}
-                    style={e.input}
+                    readOnly={bloqueada}
+                    style={est}
                     inputMode="numeric"
                     placeholder="—"
                     aria-label={`Trabajadores de ${MESES[f.mes - 1]}`}
@@ -139,14 +160,30 @@ export default function RejillaHoras({
                   <input
                     value={f.dias}
                     onChange={(ev) => cambiar(f.mes, 'dias', ev.target.value)}
-                    style={e.input}
+                    readOnly={bloqueada}
+                    style={est}
                     inputMode="numeric"
                     placeholder="—"
                     aria-label={`Días programados de ${MESES[f.mes - 1]}`}
                   />
                 </td>
+                <td style={{ ...e.td, textAlign: 'center' }}>
+                  {bloqueada ? (
+                    <button
+                      type="button"
+                      onClick={() => setBloqueadas((p) => p.filter((m) => m !== f.mes))}
+                      style={e.desbloquear}
+                      title={`Corregir ${MESES[f.mes - 1]}`}
+                    >
+                      Corregir
+                    </button>
+                  ) : (
+                    <span style={e.abierto}>editable</span>
+                  )}
+                </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -199,7 +236,7 @@ const e: Record<string, React.CSSProperties> = {
     background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
     overflowX: 'auto',
   },
-  tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13.5, minWidth: 520 },
+  tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13.5, minWidth: 620 },
   th: {
     textAlign: 'right', padding: '10px 12px', background: '#F7F7F4', color: '#5B6470',
     fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
@@ -210,6 +247,13 @@ const e: Record<string, React.CSSProperties> = {
     fontWeight: 600, color: '#14263F', whiteSpace: 'nowrap',
   },
   td: { padding: '6px 8px', borderBottom: '1px solid #F0F0EC' },
+  inputBloqueado: { background: '#F7F7F4', color: '#5B6470', borderColor: '#EDEDE8' },
+  desbloquear: {
+    background: 'none', border: '1px solid #E4E4DF', borderRadius: 6,
+    padding: '4px 10px', fontSize: 11.5, color: '#5B6470',
+    cursor: 'pointer', whiteSpace: 'nowrap',
+  },
+  abierto: { fontSize: 11, color: '#8A929C' },
   input: {
     width: '100%', minWidth: 90, padding: '7px 9px', textAlign: 'right',
     border: '1px solid #E4E4DF', borderRadius: 6, fontSize: 13.5,

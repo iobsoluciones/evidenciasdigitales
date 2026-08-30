@@ -8,6 +8,10 @@
  *
  * Las fotos son opcionales: si no hay, queda la inicial. Un organigrama
  * a medio llenar sigue sirviendo; uno que no se puede imprimir, no.
+ *
+ * Las columnas las decide quien llama: en el COPASST y en el comité de
+ * convivencia son las dos partes —y dentro, principales y suplentes—;
+ * en la brigada son los tres frentes, donde no hay suplencia que mostrar.
  */
 import { Document, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
 import { EncabezadoDoc, type EncabezadoConfig } from './EncabezadoDoc';
@@ -42,8 +46,10 @@ export type DatosOrganigrama = {
   periodo: string;
   fechaConformacion: string;
 
-  empleador: MiembroPdf[];
-  trabajadores: MiembroPdf[];
+  /** Dos columnas por parte, o tres por frente si es brigada. */
+  columnas: Array<{ titulo: string; miembros: MiembroPdf[] }>;
+  /** Solo los comités con suplencia separan principales de suplentes. */
+  porSuplencia: boolean;
 
   generadoEl: string;
 };
@@ -52,6 +58,8 @@ const ROLES: Record<string, string> = {
   presidente: 'PRESIDENTE',
   secretario: 'SECRETARIO',
   integrante: 'INTEGRANTE',
+  jefe: 'JEFE DE BRIGADA',
+  brigadista: 'BRIGADISTA',
 };
 
 export function Organigrama({ d }: { d: DatosOrganigrama }) {
@@ -80,12 +88,12 @@ export function Organigrama({ d }: { d: DatosOrganigrama }) {
           <Dato s={s} e="NORMA" v={d.norma} />
         </View>
 
-        {/* Dos columnas: la paridad que exige la norma se ve de un vistazo. */}
+        {/* En columnas: la paridad —o la cobertura por frente— se ve sin contar. */}
         <View style={s.columnas}>
-          <Columna s={s} titulo="REPRESENTANTES DEL EMPLEADOR"
-            miembros={d.empleador} color={d.colorPrimario} />
-          <Columna s={s} titulo="REPRESENTANTES DE LOS TRABAJADORES"
-            miembros={d.trabajadores} color={d.colorPrimario} />
+          {d.columnas.map((col, i) => (
+            <Columna key={i} s={s} titulo={col.titulo} miembros={col.miembros}
+              color={d.colorPrimario} porSuplencia={d.porSuplencia} />
+          ))}
         </View>
 
         <Text
@@ -102,13 +110,27 @@ export function Organigrama({ d }: { d: DatosOrganigrama }) {
 }
 
 function Columna({
-  s, titulo, miembros, color,
+  s, titulo, miembros, color, porSuplencia,
 }: {
   s: ReturnType<typeof estilos>;
   titulo: string;
   miembros: MiembroPdf[];
   color: string;
+  porSuplencia: boolean;
 }) {
+  if (!porSuplencia) {
+    return (
+      <View style={s.columna}>
+        <Text style={s.columnaTitulo}>{titulo}</Text>
+        <View style={{ marginTop: 4 }}>
+          {miembros.length === 0
+            ? <Text style={s.vacio}>Sin designar</Text>
+            : miembros.map((m, i) => <Tarjeta key={i} s={s} m={m} color={color} />)}
+        </View>
+      </View>
+    );
+  }
+
   const principales = miembros.filter((m) => !m.suplente);
   const suplentes = miembros.filter((m) => m.suplente);
 

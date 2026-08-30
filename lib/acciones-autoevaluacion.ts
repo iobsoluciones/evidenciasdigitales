@@ -167,3 +167,54 @@ export async function generarPlanMejoramiento(
       : 'No había estándares incumplidos nuevos.',
   };
 }
+
+/**
+ * Envía el informe por correo con el PDF adjunto.
+ *
+ * La autoevaluación es el soporte que pide primero un auditor y el que
+ * hay que comunicar a la ARL cuando el criterio no es aceptable, así que
+ * tiene que poder salir de la aplicación sin pasar por una captura de
+ * pantalla.
+ */
+export async function enviarAutoevaluacion(
+  id: string, destinatarios: string, mensaje: string
+): Promise<Res> {
+  const lista = destinatarios.split(/[,;\n]+/).map((c) => c.trim()).filter(Boolean);
+  if (lista.length === 0) return { ok: false, mensaje: 'Indica al menos un correo.' };
+
+  const invalidos = lista.filter((c) => !/^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]{2,}$/.test(c));
+  if (invalidos.length > 0) {
+    return { ok: false, mensaje: `Correo(s) inválido(s): ${invalidos.join(', ')}` };
+  }
+
+  const { generarInformeAutoevaluacion } = await import('./pdf/generarInformeAutoevaluacion');
+  const pdf = await generarInformeAutoevaluacion(id);
+  if (!pdf.ok) return { ok: false, mensaje: pdf.error };
+
+  const { enviarCorreo } = await import('./correo');
+  const extra = mensaje.trim()
+    ? `<p style="background:#F7F7F4;border-left:3px solid #14263F;padding:10px 14px;color:#374151;margin:16px 0;">
+         ${mensaje.replace(/</g, '&lt;').replace(/\n/g, '<br>')}
+       </p>` : '';
+
+  const envio = await enviarCorreo({
+    para: lista.join(','),
+    asunto: `${pdf.titulo} — ${pdf.empresa}`,
+    html: `
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#14263F;max-width:560px;">
+  <h2 style="margin-bottom:4px;">${pdf.titulo}</h2>
+  <p style="color:#5B6470;margin-top:0;">${pdf.empresa}</p>
+  ${extra}
+  <p>Adjunto el informe de autoevaluación de estándares mínimos, con el
+     puntaje, el criterio de valoración y el detalle estándar por estándar.</p>
+  <p style="font-size:11px;color:#8A929C;margin-top:24px;border-top:1px solid #E4E4DF;padding-top:12px;">
+    Resolución 0312 de 2019, artículos 27 y 28.
+  </p>
+</div>`.trim(),
+    adjuntos: [{ filename: pdf.nombreArchivo, content: pdf.buffer }],
+    registro: { tipo: 'otro' },
+  });
+
+  if (!envio.ok) return { ok: false, mensaje: envio.mensaje };
+  return { ok: true, mensaje: `Informe enviado a ${lista.length} destinatario(s).` };
+}

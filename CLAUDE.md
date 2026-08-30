@@ -159,6 +159,81 @@ Incluye: catálogo con foto, ingreso, **entregas con firma + acta PDF**, **firma
 - **Programación (fase 8)**: `inspeccion_programaciones` con frecuencia y próxima fecha; al ejecutar una inspección se llama `cumplir_programacion`, que corre la fecha. Los vencimientos se muestran en pantalla; **la notificación por correo está pendiente**.
 - **Plan de acción agrupado por inspección** en la vista de acciones.
 
+### Accidentalidad e investigación (fase 1)
+`eventos` (accidente / incidente / casi-accidente / enfermedad laboral) con investigación
+según la **Res. 1401 de 2007**: plazo de 15 días calculado al leer, equipo investigador,
+testigos, causas, y generación de acciones correctivas desde las causas. Informe en PDF.
+**Las firmas del equipo se piden por enlace al correo** (`/i/[token]`) — ver §5.21.
+Cerrar una investigación exige que **todas** las firmas del equipo estén capturadas.
+
+### Horas-hombre y exámenes médicos (fase 1)
+- `horas_hombre`: rejilla de doce meses. Un mes vacío ≠ un mes en cero, y **un mes ya
+  guardado queda bloqueado**: es el denominador de los indicadores del art. 30 y un
+  tropiezo con el teclado cambiaría la frecuencia de todo el año. Se desbloquea mes a mes.
+- `examenes_medicos`: **solo concepto de aptitud y restricciones. NUNCA diagnóstico** —
+  la historia clínica es reservada y la custodia el médico (Res. 2346 de 2007). No hay
+  columna de diagnóstico y no debe agregarse. `retirar_empleado` exige examen de egreso
+  o una razón documentada.
+
+### Indicadores del artículo 30 (fase 1)
+`indicadores_legales(empresa, anio)` calcula los seis indicadores que exige el
+Dec. 1072 art. 2.2.4.6.20-22, **cada uno con su fórmula escrita al lado**: frecuencia,
+severidad y mortalidad de accidentalidad, prevalencia e incidencia de enfermedad laboral
+y ausentismo. Son los de la norma, no los propios de la aplicación.
+
+### Matriz de peligros GTC 45 (fase 2)
+`peligros` con la valoración como **columnas generadas**: `np = nd*ne`, `nr = np*nc`,
+`nivel` (I–IV) y aceptabilidad. Se calculan en la base, así que ninguna pantalla puede
+mostrar un nivel distinto al de otra. `peligro_controles` enlaza cada peligro con el EPP,
+la capacitación o la inspección que lo controla: es lo que permite justificar **por qué
+ese EPP y no otro**.
+
+### Plan anual y bandeja de pendientes (fase 2)
+- `plan_anual` + `plan_actividades` con `meses_programados` y `meses_ejecutados` (int[]):
+  el cronograma es el documento, no un adorno. **Aprobar es firmar**: `aprobar_plan_anual`
+  exige al menos una actividad, nombre y firma del empleador.
+- `pendientes(empresa)` une **trece fuentes** en una sola bandeja ordenada por severidad
+  (accidentes sin investigar y sin reportar a la ARL, acciones vencidas, inspecciones
+  programadas, exámenes por vencer, peligros I y II sin control, dotación por vencer,
+  plan anual y autoevaluación del año, y **comités mal conformados o inexistentes**).
+  Es la primera pantalla del panel principal, con `semaforo_cumplimiento(empresa)`.
+
+### Autoevaluación de estándares mínimos (fase 2)
+`autoevaluaciones` + `autoevaluacion_items` sobre un **conjunto** de estándares.
+El puntaje y el criterio (crítico / moderadamente aceptable / aceptable) se derivan al
+leer, nunca se guardan. `responder_estandar` **rechaza «no aplica» sin justificación**,
+que es lo que más puntos cuesta en una visita. `generar_plan_mejoramiento` convierte cada
+incumplimiento en una acción del plan que ya existe. Informe en PDF y envío por correo.
+
+### Conjuntos de estándares editables (fase 2)
+`estandar_conjuntos` con `org_id NULL` = conjunto del sistema, de solo lectura por RLS.
+El profesional **duplica** (y puede cambiar nombre, norma, descripción y cada fila),
+**crea** desde cero o **importa desde Excel** (`importar_conjunto_estandares` valida todas
+las filas antes de escribir: o entra el archivo entero o no entra nada, con el número de
+fila en el error). Así las tablas de 7 y 21 estándares no dependen del programador — ver §5.22.
+
+### Comités, vigía y brigada de emergencia (fase 3.1)
+`comites` + `comite_miembros` para **COPASST / Vigía**, **Comité de Convivencia** y
+**Brigada de emergencia**. Lo que aporta no es el dibujo sino el **validador**:
+`composicion_requerida(empresa, tipo)` calcula lo que exige la norma según los
+trabajadores activos y `validar_comite(comite)` dice qué falta.
+
+| Tipo | Composición | Norma |
+|---|---|---|
+| Vigía | menos de 10 trabajadores | Res. 2013/1986 art. 2 · Dec. 1295/1994 art. 35 |
+| COPASST | 10–49: 1+1 · 50–499: 2+2 · 500–999: 3+3 · 1000+: 4+4, **por cada parte** | Res. 2013 de 1986 |
+| Convivencia | menos de 20: 1+1 · 20 o más: 2+2, por cada parte | Res. 652/2012 mod. 1356/2012 |
+| Brigada | **la norma no fija número**: conformar, capacitar y dotar «acorde con el nivel de riesgo» | Dec. 1072 art. 2.2.4.6.25 num. 9 · Res. 0312 est. 5.1.2 |
+
+- Periodo de **dos años** en COPASST y convivencia; **un año** en la brigada, que no lo
+  tiene en la norma pero se revisa anualmente junto con capacitación y dotación.
+- La brigada no se agrupa por parte sino por **frente** (primeros auxilios, control de
+  incendios, evacuación y rescate); su rol es jefe o brigadista. En la brigada nadie
+  representa a nadie, y `guardar_miembro_comite` lo fuerza venga de donde venga la llamada.
+- **Organigrama en PDF** pensado como cartelera (se imprime y se publica), con envío por
+  correo. Al **retirar un empleado** sale de sus comités pero **no se borra**: queda
+  inactivo con su motivo, porque el acta de conformación sigue nombrándolo.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -219,6 +294,30 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
     un componente `'use client'`. La alternativa al registro directo —apagar la confirmación de
     correo del proyecto— habría dejado sin verificación **también** al registro por correo.
 
+21. **Toda firma se puede pedir por enlace al correo, y todo documento firmado sale en
+    PDF y por correo.** Regla del producto, no una comodidad. El personal que tiene que
+    firmar —equipo investigador, jefe de área, trabajador en otra sede— casi nunca está
+    en el mismo sitio: si la firma virtual obliga a buscar a la gente, no ahorró nada
+    frente al papel. Y una firma que no se puede sacar de la aplicación no sirve como
+    soporte ante la ARL o una auditoría. Cada pantalla de firma nueva nace con las tres
+    cosas: captura en sitio, **enlace por correo** y **PDF descargable y enviable**.
+    Estado por módulo en §9.
+
+22. **A un catálogo normativo se le entrega el MÉTODO, no el contenido.** Las tablas de
+    estándares (7, 21, 60) cambian con cada resolución. Precargarlas deja al profesional
+    esperando al programador cada vez que el Ministerio publica algo. Por eso lo que se
+    entrega es duplicar + editar + **importar desde Excel**, y el conjunto del sistema es
+    de solo lectura. La misma regla aplicará a la matriz legal.
+
+23. **Lo que la norma exige va en `fallas`; lo que es criterio técnico va en
+    `recomendaciones`.** La brigada obligó a separarlos: el Decreto 1072 no fija número ni
+    paridad, así que presentar el 10 % del personal como incumplimiento sería inventar una
+    exigencia legal. `conforme` solo mira las fallas.
+
+24. **Cambiar la firma de una función RPC exige `drop function` de la anterior.** Añadir un
+    parámetro con valor por omisión crea una **sobrecarga**: las dos quedan vivas y
+    PostgREST no sabe cuál llamar. Se borra la vieja en la misma migración.
+
 ---
 
 ## 6. Problemas resueltos (y sus lecciones)
@@ -237,11 +336,22 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
 | Estilos de react-pdf inexistentes (`s.filaTabla`) | react-pdf **los ignora en silencio**: el render "pasa" con el estilo perdido. Solo `tsc` lo detecta |
 | "Indica la empresa capacitada" al crear en Vercel | La constante de formulario vacío mandaba `esEmpresaPropia:false` con `empresa:''`. Nació de **no probar la creación real** por una premisa falsa (`siguiente_codigo` usa `max+1`, no una secuencia que se gaste) |
 | Clic en el calendario que no abría nada | `abrirEdicion` hacía `return` mudo para capacitaciones y la agenda estaba vacía, así que **todos** los clics caían ahí. El dato (0 anotaciones) ya estaba a la vista |
+| `generar_token_entrega` fallaba con «`gen_random_bytes` does not exist» | pgcrypto vive en el esquema `extensions` y las funciones fijan `search_path='public'`. **Bug de producción preexistente**: la firma remota de entregas nunca había funcionado. Se **califica el esquema** (`extensions.gen_random_bytes`), no se ensancha el `search_path` |
+| `/d/[token]` redirigía a `/login` | Faltaba `/d` en `RUTAS_PUBLICAS` del middleware. Segundo bug preexistente **en la misma función**: un flujo público se rompe en dos sitios distintos, y hay que probarlo entero |
+| El enlace de firma llegaba como `/i/<token>` sin dominio | `NEXT_PUBLIC_APP_URL` se incrusta **en el build** y no estaba en `.env.local`. Se creó `lib/url-base.ts`, que lo reconstruye de las cabeceras de la petición |
+| El correo "se enviaba" pero no llegaba | `RESEND_FROM = onboarding@resend.dev` es el remitente de **prueba**: la API acepta y solo entrega al dueño de la cuenta. La evidencia estaba en la tabla `envios` (dos envíos en toda la vida, ambos al mismo correo). Se detecta el modo prueba y **el enlace siempre se muestra copiable** |
+| `guardarEquipo` borraba e insertaba de nuevo todo el equipo | Habría destruido firmas ya capturadas e invalidado enlaces enviados. Ahora **actualiza por id**, inserta lo nuevo y borra solo lo quitado |
+| `pr.proxima_fecha` / `pr.activa` no existían | Se **supusieron** los nombres en vez de consultarlos: eran `fecha_programada` y `estado='pendiente'`. Exactamente el error contra el que avisa este archivo |
+| `text[] \|\| 'literal'` → "malformed array literal" | Concatenar un literal a un `text[]` necesita `::text`. Con `format()` no falla porque devuelve text, y por eso el error aparece solo en algunas líneas |
+| `format()` con un `%` literal → "unrecognized format() type specifier" | Se escribe con `\|\|` o se duplica el signo |
+| Las funciones con `mi_org_id()` devolvían vacío al probarlas por SQL | En una sesión SQL no hay JWT. Se simula con `set_config('request.jwt.claims', …, true)` antes de probar |
+| `→` (U+2192) invisible en los PDF | Las fuentes estándar de react-pdf usan **WinAnsi**: el carácter no existe, no se dibuja y **no da error**. Solo se ve renderizando de verdad. `•` y `·` sí existen |
+| «CARLOS RAMÍREZ TOR-RES» en el organigrama | react-pdf **parte palabras con guion** cuando no caben. Se desactiva con `Font.registerHyphenationCallback((p) => [p])` en `EncabezadoDoc`, por donde pasan todos los documentos |
 | Reportar "dos capacitaciones activas" como anomalía | El límite de una activa es **por empresa**, no por organización: mirar el total ignora la frontera de trabajo |
 
 ---
 
-## 7. Protocolo de verificación pre-entrega (5 comprobaciones)
+## 7. Protocolo de verificación pre-entrega (6 comprobaciones)
 
 Aplicar a **cada** cambio de código antes de darlo por terminado — nacieron de errores costosos reales:
 
@@ -285,9 +395,24 @@ entregas · entrega_items · articulo_mantenimientos
 inspeccion_plantillas · inspeccion_items
 inspecciones · inspeccion_respuestas · acciones_correctivas
 inspeccion_programaciones   # fase 8: frecuencia + próxima fecha
+
+# Fase 1 — accidentalidad, salud e indicadores
+eventos · evento_investigacion · evento_equipo · evento_testigos
+horas_hombre                # denominador de los indicadores del art. 30
+examenes_medicos            # aptitud y restricciones, NUNCA diagnóstico
+
+# Fase 2 — planeación y verificación
+peligros (np/nr/nivel generadas) · peligro_controles
+plan_anual · plan_actividades
+estandar_conjuntos · estandar_items     # org_id NULL = del sistema, solo lectura
+autoevaluaciones · autoevaluacion_items
+
+# Fase 3 — comités
+comites · comite_miembros   # copasst | vigia | convivencia | brigada
 ```
 
-`capacitaciones`, `inspecciones` y `entregas` llevan además **`encabezado_config` jsonb** (el congelado del §5.14).
+`capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
+y `comites` llevan además **`encabezado_config` jsonb** (el congelado del §5.14).
 
 Funciones clave por dominio:
 - **Base:** `mi_org_id()`, `siguiente_codigo`, `puede_crear_empresa`, `slug_empresa_libre`, `sugerir_slug_empresa`.
@@ -295,6 +420,17 @@ Funciones clave por dominio:
 - **Capacitaciones:** `activar_capacitacion` (copia firma y congela encabezado), `empleados_con_participacion(p_activos)`, `convocar_empleados`, `matriz_capacitaciones`, `resumen_empresas` (trae `proxima`), `calendario`, `trayectoria_profesional`.
 - **Inspecciones:** `crear_inspeccion`, `guardar_respuesta_inspeccion`, `cerrar_inspeccion`, `detalle_inspeccion`, `listar_inspecciones`, `sembrar_plantillas_inspeccion`, `programar_inspeccion`, `listar_programaciones`, `cumplir_programacion`.
 - **Plan e indicadores:** `crear_accion`, `generar_acciones_inspeccion`, `actualizar_accion`, `listar_acciones`, `indicadores_inspecciones`.
+- **Fase 1:** `crear_evento`, `guardar_investigacion`, `cerrar_investigacion`,
+  `generar_acciones_evento`, `listar_eventos`, `detalle_evento`,
+  `generar_token_firma_evento`, `guardar_horas_hombre`, `horas_hombre_periodo`,
+  `guardar_examen`, `alertas_examenes`, `retirar_empleado`, `indicadores_legales`.
+- **Fase 2:** `guardar_peligro`, `matriz_peligros`, `guardar_plan_anual`,
+  `aprobar_plan_anual`, `pendientes`, `semaforo_cumplimiento`, `crear_autoevaluacion`,
+  `responder_estandar`, `detalle_autoevaluacion`, `generar_plan_mejoramiento`,
+  `duplicar_conjunto_estandares`, `actualizar_conjunto_estandares`,
+  `guardar_item_conjunto`, `importar_conjunto_estandares`.
+- **Fase 3:** `crear_comite`, `guardar_miembro_comite`, `eliminar_miembro_comite`,
+  `listar_comites`, `detalle_comite`, `composicion_requerida`, `validar_comite`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
@@ -339,8 +475,25 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 - **Fase 2** — matriz de peligros, autoevaluación con puntaje, plan anual, bandeja de pendientes.
 - **Fase 3** — COPASST, emergencias, permisos de alto riesgo, matriz legal, contratistas.
 
+### Firma remota y PDF por módulo (regla §5.21)
+
+| Documento | Firma en sitio | Enlace por correo | PDF | Envío |
+|---|---|---|---|---|
+| Asistencia a capacitación | sí | sí (`/r/[slug]` + QR) | sí | sí |
+| Entrega de dotación | sí | sí (`/d/[token]`) | sí | sí |
+| Devolución | sí | — | sí | sí |
+| Investigación de evento | sí | sí (`/i/[token]`) | sí | sí |
+| **Inspección** | sí | **falta** | sí | sí |
+| **Plan anual** (firma del empleador) | sí | **falta** | **falta** | **falta** |
+| **Acta de conformación de comité** | **falta** | **falta** | organigrama sí | sí |
+| Autoevaluación | no lleva firma capturada | — | sí | sí |
+
+Lo marcado **falta** es trabajo pendiente que abre esta regla, en ese orden.
+
 ### Notificaciones (el eslabón que falta)
 Los recordatorios de inspecciones programadas y el aviso a los responsables de acciones correctivas siguen sin enviarse. Requiere decidir si se agrega **`correo` a `empleados`**.
+**Resend sigue en modo de prueba** (`onboarding@resend.dev`): hay que verificar un dominio
+para que los correos lleguen a alguien distinto del dueño de la cuenta.
 
 ### Usuarios B2B de solo consulta (analizado, sin implementar)
 Enfoque recomendado (**C**): `usuarios` gana `rol='cliente'` + `empresa_id`, y `mi_org_id()` añade `and rol <> 'cliente'` para que **las 117 políticas fallen cerradas** ante un cliente; el acceso se da solo por funciones `SECURITY DEFINER` acotadas. En `planes`: `max_clientes_por_empresa` (0 básico / 1 pro / ilimitado enterprise) y `clientes_descargan` (solo enterprise). **Obstáculo:** falta `SUPABASE_SERVICE_ROLE_KEY` en Vercel, o hay que invitar por correo con Resend.

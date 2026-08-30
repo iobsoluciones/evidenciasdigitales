@@ -10,6 +10,11 @@
  *
  * Los integrantes van en dos columnas —empleador y trabajadores—
  * porque la paridad es lo que exige la norma y así se ve sin contar.
+ *
+ * La BRIGADA no se agrupa por parte sino por FRENTE (primeros auxilios,
+ * control de incendios, evacuación y rescate): en la brigada nadie
+ * representa a nadie, y lo que hay que ver de un vistazo es si algún
+ * frente quedó sin cubrir.
  */
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -17,7 +22,7 @@ import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import {
   crearComite, guardarMiembro, quitarMiembro, enviarOrganigrama,
   type ComiteResumen, type Comite, type Miembro, type Validacion,
-  type TipoComite, type Parte, type RolComite,
+  type TipoComite, type Parte, type RolComite, type Frente,
 } from '@/lib/acciones-comites';
 
 const TIPOS: Record<TipoComite, { t: string; norma: string }> = {
@@ -27,6 +32,10 @@ const TIPOS: Record<TipoComite, { t: string; norma: string }> = {
     t: 'Comité de Convivencia Laboral',
     norma: 'Res. 652 de 2012, modificada por la 1356 de 2012',
   },
+  brigada: {
+    t: 'Brigada de emergencia',
+    norma: 'Dec. 1072 de 2015, art. 2.2.4.6.25 · Res. 0312 est. 5.1.2',
+  },
 };
 
 const ROLES: { v: RolComite; t: string }[] = [
@@ -35,10 +44,29 @@ const ROLES: { v: RolComite; t: string }[] = [
   { v: 'integrante', t: 'Integrante' },
 ];
 
+const ROLES_BRIGADA: { v: RolComite; t: string }[] = [
+  { v: 'jefe', t: 'Jefe de brigada' },
+  { v: 'brigadista', t: 'Brigadista' },
+];
+
+const FRENTES: { v: Frente; t: string }[] = [
+  { v: 'primeros_auxilios', t: 'Primeros auxilios' },
+  { v: 'incendios', t: 'Control de incendios' },
+  { v: 'evacuacion', t: 'Evacuación y rescate' },
+];
+
+const rotulo = (r: RolComite) =>
+  [...ROLES, ...ROLES_BRIGADA].find((x) => x.v === r)?.t ?? r;
+
 const VACIO = {
   id: undefined as string | undefined,
   empleadoId: '', nombre: '', identificacion: '', cargo: '',
   parte: 'trabajadores' as Parte, suplente: false, rol: 'integrante' as RolComite,
+  frente: '' as Frente | '',
+  // Cuando se entra por «+ Agregar» de una columna, la columna YA dijo a
+  // quién representa (o a qué frente va): repreguntarlo es invitar a
+  // equivocarse, porque el formulario se abre lejos de la columna.
+  fijo: false,
 };
 
 export default function VistaComites({
@@ -70,6 +98,7 @@ export default function VistaComites({
   const c = detalle?.comite;
   const miembros = detalle?.miembros ?? [];
   const v = detalle?.validacion;
+  const esBrigada = c?.tipo === 'brigada';
 
   const correr = (fn: () => Promise<{ ok: boolean; mensaje: string }>) => {
     setAviso(null);
@@ -100,7 +129,7 @@ export default function VistaComites({
         correr(() => guardarMiembro(c!.id, {
           id: m.id, empleadoId: m.empleado_id, nombre: m.nombre,
           identificacion: m.identificacion ?? '', cargo: m.cargo_empresa ?? '',
-          parte: m.parte, suplente: m.suplente, rol: m.rol,
+          parte: m.parte, suplente: m.suplente, rol: m.rol, frente: m.frente,
           fotoUrl: data.publicUrl,
         }));
       }
@@ -170,9 +199,13 @@ export default function VistaComites({
                   <option value="copasst">COPASST</option>
                   <option value="vigia">Vigía en SST (menos de 10 trabajadores)</option>
                   <option value="convivencia">Comité de Convivencia Laboral</option>
+                  <option value="brigada">Brigada de emergencia</option>
                 </select>
               </Campo>
-              <Campo etiqueta="Inicio del periodo" ayuda="El periodo es de dos años.">
+              <Campo etiqueta="Inicio del periodo"
+                ayuda={nuevo.tipo === 'brigada'
+                  ? 'La norma no fija periodo para la brigada: se abre a un año para revisar conformación, capacitación y dotación.'
+                  : 'El periodo es de dos años.'}>
                 <input type="date" value={nuevo.inicio} style={s.input}
                   onChange={(e) => setNuevo({ ...nuevo, inicio: e.target.value })} />
               </Campo>
@@ -227,6 +260,19 @@ export default function VistaComites({
               </ul>
             )}
 
+            {v.recomendaciones?.length > 0 && (
+              <div style={s.recomendaciones}>
+                <div style={s.recomendacionesTitulo}>
+                  Recomendaciones — criterio técnico, no exigencia legal
+                </div>
+                <ul style={s.fallas}>
+                  {v.recomendaciones.map((r, i) => (
+                    <li key={i} style={s.recomendacion}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <p style={s.salvedad}>
               El cálculo usa los <strong>{v.requerido.trabajadores} empleados activos</strong> de
               la empresa. La norma habla de trabajadores: si hay contratistas, ajusta la
@@ -271,7 +317,16 @@ export default function VistaComites({
           {/* Formulario de integrante */}
           {form && (
             <section style={s.bloque}>
-              <div style={s.h3}>{form.id ? 'Editar integrante' : 'Agregar integrante'}</div>
+              <div style={s.h3}>
+                {form.id
+                  ? 'Editar integrante'
+                  : esBrigada
+                    ? `Agregar brigadista${form.frente
+                        ? ' — ' + FRENTES.find((f) => f.v === form.frente)?.t
+                        : ''}`
+                    : `Agregar integrante — representantes ${
+                        form.parte === 'empleador' ? 'del empleador' : 'de los trabajadores'}`}
+              </div>
               <Campo etiqueta="Empleado" ayuda="Si es alguien externo, déjalo vacío y escribe los datos.">
                 <select value={form.empleadoId} style={s.input}
                   onChange={(e) => setForm({ ...form, empleadoId: e.target.value })}>
@@ -300,26 +355,54 @@ export default function VistaComites({
                 </div>
               )}
               <div style={s.fila}>
-                <Campo etiqueta="Representa a">
-                  <select value={form.parte} style={s.input}
-                    onChange={(e) => setForm({ ...form, parte: e.target.value as Parte })}>
-                    <option value="empleador">El empleador</option>
-                    <option value="trabajadores">Los trabajadores</option>
-                  </select>
-                </Campo>
-                <Campo etiqueta="Condición">
-                  <select value={form.suplente ? 'si' : 'no'} style={s.input}
-                    onChange={(e) => setForm({ ...form, suplente: e.target.value === 'si' })}>
-                    <option value="no">Principal</option>
-                    <option value="si">Suplente</option>
-                  </select>
-                </Campo>
-                <Campo etiqueta="Rol en el comité">
-                  <select value={form.rol} style={s.input}
-                    onChange={(e) => setForm({ ...form, rol: e.target.value as RolComite })}>
-                    {ROLES.map((r) => <option key={r.v} value={r.v}>{r.t}</option>)}
-                  </select>
-                </Campo>
+                {esBrigada ? (
+                  <>
+                    <Campo etiqueta="Frente"
+                      ayuda="Los tres frentes deberían quedar cubiertos.">
+                      <select value={form.frente} style={s.input}
+                        onChange={(e) => setForm({ ...form, frente: e.target.value as Frente | '' })}>
+                        <option value="">— Sin asignar —</option>
+                        {FRENTES.map((f) => <option key={f.v} value={f.v}>{f.t}</option>)}
+                      </select>
+                    </Campo>
+                    <Campo etiqueta="Rol en la brigada">
+                      <select value={form.rol} style={s.input}
+                        onChange={(e) => setForm({ ...form, rol: e.target.value as RolComite })}>
+                        {ROLES_BRIGADA.map((r) => <option key={r.v} value={r.v}>{r.t}</option>)}
+                      </select>
+                    </Campo>
+                  </>
+                ) : (
+                  <>
+                    <Campo etiqueta="Representa a"
+                      ayuda={form.fijo ? 'Lo define la columna desde la que se agregó.' : undefined}>
+                      {form.fijo ? (
+                        <div style={s.fijo}>
+                          {form.parte === 'empleador' ? 'El empleador' : 'Los trabajadores'}
+                        </div>
+                      ) : (
+                        <select value={form.parte} style={s.input}
+                          onChange={(e) => setForm({ ...form, parte: e.target.value as Parte })}>
+                          <option value="empleador">El empleador</option>
+                          <option value="trabajadores">Los trabajadores</option>
+                        </select>
+                      )}
+                    </Campo>
+                    <Campo etiqueta="Condición">
+                      <select value={form.suplente ? 'si' : 'no'} style={s.input}
+                        onChange={(e) => setForm({ ...form, suplente: e.target.value === 'si' })}>
+                        <option value="no">Principal</option>
+                        <option value="si">Suplente</option>
+                      </select>
+                    </Campo>
+                    <Campo etiqueta="Rol en el comité">
+                      <select value={form.rol} style={s.input}
+                        onChange={(e) => setForm({ ...form, rol: e.target.value as RolComite })}>
+                        {ROLES.map((r) => <option key={r.v} value={r.v}>{r.t}</option>)}
+                      </select>
+                    </Campo>
+                  </>
+                )}
               </div>
               <div style={s.acciones}>
                 <button type="button" style={s.botonPlano} onClick={() => setForm(null)}>
@@ -337,9 +420,49 @@ export default function VistaComites({
             </section>
           )}
 
-          {/* Organigrama en dos columnas */}
+          {/* Brigada: por frente. Los demás: por parte, que es la paridad. */}
           <div style={s.columnas}>
-            {(['empleador', 'trabajadores'] as Parte[]).map((parte) => (
+            {esBrigada
+              ? ([...FRENTES.map((f) => f.v), ''] as Array<Frente | ''>).map((frente) => {
+                const lista = miembros.filter(
+                  (m) => m.activo && (m.frente ?? '') === frente);
+                if (frente === '' && lista.length === 0) return null;
+                return (
+                  <section key={frente || 'sin'} style={s.columna}>
+                    <div style={{
+                      ...s.columnaTitulo,
+                      background: frente ? color : '#8A929C',
+                    }}>
+                      {frente
+                        ? FRENTES.find((f) => f.v === frente)!.t
+                        : 'Sin frente asignado'}
+                    </div>
+                    {lista.length === 0 && <p style={{ ...s.vacio, paddingTop: 12 }}>Sin brigadistas</p>}
+                    {lista.map((m) => (
+                      <Tarjeta key={m.id} m={m} color={color} pendiente={pendiente}
+                        onFoto={() => { setSubiendoFoto(m.id); fotoRef.current?.click(); }}
+                        onEditar={() => setForm({
+                          id: m.id, empleadoId: m.empleado_id ?? '',
+                          nombre: m.nombre, identificacion: m.identificacion ?? '',
+                          cargo: m.cargo_empresa ?? '', parte: m.parte,
+                          suplente: m.suplente, rol: m.rol,
+                          frente: m.frente ?? '', fijo: false,
+                        })}
+                        onQuitar={() => correr(() => quitarMiembro(m.id, 'Retirado de la brigada'))} />
+                    ))}
+                    {frente && (
+                      <button type="button" style={{ ...s.botonMini, margin: '10px 14px 0' }}
+                        onClick={() => setForm({
+                          ...VACIO, parte: 'brigada', rol: 'brigadista',
+                          frente, fijo: true,
+                        })}>
+                        + Agregar
+                      </button>
+                    )}
+                  </section>
+                );
+              })
+              : (['empleador', 'trabajadores'] as Parte[]).map((parte) => (
               <section key={parte} style={s.columna}>
                 <div style={{ ...s.columnaTitulo, background: color }}>
                   {parte === 'empleador'
@@ -364,9 +487,7 @@ export default function VistaComites({
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={s.nombre}>{m.nombre}</div>
                             {m.cargo_empresa && <div style={s.cargo}>{m.cargo_empresa}</div>}
-                            <div style={{ ...s.rol, color }}>
-                              {ROLES.find((r) => r.v === m.rol)?.t ?? m.rol}
-                            </div>
+                            <div style={{ ...s.rol, color }}>{rotulo(m.rol)}</div>
                           </div>
                           <div style={s.accionesMiembro}>
                             <button type="button" style={s.botonMini}
@@ -382,6 +503,7 @@ export default function VistaComites({
                                 nombre: m.nombre, identificacion: m.identificacion ?? '',
                                 cargo: m.cargo_empresa ?? '', parte: m.parte,
                                 suplente: m.suplente, rol: m.rol,
+                                frente: m.frente ?? '', fijo: false,
                               })}>
                               Editar
                             </button>
@@ -398,7 +520,7 @@ export default function VistaComites({
                 })}
 
                 <button type="button" style={{ ...s.botonMini, marginTop: 8 }}
-                  onClick={() => setForm({ ...VACIO, parte })}>
+                  onClick={() => setForm({ ...VACIO, parte, fijo: true })}>
                   + Agregar
                 </button>
               </section>
@@ -417,7 +539,10 @@ export default function VistaComites({
               </p>
               {inactivos.map((m) => (
                 <div key={m.id} style={s.inactivo}>
-                  <strong>{m.nombre}</strong> · {m.parte === 'empleador' ? 'empleador' : 'trabajadores'}
+                  <strong>{m.nombre}</strong>
+                  {m.parte === 'brigada'
+                    ? ` · ${FRENTES.find((f) => f.v === m.frente)?.t ?? 'brigada'}`
+                    : m.parte === 'empleador' ? ' · empleador' : ' · trabajadores'}
                   {m.motivo_salida ? ` · ${m.motivo_salida}` : ''}
                 </div>
               ))}
@@ -426,6 +551,36 @@ export default function VistaComites({
         </>
       )}
     </>
+  );
+}
+
+/** Tarjeta de brigadista: la misma información, sin parte ni suplencia. */
+function Tarjeta({
+  m, color, pendiente, onFoto, onEditar, onQuitar,
+}: {
+  m: Miembro; color: string; pendiente: boolean;
+  onFoto: () => void; onEditar: () => void; onQuitar: () => void;
+}) {
+  return (
+    <div style={s.miembro}>
+      {m.foto_url
+        /* eslint-disable-next-line @next/next/no-img-element */
+        ? <img src={m.foto_url} alt="" style={s.foto} />
+        : <div style={{ ...s.fotoVacia, borderColor: color, color }}>
+            {m.nombre.charAt(0)}
+          </div>}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={s.nombre}>{m.nombre}</div>
+        {m.cargo_empresa && <div style={s.cargo}>{m.cargo_empresa}</div>}
+        <div style={{ ...s.rol, color }}>{rotulo(m.rol)}</div>
+      </div>
+      <div style={s.accionesMiembro}>
+        <button type="button" style={s.botonMini} onClick={onFoto}>Foto</button>
+        <button type="button" style={s.botonMini} onClick={onEditar}>Editar</button>
+        <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+          disabled={pendiente} onClick={onQuitar}>Quitar</button>
+      </div>
+    </div>
   );
 }
 
@@ -492,6 +647,18 @@ const s: Record<string, React.CSSProperties> = {
   norma: { color: '#8A929C', fontSize: 11.5 },
   fallas: { margin: '10px 0 0', paddingLeft: 18 },
   falla: { fontSize: 12.5, color: '#9A3412', lineHeight: 1.65 },
+  recomendaciones: {
+    marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,.07)',
+  },
+  recomendacionesTitulo: {
+    fontSize: 10.5, fontWeight: 700, color: '#5B6470',
+    letterSpacing: .4, textTransform: 'uppercase',
+  },
+  recomendacion: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.65 },
+  fijo: {
+    padding: '8px 11px', border: '1px solid #EDEDE8', borderRadius: 8,
+    fontSize: 13, background: '#F7F7F4', color: '#374151', fontWeight: 600,
+  },
   salvedad: {
     fontSize: 11.5, color: '#5B6470', lineHeight: 1.55,
     margin: '10px 0 0', paddingTop: 9, borderTop: '1px solid rgba(0,0,0,.07)',

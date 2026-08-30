@@ -364,12 +364,12 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.4 | **Matriz legal** | Est. 2.7.1 | Precargada por sector: además de cumplir, es argumento comercial — llega hecha |
 | 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
 | 3.6 | **Ausentismo** | Art. 30 | Alimenta el sexto indicador |
-| 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio |
+| 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio. **Bloqueado además por Resend**: sigue con el remitente de prueba, que solo entrega al dueño de la cuenta |
 | 3.8 | **Rendición de cuentas** | Est. 2.8.1 | Acta anual firmada |
 
 ---
 
-## 3.1 ampliado · Comités con organigrama
+## 3.1 ampliado · Comités con organigrama — **entregado** (30-ago-2026)
 
 Idea de Iván, agosto de 2026. **Se acepta:** aporta valor real y es barata porque
 reutiliza el motor de firmas, el de PDF y el conteo de empleados que ya existe.
@@ -416,26 +416,48 @@ Eso es un hallazgo de auditoría que hoy nadie detecta hasta la visita.
 > puede diferir. El sistema debe **proponer** la composición y dejar que el
 > consultor la confirme, nunca imponerla.
 
-### Alcance a construir
+### Composición exigida — Brigada de emergencia
+<sub>Decreto 1072 de 2015, art. 2.2.4.6.25 num. 9 · Res. 0312 est. 5.1.2 ·
+Ley 1575 de 2012, art. 42</sub>
 
-- [ ] Tablas `comites` (tipo, empresa, período, fechas, estado) y
+**La norma NO fija número ni paridad.** Obliga a «conformar, capacitar, entrenar y
+dotar la brigada de emergencias, acorde con su nivel de riesgo y los recursos
+disponibles». Por eso la aplicación separa dos cosas que no se pueden mezclar:
+
+| | Qué es | Cómo se muestra |
+|---|---|---|
+| **Fallas** | No hay brigadistas · falta el jefe de brigada · el periodo venció | Reprueban: `conforme = false` |
+| **Recomendaciones** | 10 % del personal por jornada (mínimo 2) · cubrir los tres frentes · capacitación y dotación vigentes | Se muestran aparte, **no reprueban** |
+
+Presentar el 10 % como incumplimiento sería inventar una exigencia legal. Los tres
+frentes —primeros auxilios, control de incendios, evacuación y rescate— son criterio
+técnico, igual que el porcentaje.
+
+- **Periodo:** la norma no lo fija. Se abre a **un año** para forzar la revisión anual
+  de conformación, capacitación y dotación, que sí es lo que mira el estándar 5.1.2.
+- En la brigada **nadie representa a nadie**: no hay parte ni suplencia. Se agrupa por
+  frente y el rol es jefe o brigadista.
+
+### Alcance construido
+
+- [x] Tablas `comites` (tipo, empresa, período, fechas, estado) y
       `comite_miembros` (empleado o persona externa, parte que representa,
-      principal/suplente, rol en el comité, **foto**, cargo en la empresa).
-- [ ] **Validador de composición**: compara los miembros registrados contra la
-      tabla de la norma según los empleados activos, y señala qué falta o sobra.
-      Debe distinguir el caso de **menos de 10 trabajadores → Vigía**, que es un
-      error clásico: nombrar COPASST donde solo corresponde vigía.
-- [ ] **Acta de conformación** y **acta de reunión** firmadas, con el motor actual.
-- [ ] **Organigrama en PDF** con foto, nombre, cargo en la empresa y rol en el
-      comité, separado en dos columnas (empleador / trabajadores) y marcando
-      principales y suplentes. Es un documento de **cartelera**: se imprime y se
-      publica, así que debe verse bien en A4 y en blanco y negro.
-- [ ] **Envío por correo** del organigrama, con el mismo motor de envíos.
-- [ ] **Edición por retiro de un miembro**: al marcar el retiro de un empleado que
-      pertenece a un comité, avisar y exigir su reemplazo. Es el mismo patrón que
-      el examen de egreso del paso 1.3 — un retiro tiene consecuencias en varios
-      sitios y el sistema debe recordarlas.
-- [ ] Alerta de **vencimiento del período** (2 años) y de reuniones no realizadas.
+      principal/suplente, rol, **frente** si es brigada, **foto**, cargo).
+- [x] **Validador de composición** contra la tabla de la norma según los empleados
+      activos, incluido el caso **menos de 10 trabajadores → Vigía**.
+- [x] **Organigrama en PDF** de cartelera, en dos columnas por parte —o **tres por
+      frente** si es brigada—, con foto opcional, y **envío por correo**.
+- [x] **Retiro de un empleado**: sale de sus comités pero queda **inactivo con su
+      motivo**, no se borra — el acta de conformación sigue nombrándolo. El comité
+      pasa a incompleto en el validador.
+- [x] **Alertas en la bandeja de pendientes**: comité mal conformado, periodo vencido,
+      y la ausencia de COPASST/Vigía (est. 1.1.6), de Convivencia (1.1.8) y de
+      brigada (5.1.2).
+- [ ] **Acta de conformación firmada** — pendiente. Es lo que exige la regla §5.21 de
+      CLAUDE.md: firma en sitio, enlace por correo y PDF. Hoy solo existe el
+      organigrama, que no lleva firmas.
+- [ ] **Acta de reunión** (mensual en COPASST, trimestral en convivencia) y alerta de
+      reuniones no realizadas.
 
 ### Por qué encaja en la regla de admisión
 
@@ -446,6 +468,24 @@ condiciones, no solo una.
 ---
 
 ---
+
+## Deuda que abre la regla de firma remota (§5.21 de CLAUDE.md)
+
+Regla nueva, agosto de 2026: **toda captura de firma debe poder pedirse por enlace al
+correo, y todo documento firmado debe poder exportarse a PDF y enviarse**. La razón es
+operativa: el personal que firma está repartido en áreas y sedes distintas, y una firma
+virtual que obliga a buscar a la gente no ahorra nada frente al papel.
+
+Estado y trabajo que abre, en orden:
+
+1. **Inspecciones** — firma del inspector y del acompañante solo en sitio. Falta el
+   enlace por correo. Es el más usado de los tres.
+2. **Plan anual** — la firma del empleador es lo que lo convierte en plan, y hoy solo
+   se captura en pantalla. Falta enlace, **falta el PDF** y falta el envío.
+3. **Acta de conformación de comité** — no captura firmas todavía. Con firmas de todos
+   los integrantes por enlace, cierra el estándar 1.1.6 con evidencia real.
+4. **Autoevaluación** — no lleva firma capturada; el PDF deja el espacio para la del
+   empleador. Decidir si se captura o se deja como documento impreso.
 
 ## Riesgos del plan
 

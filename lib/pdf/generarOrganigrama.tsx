@@ -27,7 +27,17 @@ const TIPOS: Record<string, { nombre: string; norma: string }> = {
     nombre: 'Comité de Convivencia Laboral',
     norma: 'Resolución 652 de 2012, modificada por la 1356 de 2012',
   },
+  brigada: {
+    nombre: 'Brigada de emergencia',
+    norma: 'Decreto 1072 de 2015, art. 2.2.4.6.25 · Res. 0312 est. 5.1.2',
+  },
 };
+
+const FRENTES: Array<{ v: string; t: string }> = [
+  { v: 'primeros_auxilios', t: 'PRIMEROS AUXILIOS' },
+  { v: 'incendios', t: 'CONTROL DE INCENDIOS' },
+  { v: 'evacuacion', t: 'EVACUACIÓN Y RESCATE' },
+];
 
 async function descargarUrl(url: string): Promise<Buffer | null> {
   try {
@@ -49,7 +59,7 @@ export async function generarOrganigrama(comiteId: string): Promise<ResultadoOrg
     miembros?: Array<{
       nombre: string; identificacion: string | null; cargo_empresa: string | null;
       foto_url: string | null; parte: string; suplente: boolean;
-      rol: string; activo: boolean;
+      rol: string; frente: string | null; activo: boolean;
     }>;
     empresa?: Record<string, unknown>;
   };
@@ -76,8 +86,31 @@ export async function generarOrganigrama(comiteId: string): Promise<ResultadoOrg
     foto: fotos[i] ?? null,
   });
 
-  const empleador = activos.map(aPdf).filter((_, i) => activos[i].parte === 'empleador');
-  const trabajadores = activos.map(aPdf).filter((_, i) => activos[i].parte === 'trabajadores');
+  const esBrigada = String(c.tipo) === 'brigada';
+  const enPdf = activos.map(aPdf);
+
+  // La brigada se agrupa por frente; los demás comités, por parte.
+  const columnas = esBrigada
+    ? [
+        ...FRENTES.map((f) => ({
+          titulo: f.t,
+          miembros: enPdf.filter((_, i) => activos[i].frente === f.v),
+        })),
+        {
+          titulo: 'SIN FRENTE ASIGNADO',
+          miembros: enPdf.filter((_, i) => !activos[i].frente),
+        },
+      ].filter((col, i) => i < 3 || col.miembros.length > 0)
+    : [
+        {
+          titulo: 'REPRESENTANTES DEL EMPLEADOR',
+          miembros: enPdf.filter((_, i) => activos[i].parte === 'empleador'),
+        },
+        {
+          titulo: 'REPRESENTANTES DE LOS TRABAJADORES',
+          miembros: enPdf.filter((_, i) => activos[i].parte === 'trabajadores'),
+        },
+      ];
 
   const tipo = TIPOS[String(c.tipo)] ?? { nombre: String(c.tipo), norma: '' };
   const fecha = (v: unknown) =>
@@ -104,8 +137,8 @@ export async function generarOrganigrama(comiteId: string): Promise<ResultadoOrg
     periodo: `${fecha(c.periodo_inicio)} a ${fecha(c.periodo_fin)}`,
     fechaConformacion: fecha(c.fecha_conformacion),
 
-    empleador,
-    trabajadores,
+    columnas,
+    porSuplencia: !esBrigada,
 
     generadoEl: new Date().toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' }),
   };
