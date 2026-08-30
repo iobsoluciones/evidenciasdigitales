@@ -11,6 +11,7 @@
  */
 import * as XLSX from 'xlsx';
 import { crearClienteServidor } from '../supabase/servidor';
+import { resolverNomenclatura, leerMapa } from '../nomenclaturas';
 
 export type ResultadoKardex =
   | { ok: true; buffer: Buffer; nombreArchivo: string }
@@ -75,7 +76,7 @@ export async function generarKardex(
 
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('nombre, nit, nomenclatura')
+    .select('nombre, nit, nomenclatura, version_doc, nomenclaturas')
     .eq('id', empresaId)
     .maybeSingle();
 
@@ -204,10 +205,18 @@ export async function generarKardex(
     ? `${desde ? soloFecha(desde) : 'inicio'} — ${hasta ? soloFecha(hasta) : 'hoy'}`
     : 'Historial completo';
 
+  // El kardex es un reporte: lleva la nomenclatura de ese tipo, no la
+  // de las actas.
+  const nomRep = resolverNomenclatura(
+    null, leerMapa(empresa.nomenclaturas), 'reporte', false,
+    { nomenclatura: empresa.nomenclatura, version: empresa.version_doc }
+  );
+
   const portada = [
     { Campo: 'EMPRESA', Valor: empresa.nombre },
     { Campo: 'NIT', Valor: empresa.nit ?? '' },
     { Campo: 'DOCUMENTO', Valor: 'KARDEX DE DOTACIÓN' },
+    { Campo: 'NOMENCLATURA', Valor: `${nomRep.nomenclatura} · ${nomRep.version}` },
     { Campo: 'ALCANCE', Valor: articuloId ? 'Un artículo' : 'Todos los artículos' },
     { Campo: 'PERIODO', Valor: periodo },
     { Campo: 'ARTÍCULOS', Valor: String(k.articulos.length) },

@@ -16,6 +16,7 @@ import { crearClienteServidor } from './supabase/servidor';
 import { obtenerPerfil } from './sesion';
 import { validarCapacitacion } from './tipos';
 import { empresaActiva } from './empresa-activa';
+import { resolverNomenclatura, leerMapa } from './nomenclaturas';
 
 export type Resultado = { ok: boolean; mensaje: string; id?: string };
 
@@ -54,6 +55,11 @@ export async function crearCapacitacion(datos: DatosCapacitacion): Promise<Resul
 
   const error = validarCapacitacion(datos);
   if (error) return { ok: false, mensaje: error };
+
+  const nomCap = resolverNomenclatura(
+    null, leerMapa(empresa.nomenclaturas), 'capacitacion', false,
+    { nomenclatura: empresa.nomenclatura, version: empresa.version_doc }
+  );
 
   // Si se marca "es mi propia empresa", se usa el nombre de la
   // organización y se evita reescribirlo (y escribirlo distinto).
@@ -94,9 +100,12 @@ export async function crearCapacitacion(datos: DatosCapacitacion): Promise<Resul
       estado: 'inactiva',
       creado_por: perfil.id,
 
-      // Copia del control documental vigente en este momento
-      nomenclatura: perfil.organizacion.nomenclatura,
-      version_doc: perfil.organizacion.version_doc,
+      // Copia del control documental vigente en este momento. Sale de
+      // la EMPRESA y del tipo 'capacitacion': cada formato lleva el
+      // suyo. Al activar, el trigger de la base lo vuelve a estampar
+      // con lo vigente en ese momento, que es cuando se emite.
+      nomenclatura: nomCap.nomenclatura,
+      version_doc: nomCap.version,
       titulo_doc: perfil.organizacion.titulo_doc,
       // El diseño del encabezado es de la EMPRESA y se congela aqui:
       // si lo rediseña despues, esta acta conserva el suyo.

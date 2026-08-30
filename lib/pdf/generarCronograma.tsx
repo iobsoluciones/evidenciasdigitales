@@ -8,6 +8,7 @@ import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { Cronograma, type DatosCronograma, type CampoEncabezado } from './Cronograma';
 import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverNomenclatura, leerMapa } from '../nomenclaturas';
 
 export type ResultadoCronograma =
   | { ok: true; buffer: Buffer; nombreArchivo: string; empresa: string }
@@ -68,13 +69,21 @@ export async function generarCronograma(
 
   const fmt = (iso: string) =>
     new Date(iso + 'T12:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' });
+  const nomRep = todasLasEmpresas
+    ? { nomenclatura: '—', version: 'V1' }
+    : resolverNomenclatura(null, leerMapa(empresa!.nomenclaturas), 'reporte', false, {
+        nomenclatura: String(empresa!.nomenclatura ?? ''),
+        version: String(empresa!.version_doc ?? 'V1'),
+      });
+
 
   const datos: DatosCronograma = {
     empresa: todasLasEmpresas
       ? `${perfil.organizacion.nombre} · todas las empresas`
       : String(empresa!.nombre),
-    nomenclatura: todasLasEmpresas ? '—' : String(empresa!.nomenclatura ?? '—'),
-    versionDoc: todasLasEmpresas ? 'V1' : String(empresa!.version_doc ?? 'V1'),
+    // Es un reporte, no un acta: lleva la nomenclatura del tipo 'reporte'.
+    nomenclatura: todasLasEmpresas ? '—' : nomRep.nomenclatura || '—',
+    versionDoc: todasLasEmpresas ? 'V1' : nomRep.version,
     colorPrimario: todasLasEmpresas ? '#14263F' : String(empresa!.color_primario ?? '#14263F'),
     logo,
     camposExtra: todasLasEmpresas

@@ -15,9 +15,11 @@ import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { DocumentoAsistencia, type DatosPdf } from './DocumentoAsistencia';
 import { resolverEncabezado } from './resolverEncabezado';
+import { resolverNomenclatura, leerMapa } from '../nomenclaturas';
 
 export type ResultadoPdf =
-  | { ok: true; buffer: Buffer; nombreArchivo: string; tema: string; codigo: string }
+  | { ok: true; buffer: Buffer; nombreArchivo: string; tema: string; codigo: string;
+      nomenclatura: string; versionDoc: string }
   | { ok: false; error: string };
 
 /** Descarga un archivo de Storage como Buffer. Devuelve null si falla. */
@@ -75,7 +77,7 @@ export async function generarPdfAsistencia(
   // pertenece al sistema de gestión de ese cliente.
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('logo_url, nombre, encabezado_config')
+    .select('logo_url, nombre, encabezado_config, nomenclaturas, nomenclatura, version_doc')
     .eq('id', cap.empresa_id)
     .maybeSingle();
 
@@ -129,6 +131,17 @@ export async function generarPdfAsistencia(
   const fmt = (iso: string) =>
     new Date(iso).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
 
+  // Si el acta ya se emitió manda lo congelado en la capacitación; si
+  // sigue siendo un borrador, lo vigente de la empresa para su tipo.
+  const nomCap = resolverNomenclatura(
+    { nomenclatura: cap.nomenclatura, version: cap.version_doc },
+    leerMapa(empresa?.nomenclaturas),
+    'capacitacion',
+    cap.estado !== 'inactiva',
+    { nomenclatura: empresa?.nomenclatura ?? perfil.organizacion.nomenclatura,
+      version: empresa?.version_doc ?? perfil.organizacion.version_doc }
+  );
+
   const datos: DatosPdf = {
     organizacion: perfil.organizacion.nombre,
     // CONTROL DOCUMENTAL CONGELADO: se usa el que quedó guardado en la
@@ -136,8 +149,8 @@ export async function generarPdfAsistencia(
     // acta ya emitida conserva su identificación aunque cambie la
     // configuración. El fallback cubre registros anteriores al cambio.
     tituloDoc: cap.titulo_doc || perfil.organizacion.titulo_doc || 'REPORTE DE ASISTENCIA A CAPACITACIÓN',
-    nomenclatura: cap.nomenclatura || perfil.organizacion.nomenclatura || '—',
-    versionDoc: cap.version_doc || perfil.organizacion.version_doc || 'V1',
+    nomenclatura: nomCap.nomenclatura || '—',
+    versionDoc: nomCap.version,
     fechaCreacionDoc: String(new Date(cap.created_at).getFullYear()),
     colorPrimario: perfil.organizacion.color_primario || '#1e3a8a',
     logo,
@@ -187,5 +200,8 @@ export async function generarPdfAsistencia(
     nombreArchivo: `Asistencia_${limpio || 'Capacitacion'}_${cap.codigo}_${fecha}.pdf`,
     tema: cap.tema,
     codigo: cap.codigo,
+    // Para que el pie del correo diga lo mismo que el adjunto.
+    nomenclatura: nomCap.nomenclatura,
+    versionDoc: nomCap.version,
   };
 }

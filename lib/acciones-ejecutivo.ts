@@ -11,6 +11,7 @@ import { crearClienteServidor } from './supabase/servidor';
 import { obtenerPerfil } from './sesion';
 import { generarReporteEjecutivo } from './pdf/generarEjecutivo';
 import { enviarCorreo } from './correo';
+import { resolverNomenclatura, leerMapa } from './nomenclaturas';
 
 export type Resultado = { ok: boolean; mensaje: string };
 
@@ -41,11 +42,17 @@ export async function enviarReporteEjecutivo(
   const supabase = await crearClienteServidor();
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('color_primario, nomenclatura, version_doc')
+    .select('color_primario, nomenclatura, version_doc, nomenclaturas')
     .eq('id', empresaId)
     .maybeSingle();
 
   const color = empresa?.color_primario ?? '#14263F';
+
+  // El pie del correo lleva la misma identificación que el PDF adjunto.
+  const nomRep = resolverNomenclatura(
+    null, leerMapa(empresa?.nomenclaturas), 'reporte', false,
+    { nomenclatura: empresa?.nomenclatura, version: empresa?.version_doc }
+  );
 
   const extra = mensaje.trim()
     ? `<p style="background:#F7F7F4;border-left:3px solid ${color};padding:10px 14px;color:#374151;margin:16px 0;">
@@ -63,7 +70,7 @@ export async function enviarReporteEjecutivo(
   <p>Incluye indicadores de participación, evolución mensual, distribución
      por área y ciudad, y el detalle de cada capacitación realizada.</p>
   <p style="font-size:11px;color:#8A929C;margin-top:24px;border-top:1px solid #E4E4DF;padding-top:12px;">
-    ${escapar(empresa?.nomenclatura ?? '')} · ${escapar(empresa?.version_doc ?? '')} ·
+    ${escapar(nomRep.nomenclatura)} · ${escapar(nomRep.version)} ·
     Elaborado por ${escapar(perfil.nombre)}
   </p>
 </div>`.trim();

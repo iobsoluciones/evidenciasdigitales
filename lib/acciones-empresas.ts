@@ -12,6 +12,7 @@ import { cookies } from 'next/headers';
 import { crearClienteServidor } from './supabase/servidor';
 import { obtenerPerfil } from './sesion';
 import { COOKIE_EMPRESA } from './empresa-activa';
+import { TIPOS_DOCUMENTO } from './nomenclaturas';
 
 export type Resultado = { ok: boolean; mensaje: string; id?: string };
 
@@ -239,6 +240,44 @@ export async function guardarConfiguracionEmpresa(
 
   revalidatePath('/panel', 'layout');
   return { ok: true, mensaje: 'Configuración guardada. Aplica a las capacitaciones nuevas.' };
+}
+
+/**
+ * Nomenclatura y versión POR TIPO DE DOCUMENTO.
+ *
+ * Cambiarlas afecta a lo que se emita de aquí en adelante. Los
+ * documentos ya emitidos conservan la suya: se estampa en la base en el
+ * momento de emitir (triggers estampar_nomenclatura / estampar_devolucion)
+ * y nada la vuelve a tocar. Eso es lo que sostiene la trazabilidad de un
+ * acta firmada.
+ */
+export async function guardarNomenclaturas(
+  empresaId: string,
+  mapa: Record<string, { nomenclatura: string; version: string }>
+): Promise<Resultado> {
+  const limpio: Record<string, { nomenclatura: string; version: string }> = {};
+
+  for (const { tipo } of TIPOS_DOCUMENTO) {
+    const item = mapa?.[tipo];
+    limpio[tipo] = {
+      nomenclatura: (item?.nomenclatura ?? '').trim().toUpperCase(),
+      version: ((item?.version ?? '').trim() || 'V1').toUpperCase(),
+    };
+  }
+
+  const supabase = await crearClienteServidor();
+  const { error } = await supabase
+    .from('empresas')
+    .update({ nomenclaturas: limpio })
+    .eq('id', empresaId);
+
+  if (error) return { ok: false, mensaje: error.message };
+
+  revalidatePath('/panel', 'layout');
+  return {
+    ok: true,
+    mensaje: 'Nomenclatura guardada. Aplica a los documentos que se emitan desde ahora.',
+  };
 }
 
 export async function guardarLogoEmpresa(id: string, url: string | null): Promise<Resultado> {

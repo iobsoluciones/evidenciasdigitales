@@ -12,6 +12,7 @@ import { crearClienteServidor } from '@/lib/supabase/servidor';
 import { empresaActiva } from '@/lib/empresa-activa';
 import { listarCatalogos } from '@/lib/acciones-catalogos';
 import EditorMembrete from './EditorMembrete';
+import NomenclaturasDoc from './NomenclaturasDoc';
 import CamposEncabezado from './CamposEncabezado';
 import DisenoEncabezado from './DisenoEncabezado';
 import CargaLogo from './CargaLogo';
@@ -82,6 +83,18 @@ export default async function PaginaConfiguracion() {
           esAdmin={esAdmin}
         />
       </div>
+
+      <NomenclaturasDoc
+        key={`nomenclaturas-${empresa.id}`}
+        empresaId={empresa.id}
+        actuales={empresa.nomenclaturas ?? {}}
+        respaldo={{
+          nomenclatura: empresa.nomenclatura ?? '',
+          version: empresa.version_doc,
+        }}
+        color={empresa.color_primario}
+        esAdmin={esAdmin}
+      />
 
       <DisenoEncabezado
         key={`diseno-${empresa.id}`}

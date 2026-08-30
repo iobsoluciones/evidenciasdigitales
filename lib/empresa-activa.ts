@@ -36,6 +36,8 @@ export type Empresa = {
   campos_encabezado: Array<{ etiqueta: string; valor: string }>;
   /** Diseño del encabezado de sus documentos. {} = estándar. */
   encabezado_config: Record<string, unknown>;
+  /** Nomenclatura y versión por tipo de documento. Ver lib/nomenclaturas.ts. */
+  nomenclaturas: Record<string, { nomenclatura?: string; version?: string }>;
   activa: boolean;
 };
 

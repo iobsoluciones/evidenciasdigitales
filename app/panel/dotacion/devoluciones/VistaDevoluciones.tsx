@@ -398,7 +398,12 @@ export default function VistaDevoluciones({
                     </td>
                     <td style={e.td}>
                       {d.nombres}
-                      <div style={e.metaItem}>{d.codigo}</div>
+                      {/* Dos códigos distintos: el de la devolución es el
+                          del acta que se emite ahora; el de la entrega
+                          dice de dónde salió el equipo. */}
+                      <div style={e.metaItem}>
+                        {d.devolucion_codigo ?? '—'} · entrega {d.codigo}
+                      </div>
                     </td>
                     <td style={e.td}>{d.dias_uso} días</td>
                     <td style={e.td}>

@@ -9,6 +9,7 @@ import { crearClienteServidor } from '../supabase/servidor';
 import { obtenerPerfil } from '../sesion';
 import { ReporteEjecutivo, type DatosEjecutivo, type CampoEncabezado } from './ReporteEjecutivo';
 import type { EncabezadoConfig } from './EncabezadoDoc';
+import { resolverNomenclatura, leerMapa } from '../nomenclaturas';
 
 export type ResultadoEjecutivo =
   | { ok: true; buffer: Buffer; nombreArchivo: string; empresa: string }
@@ -100,7 +101,10 @@ export async function generarReporteEjecutivo(
     empresa: empresa.nombre,
     nit: empresa.nit,
     ciudad: empresa.ciudad,
-    nomenclatura: empresa.nomenclatura ?? '—',
+    // Reporte ejecutivo: nomenclatura del tipo 'reporte'.
+    nomenclatura: resolverNomenclatura(null, leerMapa(empresa.nomenclaturas), 'reporte', false, {
+      nomenclatura: empresa.nomenclatura, version: empresa.version_doc,
+    }).nomenclatura || '—',
     versionDoc: empresa.version_doc ?? 'V1',
     colorPrimario: empresa.color_primario ?? '#14263F',
     logo,

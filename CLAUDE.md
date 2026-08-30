@@ -105,6 +105,21 @@ Cada pantalla del panel es **página servidor** (`page.tsx`, hace el fetch) + **
 ### Empresas
 CRUD, configuración documental (nomenclatura, versión, campos de encabezado), logo, declaración de dotación, exportación. Selector de empresa activa. **Slug validado como único a nivel global** al crear/editar (ver §5.15).
 
+### Nomenclatura por tipo de documento
+`empresas.nomenclaturas` (jsonb) guarda **nomenclatura + versión por tipo**: `capacitacion`,
+`entrega`, `devolucion`, `inspeccion`, `reporte`. Cada formato del SG-SST tiene su propio código
+de control documental y avanza de versión a su ritmo. Se edita en *Configuración → Nomenclatura
+por documento*; lo que falte cae en `empresas.nomenclatura` / `version_doc` (el par antiguo, que
+se conserva como respaldo). La lee `nomenclatura_doc(empresa, tipo)`.
+
+**Congelado al emitir por triggers**, no dentro de cada función: `estampar_nomenclatura` sobre
+capacitaciones (a `activa`/`cerrada`), entregas (a `firmada`) e inspecciones (a `cerrada`), y
+`estampar_devolucion` sobre `entrega_items` (cuando `fecha_devolucion` deja de ser null). Va en
+triggers porque un documento se emite por varios caminos —`firmar_entrega` y
+`firmar_entrega_publica`, activar y cerrar— y la identificación debe quedar igual por todos.
+La devolución además estrena código propio (`DEV26-001`, prefijo distinto del `D26-xxx` de las
+entregas) vía `siguiente_codigo_devolucion`.
+
 ### Diseño de encabezado por empresa (según plan)
 `empresas.encabezado_config` (jsonb) define **plantilla** (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran (NIT, dirección). Lo consume `EncabezadoDoc` en los 6 PDFs. Se habilita con `planes.encabezado_personalizable`: el plan básico usa el estándar. El código del documento **no va en el encabezado** (ya aparece en el pie).
 
@@ -188,7 +203,11 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
 17. **Un Excel de matriz lleva siempre una hoja plana** junto a la rejilla. La rejilla es un dibujo; la tabla larga es lo que el usuario puede filtrar, cruzar y llevar a dinámica. El kardex, por lo mismo, es **una sola tabla cronológica** con `!autofilter` y `!freeze`: nada de filas separadoras ni títulos intercalados.
 18. **`next.config` tiene `typescript.ignoreBuildErrors: true`** — `npm run build` **no valida tipos**. Hay que correr `npx tsc --noEmit` aparte. Varios errores visibles en producción (`"undefined%"` en un KPI, la licencia SST que no salía bajo la firma) estaban ahí y el build los ocultaba.
 
-19. **La clave de servicio solo vive en el servidor.** `lib/supabase/admin.ts` salta RLS por
+19. **Los invariantes de emisión van en triggers, no repetidos en cada función.** La nomenclatura
+    se estampa al emitir desde un trigger por tabla: cualquier camino nuevo que emita el documento
+    queda cubierto sin acordarse de copiar la línea. Es lo contrario del error del §6 con la firma
+    del responsable, que solo se copiaba en `activar_capacitacion`.
+20. **La clave de servicio solo vive en el servidor.** `lib/supabase/admin.ts` salta RLS por
     completo, así que solo puede importarse desde Server Actions o Route Handlers, nunca desde
     un componente `'use client'`. La alternativa al registro directo —apagar la confirmación de
     correo del proyecto— habría dejado sin verificación **también** al registro por correo.

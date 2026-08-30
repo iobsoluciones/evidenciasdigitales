@@ -46,7 +46,12 @@ export type Devolucion = {
   observaciones_devolucion: string | null;
   foto_devolucion_url: string | null;
   recibido_por: string | null;
+  /** Código del acta de entrega de la que salió el equipo. */
   codigo: string;
+  /** Código propio del acta de devolución, congelado al devolver. */
+  devolucion_codigo: string | null;
+  devolucion_nomenclatura: string | null;
+  devolucion_version: string | null;
   nombres: string;
   fecha_entrega: string;
   articulo: string;

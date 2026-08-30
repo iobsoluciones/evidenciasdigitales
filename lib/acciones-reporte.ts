@@ -65,8 +65,7 @@ export async function enviarReportePorCorreo(
   <p style="margin-top:18px;">Se adjunta el reporte en formato PDF con el listado
      de asistentes y sus firmas.</p>
   <p style="font-size:11px;color:#9ca3af;margin-top:24px;border-top:1px solid #e5e7eb;padding-top:12px;">
-    ${escapar(perfil.organizacion.nomenclatura ?? '')} ·
-    ${escapar(perfil.organizacion.version_doc)} ·
+    ${escapar(pdf.nomenclatura ?? '')} · ${escapar(pdf.versionDoc ?? '')} ·
     Generado automáticamente.
   </p>
 </div>`.trim();
