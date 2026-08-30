@@ -13,8 +13,8 @@
  *  1. Sin cookie de sesion NO se llama a Supabase. Una peticion anonima
  *     no tiene nada que validar: getUser() devolveria null igual, pero
  *     costando un viaje de red. Esto saca de la ruta critica al visitante
- *     de la portada y, sobre todo, a quien abre /r, /d, /i o /s desde el
- *     celular en planta para firmar.
+ *     de la portada y, sobre todo, a quien abre /r, /d, /i, /s o /p desde
+ *     el celular en planta para firmar.
  *  2. La validacion corre contra un reloj. Si Supabase no responde a
  *     tiempo, el middleware DECIDE en vez de colgarse hasta que Vercel
  *     mate la peticion con un 504: en ruta protegida manda a /login
@@ -27,7 +27,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  * Rutas que NO requieren sesion iniciada.
  * '/' es la pagina publica de producto y '/registro' el autoservicio.
  */
-const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i', '/s'];
+const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i', '/s', '/p'];
 
 /** Margen antes de que Vercel corte la invocacion del middleware. */
 const LIMITE_MS = 5000;

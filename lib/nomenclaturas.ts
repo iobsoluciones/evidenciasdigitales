@@ -21,6 +21,7 @@ export type TipoDocumento =
   | 'comite'
   | 'emergencias'
   | 'simulacro'
+  | 'permiso'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -81,6 +82,11 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'simulacro',
     etiqueta: 'Acta de simulacro',
     detalle: 'Resultados del simulacro, con las firmas del equipo evaluador.',
+  },
+  {
+    tipo: 'permiso',
+    etiqueta: 'Permiso de alto riesgo',
+    detalle: 'Alturas, espacios confinados, trabajo en caliente y demás tareas críticas.',
   },
   {
     tipo: 'reporte',

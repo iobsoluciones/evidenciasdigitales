@@ -217,6 +217,14 @@ específicas para `anon`.
 | `simulacros` | Fecha, tipo, alcance, punto de encuentro, participantes, evacuados y **tiempo de evacuación en segundos**; aciertos y oportunidades de mejora. Control documental completo |
 | `simulacro_evaluadores` | Quién firma el acta: nombre, cargo, correo, rol, `token_firma`, `firma_url` |
 
+### Alto riesgo (Fase 3.3)
+
+| Tabla | Contenido |
+|---|---|
+| `permisos_trabajo` | Tipo de tarea, fecha y **franja horaria**, lugar, descripción, ejecutor propio o contratista, estado (borrador/autorizado/cerrado/cancelado) y la constancia por falta de aptitud. La vigencia **no se guarda**: se deriva al leer |
+| `permiso_requisitos` | La lista de verificación **copiada** al crear el permiso. `obligatorio` separa lo que exige la norma de lo que es criterio técnico |
+| `permiso_participantes` | Quién autoriza, ejecuta, vigila o coordina; con el resultado del cruce de aptitud **congelado al autorizar** y su `token_firma` |
+
 ### Núcleo
 
 | Tabla | Contenido |
@@ -407,6 +415,7 @@ códigos indistinguibles en la misma acta.
 | Autoevaluación | `InformeAutoevaluacion` | `/api/pdf-autoevaluacion/[id]` |
 | Análisis de amenazas | `AnalisisAmenazas` | `/api/pdf-amenazas/[empresaId]` |
 | Acta de simulacro | `ActaSimulacro` | `/api/pdf-simulacro/[id]` |
+| Permiso de alto riesgo | `PermisoTrabajo` | `/api/pdf-permiso/[id]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se

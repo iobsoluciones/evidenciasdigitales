@@ -360,7 +360,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 |---|---|---|---|
 | 3.1 | **COPASST / Vigía y Comité de Convivencia** | Res. 2013/1986 · Res. 652/2012 · Res. 1356/2012 · Est. 1.1.6, 1.1.8 | Ver 3.1 ampliado abajo. Es el vacío **más barato** de cerrar: un acta con firmas es exactamente lo que la app ya sabe hacer |
 | 3.2 | **Plan de emergencias, brigada y simulacros** — **entregado** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Ver 3.2 ampliado abajo. Falta enlazar las inspecciones de extintores, botiquines, camillas y rutas, que **ya existen**, a este estándar |
-| 3.3 | **Permisos de trabajo de alto riesgo** | Res. 4272/2021 · Res. 491/2020 | Alturas, espacios confinados, trabajo en caliente, bloqueo de energías. Es el caso de uso **más móvil** del SG-SST: se diligencia de pie y se firma. La pantalla de ejecución de inspecciones ya es ese patrón |
+| 3.3 | **Permisos de trabajo de alto riesgo** — **entregado** | Res. 4272/2021 · Res. 491/2020 | Ver 3.3 ampliado abajo. Seis tipos de tarea, 44 requisitos, y el cruce con exámenes médicos |
 | 3.4 | **Matriz legal** | Est. 2.7.1 | Precargada por sector: además de cumplir, es argumento comercial — llega hecha |
 | 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
 | 3.6 | **Ausentismo** | Art. 30 | Alimenta el sexto indicador |
@@ -515,6 +515,60 @@ de evacuación— lo escribe el consultor fuera de la aplicación. Lo que Rúbri
 que puede sostener con datos: el análisis que lo justifica y el acta que prueba que se
 practicó. Convertir la aplicación en un editor de texto para el plan completo no pasaría
 la regla de admisión.
+
+## 3.3 ampliado · Permisos de alto riesgo — **entregado** (30-ago-2026)
+
+Lo que separa este módulo de un formato en PDF es que **la aplicación ya sabe cosas que el
+papel no**: quién tiene examen médico vigente, qué exige cada norma y cuándo venció la
+franja horaria.
+
+### Un permiso vence
+`vencido = estado 'autorizado' y (fecha + hora_fin) < ahora`. Derivado al leer, nunca
+guardado. Un permiso vencido sigue en la lista, marcado en rojo, y entra a la bandeja de
+pendientes: *«la tarea terminó y nadie verificó cómo quedó el área»*.
+
+### El cruce con exámenes médicos
+Al autorizar, `aptitud_participante` mira el último examen no-de-retiro de cada ejecutante:
+
+| Situación | Resultado |
+|---|---|
+| Sin examen registrado | **No apto** |
+| Concepto «no apto» o «aplazado» | **No apto** |
+| `fecha_vence` pasada | **No apto**, con la fecha |
+| «Apto con restricciones» | Apto, **mostrando las restricciones** para contrastarlas con la tarea |
+| Personal externo (sin `empleado_id`) | `null` — la app no tiene sus exámenes y decirlo sería inventar |
+
+Si alguien sale no apto, **se puede autorizar con constancia escrita**, que queda impresa
+en el permiso. Prohibirlo del todo llevaría a trabajar sin permiso, que es peor. El
+resultado se **congela** en el participante: el documento debe poder mostrar mañana la
+condición que se verificó hoy.
+
+### Requisitos por tipo — 44 en seis tareas
+
+| Tarea | Requisitos | De norma |
+|---|---|---|
+| Alturas | 10 | 8 (Res. 4272 de 2021) |
+| Espacios confinados | 9 | 8 (Res. 491 de 2020) |
+| Trabajo en caliente | 7 | 1 (el permiso; el resto NFPA 51B) |
+| Energías peligrosas | 6 | 1 (el permiso; el resto LOTO) |
+| Izaje de cargas | 6 | 1 |
+| Excavación | 6 | 1 |
+
+Solo lo marcado **NORMA** bloquea la emisión. Presentar una buena práctica como
+incumplimiento legal sería inventarle al cliente una exigencia que no existe (§5.23).
+
+### Lo entregado
+- [x] `permisos_trabajo`, `permiso_requisitos` y `permiso_participantes`.
+- [x] `autorizar_permiso` con todas las condiciones: requisitos, roles por tipo de tarea
+      (alturas exige coordinador **y** vigía; espacios confinados, vigía), firmas y aptitud.
+- [x] **Firma remota** en `/p/[token]`, la única que muestra la lista de verificación
+      completa: quien firma un permiso da fe de esas condiciones.
+- [x] PDF con la vigencia arriba del todo, y envío por correo.
+- [x] Alerta en la bandeja por permiso vencido sin cerrar.
+- [ ] Enlazar el permiso con la **matriz de peligros**: hoy no sabe qué peligro controla.
+- [ ] Cruzar también la **capacitación** vigente en alturas, no solo el examen médico.
+      Exige decidir cómo se registra un certificado externo (el de la ARL o el centro
+      de entrenamiento), que hoy no tiene sitio en el modelo.
 
 ## Deuda que abre la regla de firma remota (§5.21 de CLAUDE.md)
 

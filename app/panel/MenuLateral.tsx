@@ -74,6 +74,15 @@ const MODULOS: Modulo[] = [
     ],
   },
   {
+    // Tareas de alto riesgo: alturas, espacios confinados, caliente.
+    // Es el caso de uso mas movil del SG-SST: se diligencia de pie.
+    id: 'permisos',
+    titulo: 'Alto riesgo',
+    enlaces: [
+      { href: '/panel/permisos', texto: 'Permisos de trabajo' },
+    ],
+  },
+  {
     id: 'inspecciones',
     titulo: 'Inspecciones',
     enlaces: [

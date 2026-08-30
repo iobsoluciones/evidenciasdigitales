@@ -258,6 +258,31 @@ Estándar 5.1.1 · Dec. 1072 art. 2.2.4.6.25.
 - Dos PDF: **análisis de amenazas** (apaisado, con la letra A/M/B dentro de cada color para
   que sobreviva a una fotocopia) y **acta de simulacro**. Ambos se envían por correo.
 
+### Permisos de trabajo de alto riesgo (fase 3.3)
+Res. 4272 de 2021 (alturas) · Res. 491 de 2020 (espacios confinados) ·
+Dec. 1072 art. 2.2.4.6.24.
+
+- Un permiso **no es un formato más: es una autorización que vence**. Vale para una tarea
+  y una franja horaria, y fuera de ahí no autoriza nada. La vigencia se **deriva al leer**
+  (§5.9): `vencido = estado 'autorizado' y (fecha + hora_fin) ya pasó`.
+- **El cruce es lo que aporta**: `aptitud_participante` consulta `examenes_medicos` y, al
+  autorizar, comprueba que cada ejecutante tenga aptitud vigente. En papel esa
+  comprobación depende de que el supervisor se acuerde.
+- Si a alguien le falta la aptitud, **se puede autorizar dejando constancia escrita** del
+  motivo. Mismo patrón que `retirar_empleado`: prohibirlo del todo llevaría a trabajar
+  sin permiso, que es peor. La constancia sale impresa en el PDF.
+- **Autorizar es emitir**, y exige: requisitos de norma verificados y ninguno en «no
+  cumple», los roles que pide cada tarea (alturas → coordinador **y** vigía; espacios
+  confinados → vigía) y **todas las firmas**.
+- La lista de verificación se **copia al crear** (plantilla → instancia, §5.7) desde
+  `requisitos_permiso(tipo)`, con 44 requisitos en seis tipos de tarea. Cada uno marcado
+  **NORMA** o **criterio técnico** (§5.23) — y lo de norma es lo único que bloquea.
+- Firma remota en `/p/[token]`. Es la pantalla de firma que **sí muestra la lista de
+  verificación completa**: quien firma un permiso da fe de esas condiciones, y ocultárselas
+  sería pedirle que firme en blanco.
+- El PDF grita la **vigencia** arriba del todo: un permiso vencido pegado en la pared
+  parece uno vigente.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -436,6 +461,7 @@ autoevaluaciones · autoevaluacion_items
 comites · comite_miembros   # copasst | vigia | convivencia | brigada
 emergencia_amenazas         # metodología de colores; nivel_riesgo generado
 simulacros · simulacro_evaluadores   # acta firmada, con token de firma remota
+permisos_trabajo · permiso_requisitos · permiso_participantes   # alto riesgo
 ```
 
 `capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
@@ -461,7 +487,11 @@ Funciones clave por dominio:
   `guardar_amenaza`, `listar_amenazas`, `sembrar_amenazas`, `eliminar_amenaza`,
   `crear_simulacro`, `guardar_simulacro`, `guardar_evaluador_simulacro`,
   `cerrar_simulacro`, `listar_simulacros`, `detalle_simulacro`,
-  `generar_token_firma_simulacro`.
+  `generar_token_firma_simulacro`, `crear_permiso`, `guardar_permiso`,
+  `requisitos_permiso`, `responder_requisito_permiso`, `aptitud_participante`,
+  `guardar_participante_permiso`, `autorizar_permiso`, `cerrar_permiso`,
+  `cancelar_permiso`, `listar_permisos`, `detalle_permiso`,
+  `generar_token_firma_permiso`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
@@ -518,6 +548,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | **Plan anual** (firma del empleador) | sí | **falta** | **falta** | **falta** |
 | **Acta de conformación de comité** | **falta** | **falta** | organigrama sí | sí |
 | Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
+| Permiso de alto riesgo | sí | sí (`/p/[token]`) | sí | sí |
 | Análisis de amenazas | no lleva firma capturada | — | sí | sí |
 | Autoevaluación | no lleva firma capturada | — | sí | sí |
 
