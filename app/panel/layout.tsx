@@ -5,6 +5,7 @@
  * trabajo). El selector superior identifica la EMPRESA sobre la que
  * está operando. Son dos ejes distintos y conviene no mezclarlos.
  */
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { obtenerPerfil } from '@/lib/sesion';
 import { listarEmpresas, empresaActiva } from '@/lib/empresa-activa';
@@ -58,7 +59,10 @@ export default async function LayoutPanel({
       <div style={{ flex: 1, minWidth: 0 }}>
         <header style={est.barra}>
           <SelectorEmpresa empresas={empresas} activa={activa} />
-          <BotonSalir />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Link href="/panel/manual" style={est.manual}>Manual</Link>
+            <BotonSalir />
+          </div>
         </header>
 
         {(suspendida || vencida) && (
@@ -86,4 +90,9 @@ const est: Record<string, React.CSSProperties> = {
     fontSize: 13, borderBottom: '1px solid #F5C6C6',
   },
   contenido: { padding: '26px', maxWidth: 1180, overflowX: 'auto' },
+  manual: {
+    border: '1px solid #E4E4DF', color: '#5B6470', background: '#fff',
+    padding: '7px 18px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+    textDecoration: 'none', whiteSpace: 'nowrap',
+  },
 };
