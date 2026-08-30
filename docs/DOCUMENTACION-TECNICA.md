@@ -485,6 +485,7 @@ caracteres a mano, que es como se han perdido versiones antes.
 | Funciones duplicadas | `calendario` / `datos_calendario`; `convocar_empleados` / `guardar_convocatoria`; `articulos_entregables` / `articulos_entregables_edicion`; `registrar_asistencia` / `registrar_asistencia_con_evaluacion`; `entrega_publica` / `entrega_por_token`. Confirmar cuál usa el código y retirar la otra |
 | `detalle_entrega`, `firmar_entrega` | Tienen `grant` a `anon` pero **no** son `SECURITY DEFINER`: RLS bloquea las filas, así que el grant no sirve para nada. Es superficie innecesaria |
 | Navegación duplicada | Dos pantallas de «Indicadores» y dos de «Matriz»; dos bancos de plantillas en sitios distintos; «Empleados» dentro de Capacitaciones siendo transversal |
+| **Resend en modo de pruebas** | `RESEND_FROM = onboarding@resend.dev`, el remitente sandbox: la API acepta el envío pero **solo entrega al correo dueño de la cuenta** (`iobsoluciones@gmail.com`); cualquier otro destinatario se rechaza con 403. Es el mismo bloqueo que motivó el registro sin correo. Se sale verificando un dominio propio en Resend y poniendo `RESEND_FROM` con ese dominio |
 | Notificaciones | Recordatorios de inspecciones programadas y aviso a responsables de acciones: **sin implementar**. Requiere decidir si se agrega `correo` a `empleados` |
 | Clave de servicio en Preview | No está en ese alcance; el registro directo no funciona en despliegues de vista previa |
 | Carpeta del proyecto | Se llama `evidenciasdigitales`; la marca es **Rúbrica** |

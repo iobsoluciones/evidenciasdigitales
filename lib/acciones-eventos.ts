@@ -65,7 +65,12 @@ export type DetalleEvento = {
   empresa?: Record<string, unknown>;
 };
 
-export type Resultado = { ok: boolean; mensaje: string; id?: string; codigo?: string };
+export type Resultado = {
+  ok: boolean; mensaje: string; id?: string; codigo?: string;
+  /** Enlace de firma. Se devuelve aunque el correo falle: el enlace es
+   *  el entregable y el correo solo un canal. */
+  enlace?: string;
+};
 
 export async function listarEventos(): Promise<EventoLista[]> {
   const empresa = await empresaActiva();
@@ -182,20 +187,37 @@ export async function guardarInvestigacion(
   return { ok: true, mensaje: 'Investigación guardada.' };
 }
 
+export type EnlaceMiembro = {
+  nombre: string;
+  correo: string | null;
+  enlace: string;
+  enviado: boolean;
+  detalle: string;
+};
+
+export type ResultadoEquipo = Resultado & { enlaces?: EnlaceMiembro[] };
+
 /**
- * Guarda el equipo conservando lo ya emitido.
+ * Guarda el equipo y, en el mismo paso, genera y envía el enlace de
+ * firma a quien todavía no ha firmado.
  *
- * NO se puede borrar e insertar: eso destruiría las firmas ya
- * capturadas y, peor, invalidaría los enlaces de firma que ya se
- * enviaron por correo. Se actualiza por id, se insertan los nuevos y
- * solo se borran los que el usuario quitó de la lista.
+ * Va junto al guardado y no en un botón aparte porque son el mismo
+ * acto: registrar a alguien en el equipo investigador ES pedirle que
+ * firme. Un botón separado se olvida.
+ *
+ * NO se puede borrar e insertar el equipo: eso destruiría las firmas ya
+ * capturadas y, peor, invalidaría los enlaces ya enviados. Se actualiza
+ * por id, se insertan los nuevos y solo se borran los que se quitaron.
+ *
+ * Los enlaces se devuelven SIEMPRE, haya o no correo y llegue o no el
+ * mensaje: el enlace es el entregable, el correo es solo un canal.
  */
 export async function guardarEquipo(
   eventoId: string,
   miembros: Array<{
     id?: string; nombre: string; cargo: string; rol: RolEquipo; correo: string;
   }>
-): Promise<Resultado> {
+): Promise<ResultadoEquipo> {
   const empresa = await empresaActiva();
   if (!empresa) return { ok: false, mensaje: 'No hay empresa seleccionada.' };
 
@@ -209,7 +231,7 @@ export async function guardarEquipo(
     correo: m.correo?.trim().toLowerCase() || null,
   });
 
-  // 1. Los que el usuario quitó
+  // 1. Los que se quitaron de la lista
   const conservar = validos.map((m) => m.id).filter(Boolean) as string[];
   let borrar = supabase.from('evento_equipo').delete().eq('evento_id', eventoId);
   if (conservar.length > 0) borrar = borrar.not('id', 'in', `(${conservar.join(',')})`);
@@ -236,8 +258,35 @@ export async function guardarEquipo(
     if (error) return { ok: false, mensaje: error.message };
   }
 
+  // 4. Enlace de firma para quien aún no firmó
+  const { data: actuales } = await supabase
+    .from('evento_equipo')
+    .select('id, nombre, correo, firma_url')
+    .eq('evento_id', eventoId)
+    .is('firma_url', null);
+
+  const enlaces: EnlaceMiembro[] = [];
+  for (const m of actuales ?? []) {
+    const r = await enviarEnlaceFirma(m.id as string, eventoId);
+    enlaces.push({
+      nombre: String(m.nombre),
+      correo: (m.correo as string) ?? null,
+      enlace: r.enlace ?? '',
+      enviado: r.ok,
+      detalle: r.mensaje,
+    });
+  }
+
   revalidatePath(`/panel/eventos/${eventoId}`);
-  return { ok: true, mensaje: 'Equipo investigador guardado.' };
+
+  const enviados = enlaces.filter((e) => e.enviado).length;
+  const mensaje = enlaces.length === 0
+    ? 'Equipo guardado. Todos los integrantes ya firmaron.'
+    : enviados === enlaces.length
+      ? `Equipo guardado y ${enviados} enlace(s) de firma enviado(s).`
+      : `Equipo guardado. ${enviados} de ${enlaces.length} enlaces se enviaron por correo; copia los demás a mano.`;
+
+  return { ok: true, mensaje, enlaces };
 }
 
 export async function guardarTestigos(
@@ -350,10 +399,9 @@ export async function enviarEnlaceFirma(
   if (errM) return { ok: false, mensaje: errM.message };
   if (!miembro) return { ok: false, mensaje: 'Integrante no encontrado.' };
   if (miembro.firma_url) return { ok: false, mensaje: 'Este integrante ya firmó.' };
-  if (!miembro.correo) {
-    return { ok: false, mensaje: 'Escribe el correo del integrante y guarda el equipo antes de enviar.' };
-  }
 
+  // El enlace se genera aunque no haya correo: sirve para enviarlo por
+  // WhatsApp, que es como se resuelve en obra la mitad de las veces.
   const { data, error } = await supabase.rpc('generar_token_firma_evento', {
     p_miembro: miembroId,
   });
@@ -362,12 +410,21 @@ export async function enviarEnlaceFirma(
   const t = data as { ok: boolean; error?: string; token?: string };
   if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
 
+  const enlaceFirma = `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/i/${t.token}`;
+
+  if (!miembro.correo) {
+    return {
+      ok: false,
+      enlace: enlaceFirma,
+      mensaje: 'Sin correo registrado: copia el enlace y envíalo por otro medio.',
+    };
+  }
+
   const detalle = await obtenerEvento(eventoId);
   const ev = (detalle.evento ?? {}) as Record<string, unknown>;
   const empresa = (detalle.empresa ?? {}) as Record<string, unknown>;
 
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? '';
-  const enlace = `${base}/i/${t.token}`;
+  const enlace = enlaceFirma;
 
   const fecha = ev.fecha_evento
     ? new Date(String(ev.fecha_evento)).toLocaleString('es-CO', { dateStyle: 'long', timeStyle: 'short' })
@@ -420,10 +477,10 @@ export async function enviarEnlaceFirma(
     registro: { tipo: 'otro' },
   });
 
-  if (!envio.ok) return { ok: false, mensaje: envio.mensaje };
+  if (!envio.ok) return { ok: false, enlace, mensaje: envio.mensaje };
 
   revalidatePath(`/panel/eventos/${eventoId}`);
-  return { ok: true, mensaje: `Enlace enviado a ${miembro.correo}.` };
+  return { ok: true, enlace, mensaje: `Enlace enviado a ${miembro.correo}.` };
 }
 
 /** Para copiar el enlace a mano cuando no hay correo (WhatsApp). */
@@ -438,5 +495,6 @@ export async function obtenerEnlaceFirma(miembroId: string): Promise<Resultado> 
   if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
 
   const base = process.env.NEXT_PUBLIC_APP_URL ?? '';
-  return { ok: true, mensaje: `${base}/i/${t.token}` };
+  const url = `${base}/i/${t.token}`;
+  return { ok: true, mensaje: url, enlace: url };
 }

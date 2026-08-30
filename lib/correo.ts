@@ -13,6 +13,17 @@ import { obtenerPerfil } from './sesion';
 /** [MODIFICAR AQUI] Remitente. Debe ser de un dominio verificado en Resend. */
 export const REMITENTE = process.env.RESEND_FROM ?? 'onboarding@resend.dev';
 
+/**
+ * onboarding@resend.dev es el remitente de PRUEBAS de Resend: la API
+ * acepta el envío pero solo entrega al correo del dueño de la cuenta.
+ * Cualquier otro destinatario se rechaza con 403.
+ *
+ * Sin dominio propio no hay forma de salir de este modo, así que lo que
+ * toca es decirlo claro en pantalla en vez de dejar que el usuario
+ * espere un mensaje que nunca va a llegar.
+ */
+export const EN_MODO_PRUEBA = REMITENTE.includes('onboarding@resend.dev');
+
 export type ResultadoCorreo = { ok: boolean; mensaje: string };
 
 export type Adjunto = { filename: string; content: Buffer };
@@ -65,7 +76,20 @@ export async function enviarCorreo(opciones: {
       await registrarEnvio(perfil, opciones, error ? null : data?.id, error?.message);
     }
 
-    if (error) return { ok: false, mensaje: error.message };
+    if (error) {
+      // El rechazo tipico del modo de pruebas no dice que hacer.
+      const esRechazoPrueba =
+        EN_MODO_PRUEBA && /own email address|verify a domain|testing emails/i.test(error.message);
+
+      return {
+        ok: false,
+        mensaje: esRechazoPrueba
+          ? `Resend está en modo de pruebas (remitente ${REMITENTE}) y solo entrega al correo ` +
+            'dueño de la cuenta. Para escribir a otros destinatarios hay que verificar un ' +
+            'dominio propio en Resend y poner RESEND_FROM con ese dominio.'
+          : error.message,
+      };
+    }
     return { ok: true, mensaje: 'Correo enviado correctamente.' };
   } catch (e) {
     const mensaje = e instanceof Error ? e.message : 'Error desconocido al enviar.';

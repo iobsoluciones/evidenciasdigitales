@@ -18,8 +18,9 @@ import { useRouter } from 'next/navigation';
 import {
   guardarInvestigacion, guardarEquipo, guardarTestigos,
   cerrarInvestigacion, generarAccionesEvento, actualizarEvento,
-  enviarEnlaceFirma, obtenerEnlaceFirma,
+  obtenerEnlaceFirma,
   type Causa, type Metodologia, type RolEquipo, type DetalleEvento,
+  type EnlaceMiembro,
 } from '@/lib/acciones-eventos';
 
 const METODOLOGIAS: { v: Metodologia; t: string }[] = [
@@ -91,7 +92,8 @@ export default function Investigacion({
         }))
       : [{ nombre: '', cargo: '', rol: 'responsable_sst', correo: '', firma_url: null }]
   );
-  const [enlace, setEnlace] = useState<string | null>(null);
+  // Enlaces devueltos por el último guardado del equipo.
+  const [enlaces, setEnlaces] = useState<EnlaceMiembro[]>([]);
 
   const [testigos, setTestigos] = useState<Testigo[]>(
     (detalle.testigos ?? []).map((t) => ({
@@ -189,6 +191,11 @@ export default function Investigacion({
           un <strong>representante del COPASST</strong>. Sin la firma del responsable no se
           puede cerrar la investigación.
         </p>
+        <p style={s.nota}>
+          Al guardar se le envía a cada uno su <strong>enlace personal de firma</strong> por
+          correo, con un resumen del evento. No tienen que estar en el mismo sitio ni tener
+          cuenta en el sistema.
+        </p>
 
         {equipo.map((m, i) => (
           <div key={i} style={s.miembro}>
@@ -248,35 +255,24 @@ export default function Investigacion({
               </span>
 
               {!cerrada && !m.firma_url && m.id && (
-                <>
-                  <button
-                    onClick={() => accion(() => enviarEnlaceFirma(m.id!, eventoId))}
-                    disabled={pendiente}
-                    style={s.botonPlano}
-                    type="button"
-                  >
-                    {m.enlace_activo ? 'Reenviar por correo' : 'Enviar enlace por correo'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAviso(null);
-                      startTransition(async () => {
-                        const r = await obtenerEnlaceFirma(m.id!);
-                        if (r.ok) { setEnlace(r.mensaje); router.refresh(); }
-                        else mal(r.mensaje);
-                      });
-                    }}
-                    disabled={pendiente}
-                    style={s.botonPlano}
-                    type="button"
-                  >
-                    Copiar enlace
-                  </button>
-                </>
-              )}
-
-              {!cerrada && !m.id && (
-                <span style={s.pista}>Guarda el equipo para poder enviarle el enlace.</span>
+                <button
+                  onClick={() => {
+                    setAviso(null);
+                    startTransition(async () => {
+                      const r = await obtenerEnlaceFirma(m.id!);
+                      if (r.ok && r.enlace) {
+                        setEnlaces([{ nombre: m.nombre, correo: m.correo || null,
+                          enlace: r.enlace, enviado: false, detalle: 'Enlace para copiar.' }]);
+                        router.refresh();
+                      } else mal(r.mensaje);
+                    });
+                  }}
+                  disabled={pendiente}
+                  style={s.botonPlano}
+                  type="button"
+                >
+                  Ver enlace
+                </button>
               )}
 
               {!cerrada && equipo.length > 1 && (
@@ -302,11 +298,19 @@ export default function Investigacion({
               + Agregar integrante
             </button>
             <button
-              onClick={() => accion(() => guardarEquipo(eventoId, equipo))}
+              onClick={() => {
+                setAviso(null);
+                startTransition(async () => {
+                  const r = await guardarEquipo(eventoId, equipo);
+                  setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+                  setEnlaces(r.enlaces ?? []);
+                  if (r.ok) router.refresh();
+                });
+              }}
               disabled={pendiente}
               style={{ ...s.botonSec, borderColor: color, color }}
             >
-              Guardar equipo
+              Guardar equipo y enviar enlaces
             </button>
           </div>
         )}
@@ -480,14 +484,34 @@ export default function Investigacion({
         </div>
       </section>
 
-      {enlace && (
+      {enlaces.length > 0 && (
         <div style={s.enlaceCaja}>
-          <div style={s.enlaceTitulo}>Enlace de firma</div>
-          <input readOnly value={enlace} style={{ ...s.input, fontSize: 12 }} onFocus={(e) => e.target.select()} />
+          <div style={s.enlaceTitulo}>Enlaces de firma</div>
           <p style={s.nota}>
-            Cópialo y envíalo por el medio que prefieras. Es personal y deja de
-            funcionar apenas esa persona firme.
+            Cada enlace es personal y deja de funcionar apenas esa persona firme.
+            Si el correo no salió, cópialo y mándalo por el medio que prefieras.
           </p>
+          {enlaces.map((e, i) => (
+            <div key={i} style={s.enlaceFila}>
+              <div style={s.enlaceCab}>
+                <span style={s.enlaceNombre}>{e.nombre}</span>
+                <span style={{
+                  ...s.enlaceEstado,
+                  background: e.enviado ? '#E6F4EA' : '#FFF7ED',
+                  color: e.enviado ? '#1E6B3A' : '#9A3412',
+                }}>
+                  {e.enviado ? `Enviado a ${e.correo}` : 'No enviado'}
+                </span>
+              </div>
+              {!e.enviado && <p style={s.enlaceDetalle}>{e.detalle}</p>}
+              <input
+                readOnly
+                value={e.enlace}
+                style={{ ...s.input, fontSize: 12 }}
+                onFocus={(ev) => ev.target.select()}
+              />
+            </div>
+          ))}
         </div>
       )}
 
@@ -610,7 +634,12 @@ const s: Record<string, React.CSSProperties> = {
     background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
     padding: '14px 18px', marginBottom: 14,
   },
-  enlaceTitulo: { fontSize: 13, fontWeight: 700, marginBottom: 8 },
+  enlaceTitulo: { fontSize: 13, fontWeight: 700, marginBottom: 6 },
+  enlaceFila: { borderTop: '1px solid #F0F0EC', paddingTop: 10, marginTop: 10 },
+  enlaceCab: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 },
+  enlaceNombre: { fontSize: 13, fontWeight: 600 },
+  enlaceEstado: { fontSize: 10.5, fontWeight: 700, padding: '2px 9px', borderRadius: 20 },
+  enlaceDetalle: { fontSize: 11.5, color: '#9A3412', lineHeight: 1.55, margin: '0 0 7px' },
 
   causas: { marginTop: 16, paddingTop: 14, borderTop: '1px solid #F0F0EC' },
   causasDestacadas: {
