@@ -559,6 +559,14 @@ function ManualDotacion() {
             ]}
           />
         </Figura>
+        <Ojo>
+          La devolución se registra <strong>por elemento</strong>, no por acta
+          completa: alguien puede devolver el portátil y quedarse con el celular
+          de la misma entrega. Cada devolución emite su propia <strong>acta en
+          PDF</strong>, con su código (<em>DEV26-001</em>), la comparación entre
+          cómo se entregó y cómo volvió, y el acta de entrega de la que salió.
+        </Ojo>
+
         <Regla titulo="Por qué el inventario se mueve al firmar y no al crear">
           Un borrador no es una entrega: es una intención. Si el inventario se
           descontara al armarlo, cualquier borrador abandonado dejaría faltantes

@@ -83,7 +83,7 @@ lib/
   acciones-*.ts               # 'use server' — una por dominio (entregas, unidades, expediente,
                               #   inspecciones, ejecutar-inspeccion, plan, indicadores…)
   graficos.tsx                # BarrasHorizontales, Columnas, Panel (gráficos con divs)
-  pdf/                        # ActaEntrega, InformeInspeccion, DocumentoAsistencia,
+  pdf/                        # ActaEntrega, ActaDevolucion, InformeInspeccion, DocumentoAsistencia,
                               #   Cronograma, HojaDeVida, ReporteEjecutivo + generadores
     EncabezadoDoc.tsx         # encabezado ÚNICO de los 6 PDFs (3 plantillas)
     resolverEncabezado.ts     # decide congelado vs. vigente (ver §5.14)
@@ -140,7 +140,7 @@ Un solo módulo porque el documento de entrega es idéntico. Discriminador `arti
 - `consumible` (EPP): control por cantidad, vence, se repone.
 - `retornable` (equipos): control por unidad con serial/placa, se devuelve.
 
-Incluye: catálogo con foto, ingreso, **entregas con firma + acta PDF**, **firma remota** (`/d/[token]`), **devoluciones** (compara estado entrega vs devolución), **alertas** (por vencer / bajo mínimo / de retirados / garantías), **matriz de dotación** (vigencia por empleado × artículo), **kardex Excel** con saldo corrido, **carga masiva de unidades** desde Excel, y **expediente del empleado** (cruza formación + EPP + equipos con un veredicto "Al día / Requiere atención").
+Incluye: catálogo con foto, ingreso, **entregas con firma + acta PDF**, **firma remota** (`/d/[token]`), **devoluciones** por elemento, con **acta en PDF** propia (`detalle_devolucion`, código `DEV26-xxx`, compara estado de entrega vs. devolución y enlaza con el acta de entrega de origen), **alertas** (por vencer / bajo mínimo / de retirados / garantías), **matriz de dotación** (vigencia por empleado × artículo), **kardex Excel** con saldo corrido, **carga masiva de unidades** desde Excel, y **expediente del empleado** (cruza formación + EPP + equipos con un veredicto "Al día / Requiere atención").
 
 ### Inspecciones y auditorías (fases 1–8; falta solo la notificación por correo)
 - **Banco de plantillas** (listas de verificación) reutilizables entre empresas. **11 plantillas precargadas** (Extintores NTC 2885, Botiquines Res. 0705/2007, Camillas, Orden y aseo, Señalización NTC 1461, Rutas de evacuación, Arnés/alturas Res. 4272/2021, Escaleras ANSI A14, Herramienta eléctrica, EPP en uso, Estándares mínimos SG-SST Res. 0312/2019) = **121 criterios, 59 críticos**. Editables; se pueden duplicar y adaptar. Vista lista/tarjetas.

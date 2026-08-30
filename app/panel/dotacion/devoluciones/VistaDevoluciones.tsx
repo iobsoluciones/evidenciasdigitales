@@ -382,8 +382,8 @@ export default function VistaDevoluciones({
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
             <thead>
               <tr>
-                {['Equipo', 'Quien lo tenía', 'Uso', 'Entregó', 'Volvió', 'Recibió'].map((h) => (
-                  <th key={h} style={e.th}>{h}</th>
+                {['Equipo', 'Quien lo tenía', 'Uso', 'Entregó', 'Volvió', 'Recibió', ''].map((h, i) => (
+                  <th key={i} style={e.th}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -426,6 +426,16 @@ export default function VistaDevoluciones({
                       {d.recibido_por ?? '—'}
                       <div style={e.metaItem}>{fmt(d.fecha_devolucion)}</div>
                     </td>
+                    <td style={e.td}>
+                      <a
+                        href={`/api/pdf-devolucion/${d.id}`}
+                        style={e.enlaceActa}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        Acta
+                      </a>
+                    </td>
                   </tr>
                 );
               })}
@@ -438,6 +448,11 @@ export default function VistaDevoluciones({
 }
 
 const e: Record<string, React.CSSProperties> = {
+  enlaceActa: {
+    display: 'inline-block', border: '1px solid #E4E4DF', borderRadius: 7,
+    padding: '4px 12px', fontSize: 11.5, fontWeight: 600,
+    color: '#14263F', textDecoration: 'none', whiteSpace: 'nowrap',
+  },
   pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #E4E4DF', marginBottom: 16 },
   pestana: {
     background: 'none', border: 'none', padding: '10px 18px', fontSize: 13,
