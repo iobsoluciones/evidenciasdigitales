@@ -269,8 +269,14 @@ Los seis, con la fórmula oficial:
 
 Aquí los módulos sueltos se vuelven un sistema de gestión.
 
-## 2.1 · Matriz de identificación de peligros (IPEVR)
-<sub>Estándar 4.1.2 · GTC 45</sub>
+## 2.1 · Matriz de identificación de peligros (IPEVR) — **entregada**
+<sub>Estándar 4.1.2 · GTC 45 · 30 de agosto de 2026</sub>
+
+> `peligros` con la valoración en **columnas generadas** (NP = ND × NE,
+> NR = NP × NC, nivel y aceptabilidad derivados del NR): calcularla fuera de la
+> base permitiría que un cambio de ND dejara el nivel viejo guardado y la matriz
+> mintiera sin avisar. `peligro_controles` enlaza cada peligro con el EPP, la
+> capacitación y la inspección que ya existen en la aplicación.
 
 - Tablas `peligros` y `peligro_controles`.
 - Valoración estándar: **ND × NE = NP**, **NP × NC = NR**, nivel I–IV y

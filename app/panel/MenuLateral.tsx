@@ -40,6 +40,15 @@ const MODULOS: Modulo[] = [
     ],
   },
   {
+    // La matriz de peligros es el PLANEAR del ciclo: de ella deberian
+    // derivarse los controles de los demas modulos.
+    id: 'peligros',
+    titulo: 'Peligros y riesgos',
+    enlaces: [
+      { href: '/panel/peligros', texto: 'Matriz de peligros' },
+    ],
+  },
+  {
     // Accidentes e incidentes: Res. 1401/2007. Va junto a inspecciones
     // porque ambos terminan en el mismo plan de accion.
     id: 'eventos',
