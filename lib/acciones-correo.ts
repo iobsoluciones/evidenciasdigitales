@@ -6,29 +6,16 @@
  * Se ejecuta en el servidor: la clave de Resend nunca llega al
  * navegador, y el token se genera aquí, no en el cliente.
  */
-import { headers } from 'next/headers';
 import { crearClienteServidor } from './supabase/servidor';
 import { obtenerPerfil } from './sesion';
 import { enviarCorreo, plantillaFirma } from './correo';
+import { urlBase } from './url-base';
 
 export type Resultado = { ok: boolean; mensaje: string };
 
 /** Validación simple pero suficiente de correo. */
 function correoValido(c: string): boolean {
   return /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]{2,}$/.test(c.trim());
-}
-
-/**
- * Determina la URL base del sitio.
- * Prioriza la variable de entorno (útil en producción) y cae a las
- * cabeceras de la petición, que funcionan igual en localhost.
- */
-async function urlBase(): Promise<string> {
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
-  const h = await headers();
-  const host = h.get('host') ?? 'localhost:3000';
-  const protocolo = host.startsWith('localhost') ? 'http' : 'https';
-  return `${protocolo}://${host}`;
 }
 
 export async function enviarEnlaceFirma(

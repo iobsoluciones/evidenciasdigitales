@@ -36,6 +36,9 @@ const ROLES: { v: RolEquipo; t: string }[] = [
   { v: 'otro', t: 'Otro' },
 ];
 
+const OK = '#1E6B3A';
+const OK_SUAVE = '#E6F4EA';
+
 const CLASES_INMEDIATA = ['acto', 'condicion'];
 const CLASES_BASICA = ['personal', 'trabajo'];
 const NOMBRE_CLASE: Record<string, string> = {
@@ -68,6 +71,10 @@ export default function Investigacion({
   const cerrada = Boolean(inv.fecha_cierre);
 
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+  // Cuál fue la última acción que salió bien: el botón se pone en verde
+  // unos segundos para que se vea que hizo algo. Sin eso, guardar y que
+  // nada cambie en pantalla se siente como que no funcionó.
+  const [hecho, setHecho] = useState<string | null>(null);
 
   const [metodologia, setMetodologia] = useState<Metodologia>(
     (inv.metodologia as Metodologia) ?? '5_porques'
@@ -111,14 +118,30 @@ export default function Investigacion({
   function mal(texto: string) { setAviso({ tipo: 'error', texto }); }
 
   /* ---------- Acciones ---------- */
-  const accion = (fn: () => Promise<{ ok: boolean; mensaje: string }>) => {
+  const accion = (clave: string, fn: () => Promise<{ ok: boolean; mensaje: string }>) => {
     setAviso(null);
     startTransition(async () => {
       const r = await fn();
       setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
-      if (r.ok) router.refresh();
+      if (r.ok) {
+        setHecho(clave);
+        setTimeout(() => setHecho((h) => (h === clave ? null : h)), 2600);
+        router.refresh();
+      }
     });
   };
+
+  /** Estilo del botón según su estado: reposo, en curso o recién hecho. */
+  function estiloGuardar(clave: string): React.CSSProperties {
+    if (hecho === clave) {
+      return { ...s.botonSec, borderColor: OK, color: OK, background: OK_SUAVE };
+    }
+    if (pendiente) return { ...s.botonSec, borderColor: '#E4E4DF', color: '#8A929C' };
+    return { ...s.botonSec, borderColor: color, color };
+  }
+
+  const texto = (clave: string, normal: string, curso: string) =>
+    hecho === clave ? '✓ Guardado' : pendiente ? curso : normal;
 
   return (
     <>
@@ -168,16 +191,16 @@ export default function Investigacion({
         {!cerrada && (
           <div style={s.acciones}>
             <button
-              onClick={() => accion(() => actualizarEvento(eventoId, {
+              onClick={() => accion('consecuencias', () => actualizarEvento(eventoId, {
                 diasIncapacidad: Number(dias) || 0,
                 reportadoArl: arl,
                 fechaReporteArl: arl && !ev.fecha_reporte_arl ? new Date().toISOString() : null,
                 numeroFurat: furat,
               }))}
               disabled={pendiente}
-              style={{ ...s.botonSec, borderColor: color, color }}
+              style={estiloGuardar('consecuencias')}
             >
-              Guardar
+              {texto('consecuencias', 'Guardar', 'Guardando…')}
             </button>
           </div>
         )}
@@ -304,13 +327,17 @@ export default function Investigacion({
                   const r = await guardarEquipo(eventoId, equipo);
                   setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
                   setEnlaces(r.enlaces ?? []);
-                  if (r.ok) router.refresh();
+                  if (r.ok) {
+                    setHecho('equipo');
+                    setTimeout(() => setHecho((h) => (h === 'equipo' ? null : h)), 2600);
+                    router.refresh();
+                  }
                 });
               }}
               disabled={pendiente}
-              style={{ ...s.botonSec, borderColor: color, color }}
+              style={estiloGuardar('equipo')}
             >
-              Guardar equipo y enviar enlaces
+              {texto('equipo', 'Guardar equipo y enviar enlaces', 'Guardando y enviando…')}
             </button>
           </div>
         )}
@@ -373,11 +400,11 @@ export default function Investigacion({
               + Agregar testigo
             </button>
             <button
-              onClick={() => accion(() => guardarTestigos(eventoId, testigos))}
+              onClick={() => accion('testigos', () => guardarTestigos(eventoId, testigos))}
               disabled={pendiente}
-              style={{ ...s.botonSec, borderColor: color, color }}
+              style={estiloGuardar('testigos')}
             >
-              Guardar testigos
+              {texto('testigos', 'Guardar testigos', 'Guardando…')}
             </button>
           </div>
         )}
@@ -428,13 +455,13 @@ export default function Investigacion({
         {!cerrada && (
           <div style={s.acciones}>
             <button
-              onClick={() => accion(() => guardarInvestigacion(eventoId, {
+              onClick={() => accion('analisis', () => guardarInvestigacion(eventoId, {
                 metodologia, causasInmediatas: inmediatas, causasBasicas: basicas, conclusiones,
               }))}
               disabled={pendiente}
-              style={{ ...s.botonSec, borderColor: color, color }}
+              style={estiloGuardar('analisis')}
             >
-              Guardar análisis
+              {texto('analisis', 'Guardar análisis', 'Guardando…')}
             </button>
           </div>
         )}
@@ -475,11 +502,13 @@ export default function Investigacion({
 
         <div style={s.acciones}>
           <button
-            onClick={() => accion(() => generarAccionesEvento(eventoId, responsableAcciones))}
+            onClick={() => accion('acciones', () => generarAccionesEvento(eventoId, responsableAcciones))}
             disabled={pendiente}
-            style={{ ...s.botonSec, borderColor: color, color }}
+            style={estiloGuardar('acciones')}
           >
-            Generar acciones desde las causas básicas
+            {hecho === 'acciones'
+              ? '✓ Acciones generadas'
+              : pendiente ? 'Generando…' : 'Generar acciones desde las causas básicas'}
           </button>
         </div>
       </section>
@@ -536,11 +565,11 @@ export default function Investigacion({
           </p>
           <div style={s.acciones}>
             <button
-              onClick={() => accion(() => cerrarInvestigacion(eventoId, conclusiones))}
+              onClick={() => accion('cierre', () => cerrarInvestigacion(eventoId, conclusiones))}
               disabled={pendiente}
-              style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}
+              style={{ ...s.botonLleno, background: hecho === 'cierre' ? OK : pendiente ? '#cbd5e1' : color }}
             >
-              {pendiente ? 'Cerrando…' : 'Cerrar investigación'}
+              {hecho === 'cierre' ? '✓ Cerrada' : pendiente ? 'Cerrando…' : 'Cerrar investigación'}
             </button>
           </div>
         </section>

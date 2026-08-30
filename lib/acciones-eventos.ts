@@ -18,6 +18,7 @@
 import { revalidatePath } from 'next/cache';
 import { crearClienteServidor } from './supabase/servidor';
 import { empresaActiva } from './empresa-activa';
+import { urlBase } from './url-base';
 
 export type TipoEvento = 'accidente' | 'incidente' | 'casi_accidente' | 'enfermedad';
 export type RolEquipo = 'responsable_sst' | 'copasst' | 'jefe_inmediato' | 'otro';
@@ -410,7 +411,7 @@ export async function enviarEnlaceFirma(
   const t = data as { ok: boolean; error?: string; token?: string };
   if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
 
-  const enlaceFirma = `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/i/${t.token}`;
+  const enlaceFirma = `${await urlBase()}/i/${t.token}`;
 
   if (!miembro.correo) {
     return {
@@ -494,7 +495,6 @@ export async function obtenerEnlaceFirma(miembroId: string): Promise<Resultado> 
   const t = data as { ok: boolean; error?: string; token?: string };
   if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
 
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? '';
-  const url = `${base}/i/${t.token}`;
+  const url = `${await urlBase()}/i/${t.token}`;
   return { ok: true, mensaje: url, enlace: url };
 }

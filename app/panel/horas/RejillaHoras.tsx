@@ -51,8 +51,10 @@ export default function RejillaHoras({
   const [pendiente, startTransition] = useTransition();
   const [filas, setFilas] = useState<Fila[]>(() => aFilas(datos));
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+  const [hecho, setHecho] = useState(false);
 
   function cambiar(mes: number, campo: keyof Omit<Fila, 'mes'>, valor: string) {
+    setHecho(false);
     // Solo dígitos, coma y punto: evita que un texto se convierta en 0
     // silenciosamente al guardar.
     if (valor !== '' && !/^[0-9]*[.,]?[0-9]*$/.test(valor)) return;
@@ -83,6 +85,10 @@ export default function RejillaHoras({
           }))
       );
       setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+      if (r.ok) {
+        setHecho(true);
+        setTimeout(() => setHecho(false), 2600);
+      }
     });
   }
 
@@ -159,9 +165,9 @@ export default function RejillaHoras({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.boton, background: pendiente ? '#cbd5e1' : color }}
+          style={{ ...e.boton, background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color }}
         >
-          {pendiente ? 'Guardando…' : `Guardar ${anio}`}
+          {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : `Guardar ${anio}`}
         </button>
       </div>
     </>

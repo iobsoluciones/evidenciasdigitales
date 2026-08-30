@@ -313,7 +313,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 
 | # | Módulo | Norma | Nota |
 |---|---|---|---|
-| 3.1 | **COPASST / Vigía y Comité de Convivencia** | Res. 2013/1986 · Res. 652/2012 · Est. 1.1.6, 1.1.8 | Conformación, votación, cronograma y actas firmadas. Es el vacío **más barato** de cerrar: un acta con firmas es exactamente lo que la app ya sabe hacer |
+| 3.1 | **COPASST / Vigía y Comité de Convivencia** | Res. 2013/1986 · Res. 652/2012 · Res. 1356/2012 · Est. 1.1.6, 1.1.8 | Ver 3.1 ampliado abajo. Es el vacío **más barato** de cerrar: un acta con firmas es exactamente lo que la app ya sabe hacer |
 | 3.2 | **Plan de emergencias, brigada y simulacros** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Las inspecciones de extintores, botiquines, camillas y rutas **ya existen**: hay que enlazarlas a este estándar en vez de dejarlas sueltas |
 | 3.3 | **Permisos de trabajo de alto riesgo** | Res. 4272/2021 · Res. 491/2020 | Alturas, espacios confinados, trabajo en caliente, bloqueo de energías. Es el caso de uso **más móvil** del SG-SST: se diligencia de pie y se firma. La pantalla de ejecución de inspecciones ya es ese patrón |
 | 3.4 | **Matriz legal** | Est. 2.7.1 | Precargada por sector: además de cumplir, es argumento comercial — llega hecha |
@@ -321,6 +321,84 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.6 | **Ausentismo** | Art. 30 | Alimenta el sexto indicador |
 | 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio |
 | 3.8 | **Rendición de cuentas** | Est. 2.8.1 | Acta anual firmada |
+
+---
+
+## 3.1 ampliado · Comités con organigrama
+
+Idea de Iván, agosto de 2026. **Se acepta:** aporta valor real y es barata porque
+reutiliza el motor de firmas, el de PDF y el conteo de empleados que ya existe.
+
+Lo que la vuelve valiosa no es dibujar el organigrama: es que **la app ya sabe
+cuántos trabajadores activos tiene cada empresa**, así que puede calcular la
+composición que exige la norma y avisar cuando el comité está mal conformado.
+Eso es un hallazgo de auditoría que hoy nadie detecta hasta la visita.
+
+### Composición exigida — COPASST
+<sub>Resolución 2013 de 1986, art. 2 · Decreto 1295 de 1994, art. 35</sub>
+
+| Trabajadores | Representantes del empleador | Representantes de los trabajadores |
+|---|---|---|
+| Menos de 10 | **No hay COPASST: se designa un Vigía en SST** | — |
+| 10 a 49 | 1 principal + 1 suplente | 1 principal + 1 suplente |
+| 50 a 499 | 2 + 2 suplentes | 2 + 2 suplentes |
+| 500 a 999 | 3 + 3 suplentes | 3 + 3 suplentes |
+| 1000 o más | 4 + 4 suplentes | 4 + 4 suplentes |
+
+- **Período:** 2 años. **Reuniones:** una vez al mes, en horario de trabajo.
+- Los representantes de los trabajadores se eligen por **votación libre**; los del
+  empleador los **designa** directamente.
+- El empleador nombra al **presidente**; el comité en pleno elige al **secretario**.
+- El empleador debe dar **4 horas semanales** dentro de la jornada para su
+  funcionamiento.
+
+### Composición exigida — Comité de Convivencia Laboral
+<sub>Resolución 652 de 2012, modificada por la Resolución 1356 de 2012</sub>
+
+| Trabajadores | Composición |
+|---|---|
+| Menos de 20 | **1 representante del empleador y 1 de los trabajadores**, con suplentes |
+| 20 o más | **2 y 2**, con suplentes. La empresa puede designar más, siempre **igual número por cada parte** |
+
+- **Período:** 2 años. **Reuniones:** ordinarias **cada tres meses** (la 1356 cambió
+  la periodicidad mensual de la 652 original).
+- Presidente y secretario se eligen **de mutuo acuerdo** entre los miembros.
+- **No puede ser miembro** quien haya tenido queja de acoso laboral en los últimos
+  seis meses.
+
+> Ojo con el conteo: la norma habla de **trabajadores de la empresa**, no de
+> empleados registrados en la app. Si el cliente tiene contratistas, el número
+> puede diferir. El sistema debe **proponer** la composición y dejar que el
+> consultor la confirme, nunca imponerla.
+
+### Alcance a construir
+
+- [ ] Tablas `comites` (tipo, empresa, período, fechas, estado) y
+      `comite_miembros` (empleado o persona externa, parte que representa,
+      principal/suplente, rol en el comité, **foto**, cargo en la empresa).
+- [ ] **Validador de composición**: compara los miembros registrados contra la
+      tabla de la norma según los empleados activos, y señala qué falta o sobra.
+      Debe distinguir el caso de **menos de 10 trabajadores → Vigía**, que es un
+      error clásico: nombrar COPASST donde solo corresponde vigía.
+- [ ] **Acta de conformación** y **acta de reunión** firmadas, con el motor actual.
+- [ ] **Organigrama en PDF** con foto, nombre, cargo en la empresa y rol en el
+      comité, separado en dos columnas (empleador / trabajadores) y marcando
+      principales y suplentes. Es un documento de **cartelera**: se imprime y se
+      publica, así que debe verse bien en A4 y en blanco y negro.
+- [ ] **Envío por correo** del organigrama, con el mismo motor de envíos.
+- [ ] **Edición por retiro de un miembro**: al marcar el retiro de un empleado que
+      pertenece a un comité, avisar y exigir su reemplazo. Es el mismo patrón que
+      el examen de egreso del paso 1.3 — un retiro tiene consecuencias en varios
+      sitios y el sistema debe recordarlas.
+- [ ] Alerta de **vencimiento del período** (2 años) y de reuniones no realizadas.
+
+### Por qué encaja en la regla de admisión
+
+Termina en **documentos firmados** (actas de conformación y de reunión) y en un
+**dato que alimenta la autoevaluación** (estándares 1.1.6 y 1.1.8). Cumple las dos
+condiciones, no solo una.
+
+---
 
 ---
 
