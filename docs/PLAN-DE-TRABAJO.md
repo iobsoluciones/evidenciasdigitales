@@ -296,14 +296,28 @@ Aquí los módulos sueltos se vuelven un sistema de gestión.
   **plan de mejoramiento** derivado.
 - Selección de 7 / 21 / 60 estándares según tamaño y clase de riesgo.
 
-## 2.3 · Plan anual de trabajo
-<sub>Estándar 2.4.1</sub>
+## 2.3 · Plan anual de trabajo — **entregado**
+<sub>Estándar 2.4.1 · 30 de agosto de 2026</sub>
+
+> Cronograma de doce meses por actividad con dos marcas: **programados** y
+> **ejecutados**. Sin esa distinción el plan diría qué se pensaba hacer pero nunca
+> qué se hizo, que es justo lo que revisa un auditor. Aprobar es firmar: el
+> documento se congela al recibir la firma del empleador.
 
 - Objetivos, metas, responsables, recursos, cronograma y **firma del empleador**.
 - Se alimenta del cronograma y el calendario que ya existen.
 - Es el primer documento que pide cualquier auditor.
 
-## 2.4 · Bandeja de pendientes y semáforo
+## 2.4 · Bandeja de pendientes — **entregada** (falta el semáforo de autoevaluación)
+<sub>30 de agosto de 2026</sub>
+
+> `pendientes(empresa)` reúne en una sola consulta nueve fuentes que antes vivían
+> en seis pantallas: accidentes sin investigar y sin reportar a la ARL, acciones
+> vencidas, inspecciones programadas, exámenes médicos, peligros no aceptables sin
+> controles, dotación por vencer y el plan anual sin aprobar o inexistente. Todo
+> derivado al leer. Encabeza `/panel`.
+
+## 2.4 original · Bandeja de pendientes y semáforo
 
 - **La portada del panel deja de ser un directorio de empresas.** Un consultor no
   abre la app para ver sus empresas —ya sabe cuáles son—, la abre para saber qué

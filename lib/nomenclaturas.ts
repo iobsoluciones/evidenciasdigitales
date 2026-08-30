@@ -16,6 +16,7 @@ export type TipoDocumento =
   | 'devolucion'
   | 'inspeccion'
   | 'investigacion'
+  | 'plan_anual'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -51,6 +52,11 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'investigacion',
     etiqueta: 'Informe de investigación',
     detalle: 'Investigación de accidentes, incidentes y enfermedades laborales.',
+  },
+  {
+    tipo: 'plan_anual',
+    etiqueta: 'Plan anual de trabajo',
+    detalle: 'Plan anual del SG-SST, firmado por el empleador.',
   },
   {
     tipo: 'reporte',

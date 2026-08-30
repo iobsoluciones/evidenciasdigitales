@@ -9,6 +9,9 @@ import Link from 'next/link';
 import { crearClienteServidor } from '@/lib/supabase/servidor';
 import { obtenerPerfil } from '@/lib/sesion';
 import TarjetasEmpresas from './TarjetasEmpresas';
+import Pendientes from './Pendientes';
+import { empresaActiva } from '@/lib/empresa-activa';
+import { obtenerPendientes } from '@/lib/acciones-pendientes';
 
 export type EmpresaResumen = {
   id: string;
@@ -40,13 +43,30 @@ export default async function PaginaCartera() {
     puede: boolean; usadas?: number; limite?: number | null; motivo?: string;
   };
 
+  // La bandeja va PRIMERO: lo que un consultor necesita al abrir no es
+  // el directorio de sus empresas —ya sabe cuáles son— sino qué tiene
+  // que hacer hoy en la que está trabajando.
+  const activa = await empresaActiva();
+  const pendientes = activa ? await obtenerPendientes() : null;
+
   return (
-    <TarjetasEmpresas
-      empresas={empresas}
-      puedeAgregar={lim.puede}
-      usadas={lim.usadas ?? empresas.length}
-      tope={lim.limite ?? null}
-      plan={perfil?.organizacion.plan ?? ''}
-    />
+    <>
+      {activa && pendientes && (
+        <Pendientes
+          key={activa.id}
+          datos={pendientes}
+          empresa={activa.nombre}
+          color={activa.color_primario}
+        />
+      )}
+
+      <TarjetasEmpresas
+        empresas={empresas}
+        puedeAgregar={lim.puede}
+        usadas={lim.usadas ?? empresas.length}
+        tope={lim.limite ?? null}
+        plan={perfil?.organizacion.plan ?? ''}
+      />
+    </>
   );
 }
