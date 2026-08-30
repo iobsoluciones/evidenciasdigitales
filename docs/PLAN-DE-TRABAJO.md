@@ -299,9 +299,16 @@ Aquí los módulos sueltos se vuelven un sistema de gestión.
 > norma lo puntúa en cero. Los estándares incumplidos generan acciones en el plan
 > de acción que ya existe.
 >
-> **Salvedad:** la tabla de 100 puntos corresponde al conjunto de 60. Para 7 y 21
-> el porcentaje se calcula proporcionalmente sobre los estándares seleccionados,
-> no con la tabla propia de esos artículos.
+> **Los conjuntos de estándares son editables e importables** desde
+> `/panel/estandares`, decisión de Iván del 30-ago-2026: una resolución nueva no
+> puede obligar al profesional a esperar a que un programador la cargue. El de 60
+> viene precargado y bloqueado —sus pesos están verificados contra el art. 27—; los
+> de 7 y 21 se arman duplicando o importando desde Excel.
+>
+> **La línea que separa lo editable de lo que no:** el CONTENIDO normativo (qué
+> estándares, con qué peso) lo mantiene el profesional; el MÉTODO (tablas ND/NE/NC
+> de la GTC 45, fórmulas del art. 30, bandas del criterio) se queda en código,
+> porque si cada quien lo ajusta dos evaluaciones dejan de ser comparables.
 
 - La lista de verificación **ya está cargada** como plantilla de inspección.
   Falta el paso final: puntaje oficial con sus tres bandas

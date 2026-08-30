@@ -8,6 +8,7 @@ import { empresaActiva } from '@/lib/empresa-activa';
 import {
   listarAutoevaluaciones, obtenerAutoevaluacion,
 } from '@/lib/acciones-autoevaluacion';
+import { listarConjuntos } from '@/lib/acciones-conjuntos';
 import VistaAutoevaluacion from './VistaAutoevaluacion';
 
 export const dynamic = 'force-dynamic';
@@ -32,6 +33,7 @@ export default async function PaginaAutoevaluacion({
 
   const { id } = await searchParams;
   const lista = await listarAutoevaluaciones();
+  const conjuntos = await listarConjuntos();
 
   const actual = new Date().getFullYear();
   const elegida = id ?? lista.find((x) => x.anio === actual)?.id;
@@ -50,6 +52,7 @@ export default async function PaginaAutoevaluacion({
         key={elegida ?? 'nueva'}
         lista={lista}
         detalle={detalle}
+        conjuntos={conjuntos}
         color={empresa.color_primario}
       />
     </>

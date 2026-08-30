@@ -86,13 +86,19 @@ export async function obtenerAutoevaluacion(id: string): Promise<DetalleAuto> {
   return (data ?? { ok: false, error: 'No encontrada.' }) as DetalleAuto;
 }
 
-export async function crearAutoevaluacion(anio: number, alcance: number): Promise<Res> {
+/**
+ * Se crea a partir de un CONJUNTO de estándares, que el profesional
+ * mantiene en /panel/estandares. Los estándares se copian: si el
+ * conjunto cambia después, lo ya evaluado conserva su tabla.
+ */
+export async function crearAutoevaluacion(anio: number, conjuntoId: string): Promise<Res> {
   const empresa = await empresaActiva();
   if (!empresa) return { ok: false, mensaje: 'No hay empresa seleccionada.' };
+  if (!conjuntoId) return { ok: false, mensaje: 'Elige el conjunto de estándares que aplica.' };
 
   const supabase = await crearClienteServidor();
   const { data, error } = await supabase.rpc('crear_autoevaluacion', {
-    p_empresa: empresa.id, p_anio: anio, p_alcance: alcance,
+    p_empresa: empresa.id, p_anio: anio, p_conjunto: conjuntoId,
   });
   if (error) return { ok: false, mensaje: error.message };
 

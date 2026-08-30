@@ -49,16 +49,18 @@ const RESULTADOS: { v: Resultado_; t: string; fondo: string; color: string }[] =
 export default function VistaAutoevaluacion({
   lista,
   detalle,
+  conjuntos,
   color,
 }: {
   lista: ResumenAuto[];
   detalle: DetalleAuto | null;
+  conjuntos: Array<{ id: string; nombre: string; norma: string | null; estandares: number; peso_total: number }>;
   color: string;
 }) {
   const router = useRouter();
   const [pendiente, startTransition] = useTransition();
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
-  const [alcance, setAlcance] = useState(60);
+  const [conjunto, setConjunto] = useState(conjuntos[0]?.id ?? '');
   const [justificando, setJustificando] = useState<{ id: string; texto: string } | null>(null);
   const [responsable, setResponsable] = useState('');
 
@@ -112,19 +114,24 @@ export default function VistaAutoevaluacion({
             Es obligatoria y anual. Su puntaje determina el criterio de valoración
             de la empresa y si hay que presentar plan de mejoramiento.
           </p>
-          <label style={s.label}>Cuántos estándares aplican</label>
-          <select value={alcance} onChange={(e) => setAlcance(Number(e.target.value))}
-            style={{ ...s.input, maxWidth: 420, marginBottom: 6 }}>
-            <option value={7}>7 · menos de 10 trabajadores, riesgo I, II o III</option>
-            <option value={21}>21 · de 11 a 50 trabajadores, riesgo I, II o III</option>
-            <option value={60}>60 · más de 50 trabajadores, o riesgo IV o V</option>
+          <label style={s.label}>Conjunto de estándares que aplica</label>
+          <select value={conjunto} onChange={(e) => setConjunto(e.target.value)}
+            style={{ ...s.input, maxWidth: 460, marginBottom: 6 }}>
+            {conjuntos.length === 0 && <option value="">No hay conjuntos cargados</option>}
+            {conjuntos.map((x) => (
+              <option key={x.id} value={x.id}>
+                {x.nombre} — {x.estandares} estándares, {x.peso_total} puntos
+              </option>
+            ))}
           </select>
           <p style={s.ayuda}>
-            El puntaje sobre 100 con la tabla oficial corresponde al conjunto de 60.
-            Para 7 y 21 el porcentaje se calcula proporcionalmente sobre los
-            estándares seleccionados.
+            Los conjuntos los mantienes tú en{' '}
+            <a href="/panel/estandares" style={{ color: '#14263F', fontWeight: 600 }}>
+              Conjuntos de estándares
+            </a>
+            : ahí puedes duplicar el de 60 o importar el de 7 y 21 desde Excel.
           </p>
-          <button onClick={() => correr(() => crearAutoevaluacion(anio, alcance))}
+          <button onClick={() => correr(() => crearAutoevaluacion(anio, conjunto))}
             disabled={pendiente} type="button"
             style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color, marginTop: 12 }}>
             {pendiente ? 'Creando…' : `Crear la autoevaluación de ${anio}`}
