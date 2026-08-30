@@ -34,7 +34,7 @@ Plataforma **SaaS multiempresa de HSEQ / SST** (Seguridad y Salud en el Trabajo)
 
 ### Variables de entorno (declarar en Vercel, no viven en el repo)
 
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY`, `RESEND_FROM`.
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY`, `RESEND_FROM`, **`SUPABASE_SERVICE_ROLE_KEY`** (secreta, solo servidor — la usa el registro directo).
 
 > Las `NEXT_PUBLIC_*` se incrustan **en el build**: si se agregan o cambian en Vercel, hay que **redeployar**.
 
@@ -64,6 +64,9 @@ app/
       programadas/            # fase 8: programación y vencimientos
     acciones/                 # plan de acción (acciones correctivas)
     calendario/, reportes/, configuracion/, perfil/
+    manual/[modulo]/          # manual de uso gráfico (9 submanuales)
+  clave/                      # cambio obligatorio de clave del registro directo
+  registro/, registro/directo/# alta por correo y alta temporal sin correo
   r/[slug]/                   # PÚBLICA: registro de asistencia a capacitación (sin sesión)
   d/[token]/                  # PÚBLICA: firma remota de una entrega (sin sesión)
   api/
@@ -140,6 +143,23 @@ Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Matriz de capacitaciones** y **matriz de dotación**: cada libro trae la **rejilla** que se ve en pantalla *y* una hoja **Detalle** con una fila por cruce empleado × elemento, porque una rejilla no se puede filtrar ni cruzar. La de dotación suma una hoja de equipos asignados (un empleado puede tener varios, cada uno con placa).
 - Estados reales de la matriz de dotación: `vigente | por_vencer | vencido | sin_vencimiento | nunca`.
 
+### Registro de cuentas — dos métodos
+1. **Por correo** (`/registro`): `signUp` + `crear_organizacion`. Es el definitivo.
+2. **Directo, TEMPORAL** (`/registro/directo`): el servidor crea la cuenta ya confirmada con la
+   clave de servicio y **genera la contraseña**, que se muestra una sola vez. Marca
+   `usuarios.debe_cambiar_clave`, y el layout del panel redirige a `/clave` hasta que se cambie.
+   Existe porque el proyecto tiene `mailer_autoconfirm = false` y usa el SMTP compartido de
+   Supabase: quien se registra por correo puede quedarse esperando un mensaje que no llega.
+   **Se retira** borrando `lib/acciones-registro.ts`, `app/registro/directo/` y el enlace en
+   `/registro`; el método por correo no se toca.
+
+### Manual de uso (`/panel/manual`)
+Nueve submanuales, uno por módulo, con figuras dibujadas (no capturas: una captura envejece con
+el primer cambio de estilo). `Figuras.tsx` da las piezas — `Ventana`, `Flujo`, `Decision`,
+`Jerarquia`, `Regla`, `Ojo` — y `contenido.tsx` el texto. Se entra desde el botón **Manual**,
+junto a *Salir*. Cada submanual responde: para qué sirve → cómo se hace → **por qué se comporta
+así**; ese tercer punto es el que evita las preguntas de soporte.
+
 ### Storage (Supabase)
 - Bucket **`logos`** — público (logos de empresa, fotos de artículos, fotos de hallazgos).
 - Bucket **`firmas`** — privado (se lee con `createSignedUrl`).
@@ -167,6 +187,11 @@ Tres libros descargables (`/api/excel/*`) además del kardex:
 16. **Las capacidades se leen del plan**, no del código: `planes.encabezado_personalizable` y, cuando exista B2B, `max_clientes_por_empresa` / `clientes_descargan`.
 17. **Un Excel de matriz lleva siempre una hoja plana** junto a la rejilla. La rejilla es un dibujo; la tabla larga es lo que el usuario puede filtrar, cruzar y llevar a dinámica. El kardex, por lo mismo, es **una sola tabla cronológica** con `!autofilter` y `!freeze`: nada de filas separadoras ni títulos intercalados.
 18. **`next.config` tiene `typescript.ignoreBuildErrors: true`** — `npm run build` **no valida tipos**. Hay que correr `npx tsc --noEmit` aparte. Varios errores visibles en producción (`"undefined%"` en un KPI, la licencia SST que no salía bajo la firma) estaban ahí y el build los ocultaba.
+
+19. **La clave de servicio solo vive en el servidor.** `lib/supabase/admin.ts` salta RLS por
+    completo, así que solo puede importarse desde Server Actions o Route Handlers, nunca desde
+    un componente `'use client'`. La alternativa al registro directo —apagar la confirmación de
+    correo del proyecto— habría dejado sin verificación **también** al registro por correo.
 
 ---
 
@@ -251,7 +276,10 @@ Funciones clave por dominio:
 ## 9. Pendientes por hacer
 
 ### Inmediato — verificar en Vercel
-- Verificar que las **5 variables de entorno** estén en Vercel (scope Production) y **redeployar** tras cambiarlas.
+- **Añadir `SUPABASE_SERVICE_ROLE_KEY`** (Supabase → Settings → API → `service_role`) en Vercel y en
+  `.env.local`, y redeployar. Sin ella `/registro/directo` responde con el aviso correspondiente y
+  no crea cuentas. Es secreta: nunca en el repo ni con prefijo `NEXT_PUBLIC_`.
+- Verificar que las **variables de entorno** estén en Vercel (scope Production) y **redeployar** tras cambiarlas.
 - **Probar de extremo a extremo las tres descargas de `/api/excel/*`**: se validó la forma de los datos contra la base y compilan, pero no se ejecutaron con sesión real.
 
 ### Notificaciones (el eslabón que falta)
