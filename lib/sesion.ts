@@ -28,6 +28,9 @@ export type PerfilUsuario = {
   nombre: string;
   rol: 'admin' | 'operador';
   correo: string;
+  /** true si la clave la generó el sistema (registro directo) y aún
+   *  no se ha cambiado. El panel bloquea el paso hasta que se cambie. */
+  debeCambiarClave: boolean;
   organizacion: Organizacion;
 };
 
@@ -45,7 +48,7 @@ export async function obtenerPerfil(): Promise<PerfilUsuario | null> {
   const { data, error } = await supabase
     .from('usuarios')
     .select(`
-      id, nombre, rol,
+      id, nombre, rol, debe_cambiar_clave,
       organizaciones (
         id, slug, nombre, nomenclatura, titulo_doc, version_doc,
         logo_url, color_primario, plan, estado, fecha_expiracion,
@@ -62,6 +65,7 @@ export async function obtenerPerfil(): Promise<PerfilUsuario | null> {
     nombre: data.nombre,
     rol: data.rol,
     correo: user.email ?? '',
+    debeCambiarClave: Boolean(data.debe_cambiar_clave),
     organizacion: data.organizaciones as unknown as Organizacion,
   };
 }

@@ -20,6 +20,12 @@ export default async function LayoutPanel({
   const perfil = await obtenerPerfil();
   if (!perfil) redirect('/login');
 
+  // Contraseña generada por el sistema y todavía sin cambiar: no se
+  // entra al panel hasta ponerle una propia. La pantalla vive fuera de
+  // este layout a propósito, para que el bloqueo no se pueda esquivar
+  // navegando a otra ruta del panel.
+  if (perfil.debeCambiarClave) redirect('/clave');
+
   const cuenta = perfil.organizacion;
   const empresas = await listarEmpresas();
   const activa = await empresaActiva();

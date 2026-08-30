@@ -162,6 +162,15 @@ export default function PaginaRegistro() {
           ¿Ya tienes cuenta? <Link href="/login" style={{ color: '#3b82f6' }}>Inicia sesión</Link>
         </p>
 
+        {/* Salida para quien no recibe el correo de confirmación.
+            Temporal: se retira cuando haya dominio y cuenta de envío. */}
+        <div style={s.alterna}>
+          ¿No te llega el correo de confirmación?{' '}
+          <Link href="/registro/directo" style={{ color: '#3b82f6', fontWeight: 600 }}>
+            Crea tu cuenta sin correo
+          </Link>
+        </div>
+
         <p style={s.legal}>
           Al crear la cuenta aceptas el tratamiento de datos personales conforme
           a la Ley 1581 de 2012.
@@ -222,5 +231,9 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: 10, fontSize: 15, fontWeight: 600,
   },
   pie: { fontSize: 13, textAlign: 'center', marginTop: 18, color: '#6b7280' },
+  alterna: {
+    marginTop: 16, paddingTop: 14, borderTop: '1px solid #E4E4DF',
+    fontSize: 12.5, color: '#6b7280', textAlign: 'center', lineHeight: 1.6,
+  },
   legal: { fontSize: 10.5, color: '#9ca3af', textAlign: 'center', marginTop: 14, lineHeight: 1.5 },
 };
