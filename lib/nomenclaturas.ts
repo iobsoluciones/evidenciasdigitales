@@ -15,6 +15,7 @@ export type TipoDocumento =
   | 'entrega'
   | 'devolucion'
   | 'inspeccion'
+  | 'investigacion'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -45,6 +46,11 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'inspeccion',
     etiqueta: 'Informe de inspección',
     detalle: 'Informe con veredicto, hallazgos y evidencia.',
+  },
+  {
+    tipo: 'investigacion',
+    etiqueta: 'Informe de investigación',
+    detalle: 'Investigación de accidentes, incidentes y enfermedades laborales.',
   },
   {
     tipo: 'reporte',

@@ -19,6 +19,8 @@ export const COOKIE_EMPRESA = 'empresa_activa';
 
 export type Empresa = {
   id: string;
+  /** Frontera de RLS. Hace falta al insertar filas desde el servidor. */
+  org_id: string;
   slug: string;
   nombre: string;
   nit: string | null;
