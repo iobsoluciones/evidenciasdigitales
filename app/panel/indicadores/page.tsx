@@ -74,10 +74,26 @@ export default async function PaginaIndicadores() {
 
   return (
     <>
-      <h1 style={{ fontSize: 22, marginBottom: 3, letterSpacing: -0.4 }}>Indicadores</h1>
-      <p style={{ color: '#5B6470', fontSize: 13, marginTop: 0 }}>
-        {empresa.nombre} · últimos 12 meses
-      </p>
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+        gap: 16, flexWrap: 'wrap',
+      }}>
+        <div>
+          <h1 style={{ fontSize: 22, marginBottom: 3, letterSpacing: -0.4 }}>Indicadores</h1>
+          <p style={{ color: '#5B6470', fontSize: 13, marginTop: 0 }}>
+            {empresa.nombre} · últimos 12 meses
+          </p>
+        </div>
+        {/* Captura, no consulta: se diligencia una vez al año y es el
+            denominador de los indicadores del art. 30 de la Res. 0312. */}
+        <Link href="/panel/horas" style={{
+          border: '1px solid #E4E4DF', background: '#fff', color: '#14263F',
+          padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
+          textDecoration: 'none', whiteSpace: 'nowrap',
+        }}>
+          Horas-hombre trabajadas
+        </Link>
+      </div>
 
       {/* ---------- Participación general ---------- */}
       <TarjetaParticipacion datos={r?.participacionGeneral ?? null} color={color} />
