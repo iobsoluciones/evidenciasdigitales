@@ -114,6 +114,29 @@ export default function Investigacion({
 
   const [responsableAcciones, setResponsableAcciones] = useState('');
 
+  // Requisitos de cierre, calculados de lo que ya está guardado (no del
+  // formulario en pantalla): la base valida lo mismo, y mostrarlo antes
+  // evita que el usuario intente cerrar y choque contra un error.
+  const guardados = detalle.equipo ?? [];
+  const sinFirmar = guardados.filter((m) => !m.firma_url);
+  const hayResponsable = guardados.some((m) => m.rol === 'responsable_sst');
+  const causasGuardadas = ((inv.causas_basicas as Causa[]) ?? []).filter(
+    (c) => c?.descripcion?.trim()
+  ).length;
+
+  const faltas: string[] = [];
+  if (causasGuardadas === 0) faltas.push('Registra y guarda al menos una causa básica.');
+  if (guardados.length === 0) faltas.push('Registra el equipo investigador.');
+  else {
+    if (!hayResponsable) faltas.push('El equipo debe incluir al responsable del SG-SST.');
+    if (sinFirmar.length > 0) {
+      faltas.push(
+        `Faltan las firmas de: ${sinFirmar.map((m) => m.nombre).join(', ')}.`
+      );
+    }
+  }
+  const puedeCerrar = faltas.length === 0;
+
   function ok(texto: string) { setAviso({ tipo: 'ok', texto }); }
   function mal(texto: string) { setAviso({ tipo: 'error', texto }); }
 
@@ -560,14 +583,34 @@ export default function Investigacion({
           <h2 style={s.h2}>Cerrar la investigación</h2>
           <p style={s.nota}>
             Al cerrar, el control documental queda congelado y el informe deja de
-            poder cambiar. Se exige al menos una causa básica y la firma del
-            responsable del SG-SST.
+            poder cambiar. Hacen falta <strong>todas las firmas del equipo</strong>:
+            un informe que lista a tres integrantes y trae una sola firma no prueba
+            que los otros dos participaron.
           </p>
+
+          {puedeCerrar ? (
+            <div style={s.listo}>Todo listo: el informe se puede emitir.</div>
+          ) : (
+            <ul style={s.faltas}>
+              {faltas.map((f, i) => (
+                <li key={i} style={s.falta}>{f}</li>
+              ))}
+            </ul>
+          )}
+
           <div style={s.acciones}>
             <button
               onClick={() => accion('cierre', () => cerrarInvestigacion(eventoId, conclusiones))}
-              disabled={pendiente}
-              style={{ ...s.botonLleno, background: hecho === 'cierre' ? OK : pendiente ? '#cbd5e1' : color }}
+              disabled={pendiente || !puedeCerrar}
+              title={puedeCerrar ? undefined : 'Resuelve lo que falta antes de cerrar'}
+              style={{
+                ...s.botonLleno,
+                background: hecho === 'cierre' ? OK
+                  : !puedeCerrar ? '#D8DCDF'
+                  : pendiente ? '#cbd5e1' : color,
+                color: !puedeCerrar && hecho !== 'cierre' ? '#8A929C' : '#fff',
+                cursor: puedeCerrar && !pendiente ? 'pointer' : 'not-allowed',
+              }}
             >
               {hecho === 'cierre' ? '✓ Cerrada' : pendiente ? 'Cerrando…' : 'Cerrar investigación'}
             </button>
@@ -700,4 +743,16 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
   },
   aviso: { padding: '11px 14px', borderRadius: 9, fontSize: 13, marginBottom: 14, lineHeight: 1.55 },
+  listo: {
+    background: '#E6F4EA', color: '#1E6B3A', borderRadius: 8,
+    padding: '10px 13px', fontSize: 12.5, fontWeight: 600,
+  },
+  faltas: {
+    listStyle: 'none', margin: 0, padding: 0,
+    background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 8,
+  },
+  falta: {
+    fontSize: 12.5, color: '#7C2D12', lineHeight: 1.55,
+    padding: '9px 14px', borderBottom: '1px solid #FBDCBC',
+  },
 };
