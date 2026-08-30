@@ -178,6 +178,17 @@ específicas para `anon`.
 
 33 tablas. Agrupadas por dominio:
 
+### Salud y accidentalidad (Fase 1)
+
+| Tabla | Contenido |
+|---|---|
+| `horas_hombre` | Horas, promedio de trabajadores y días programados por empresa y mes. Denominador de los indicadores del art. 30 |
+| `eventos` | Accidentes, incidentes, casi accidentes y enfermedades laborales. El hecho |
+| `evento_investigacion` | El análisis: metodología, causas inmediatas y básicas, conclusiones |
+| `evento_equipo` | Quién investiga, con correo, token de firma remota y firma |
+| `evento_testigos` | Testigos y su versión |
+| `examenes_medicos` | Concepto de aptitud y restricciones. **Nunca el diagnóstico** |
+
 ### Núcleo
 
 | Tabla | Contenido |

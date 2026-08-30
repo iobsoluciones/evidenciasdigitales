@@ -43,9 +43,10 @@ const MODULOS: Modulo[] = [
     // Accidentes e incidentes: Res. 1401/2007. Va junto a inspecciones
     // porque ambos terminan en el mismo plan de accion.
     id: 'eventos',
-    titulo: 'Accidentalidad',
+    titulo: 'Salud y accidentalidad',
     enlaces: [
       { href: '/panel/eventos', texto: 'Accidentes e incidentes' },
+      { href: '/panel/examenes', texto: 'Exámenes médicos' },
       { href: '/panel/horas', texto: 'Horas-hombre' },
     ],
   },

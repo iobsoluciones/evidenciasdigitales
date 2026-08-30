@@ -86,6 +86,14 @@ export default async function PaginaIndicadores() {
         </div>
         {/* Captura, no consulta: se diligencia una vez al año y es el
             denominador de los indicadores del art. 30 de la Res. 0312. */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Link href="/panel/indicadores/legales" style={{
+          border: '1px solid #14263F', background: '#14263F', color: '#fff',
+          padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
+          textDecoration: 'none', whiteSpace: 'nowrap',
+        }}>
+          Indicadores del art. 30
+        </Link>
         <Link href="/panel/horas" style={{
           border: '1px solid #E4E4DF', background: '#fff', color: '#14263F',
           padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
@@ -93,6 +101,7 @@ export default async function PaginaIndicadores() {
         }}>
           Horas-hombre trabajadas
         </Link>
+        </div>
       </div>
 
       {/* ---------- Participación general ---------- */}

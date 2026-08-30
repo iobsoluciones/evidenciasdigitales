@@ -80,6 +80,11 @@ que ya tiene duplicados produce un producto que nadie usa.
 
 # FASE 1 — Cerrar la exposición legal
 
+> **Estado: completada el 30 de agosto de 2026.** Los cuatro pasos entregados y
+> verificados contra la base. Añadido sobre lo planeado: **firma remota del equipo
+> investigador por enlace al correo** —el equipo casi nunca coincide en el mismo
+> sitio— y la validación de que **todas** las firmas existen antes de cerrar.
+
 **Objetivo:** que el consultor no tenga que salirse de Rúbrica en el peor momento.
 Hoy, cuando ocurre un accidente —cuando el SG-SST se pone a prueba— vuelve a Word.
 

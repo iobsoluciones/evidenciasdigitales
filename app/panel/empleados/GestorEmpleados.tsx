@@ -62,6 +62,8 @@ export default function GestorEmpleados({
   const [filtroArea, setFiltroArea] = useState('');
   const [pagina, setPagina] = useState(0);
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
+  const [pidiendoMotivo, setPidiendoMotivo] = useState<{ id: string; mensaje: string } | null>(null);
+  const [motivo, setMotivo] = useState('');
   const [errores, setErrores] = useState<string[]>([]);
   const [leyendo, setLeyendo] = useState(false);
 
@@ -110,11 +112,43 @@ export default function GestorEmpleados({
     });
   }
 
+  /**
+   * Retiro. Si falta el examen médico de egreso el servidor lo bloquea
+   * y aquí se pide el motivo: la Resolución 2346 lo exige, pero en la
+   * práctica el trabajador a veces no asiste, y dejar constancia de eso
+   * también es evidencia.
+   */
   function retirar(id: string) {
     startTransition(async () => {
       const r = await retirarEmpleado(id);
+      if (r.ok) {
+        setAviso({ tipo: 'ok', texto: r.mensaje });
+        router.refresh();
+        return;
+      }
+      if (r.sinExamen) {
+        setPidiendoMotivo({ id, mensaje: r.mensaje });
+        setAviso(null);
+        return;
+      }
+      setAviso({ tipo: 'error', texto: r.mensaje });
+    });
+  }
+
+  function retirarSinExamen() {
+    if (!pidiendoMotivo) return;
+    if (!motivo.trim()) {
+      setAviso({ tipo: 'error', texto: 'Escribe por qué no se realizó el examen.' });
+      return;
+    }
+    startTransition(async () => {
+      const r = await retirarEmpleado(pidiendoMotivo.id, motivo);
       setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
-      if (r.ok) router.refresh();
+      if (r.ok) {
+        setPidiendoMotivo(null);
+        setMotivo('');
+        router.refresh();
+      }
     });
   }
 
@@ -225,6 +259,42 @@ export default function GestorEmpleados({
             obligatorias; cargo, area y ciudad son opcionales. El orden no importa.
             Volver a cargar el mismo archivo actualiza los datos en vez de duplicarlos.
           </p>
+        </div>
+      )}
+
+      {pidiendoMotivo && (
+        <div style={e.egreso}>
+          <div style={e.egresoTitulo}>Falta el examen médico de egreso</div>
+          <p style={e.egresoTexto}>
+            La Resolución 2346 de 2007 lo exige, y es la principal defensa del
+            empleador si más adelante aparece una reclamación por enfermedad
+            laboral. Regístralo en <strong>Exámenes médicos</strong> antes de
+            retirar, o deja aquí constancia de por qué no se realizó.
+          </p>
+          <textarea
+            value={motivo}
+            onChange={(ev) => setMotivo(ev.target.value)}
+            rows={2}
+            style={e.egresoCampo}
+            placeholder="El trabajador no asistió a la cita programada el…"
+          />
+          <div style={e.egresoBotones}>
+            <button
+              onClick={() => { setPidiendoMotivo(null); setMotivo(''); }}
+              style={e.egresoCancelar}
+              type="button"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={retirarSinExamen}
+              disabled={pendiente}
+              style={e.egresoConfirmar}
+              type="button"
+            >
+              Retirar dejando constancia
+            </button>
+          </div>
         </div>
       )}
 
@@ -397,6 +467,27 @@ export default function GestorEmpleados({
 }
 
 const e: Record<string, React.CSSProperties> = {
+  egreso: {
+    background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 10,
+    padding: '14px 16px', margin: '14px 0',
+  },
+  egresoTitulo: { fontSize: 14, fontWeight: 700, color: '#7C2D12', marginBottom: 6 },
+  egresoTexto: { fontSize: 12.5, color: '#7C2D12', lineHeight: 1.6, margin: '0 0 10px' },
+  egresoCampo: {
+    width: '100%', padding: '9px 11px', border: '1px solid #FED7AA',
+    borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
+    fontFamily: 'inherit', resize: 'vertical',
+  },
+  egresoBotones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
+  egresoCancelar: {
+    background: 'none', border: 'none', color: '#7C2D12',
+    fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
+  },
+  egresoConfirmar: {
+    background: '#9A3412', color: '#fff', border: 'none',
+    padding: '8px 18px', borderRadius: 8, fontSize: 12.5,
+    fontWeight: 600, cursor: 'pointer',
+  },
   card: {
     background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
     padding: 22, marginBottom: 16,

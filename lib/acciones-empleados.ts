@@ -33,7 +33,12 @@ export type EmpleadoRetirado = Empleado & {
   ultima: string | null;
 };
 
-export type Resultado = { ok: boolean; mensaje: string };
+export type Resultado = {
+  ok: boolean;
+  mensaje: string;
+  /** true cuando el retiro se bloqueó por falta del examen de egreso. */
+  sinExamen?: boolean;
+};
 
 export type ResultadoCarga = {
   ok: boolean;
@@ -167,19 +172,47 @@ export async function actualizarEmpleado(
  * Se desactiva en vez de borrar: las asistencias históricas siguen
  * teniendo sentido aunque la persona ya no esté en la empresa.
  */
-export async function retirarEmpleado(id: string): Promise<Resultado> {
+/**
+ * Retiro de un empleado.
+ *
+ * Exige el EXAMEN MÉDICO DE EGRESO (Resolución 2346 de 2007). Es la
+ * principal defensa del empleador ante una reclamación por enfermedad
+ * laboral presentada después de la desvinculación: sin él no hay forma
+ * de demostrar en qué estado de salud salió la persona.
+ *
+ * Si no se hizo, se admite dejar constancia del motivo —que es lo que
+ * pasa la mitad de las veces— y queda registrado como examen de egreso
+ * aplazado. Constancia de gestión también es evidencia.
+ */
+export async function retirarEmpleado(
+  id: string,
+  motivoSinExamen?: string
+): Promise<Resultado> {
   const supabase = await crearClienteServidor();
-  const { error } = await supabase
-    .from('empleados')
-    .update({ activo: false, fecha_retiro: new Date().toISOString() })
-    .eq('id', id);
+  const { data, error } = await supabase.rpc('retirar_empleado', {
+    p_empleado: id,
+    p_fecha: null,
+    p_sin_examen_motivo: motivoSinExamen?.trim() || null,
+  });
 
   if (error) return { ok: false, mensaje: error.message };
 
+  const r = data as { ok: boolean; error?: string; sin_examen?: boolean; con_examen?: boolean };
+  if (!r.ok) {
+    return { ok: false, mensaje: r.error ?? 'No se pudo retirar.', sinExamen: r.sin_examen };
+  }
+
   revalidatePath('/panel/empleados');
   revalidatePath('/panel/empleados/retirados');
+  revalidatePath('/panel/examenes');
   revalidatePath('/panel/configuracion');
-  return { ok: true, mensaje: 'Empleado retirado. Queda en Empleados retirados con su historial.' };
+
+  return {
+    ok: true,
+    mensaje: r.con_examen
+      ? 'Empleado retirado con su examen de egreso. Queda en Empleados retirados con su historial.'
+      : 'Empleado retirado. Quedó constancia de que el examen de egreso no se realizó.',
+  };
 }
 
 /** Empleados retirados de la empresa activa, con su participacion historica. */
