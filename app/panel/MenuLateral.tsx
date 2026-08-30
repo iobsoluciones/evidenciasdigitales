@@ -47,6 +47,7 @@ const MODULOS: Modulo[] = [
     enlaces: [
       { href: '/panel/peligros', texto: 'Matriz de peligros' },
       { href: '/panel/plan-anual', texto: 'Plan anual de trabajo' },
+      { href: '/panel/autoevaluacion', texto: 'Autoevaluación 0312' },
     ],
   },
   {

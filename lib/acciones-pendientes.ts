@@ -45,3 +45,27 @@ export async function obtenerPendientes(): Promise<Pendientes> {
   const { data } = await supabase.rpc('pendientes', { p_empresa: empresa.id });
   return (data ?? VACIO) as Pendientes;
 }
+
+export type Semaforo = {
+  hay: boolean;
+  id?: string;
+  anio?: number;
+  estado?: 'borrador' | 'cerrada';
+  porcentaje?: number;
+  criterio?: 'critico' | 'moderadamente_aceptable' | 'aceptable';
+  pendientes?: number;
+};
+
+/**
+ * Una sola cifra por empresa: el porcentaje de la autoevaluación.
+ * Es el número que el gerente entiende sin formación en SST y el que
+ * el consultor usa para justificar su contrato.
+ */
+export async function obtenerSemaforo(): Promise<Semaforo> {
+  const empresa = await empresaActiva();
+  if (!empresa) return { hay: false };
+
+  const supabase = await crearClienteServidor();
+  const { data } = await supabase.rpc('semaforo_cumplimiento', { p_empresa: empresa.id });
+  return (data ?? { hay: false }) as Semaforo;
+}

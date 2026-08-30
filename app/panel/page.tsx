@@ -11,7 +11,7 @@ import { obtenerPerfil } from '@/lib/sesion';
 import TarjetasEmpresas from './TarjetasEmpresas';
 import Pendientes from './Pendientes';
 import { empresaActiva } from '@/lib/empresa-activa';
-import { obtenerPendientes } from '@/lib/acciones-pendientes';
+import { obtenerPendientes, obtenerSemaforo } from '@/lib/acciones-pendientes';
 
 export type EmpresaResumen = {
   id: string;
@@ -48,6 +48,7 @@ export default async function PaginaCartera() {
   // que hacer hoy en la que está trabajando.
   const activa = await empresaActiva();
   const pendientes = activa ? await obtenerPendientes() : null;
+  const semaforo = activa ? await obtenerSemaforo() : { hay: false };
 
   return (
     <>
@@ -55,6 +56,7 @@ export default async function PaginaCartera() {
         <Pendientes
           key={activa.id}
           datos={pendientes}
+          semaforo={semaforo}
           empresa={activa.nombre}
           color={activa.color_primario}
         />

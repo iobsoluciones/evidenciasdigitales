@@ -267,6 +267,8 @@ Los seis, con la fórmula oficial:
 
 # FASE 2 — Dar columna vertebral al sistema
 
+> **Estado: completada el 30 de agosto de 2026.**
+
 Aquí los módulos sueltos se vuelven un sistema de gestión.
 
 ## 2.1 · Matriz de identificación de peligros (IPEVR) — **entregada**
@@ -287,8 +289,19 @@ Aquí los módulos sueltos se vuelven un sistema de gestión.
 - Eso convierte cinco módulos sueltos en un sistema, y permite responderle al
   auditor **por qué** se entrega ese EPP y no otro.
 
-## 2.2 · Autoevaluación de estándares mínimos
-<sub>Resolución 0312, art. 27</sub>
+## 2.2 · Autoevaluación de estándares mínimos — **entregada**
+<sub>Resolución 0312, arts. 27 y 28 · 30 de agosto de 2026</sub>
+
+> Catálogo global de los **60 estándares con sus pesos oficiales, que suman
+> exactamente 100**, marcando la pertenencia a los conjuntos de 7 y 21. El puntaje
+> y el criterio se derivan al leer: guardarlos dejaría el porcentaje viejo al
+> cambiar una respuesta. Un «no aplica» sin justificación se rechaza, porque la
+> norma lo puntúa en cero. Los estándares incumplidos generan acciones en el plan
+> de acción que ya existe.
+>
+> **Salvedad:** la tabla de 100 puntos corresponde al conjunto de 60. Para 7 y 21
+> el porcentaje se calcula proporcionalmente sobre los estándares seleccionados,
+> no con la tabla propia de esos artículos.
 
 - La lista de verificación **ya está cargada** como plantilla de inspección.
   Falta el paso final: puntaje oficial con sus tres bandas

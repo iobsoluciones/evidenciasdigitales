@@ -10,7 +10,7 @@
  * alguien que no distinga los tonos.
  */
 import Link from 'next/link';
-import type { Pendientes as Datos, Severidad } from '@/lib/acciones-pendientes';
+import type { Pendientes as Datos, Severidad, Semaforo } from '@/lib/acciones-pendientes';
 
 const TONOS: Record<Severidad, { fondo: string; color: string; borde: string; texto: string }> = {
   critico: { fondo: '#FDF2F2', color: '#9B1C1C', borde: '#9B1C1C', texto: 'Crítico' },
@@ -24,12 +24,40 @@ function plazo(dias: number): string {
   return `Faltan ${dias} d`;
 }
 
+const CRITERIOS: Record<string, { t: string; fondo: string; color: string }> = {
+  critico: { t: 'Crítico', fondo: '#FDF2F2', color: '#9B1C1C' },
+  moderadamente_aceptable: { t: 'Moderadamente aceptable', fondo: '#FFF7ED', color: '#9A3412' },
+  aceptable: { t: 'Aceptable', fondo: '#E6F4EA', color: '#1E6B3A' },
+};
+
+/** El semáforo va junto a los pendientes: uno dice cómo está el sistema
+ *  y el otro qué hacer para moverlo. Separarlos obligaría a mirar dos
+ *  pantallas para la misma pregunta. */
+function Semaforo({ s: sem }: { s: Semaforo }) {
+  if (!sem.hay || sem.porcentaje === undefined) return null;
+  const c = CRITERIOS[sem.criterio ?? 'critico'];
+  return (
+    <Link href="/panel/autoevaluacion" style={{ ...s.semaforo, background: c.fondo, color: c.color }}>
+      <span style={s.semCifra}>{sem.porcentaje}%</span>
+      <span style={s.semTexto}>
+        {c.t}
+        <span style={s.semAnio}>
+          Autoevaluación {sem.anio}
+          {sem.estado === 'borrador' ? ` · ${sem.pendientes} sin evaluar` : ''}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
 export default function Pendientes({
   datos,
+  semaforo,
   empresa,
   color,
 }: {
   datos: Datos;
+  semaforo: Semaforo;
   empresa: string;
   color: string;
 }) {
@@ -40,6 +68,7 @@ export default function Pendientes({
       <section style={{ ...s.caja, borderLeft: `4px solid #1E6B3A` }}>
         <div style={s.cabecera}>
           <h2 style={s.titulo}>Nada pendiente en {empresa}</h2>
+          <Semaforo s={semaforo} />
         </div>
         <p style={s.vacio}>
           No hay accidentes sin investigar, acciones vencidas, exámenes por vencer
@@ -60,6 +89,7 @@ export default function Pendientes({
           </p>
         </div>
         <div style={s.contadores}>
+          <Semaforo s={semaforo} />
           {(['critico', 'alto', 'medio'] as Severidad[]).map((sev) => {
             const n = sev === 'critico' ? resumen.criticos
               : sev === 'alto' ? resumen.altos : resumen.medios;
@@ -113,7 +143,14 @@ const s: Record<string, React.CSSProperties> = {
   },
   titulo: { fontSize: 17, fontWeight: 700, color: '#14263F', margin: 0 },
   sub: { fontSize: 12.5, color: '#5B6470', margin: '3px 0 0' },
-  contadores: { display: 'flex', gap: 6, flexWrap: 'wrap' },
+  contadores: { display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' },
+  semaforo: {
+    display: 'flex', alignItems: 'center', gap: 9, borderRadius: 9,
+    padding: '7px 13px', textDecoration: 'none', marginRight: 4,
+  },
+  semCifra: { fontSize: 21, fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' },
+  semTexto: { display: 'flex', flexDirection: 'column', fontSize: 11.5, fontWeight: 700, lineHeight: 1.35 },
+  semAnio: { fontSize: 10, fontWeight: 400, opacity: .85 },
   contador: {
     fontSize: 11, fontWeight: 700, padding: '4px 11px', borderRadius: 20,
     whiteSpace: 'nowrap',
