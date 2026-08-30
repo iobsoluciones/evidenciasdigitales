@@ -371,6 +371,7 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
 | Las funciones con `mi_org_id()` devolvían vacío al probarlas por SQL | En una sesión SQL no hay JWT. Se simula con `set_config('request.jwt.claims', …, true)` antes de probar |
 | `→` (U+2192) invisible en los PDF | Las fuentes estándar de react-pdf usan **WinAnsi**: el carácter no existe, no se dibuja y **no da error**. Solo se ve renderizando de verdad. `•` y `·` sí existen |
 | «CARLOS RAMÍREZ TOR-RES» en el organigrama | react-pdf **parte palabras con guion** cuando no caben. Se desactiva con `Font.registerHyphenationCallback((p) => [p])` en `EncabezadoDoc`, por donde pasan todos los documentos |
+| Vercel devolvió `504 MIDDLEWARE_INVOCATION_TIMEOUT` con Supabase sano | El middleware llamaba a `getUser()` —un viaje de red— **en toda petición**, incluidas las anónimas y las públicas, sin reloj. Un solo retardo de Supabase tumbaba el sitio entero. Ahora **sin cookie de sesión no se pregunta** (una petición anónima no tiene nada que validar) y la validación corre contra un límite de 5 s: si vence, el middleware **decide** —a `/login` en ruta protegida, de largo en pública— en vez de colgarse hasta que Vercel la mate |
 | Reportar "dos capacitaciones activas" como anomalía | El límite de una activa es **por empresa**, no por organización: mirar el total ignora la frontera de trabajo |
 
 ---
