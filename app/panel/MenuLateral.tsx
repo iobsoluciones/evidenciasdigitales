@@ -7,9 +7,10 @@
  * gestión de empresas —que es la vista de cartera— y luego los
  * módulos, que operan siempre sobre la empresa activa.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { EVENTO_MENU } from './BotonMenu';
 
 type Enlace = { href: string; texto: string };
 type Modulo = { id: string; titulo: string; enlaces: Enlace[]; pronto?: boolean };
@@ -70,6 +71,15 @@ export default function MenuLateral({
   const [abierto, setAbierto] = useState<string | null>(moduloActivo);
   const [movil, setMovil] = useState(false);
 
+  // El botón que abre el menú está en la barra superior, fuera de este
+  // componente. Se comunica por evento para no tener que subir el
+  // estado a un layout que es Server Component.
+  useEffect(() => {
+    const alternar = () => setMovil((v) => !v);
+    window.addEventListener(EVENTO_MENU, alternar);
+    return () => window.removeEventListener(EVENTO_MENU, alternar);
+  }, []);
+
   const enCartera = ruta === '/panel' || ruta.startsWith('/panel/empresas');
   const enCalendario = ruta.startsWith('/panel/calendario');
   const enReportes = ruta.startsWith('/panel/reportes') || ruta.startsWith('/panel/envios');
@@ -79,13 +89,6 @@ export default function MenuLateral({
 
   return (
     <>
-      <div style={{ ...e.barraMovil, background: color }} className="solo-movil">
-        <button onClick={() => setMovil(!movil)} style={e.hamburguesa} aria-label="Menú">
-          <span style={e.linea} /><span style={e.linea} /><span style={e.linea} />
-        </button>
-        <span style={{ fontSize: 14, fontWeight: 600 }}>{profesional}</span>
-      </div>
-
       <nav style={e.lateral} className={movil ? 'lateral abierto' : 'lateral'}>
         {/* ---------- El profesional ---------- */}
         <div style={e.cabecera}>
@@ -299,8 +302,5 @@ const e: Record<string, React.CSSProperties> = {
   },
   itemInactivo: { color: '#B5BBC2', cursor: 'default' },
 
-  barraMovil: { position: 'sticky', top: 0, zIndex: 50, color: '#fff', padding: '12px 16px', alignItems: 'center', gap: 14 },
-  hamburguesa: { background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 4, padding: 0 },
-  linea: { width: 19, height: 2, background: '#fff', display: 'block' },
   velo: { position: 'fixed', inset: 0, background: 'rgba(20,38,63,.45)', zIndex: 55 },
 };

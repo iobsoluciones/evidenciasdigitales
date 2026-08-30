@@ -12,6 +12,7 @@ import { listarEmpresas, empresaActiva } from '@/lib/empresa-activa';
 import MenuLateral from './MenuLateral';
 import SelectorEmpresa from './SelectorEmpresa';
 import BotonSalir from './BotonSalir';
+import BotonMenu from './BotonMenu';
 
 export default async function LayoutPanel({
   children,
@@ -58,8 +59,12 @@ export default async function LayoutPanel({
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <header style={est.barra}>
+          <BotonMenu color={marca} />
           <SelectorEmpresa empresas={empresas} activa={activa} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* marginLeft:auto y no space-between: sin empresas el selector
+              no pinta nada, y entonces Manual y Salir se iban al borde
+              izquierdo. Así quedan a la derecha siempre. */}
+          <div style={est.acciones}>
             <Link href="/panel/manual" style={est.manual}>Manual</Link>
             <BotonSalir />
           </div>
@@ -81,10 +86,11 @@ export default async function LayoutPanel({
 
 const est: Record<string, React.CSSProperties> = {
   barra: {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    gap: 16, padding: '11px 26px', borderBottom: '1px solid #E4E4DF',
+    display: 'flex', alignItems: 'center',
+    gap: 12, padding: '11px 26px', borderBottom: '1px solid #E4E4DF',
     background: '#fff', flexWrap: 'wrap',
   },
+  acciones: { display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' },
   alerta: {
     background: '#FDF2F2', color: '#9B1C1C', padding: '11px 26px',
     fontSize: 13, borderBottom: '1px solid #F5C6C6',
