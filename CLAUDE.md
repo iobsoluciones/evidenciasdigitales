@@ -234,6 +234,30 @@ trabajadores activos y `validar_comite(comite)` dice qué falta.
   correo. Al **retirar un empleado** sale de sus comités pero **no se borra**: queda
   inactivo con su motivo, porque el acta de conformación sigue nombrándolo.
 
+### Emergencias — amenazas y simulacros (fase 3.2)
+Estándar 5.1.1 · Dec. 1072 art. 2.2.4.6.25.
+
+- **`emergencia_amenazas`** — análisis por la **metodología de colores** (guía FOPAE,
+  Res. 004/09). La trampa está en la escala: el número mide la **vulnerabilidad, no el
+  control**. «Sí, existe» puntúa **0.0** y «No existe» **1.0**, así que la suma de los tres
+  aspectos se lee 0.0–1.0 baja (verde) · 1.1–2.0 media (amarillo) · 2.1–3.0 alta (rojo).
+  Invertirla pintaría de verde justo lo que está mal, y por eso la pantalla dice el valor
+  de cada opción en voz alta.
+- El **diamante** (amenaza + personas + recursos + sistemas) y el `nivel_riesgo` son
+  **columnas generadas**: 3 o 4 rombos en alto → alto; 1 o 2 en alto, o 3 en medio → medio.
+- `sembrar_amenazas` precarga catorce amenazas típicas **sin calificar**: el sistema
+  propone la lista, el profesional la califica. Proponer una calificación sería inventarle
+  el análisis, y `evaluada = false` evita que los valores por omisión pinten de rojo un
+  análisis que nadie ha hecho.
+- **`simulacros`** + **`simulacro_evaluadores`** — el acta es la evidencia del estándar:
+  tener el plan escrito no prueba que se haya probado. **Cerrar exige todas las firmas**,
+  y las firmas se piden **por enlace al correo** (`/s/[token]`), porque los evaluadores
+  están repartidos por la planta y uno suele ser el asesor de la ARL.
+- El listado muestra **tiempo de evacuación y cobertura**, que son los dos números que se
+  comparan con el simulacro anterior. Una lista de fechas no dice si la empresa mejoró.
+- Dos PDF: **análisis de amenazas** (apaisado, con la letra A/M/B dentro de cada color para
+  que sobreviva a una fotocopia) y **acta de simulacro**. Ambos se envían por correo.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -407,8 +431,10 @@ plan_anual · plan_actividades
 estandar_conjuntos · estandar_items     # org_id NULL = del sistema, solo lectura
 autoevaluaciones · autoevaluacion_items
 
-# Fase 3 — comités
+# Fase 3 — comités y emergencias
 comites · comite_miembros   # copasst | vigia | convivencia | brigada
+emergencia_amenazas         # metodología de colores; nivel_riesgo generado
+simulacros · simulacro_evaluadores   # acta firmada, con token de firma remota
 ```
 
 `capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
@@ -430,7 +456,11 @@ Funciones clave por dominio:
   `duplicar_conjunto_estandares`, `actualizar_conjunto_estandares`,
   `guardar_item_conjunto`, `importar_conjunto_estandares`.
 - **Fase 3:** `crear_comite`, `guardar_miembro_comite`, `eliminar_miembro_comite`,
-  `listar_comites`, `detalle_comite`, `composicion_requerida`, `validar_comite`.
+  `listar_comites`, `detalle_comite`, `composicion_requerida`, `validar_comite`,
+  `guardar_amenaza`, `listar_amenazas`, `sembrar_amenazas`, `eliminar_amenaza`,
+  `crear_simulacro`, `guardar_simulacro`, `guardar_evaluador_simulacro`,
+  `cerrar_simulacro`, `listar_simulacros`, `detalle_simulacro`,
+  `generar_token_firma_simulacro`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
@@ -486,6 +516,8 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | **Inspección** | sí | **falta** | sí | sí |
 | **Plan anual** (firma del empleador) | sí | **falta** | **falta** | **falta** |
 | **Acta de conformación de comité** | **falta** | **falta** | organigrama sí | sí |
+| Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
+| Análisis de amenazas | no lleva firma capturada | — | sí | sí |
 | Autoevaluación | no lleva firma capturada | — | sí | sí |
 
 Lo marcado **falta** es trabajo pendiente que abre esta regla, en ese orden.

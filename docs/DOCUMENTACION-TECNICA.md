@@ -209,6 +209,14 @@ específicas para `anon`.
 | `comites` | `tipo` = copasst \| vigia \| convivencia \| **brigada**. Periodo, acta, estado |
 | `comite_miembros` | Empleado o persona externa; `parte`, `suplente`, `rol`, **`frente`** (solo brigada), foto, `activo` y `motivo_salida` |
 
+### Emergencias (Fase 3.2)
+
+| Tabla | Contenido |
+|---|---|
+| `emergencia_amenazas` | Análisis por metodología de colores. `v_personas`, `v_recursos`, `v_sistemas`, `rombos_rojos`, `rombos_amarillos` y `nivel_riesgo` son **columnas generadas**. `evaluada` distingue lo sembrado de lo calificado |
+| `simulacros` | Fecha, tipo, alcance, punto de encuentro, participantes, evacuados y **tiempo de evacuación en segundos**; aciertos y oportunidades de mejora. Control documental completo |
+| `simulacro_evaluadores` | Quién firma el acta: nombre, cargo, correo, rol, `token_firma`, `firma_url` |
+
 ### Núcleo
 
 | Tabla | Contenido |
@@ -397,6 +405,8 @@ códigos indistinguibles en la misma acta.
 | Informe de investigación | `InformeInvestigacion` | `/api/pdf-investigacion/[id]` |
 | Organigrama del comité | `Organigrama` | `/api/pdf-organigrama/[id]` |
 | Autoevaluación | `InformeAutoevaluacion` | `/api/pdf-autoevaluacion/[id]` |
+| Análisis de amenazas | `AnalisisAmenazas` | `/api/pdf-amenazas/[empresaId]` |
+| Acta de simulacro | `ActaSimulacro` | `/api/pdf-simulacro/[id]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se

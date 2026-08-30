@@ -64,6 +64,16 @@ const MODULOS: Modulo[] = [
     ],
   },
   {
+    // Emergencias: el analisis dice que puede pasar y el simulacro
+    // prueba que se sabe responder. Los dos sustentan el estandar 5.1.1.
+    id: 'emergencias',
+    titulo: 'Emergencias',
+    enlaces: [
+      { href: '/panel/emergencias', texto: 'Análisis de amenazas' },
+      { href: '/panel/emergencias/simulacros', texto: 'Simulacros' },
+    ],
+  },
+  {
     id: 'inspecciones',
     titulo: 'Inspecciones',
     enlaces: [

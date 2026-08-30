@@ -359,7 +359,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | # | Módulo | Norma | Nota |
 |---|---|---|---|
 | 3.1 | **COPASST / Vigía y Comité de Convivencia** | Res. 2013/1986 · Res. 652/2012 · Res. 1356/2012 · Est. 1.1.6, 1.1.8 | Ver 3.1 ampliado abajo. Es el vacío **más barato** de cerrar: un acta con firmas es exactamente lo que la app ya sabe hacer |
-| 3.2 | **Plan de emergencias, brigada y simulacros** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Las inspecciones de extintores, botiquines, camillas y rutas **ya existen**: hay que enlazarlas a este estándar en vez de dejarlas sueltas |
+| 3.2 | **Plan de emergencias, brigada y simulacros** — **entregado** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Ver 3.2 ampliado abajo. Falta enlazar las inspecciones de extintores, botiquines, camillas y rutas, que **ya existen**, a este estándar |
 | 3.3 | **Permisos de trabajo de alto riesgo** | Res. 4272/2021 · Res. 491/2020 | Alturas, espacios confinados, trabajo en caliente, bloqueo de energías. Es el caso de uso **más móvil** del SG-SST: se diligencia de pie y se firma. La pantalla de ejecución de inspecciones ya es ese patrón |
 | 3.4 | **Matriz legal** | Est. 2.7.1 | Precargada por sector: además de cumplir, es argumento comercial — llega hecha |
 | 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
@@ -468,6 +468,53 @@ condiciones, no solo una.
 ---
 
 ---
+
+## 3.2 ampliado · Emergencias — **entregado** (30-ago-2026)
+
+### Análisis de amenazas y vulnerabilidad
+<sub>Metodología de colores, guía FOPAE (Res. 004/09) · estándar 5.1.1</sub>
+
+Se verificó la escala contra la fuente antes de implementarla, porque circulan las dos
+versiones y la diferencia no es cosmética: **el número mide la vulnerabilidad, no el
+control**.
+
+| Respuesta | Puntúa |
+|---|---|
+| Sí, existe / se cumple | **0.0** |
+| Parcialmente | 0.5 |
+| No existe / no se cumple | **1.0** |
+
+Suma de los tres aspectos → 0.0–1.0 **baja** (verde) · 1.1–2.0 **media** (amarillo) ·
+2.1–3.0 **alta** (rojo). Con la escala invertida el análisis pintaría de verde justo lo
+que está mal, así que la pantalla muestra el valor de cada opción y el PDF explica cómo se
+lee: el error, si ocurre, tiene que ser visible.
+
+**Diamante de riesgo:** amenaza + personas + recursos + sistemas. 3 o 4 rombos en alto →
+riesgo **alto**; 1 o 2 en alto, o 3 en medio → **medio**; el resto **bajo**.
+
+- [x] `emergencia_amenazas` con la valoración en columnas generadas.
+- [x] Catorce amenazas típicas sembradas **sin calificar** (`evaluada = false`).
+- [x] PDF apaisado con la letra A/M/B dentro del color, y envío por correo.
+- [ ] Enlazar cada amenaza con las inspecciones que la controlan (extintores, botiquines,
+      camillas, rutas de evacuación), igual que `peligro_controles` en la fase 2.
+
+### Simulacros
+- [x] `simulacros` + `simulacro_evaluadores`; tiempo de evacuación en segundos y cobertura
+      derivada, que son los números que se comparan entre un simulacro y el siguiente.
+- [x] **Cerrar exige todas las firmas** y al menos un evaluador.
+- [x] **Firma remota** en `/s/[token]`, con envío por correo y enlace siempre copiable.
+- [x] Acta en PDF y envío por correo.
+- [x] Alertas en la bandeja: sin análisis, amenazas sin calificar, sin simulacro en 12
+      meses, y acta esperando firmas.
+- [ ] Generar acciones del plan desde las **oportunidades de mejora**, como ya hace la
+      investigación de accidentes con las causas.
+
+### Lo que sigue sin cubrir del estándar 5.1.1
+El **documento narrativo** del plan de emergencias —procedimientos, roles, planos y rutas
+de evacuación— lo escribe el consultor fuera de la aplicación. Lo que Rúbrica aporta es lo
+que puede sostener con datos: el análisis que lo justifica y el acta que prueba que se
+practicó. Convertir la aplicación en un editor de texto para el plan completo no pasaría
+la regla de admisión.
 
 ## Deuda que abre la regla de firma remota (§5.21 de CLAUDE.md)
 

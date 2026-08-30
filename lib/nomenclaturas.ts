@@ -19,6 +19,8 @@ export type TipoDocumento =
   | 'plan_anual'
   | 'autoevaluacion'
   | 'comite'
+  | 'emergencias'
+  | 'simulacro'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -69,6 +71,16 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'comite',
     etiqueta: 'Actas de comités',
     detalle: 'COPASST, Vigía en SST y Comité de Convivencia Laboral.',
+  },
+  {
+    tipo: 'emergencias',
+    etiqueta: 'Análisis de amenazas',
+    detalle: 'Anexo técnico del plan de emergencias, por metodología de colores.',
+  },
+  {
+    tipo: 'simulacro',
+    etiqueta: 'Acta de simulacro',
+    detalle: 'Resultados del simulacro, con las firmas del equipo evaluador.',
   },
   {
     tipo: 'reporte',
