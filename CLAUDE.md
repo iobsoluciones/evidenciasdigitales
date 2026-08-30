@@ -1,6 +1,10 @@
 # Rúbrica — Contexto del proyecto
 
 > Documento de referencia para Claude Code. Describe el estado del proyecto, sus decisiones de arquitectura y sus convenciones. **Léelo completo antes de tocar código.**
+>
+> Documentación de apoyo en `docs/`:
+> - **[docs/DOCUMENTACION-TECNICA.md](docs/DOCUMENTACION-TECNICA.md)** — inventario completo de lo implementado (33 tablas, ~110 funciones, 15 triggers, 52 páginas), modelo de seguridad, estado de verificación y deuda técnica.
+> - **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)** — ruta de trabajo por fases derivada de la evaluación contra la Res. 0312. **Consúltalo antes de proponer funcionalidad nueva.**
 
 ---
 
@@ -74,8 +78,11 @@ app/
     kardex/                   # exporta kardex Excel
     excel/                    # inspecciones, matriz-capacitaciones, matriz-dotacion
 
+docs/                         # DOCUMENTACION-TECNICA.md · PLAN-DE-TRABAJO.md
+
 lib/
   supabase/servidor.ts        # createServerClient (cookies). Uno nuevo por petición.
+  supabase/admin.ts           # clave de servicio: SALTA RLS. Solo servidor (§5.20)
   supabase/cliente.ts         # createBrowserClient
   sesion.ts                   # obtenerPerfil()
   empresa-activa.ts           # empresaActiva(), listarEmpresas(), COOKIE_EMPRESA, tipo Empresa
@@ -292,6 +299,30 @@ Funciones clave por dominio:
 
 ---
 
+## 8b. Alcance frente al SG-SST (evaluación del 29-ago-2026)
+
+**Rúbrica es hoy un sistema de evidencias, no un sistema de gestión.** Cubre el
+*Hacer* del ciclo PHVA y deja casi vacíos el *Planear* y el *Verificar*. Aporta
+evidencia directa para **~12 de los 60 estándares mínimos** de la Res. 0312.
+
+Cubre bien: capacitación (est. 3.2.1, 1.2.x), entrega de EPP (4.2.6), inspecciones
+(4.1.3), acciones correctivas (7.1.x) y control documental (art. 2.2.4.6.12/13).
+
+**Vacíos críticos** — ver el plan para el detalle y el orden:
+1. **Investigación de accidentes** (Res. 1401/2007; 15 días) — hoy el consultor
+   sale de la app justo cuando el SG-SST se pone a prueba.
+2. **Matriz de peligros GTC 45** (est. 4.1.2) — sin ella los módulos quedan
+   huérfanos: no se puede justificar *por qué* ese EPP y no otro.
+3. **Exámenes médicos** (Res. 2346/2007) — y hoy se puede retirar a un empleado
+   **sin exigir el examen de egreso**, que es un hallazgo esperando.
+4. **Indicadores del art. 30** — los actuales son propios, no los que exige la norma.
+
+**Regla de admisión para funcionalidad nueva:** cada módulo debe terminar en un
+**documento firmado** o en un **dato que alimente un indicador obligatorio**. Si no
+hace ninguna de las dos, no entra.
+
+---
+
 ## 9. Pendientes por hacer
 
 ### Inmediato — verificar en Vercel
@@ -301,12 +332,25 @@ Funciones clave por dominio:
 - Verificar que las **variables de entorno** estén en Vercel (scope Production) y **redeployar** tras cambiarlas.
 - **Probar de extremo a extremo las tres descargas de `/api/excel/*`**: se validó la forma de los datos contra la base y compilan, pero no se ejecutaron con sesión real.
 
+### Ruta de trabajo
+El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resumen:
+- **Fase 0** — decisiones de Iván, limpieza (tabla `perfiles` huérfana, funciones duplicadas) y **reorganización del menú por PHVA antes de agregar módulos**.
+- **Fase 1** — horas-hombre → investigación de accidentes → exámenes médicos → indicadores del art. 30. *Es la fase en curso.*
+- **Fase 2** — matriz de peligros, autoevaluación con puntaje, plan anual, bandeja de pendientes.
+- **Fase 3** — COPASST, emergencias, permisos de alto riesgo, matriz legal, contratistas.
+
 ### Notificaciones (el eslabón que falta)
 Los recordatorios de inspecciones programadas y el aviso a los responsables de acciones correctivas siguen sin enviarse. Requiere decidir si se agrega **`correo` a `empleados`**.
 
 ### Usuarios B2B de solo consulta (analizado, sin implementar)
 Enfoque recomendado (**C**): `usuarios` gana `rol='cliente'` + `empresa_id`, y `mi_org_id()` añade `and rol <> 'cliente'` para que **las 117 políticas fallen cerradas** ante un cliente; el acceso se da solo por funciones `SECURITY DEFINER` acotadas. En `planes`: `max_clientes_por_empresa` (0 básico / 1 pro / ilimitado enterprise) y `clientes_descargan` (solo enterprise). **Obstáculo:** falta `SUPABASE_SERVICE_ROLE_KEY` en Vercel, o hay que invitar por correo con Resend.
 **Pendiente de confirmar con Iván:** si se acepta el enfoque C (tocar `mi_org_id()`) y qué ve exactamente un cliente — el mínimo defendible sería sus capacitaciones con asistentes, sus inspecciones con veredicto y su plan de acción.
+
+### Deuda técnica (detalle en docs/DOCUMENTACION-TECNICA.md §11)
+- Tabla **`perfiles`** sin una sola referencia en el código: resto de un renombrado.
+- **Funciones duplicadas**: `calendario`/`datos_calendario`, `convocar_empleados`/`guardar_convocatoria`, `entrega_publica`/`entrega_por_token`, entre otras.
+- `detalle_entrega` y `firmar_entrega` tienen `grant` a `anon` sin ser `SECURITY DEFINER`: el grant no sirve y es superficie de más.
+- Navegación duplicada: dos «Indicadores», dos «Matriz», dos bancos de plantillas.
 
 ### Proyecto
 - **Renombrar la carpeta** `asistencia` → `rubrica` (`Rename-Item asistencia rubrica`; no afecta código). Actualizar nombre de marca en la UI.
