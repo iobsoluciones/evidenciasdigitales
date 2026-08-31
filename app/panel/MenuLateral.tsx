@@ -61,6 +61,7 @@ const MODULOS: Modulo[] = [
     enlaces: [
       { href: '/panel/eventos', texto: 'Accidentes e incidentes' },
       { href: '/panel/examenes', texto: 'Exámenes médicos' },
+      { href: '/panel/ausentismo', texto: 'Ausentismo' },
       { href: '/panel/horas', texto: 'Horas-hombre' },
     ],
   },

@@ -311,6 +311,23 @@ tiene **dos capas**:
 > cerrada: la matriz depende del sector, la actividad y el nivel de riesgo de cada cliente,
 > y ninguna lista genérica puede saber eso.
 
+### Ausentismo (fase 3.6)
+Dec. 1072 art. 2.2.4.6.22 · Res. 0312 art. 30.
+
+Cierra el sexto indicador legal, que hasta ahora **mentía por defecto**: se calculaba con
+los días de incapacidad de los accidentes, que son una fracción. El grueso del ausentismo
+es enfermedad general.
+
+- `ausencias` guarda **origen y días, nunca el diagnóstico** — misma regla que
+  `examenes_medicos` (Res. 2346 de 2007). No hay columna de diagnóstico y no debe agregarse.
+- `causa_medica` es **columna generada**: enfermedad general, laboral, accidente de trabajo
+  y accidente común cuentan; las licencias de ley y los permisos no. Meterlas inflaría el
+  indicador y lo volvería incomparable con el del sector.
+- `guardar_ausencia` **rechaza el solapamiento** de fechas de una misma persona: casi
+  siempre es la misma incapacidad cargada dos veces, y duplicaría el indicador.
+- Una incapacidad que **cruza el 31 de diciembre** aporta todos sus días al listado pero
+  solo los del año al indicador (`least`/`greatest` sobre el rango).
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -478,6 +495,7 @@ inspeccion_programaciones   # fase 8: frecuencia + próxima fecha
 eventos · evento_investigacion · evento_equipo · evento_testigos
 horas_hombre                # denominador de los indicadores del art. 30
 examenes_medicos            # aptitud y restricciones, NUNCA diagnóstico
+ausencias                   # origen y días, NUNCA diagnóstico; causa_medica generada
 
 # Fase 2 — planeación y verificación
 peligros (np/nr/nivel generadas) · peligro_controles
@@ -506,7 +524,8 @@ Funciones clave por dominio:
 - **Fase 1:** `crear_evento`, `guardar_investigacion`, `cerrar_investigacion`,
   `generar_acciones_evento`, `listar_eventos`, `detalle_evento`,
   `generar_token_firma_evento`, `guardar_horas_hombre`, `horas_hombre_periodo`,
-  `guardar_examen`, `alertas_examenes`, `retirar_empleado`, `indicadores_legales`.
+  `guardar_examen`, `alertas_examenes`, `retirar_empleado`, `indicadores_legales`,
+  `guardar_ausencia`, `listar_ausencias`, `eliminar_ausencia`.
 - **Fase 2:** `guardar_peligro`, `matriz_peligros`, `guardar_plan_anual`,
   `aprobar_plan_anual`, `pendientes`, `semaforo_cumplimiento`, `crear_autoevaluacion`,
   `responder_estandar`, `detalle_autoevaluacion`, `generar_plan_mejoramiento`,

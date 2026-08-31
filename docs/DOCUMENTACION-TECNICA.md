@@ -188,6 +188,7 @@ específicas para `anon`.
 | `evento_equipo` | Quién investiga, con correo, token de firma remota y firma |
 | `evento_testigos` | Testigos y su versión |
 | `examenes_medicos` | Concepto de aptitud y restricciones. **Nunca el diagnóstico** |
+| `ausencias` | Origen y días de cada ausencia. **Nunca el diagnóstico.** `dias` y `causa_medica` son columnas generadas; `evento_id` la enlaza con el accidente ya investigado |
 
 ### Planeación y verificación (Fase 2)
 
