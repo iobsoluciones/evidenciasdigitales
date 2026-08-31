@@ -364,7 +364,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.4 | **Matriz legal** — **entregado** | Est. 2.7.1 | Ver 3.4 ampliado abajo. Llega hecha **y** es editable: las dos cosas, no una |
 | 3.5 | **Contratistas** — **entregado** | Est. 2.6.1 | 12 soportes con **vigencia propia**: lo que caduca vuelve a aparecer como pendiente. Aprobar exige tener los de norma. Falta enlazar el permiso de alto riesgo con el contratista registrado |
 | 3.6 | **Ausentismo** — **entregado** | Art. 30 | Cierra el sexto indicador, que se venía calculando solo con las incapacidades por accidente: una fracción del total |
-| 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio. **Bloqueado además por Resend**: sigue con el remitente de prueba, que solo entrega al dueño de la cuenta |
+| 3.7 | **Notificaciones por correo** — **entregado lo que se puede** | — | Resumen diario de pendientes al consultor, por cron. Avisar a **otras personas** sigue bloqueado por Resend y por la decisión sobre `empleados.correo` |
 | 3.8 | **Rendición de cuentas** — **entregado** | Est. 2.8.1 | Acta anual donde **cada responsable escribe lo suyo** desde su enlace. Cerrar exige informe Y firma de todos |
 
 ---
@@ -606,6 +606,23 @@ el **método, no el contenido**. No son incompatibles: se entregan las dos capas
 > **El catálogo base es un punto de partida, no una asesoría legal.** Debe revisarlo un
 > profesional contra el sector, la actividad y el nivel de riesgo de cada cliente. La
 > pantalla y el plan lo dicen con esas palabras a propósito.
+
+## Notificaciones — lo entregado y lo que sigue bloqueado
+
+**Entregado (fase 3.7):** `/api/cron/recordatorios` manda un resumen de los pendientes
+críticos y altos de toda la cartera, al correo del consultor, los días hábiles a las 7:00
+de Bogotá. **No manda nada cuando no hay pendientes:** un recordatorio que llega todos los
+días diga lo que diga se deja de leer en una semana, y entonces falla justo el día que
+trae algo urgente. Se autentica con `CRON_SECRET`; sin esa variable se niega a correr.
+
+**Sigue bloqueado, y no por código:**
+
+1. **Resend en modo de pruebas.** Hasta verificar un dominio propio, ningún correo llega a
+   nadie distinto del dueño de la cuenta. Afecta a *todos* los módulos, no solo a los
+   recordatorios: los enlaces de firma tampoco llegan a sus destinatarios.
+2. **`empleados` no tiene columna `correo`.** Sin ella no se puede avisar al responsable
+   de una acción correctiva ni al trabajador cuyo examen vence. Está planteada como
+   decisión desde la Fase 0 y no se tomó por Iván.
 
 ## Deuda que abre la regla de firma remota (§5.21 de CLAUDE.md)
 
