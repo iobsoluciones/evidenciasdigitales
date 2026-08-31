@@ -231,6 +231,8 @@ específicas para `anon`.
 | Tabla | Contenido |
 |---|---|
 | `norma_catalogo` | Catálogo reutilizable de normas. **`org_id NULL` = del sistema**, de solo lectura por RLS; el resto es del consultor. 29 normas base precargadas |
+| `rendiciones` | Acta anual, una por empresa y año (restricción única). Marco del periodo y control documental |
+| `rendicion_responsables` | Quién rinde cuentas: responsabilidades asignadas por el consultor e **informe escrito por la propia persona**, con su `token_firma` |
 | `matriz_legal` | La matriz de cada empresa: **copia** de la norma más `aplica`, `cumplimiento`, **`evidencia`**, responsable y fecha de verificación. `norma_id` queda como enlace blando al catálogo |
 
 ### Núcleo
@@ -425,6 +427,7 @@ códigos indistinguibles en la misma acta.
 | Acta de simulacro | `ActaSimulacro` | `/api/pdf-simulacro/[id]` |
 | Permiso de alto riesgo | `PermisoTrabajo` | `/api/pdf-permiso/[id]` |
 | Matriz legal | `MatrizLegal` | `/api/pdf-matriz-legal/[empresaId]` |
+| Rendición de cuentas | `ActaRendicion` | `/api/pdf-rendicion/[id]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se

@@ -23,6 +23,7 @@ export type TipoDocumento =
   | 'simulacro'
   | 'permiso'
   | 'matriz_legal'
+  | 'rendicion'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -93,6 +94,11 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'matriz_legal',
     etiqueta: 'Matriz legal',
     detalle: 'Requisitos legales aplicables y su estado de cumplimiento.',
+  },
+  {
+    tipo: 'rendicion',
+    etiqueta: 'Rendición de cuentas',
+    detalle: 'Acta anual en que cada responsable rinde cuentas por escrito.',
   },
   {
     tipo: 'reporte',

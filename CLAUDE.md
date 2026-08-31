@@ -328,6 +328,22 @@ es enfermedad general.
 - Una incapacidad que **cruza el 31 de diciembre** aporta todos sus días al listado pero
   solo los del año al indicador (`least`/`greatest` sobre el rango).
 
+### Rendición de cuentas (fase 3.8)
+Estándar 2.8.1 · Dec. 1072 art. 2.2.4.6.8 num. 3.
+
+La norma pide que quienes tienen responsabilidades en el SG-SST rindan cuentas
+**anualmente y por escrito**. Las dos cosas importan, y de ahí sale todo el diseño:
+
+- El consultor arma el marco (alcance, logros, dificultades, compromisos) y asigna a cada
+  responsable **lo que le correspondía**. Lo que no escribe es el informe de cada uno.
+- Cada responsable **escribe su propio informe** desde `/c/[token]` y firma en la misma
+  pantalla. Es la única pantalla pública donde la persona escribe algo, no solo firma.
+- `cerrar_rendicion` exige que **todos hayan escrito Y firmado**: un acta donde los
+  informes los redactó una sola persona no es una rendición de cuentas, es una lista de
+  asistencia con párrafos.
+- Una por año (restricción única sobre `empresa_id, anio`). El PDF se organiza **por
+  persona**, no por tema, porque eso es lo que la norma pide demostrar.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -510,6 +526,7 @@ simulacros · simulacro_evaluadores   # acta firmada, con token de firma remota
 permisos_trabajo · permiso_requisitos · permiso_participantes   # alto riesgo
 norma_catalogo              # org_id NULL = del sistema, solo lectura
 matriz_legal                # copia por empresa, con evidencia de cumplimiento
+rendiciones · rendicion_responsables   # acta anual; cada quien escribe lo suyo
 ```
 
 `capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
@@ -542,7 +559,9 @@ Funciones clave por dominio:
   `cancelar_permiso`, `listar_permisos`, `detalle_permiso`,
   `generar_token_firma_permiso`, `listar_normas_catalogo`,
   `guardar_norma_catalogo`, `importar_normas`, `sembrar_matriz_legal`,
-  `agregar_norma_matriz`, `guardar_item_matriz`, `listar_matriz_legal`.
+  `agregar_norma_matriz`, `guardar_item_matriz`, `listar_matriz_legal`,
+  `crear_rendicion`, `guardar_responsable_rendicion`, `cerrar_rendicion`,
+  `listar_rendiciones`, `detalle_rendicion`, `generar_token_rendicion`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
@@ -602,6 +621,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | Permiso de alto riesgo | sí | sí (`/p/[token]`) | sí | sí |
 | Análisis de amenazas | no lleva firma capturada | — | sí | sí |
 | Matriz legal | no lleva firma capturada | — | sí | sí |
+| Rendición de cuentas | sí | sí (`/c/[token]`) | sí | sí |
 | Autoevaluación | no lleva firma capturada | — | sí | sí |
 
 Lo marcado **falta** es trabajo pendiente que abre esta regla, en ese orden.

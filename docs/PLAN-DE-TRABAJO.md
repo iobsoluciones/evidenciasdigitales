@@ -365,7 +365,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
 | 3.6 | **Ausentismo** — **entregado** | Art. 30 | Cierra el sexto indicador, que se venía calculando solo con las incapacidades por accidente: una fracción del total |
 | 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio. **Bloqueado además por Resend**: sigue con el remitente de prueba, que solo entrega al dueño de la cuenta |
-| 3.8 | **Rendición de cuentas** | Est. 2.8.1 | Acta anual firmada |
+| 3.8 | **Rendición de cuentas** — **entregado** | Est. 2.8.1 | Acta anual donde **cada responsable escribe lo suyo** desde su enlace. Cerrar exige informe Y firma de todos |
 
 ---
 

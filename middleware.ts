@@ -27,7 +27,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  * Rutas que NO requieren sesion iniciada.
  * '/' es la pagina publica de producto y '/registro' el autoservicio.
  */
-const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i', '/s', '/p'];
+const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i', '/s', '/p', '/c'];
 
 /** Margen antes de que Vercel corte la invocacion del middleware. */
 const LIMITE_MS = 5000;
