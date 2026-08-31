@@ -362,7 +362,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.2 | **Plan de emergencias, brigada y simulacros** — **entregado** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Ver 3.2 ampliado abajo. Falta enlazar las inspecciones de extintores, botiquines, camillas y rutas, que **ya existen**, a este estándar |
 | 3.3 | **Permisos de trabajo de alto riesgo** — **entregado** | Res. 4272/2021 · Res. 491/2020 | Ver 3.3 ampliado abajo. Seis tipos de tarea, 44 requisitos, y el cruce con exámenes médicos |
 | 3.4 | **Matriz legal** — **entregado** | Est. 2.7.1 | Ver 3.4 ampliado abajo. Llega hecha **y** es editable: las dos cosas, no una |
-| 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
+| 3.5 | **Contratistas** — **entregado** | Est. 2.6.1 | 12 soportes con **vigencia propia**: lo que caduca vuelve a aparecer como pendiente. Aprobar exige tener los de norma. Falta enlazar el permiso de alto riesgo con el contratista registrado |
 | 3.6 | **Ausentismo** — **entregado** | Art. 30 | Cierra el sexto indicador, que se venía calculando solo con las incapacidades por accidente: una fracción del total |
 | 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio. **Bloqueado además por Resend**: sigue con el remitente de prueba, que solo entrega al dueño de la cuenta |
 | 3.8 | **Rendición de cuentas** — **entregado** | Est. 2.8.1 | Acta anual donde **cada responsable escribe lo suyo** desde su enlace. Cerrar exige informe Y firma de todos |

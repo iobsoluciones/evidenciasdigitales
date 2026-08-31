@@ -83,6 +83,7 @@ const MODULOS: Modulo[] = [
     titulo: 'Alto riesgo',
     enlaces: [
       { href: '/panel/permisos', texto: 'Permisos de trabajo' },
+      { href: '/panel/contratistas', texto: 'Contratistas' },
     ],
   },
   {

@@ -231,6 +231,9 @@ específicas para `anon`.
 | Tabla | Contenido |
 |---|---|
 | `norma_catalogo` | Catálogo reutilizable de normas. **`org_id NULL` = del sistema**, de solo lectura por RLS; el resto es del consultor. 29 normas base precargadas |
+| `contratistas` | Empresa contratista con su ARL, clase de riesgo, vigencia del contrato y el **concepto de la evaluación** documental |
+| `contratista_requisitos` | Los 12 soportes exigidos, copiados al crear. Cada uno con su **`fecha_vence`**: un documento sin vigencia parece válido para siempre |
+| `contratista_personal` | Quién entra a planta, con aptitud médica e inducción |
 | `rendiciones` | Acta anual, una por empresa y año (restricción única). Marco del periodo y control documental |
 | `rendicion_responsables` | Quién rinde cuentas: responsabilidades asignadas por el consultor e **informe escrito por la propia persona**, con su `token_firma` |
 | `matriz_legal` | La matriz de cada empresa: **copia** de la norma más `aplica`, `cumplimiento`, **`evidencia`**, responsable y fecha de verificación. `norma_id` queda como enlace blando al catálogo |

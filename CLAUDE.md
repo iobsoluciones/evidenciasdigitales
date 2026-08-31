@@ -344,6 +344,24 @@ La norma pide que quienes tienen responsabilidades en el SG-SST rindan cuentas
 - Una por año (restricción única sobre `empresa_id, anio`). El PDF se organiza **por
   persona**, no por tema, porque eso es lo que la norma pide demostrar.
 
+### Contratistas (fase 3.5)
+Estándar 2.6.1 · Dec. 1072 art. 2.2.4.6.28.
+
+En muchas empresas medianas los contratistas son la mitad de la gente en planta, y hasta
+ahora la aplicación no sabía que existían: `empleados` eran solo los de nómina.
+
+- Lo que aporta no es la ficha sino que **los soportes vencen**. Una planilla de aportes de
+  hace cuatro meses no prueba nada, y la afiliación a la ARL verificada en enero puede
+  estar cancelada hoy. Cada requisito lleva su `fecha_vence` y el vencimiento entra a la
+  bandeja de pendientes.
+- **12 requisitos** copiados al crear (plantilla → instancia, §5.7), 10 marcados NORMA.
+- `guardar_contratista` **impide aprobar con un requisito de norma pendiente**: si la
+  evaluación se puede firmar con documentos faltantes, no significa nada. Queda la salida
+  honesta de *aprobado con condiciones*, que exige escribir cuáles.
+- `contratista_personal` registra quién entra a planta, con su aptitud médica y su
+  inducción. Personal con **examen vencido** genera alerta crítica: está adentro sin
+  aptitud vigente.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -527,6 +545,7 @@ permisos_trabajo · permiso_requisitos · permiso_participantes   # alto riesgo
 norma_catalogo              # org_id NULL = del sistema, solo lectura
 matriz_legal                # copia por empresa, con evidencia de cumplimiento
 rendiciones · rendicion_responsables   # acta anual; cada quien escribe lo suyo
+contratistas · contratista_requisitos · contratista_personal   # soportes con vigencia
 ```
 
 `capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
@@ -561,7 +580,10 @@ Funciones clave por dominio:
   `guardar_norma_catalogo`, `importar_normas`, `sembrar_matriz_legal`,
   `agregar_norma_matriz`, `guardar_item_matriz`, `listar_matriz_legal`,
   `crear_rendicion`, `guardar_responsable_rendicion`, `cerrar_rendicion`,
-  `listar_rendiciones`, `detalle_rendicion`, `generar_token_rendicion`.
+  `listar_rendiciones`, `detalle_rendicion`, `generar_token_rendicion`,
+  `crear_contratista`, `guardar_contratista`, `requisitos_contratista`,
+  `responder_requisito_contratista`, `guardar_personal_contratista`,
+  `listar_contratistas`, `detalle_contratista`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
