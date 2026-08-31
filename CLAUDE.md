@@ -38,7 +38,7 @@ Plataforma **SaaS multiempresa de HSEQ / SST** (Seguridad y Salud en el Trabajo)
 
 ### Variables de entorno (declarar en Vercel, no viven en el repo)
 
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY`, `RESEND_FROM`, **`SUPABASE_SERVICE_ROLE_KEY`** (secreta, solo servidor — la usa el registro directo).
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_APP_URL`, `RESEND_API_KEY`, `RESEND_FROM`, **`SUPABASE_SERVICE_ROLE_KEY`** (secreta, solo servidor — la usan el registro directo y el cron), **`CRON_SECRET`** (secreta — sin ella el cron de recordatorios se niega a correr).
 
 > Las `NEXT_PUBLIC_*` se incrustan **en el build**: si se agregan o cambian en Vercel, hay que **redeployar**.
 
@@ -361,6 +361,27 @@ ahora la aplicación no sabía que existían: `empleados` eran solo los de nómi
 - `contratista_personal` registra quién entra a planta, con su aptitud médica y su
   inducción. Personal con **examen vencido** genera alerta crítica: está adentro sin
   aptitud vigente.
+
+### Recordatorios por correo (fase 3.7)
+
+`/api/cron/recordatorios` lo dispara el **cron de Vercel** (`vercel.json`, días hábiles a
+las 7:00 de Bogotá), no una persona: no hay sesión, usa la clave de servicio y se
+autentica con **`CRON_SECRET`**.
+
+- Manda **un solo correo por consultor** con lo crítico y lo alto de todas sus empresas.
+- **No manda nada cuando no hay pendientes.** Un recordatorio que llega todos los días
+  diga lo que diga se deja de leer en una semana, y entonces falla justo el día que trae
+  algo urgente.
+- `resumen_recordatorios()` es `SECURITY DEFINER` y está **revocada de `authenticated` y
+  `anon`**: devuelve la cartera de todas las organizaciones a la vez, así que solo la
+  puede llamar el cron. Un consultor que pudiera ejecutarla vería los clientes de otro.
+- `/api/cron` va en `RUTAS_PUBLICAS` del middleware —no lo abre una persona— pero **no
+  queda desprotegido**: la autenticación es `CRON_SECRET` dentro de la propia ruta, que es
+  la capa que le corresponde.
+
+> **Sigue bloqueado por Resend.** Con el remitente de pruebas esto solo llega al correo
+> dueño de la cuenta. Avisar a jefes de área o a responsables de acciones exige verificar
+> un dominio propio, y además decidir si `empleados` gana una columna `correo`.
 
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:

@@ -26,8 +26,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 /**
  * Rutas que NO requieren sesion iniciada.
  * '/' es la pagina publica de producto y '/registro' el autoservicio.
+ *
+ * '/api/cron' no lleva sesion porque no lo abre una persona: lo dispara
+ * el cron de Vercel. No queda desprotegido — se autentica con
+ * CRON_SECRET dentro de la propia ruta, que es la capa que le
+ * corresponde. Sin esta linea el middleware lo redirigia a /login y el
+ * cron nunca corria.
  */
-const RUTAS_PUBLICAS = ['/', '/login', '/registro', '/recuperar', '/r', '/f', '/d', '/i', '/s', '/p', '/c'];
+const RUTAS_PUBLICAS = [
+  '/', '/login', '/registro', '/recuperar',
+  '/r', '/f', '/d', '/i', '/s', '/p', '/c',
+  '/api/cron',
+];
 
 /** Margen antes de que Vercel corte la invocacion del middleware. */
 const LIMITE_MS = 5000;
