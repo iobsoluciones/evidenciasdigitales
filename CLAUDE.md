@@ -283,6 +283,34 @@ Dec. 1072 art. 2.2.4.6.24.
 - El PDF grita la **vigencia** arriba del todo: un permiso vencido pegado en la pared
   parece uno vigente.
 
+### Matriz legal (fase 3.4)
+Estándar 2.7.1 · Dec. 1072 art. 2.2.4.6.8 num. 3.
+
+Es la primera aplicación completa de la regla §5.22 —**método, no contenido**— y por eso
+tiene **dos capas**:
+
+1. **`norma_catalogo` con `org_id NULL`** = catálogo del sistema, de solo lectura por RLS.
+   Llega con **29 normas transversales** del SG-SST colombiano para no arrancar de cero.
+2. Encima, el consultor **crea sus propias normas** (las del sector de su cliente) o
+   **importa un Excel completo**. Cuando el Ministerio publique algo nuevo no espera al
+   programador. `importar_normas` valida todas las filas antes de escribir: entra el
+   archivo entero o no entra nada, con el número de fila en el error.
+
+- La matriz de cada empresa **copia** la identificación de la norma (plantilla → instancia,
+  §5.7) y guarda `norma_id` como enlace blando: corregir el catálogo no cambia sola una
+  matriz ya entregada.
+- **«Cumple» exige escribir la evidencia.** Una matriz que dice que cumple sin decir con
+  qué se demuestra es lo que un auditor desarma en la primera pregunta, y por eso
+  `guardar_item_matriz` la rechaza.
+- Lo que **no aplica se conserva marcado como tal**, no se borra: mostrar que se analizó y
+  se descartó es parte de haber hecho la identificación.
+- PDF apaisado —la columna de evidencia es la que importa y tiene que caber— y envío por
+  correo. Alertas en la bandeja: sin matriz, requisitos incumplidos y normas sin evaluar.
+
+> El catálogo base es un **punto de partida que el profesional revisa**, no una lista
+> cerrada: la matriz depende del sector, la actividad y el nivel de riesgo de cada cliente,
+> y ninguna lista genérica puede saber eso.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -462,6 +490,8 @@ comites · comite_miembros   # copasst | vigia | convivencia | brigada
 emergencia_amenazas         # metodología de colores; nivel_riesgo generado
 simulacros · simulacro_evaluadores   # acta firmada, con token de firma remota
 permisos_trabajo · permiso_requisitos · permiso_participantes   # alto riesgo
+norma_catalogo              # org_id NULL = del sistema, solo lectura
+matriz_legal                # copia por empresa, con evidencia de cumplimiento
 ```
 
 `capacitaciones`, `inspecciones`, `entregas`, `eventos`, `plan_anual`, `autoevaluaciones`
@@ -491,7 +521,9 @@ Funciones clave por dominio:
   `requisitos_permiso`, `responder_requisito_permiso`, `aptitud_participante`,
   `guardar_participante_permiso`, `autorizar_permiso`, `cerrar_permiso`,
   `cancelar_permiso`, `listar_permisos`, `detalle_permiso`,
-  `generar_token_firma_permiso`.
+  `generar_token_firma_permiso`, `listar_normas_catalogo`,
+  `guardar_norma_catalogo`, `importar_normas`, `sembrar_matriz_legal`,
+  `agregar_norma_matriz`, `guardar_item_matriz`, `listar_matriz_legal`.
 - **Público (`SECURITY DEFINER` + `grant … to anon`):** `capacitacion_activa_publica`, `entrega_publica`, `evaluacion_publica`, `verificar_empleado`, `registrar_asistencia_con_evaluacion`.
 
 ---
@@ -550,6 +582,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
 | Permiso de alto riesgo | sí | sí (`/p/[token]`) | sí | sí |
 | Análisis de amenazas | no lleva firma capturada | — | sí | sí |
+| Matriz legal | no lleva firma capturada | — | sí | sí |
 | Autoevaluación | no lleva firma capturada | — | sí | sí |
 
 Lo marcado **falta** es trabajo pendiente que abre esta regla, en ese orden.

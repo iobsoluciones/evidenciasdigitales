@@ -22,6 +22,7 @@ export type TipoDocumento =
   | 'emergencias'
   | 'simulacro'
   | 'permiso'
+  | 'matriz_legal'
   | 'reporte';
 
 export type Nomenclatura = { nomenclatura: string; version: string };
@@ -87,6 +88,11 @@ export const TIPOS_DOCUMENTO: {
     tipo: 'permiso',
     etiqueta: 'Permiso de alto riesgo',
     detalle: 'Alturas, espacios confinados, trabajo en caliente y demás tareas críticas.',
+  },
+  {
+    tipo: 'matriz_legal',
+    etiqueta: 'Matriz legal',
+    detalle: 'Requisitos legales aplicables y su estado de cumplimiento.',
   },
   {
     tipo: 'reporte',

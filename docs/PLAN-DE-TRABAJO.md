@@ -361,7 +361,7 @@ Barata en esfuerzo: casi todo reutiliza el motor de firmas y actas.
 | 3.1 | **COPASST / Vigía y Comité de Convivencia** | Res. 2013/1986 · Res. 652/2012 · Res. 1356/2012 · Est. 1.1.6, 1.1.8 | Ver 3.1 ampliado abajo. Es el vacío **más barato** de cerrar: un acta con firmas es exactamente lo que la app ya sabe hacer |
 | 3.2 | **Plan de emergencias, brigada y simulacros** — **entregado** | Est. 5.1.1, 5.1.2 · Dec. 1072 art. 2.2.4.6.25 | Ver 3.2 ampliado abajo. Falta enlazar las inspecciones de extintores, botiquines, camillas y rutas, que **ya existen**, a este estándar |
 | 3.3 | **Permisos de trabajo de alto riesgo** — **entregado** | Res. 4272/2021 · Res. 491/2020 | Ver 3.3 ampliado abajo. Seis tipos de tarea, 44 requisitos, y el cruce con exámenes médicos |
-| 3.4 | **Matriz legal** | Est. 2.7.1 | Precargada por sector: además de cumplir, es argumento comercial — llega hecha |
+| 3.4 | **Matriz legal** — **entregado** | Est. 2.7.1 | Ver 3.4 ampliado abajo. Llega hecha **y** es editable: las dos cosas, no una |
 | 3.5 | **Contratistas** | Est. 2.6.1 | Hoy `empleados` son de la empresa; no hay forma de registrar personal tercerizado ni exigirle afiliación y EPP. En muchas empresas medianas es la mitad de la gente en planta |
 | 3.6 | **Ausentismo** | Art. 30 | Alimenta el sexto indicador |
 | 3.7 | **Notificaciones por correo** | — | Depende de la decisión 0.1.1 y de tener dominio propio. **Bloqueado además por Resend**: sigue con el remitente de prueba, que solo entrega al dueño de la cuenta |
@@ -569,6 +569,43 @@ incumplimiento legal sería inventarle al cliente una exigencia que no existe (�
 - [ ] Cruzar también la **capacitación** vigente en alturas, no solo el examen médico.
       Exige decidir cómo se registra un certificado externo (el de la ARL o el centro
       de entrenamiento), que hoy no tiene sitio en el modelo.
+
+## 3.4 ampliado · Matriz legal — **entregado** (30-ago-2026)
+
+El plan pedía que **llegara hecha** («argumento comercial») y la regla §5.22 exige entregar
+el **método, no el contenido**. No son incompatibles: se entregan las dos capas.
+
+| Capa | Qué es | Quién la edita |
+|---|---|---|
+| Catálogo del sistema (`org_id NULL`) | 29 normas transversales del SG-SST colombiano | Nadie — solo lectura por RLS |
+| Catálogo propio | Las normas del sector de cada cliente | El consultor: crea, edita o **importa un Excel** |
+| Matriz de la empresa | Copia de las normas aplicables, con evidencia | El consultor, empresa por empresa |
+
+### Las tres reglas que hacen útil la matriz
+1. **«Cumple» exige evidencia escrita.** Sin decir con qué se demuestra, la matriz es una
+   lista de buenos deseos que un auditor desarma en la primera pregunta.
+2. **Lo que no aplica se conserva marcado**, no se borra. Mostrar que se analizó y se
+   descartó es parte de haber hecho la identificación.
+3. **La matriz copia la norma** del catálogo (§5.7). Corregir el catálogo no puede cambiar
+   sola una matriz ya entregada y firmada.
+
+### Lo entregado
+- [x] `norma_catalogo` + `matriz_legal`, con RLS que hace el catálogo del sistema
+      inmutable y deja el propio editable.
+- [x] 29 normas base precargadas, marcadas como transversales las que aplican a cualquier
+      empleador.
+- [x] Crear, importar desde Excel (validación todo-o-nada con número de fila) y plantilla
+      descargable.
+- [x] PDF apaisado y envío por correo.
+- [x] Alertas: sin matriz legal, requisitos incumplidos, normas sin evaluar.
+- [ ] Avisar cuando **la norma del catálogo cambió** después de copiarse a una matriz. El
+      enlace blando `norma_id` ya está puesto para eso.
+- [ ] Generar acciones del plan desde los **requisitos incumplidos**, como ya hacen la
+      autoevaluación y la investigación de accidentes.
+
+> **El catálogo base es un punto de partida, no una asesoría legal.** Debe revisarlo un
+> profesional contra el sector, la actividad y el nivel de riesgo de cada cliente. La
+> pantalla y el plan lo dicen con esas palabras a propósito.
 
 ## Deuda que abre la regla de firma remota (§5.21 de CLAUDE.md)
 

@@ -49,6 +49,7 @@ const MODULOS: Modulo[] = [
       { href: '/panel/plan-anual', texto: 'Plan anual de trabajo' },
       { href: '/panel/autoevaluacion', texto: 'Autoevaluación 0312' },
       { href: '/panel/estandares', texto: 'Conjuntos de estándares' },
+      { href: '/panel/matriz-legal', texto: 'Matriz legal' },
       { href: '/panel/comites', texto: 'Comités' },
     ],
   },

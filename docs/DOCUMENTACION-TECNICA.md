@@ -225,6 +225,13 @@ específicas para `anon`.
 | `permiso_requisitos` | La lista de verificación **copiada** al crear el permiso. `obligatorio` separa lo que exige la norma de lo que es criterio técnico |
 | `permiso_participantes` | Quién autoriza, ejecuta, vigila o coordina; con el resultado del cruce de aptitud **congelado al autorizar** y su `token_firma` |
 
+### Matriz legal (Fase 3.4)
+
+| Tabla | Contenido |
+|---|---|
+| `norma_catalogo` | Catálogo reutilizable de normas. **`org_id NULL` = del sistema**, de solo lectura por RLS; el resto es del consultor. 29 normas base precargadas |
+| `matriz_legal` | La matriz de cada empresa: **copia** de la norma más `aplica`, `cumplimiento`, **`evidencia`**, responsable y fecha de verificación. `norma_id` queda como enlace blando al catálogo |
+
 ### Núcleo
 
 | Tabla | Contenido |
@@ -416,6 +423,7 @@ códigos indistinguibles en la misma acta.
 | Análisis de amenazas | `AnalisisAmenazas` | `/api/pdf-amenazas/[empresaId]` |
 | Acta de simulacro | `ActaSimulacro` | `/api/pdf-simulacro/[id]` |
 | Permiso de alto riesgo | `PermisoTrabajo` | `/api/pdf-permiso/[id]` |
+| Matriz legal | `MatrizLegal` | `/api/pdf-matriz-legal/[empresaId]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se
