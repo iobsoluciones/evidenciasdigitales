@@ -20,6 +20,7 @@ import {
   type DetalleInspeccion, type ResultadoCriterio,
 } from '@/lib/acciones-ejecutar-inspeccion';
 import { generarAccionesInspeccion } from '@/lib/acciones-plan';
+import { obtenerEnlaceFirmaInspeccion } from '@/lib/acciones-ejecutar-inspeccion';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
 
@@ -41,6 +42,7 @@ export default function EjecutarInspeccion({
   const router = useRouter();
   const supabase = crearClienteNavegador();
   const [pendiente, startTransition] = useTransition();
+  const [enlaceFirma, setEnlaceFirma] = useState<string | null>(null);
   const firmaInspRef = useRef<LienzoFirmaRef>(null);
   const firmaAcompRef = useRef<LienzoFirmaRef>(null);
   const fotoRef = useRef<HTMLInputElement>(null);
@@ -521,6 +523,25 @@ export default function EjecutarInspeccion({
                 >
                   Descargar PDF
                 </a>
+                {!insp.firma_acompanante_url && (
+                  <button
+                    onClick={() => {
+                      startTransition(async () => {
+                        const r = await obtenerEnlaceFirmaInspeccion(insp.id);
+                        if (r.enlace) setEnlaceFirma(r.enlace);
+                        setAviso({
+                          tipo: r.ok ? 'ok' : 'error',
+                          texto: r.ok ? 'Enlace listo para el acompañante.' : r.mensaje,
+                        });
+                        router.refresh();
+                      });
+                    }}
+                    disabled={pendiente}
+                    style={s.btnSec}
+                  >
+                    Enlace de firma del acompañante
+                  </button>
+                )}
                 {hallazgos.length > 0 && (
                   <button
                     onClick={() => {
@@ -537,6 +558,17 @@ export default function EjecutarInspeccion({
                   </button>
                 )}
               </div>
+
+              {enlaceFirma && (
+                <div style={s.enlaceCaja}>
+                  <div style={s.enlaceTitulo}>Enlace de firma del acompañante</div>
+                  <code style={s.enlaceUrl}>{enlaceFirma}</code>
+                  <p style={s.nota}>
+                    Mándaselo al jefe del área. Verá los hallazgos antes de firmar,
+                    y el PDF se regenera con su firma.
+                  </p>
+                </div>
+              )}
               {hallazgos.length > 0 && (
                 <p style={{ ...s.nota, marginTop: 10 }}>
                   Convierte cada hallazgo en una acción del plan, con responsable
@@ -565,6 +597,15 @@ function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
 }
 
 const s: Record<string, React.CSSProperties> = {
+  enlaceCaja: {
+    background: '#F7F7F4', border: '1px solid #E4E4DF',
+    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+  },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceUrl: {
+    display: 'block', fontFamily: "'Consolas','Courier New',monospace",
+    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+  },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 14, flexWrap: 'wrap', marginTop: 12, marginBottom: 14,

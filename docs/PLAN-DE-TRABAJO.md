@@ -665,8 +665,9 @@ virtual que obliga a buscar a la gente no ahorra nada frente al papel.
 
 Estado y trabajo que abre, en orden:
 
-1. **Inspecciones** — firma del inspector y del acompañante solo en sitio. Falta el
-   enlace por correo. Es el más usado de los tres.
+1. ~~**Inspecciones**~~ — **hecho (31-ago-2026).** El acompañante firma desde
+   `/v/[token]` sobre la inspección ya cerrada, viendo los hallazgos. No se tocó el
+   cierre: nunca exigió su firma, y cambiarlo habría roto un módulo que funciona.
 2. ~~**Plan anual**~~ — **hecho (31-ago-2026).** PDF apaisado con el cronograma marcado
    con letra (P/E), aprobación remota en `/a/[token]` con el plan completo a la vista, y
    envío por correo.

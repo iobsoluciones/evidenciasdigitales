@@ -679,7 +679,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | Entrega de dotación | sí | sí (`/d/[token]`) | sí | sí |
 | Devolución | sí | — | sí | sí |
 | Investigación de evento | sí | sí (`/i/[token]`) | sí | sí |
-| **Inspección** | sí | **falta** | sí | sí |
+| Inspección | sí | sí (`/v/[token]`, el acompañante) | sí | sí |
 | Plan anual (firma del empleador) | sí | sí (`/a/[token]`) | sí | sí |
 | Acta de conformación de comité | sí | sí (`/m/[token]`) | sí | sí |
 | Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
@@ -699,6 +699,10 @@ para que los correos lleguen a alguien distinto del dueño de la cuenta.
 ### Usuarios B2B de solo consulta (analizado, sin implementar)
 Enfoque recomendado (**C**): `usuarios` gana `rol='cliente'` + `empresa_id`, y `mi_org_id()` añade `and rol <> 'cliente'` para que **las 117 políticas fallen cerradas** ante un cliente; el acceso se da solo por funciones `SECURITY DEFINER` acotadas. En `planes`: `max_clientes_por_empresa` (0 básico / 1 pro / ilimitado enterprise) y `clientes_descargan` (solo enterprise). **Obstáculo:** falta `SUPABASE_SERVICE_ROLE_KEY` en Vercel, o hay que invitar por correo con Resend.
 **Pendiente de confirmar con Iván:** si se acepta el enfoque C (tocar `mi_org_id()`) y qué ve exactamente un cliente — el mínimo defendible sería sus capacitaciones con asistentes, sus inspecciones con veredicto y su plan de acción.
+
+> **La regla §5.21 quedó saldada el 31-ago-2026**: los ocho documentos con firma tienen
+> captura en sitio, enlace por correo, PDF y envío. Lo que sigue faltando no es código
+> sino el dominio verificado en Resend — sin él ningún enlace llega a su destinatario.
 
 ### Deuda técnica (detalle en docs/DOCUMENTACION-TECNICA.md §11)
 Lo de la Fase 0 quedó **saldado el 31-ago-2026**: se eliminaron la tabla `perfiles` y

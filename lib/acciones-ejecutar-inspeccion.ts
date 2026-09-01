@@ -257,3 +257,32 @@ export async function unidadesParaInspeccion(): Promise<Array<{
     };
   });
 }
+
+/**
+ * ENLACE DE FIRMA DEL ACOMPAÑANTE — regla §5.21
+ * ---------------------------------------------------------------
+ * La firma del inspector se captura en sitio: él opera la aplicación.
+ * La del acompañante es otra cosa — el jefe del área recorre la planta
+ * y se va a atender lo suyo, y su firma quedaba «para después».
+ *
+ * Firma sobre la inspección ya cerrada, y el PDF se regenera con ella.
+ * Cerrar nunca exigió su firma, así que esto no toca ese flujo.
+ */
+export async function obtenerEnlaceFirmaInspeccion(
+  inspeccionId: string
+): Promise<{ ok: boolean; mensaje: string; enlace?: string }> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('generar_token_firma_inspeccion', {
+    p_inspeccion: inspeccionId,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const t = data as { ok: boolean; error?: string; token?: string };
+  if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
+
+  const { urlBase } = await import('./url-base');
+  const url = `${await urlBase()}/v/${t.token}`;
+
+  revalidatePath(`/panel/inspecciones/${inspeccionId}`);
+  return { ok: true, mensaje: url, enlace: url };
+}
