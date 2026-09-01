@@ -6,7 +6,7 @@
  * capítulo del problema que se tiene delante.
  */
 import Link from 'next/link';
-import { MANUALES } from './contenido';
+import { MANUALES, FASES } from './contenido';
 import { Flujo, Jerarquia } from './Figuras';
 
 export const metadata = { title: 'Manual de uso' };
@@ -18,7 +18,8 @@ export default function PaginaManual() {
         <h1 style={s.h1}>Manual de uso</h1>
         <p style={s.bajada}>
           Cómo se usa cada módulo y, sobre todo, por qué se comporta como lo
-          hace. Empieza por <strong>Ingreso y primeros pasos</strong> si es tu
+          hace. Están agrupados por las cuatro fases del ciclo PHVA, igual que el
+          menú. Empieza por <strong>Ingreso y primeros pasos</strong> si es tu
           primera vez.
         </p>
       </header>
@@ -51,21 +52,36 @@ export default function PaginaManual() {
         </div>
       </section>
 
-      <h2 style={{ ...s.h2, marginTop: 34 }}>Submanuales</h2>
-      <div style={s.rejilla}>
-        {MANUALES.map((m, i) => (
-          <Link key={m.id} href={`/panel/manual/${m.id}`} style={{ ...s.tarjeta, borderTop: `3px solid ${m.color}` }}>
-            <span style={{ ...s.numero, color: m.color }}>{String(i + 1).padStart(2, '0')}</span>
-            <span style={s.tarjetaTitulo}>{m.titulo}</span>
-            <span style={s.tarjetaResumen}>{m.resumen}</span>
-            <span style={s.cubre}>
-              {m.cubre.map((x) => (
-                <span key={x} style={s.chip}>{x}</span>
-              ))}
-            </span>
-          </Link>
-        ))}
-      </div>
+      {/* Agrupados por fase, con los mismos colores del menú lateral: se
+          busca el submanual donde se busca el módulo. */}
+      {FASES.map((f) => (
+        <section key={f.v} style={{ marginTop: 34 }}>
+          <div style={{ ...s.fase, borderLeft: `4px solid ${f.color}` }}>
+            <h2 style={{ ...s.h2, color: f.color, margin: 0 }}>{f.t}</h2>
+            <p style={s.p}>{f.d}</p>
+          </div>
+          <div style={s.rejilla}>
+            {MANUALES.filter((m) => m.fase === f.v).map((m) => (
+              <Link
+                key={m.id}
+                href={`/panel/manual/${m.id}`}
+                style={{ ...s.tarjeta, borderTop: `3px solid ${m.color}` }}
+              >
+                <span style={{ ...s.numero, color: m.color }}>
+                  {String(MANUALES.indexOf(m) + 1).padStart(2, '0')}
+                </span>
+                <span style={s.tarjetaTitulo}>{m.titulo}</span>
+                <span style={s.tarjetaResumen}>{m.resumen}</span>
+                <span style={s.cubre}>
+                  {m.cubre.map((x) => (
+                    <span key={x} style={s.chip}>{x}</span>
+                  ))}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }
@@ -80,6 +96,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   h2: { fontSize: 16.5, fontWeight: 700, color: '#14263F', margin: '0 0 6px' },
   p: { fontSize: 13.5, color: '#5B6470', margin: 0, lineHeight: 1.65 },
+  fase: { padding: '2px 0 2px 12px', marginBottom: 4 },
   rejilla: {
     display: 'grid', gap: 13, marginTop: 16,
     gridTemplateColumns: 'repeat(auto-fill,minmax(258px,1fr))',

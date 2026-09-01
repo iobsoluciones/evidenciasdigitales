@@ -440,11 +440,18 @@ indistinguibles entre sí. Bajo 1180 px queda solo el icono; bajo 900 px la barr
 desaparece y los accesos vuelven al lateral, que en móvil es el único menú que hay.
 
 ### Manual de uso (`/panel/manual`)
-Nueve submanuales, uno por módulo, con figuras dibujadas (no capturas: una captura envejece con
-el primer cambio de estilo). `Figuras.tsx` da las piezas — `Ventana`, `Flujo`, `Decision`,
-`Jerarquia`, `Regla`, `Ojo` — y `contenido.tsx` el texto. Se entra desde el botón **Manual**,
-junto a *Salir*. Cada submanual responde: para qué sirve → cómo se hace → **por qué se comporta
-así**; ese tercer punto es el que evita las preguntas de soporte.
+**21 submanuales agrupados por fase del PHVA**, con los mismos colores del menú: el submanual se
+busca donde se busca el módulo. Figuras dibujadas (no capturas: una captura envejece con el primer
+cambio de estilo). `Figuras.tsx` da las piezas — `Ventana`, `Flujo`, `Decision`, `Jerarquia`,
+`Regla`, `Ojo` — y `contenido.tsx` el texto. Se entra desde el botón **Manual**, junto a *Salir*.
+Cada submanual responde: para qué sirve → cómo se hace → **por qué se comporta así**; ese tercer
+punto es el que evita las preguntas de soporte.
+
+Dos submanuales no corresponden a un módulo del menú y existen a propósito:
+**Panel principal y pendientes** (la bandeja es la primera pantalla y nadie la lee como módulo) y
+**Firmas, PDF y correo**, que explica la regla del §5.21 una sola vez en lugar de repetirla en
+cada capítulo. Añadir un módulo al manual es añadir una ficha a `MANUALES` —con su `fase`— y su
+función al mapa `CONTENIDOS`; el índice y las páginas se generan de ahí.
 
 ### Storage (Supabase)
 - Bucket **`logos`** — público (logos de empresa, fotos de artículos, fotos de hallazgos).
