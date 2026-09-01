@@ -59,8 +59,8 @@ export default function PaginaLogin() {
   return (
     <main style={s.pantalla}>
       <div style={s.tarjeta}>
-        <h1 style={s.titulo}>Sistema de Asistencia</h1>
-        <p style={s.sub}>Ingresa con tu cuenta corporativa</p>
+        <h1 style={s.titulo}>Rúbrica</h1>
+        <p style={s.sub}>Evidencia firmada para el SG-SST</p>
 
         <form onSubmit={iniciarSesion}>
           <label style={s.label}>Correo</label>

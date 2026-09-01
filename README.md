@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rúbrica
 
-## Getting Started
+**Evidencia firmada para el SG-SST.**
 
-First, run the development server:
+Plataforma SaaS multiempresa de HSEQ / SST: un consultor administra desde aquí el
+Sistema de Gestión de Seguridad y Salud en el Trabajo de todas sus empresas cliente.
+Todo el producto gira alrededor de una idea — **capturar firmas que sirvan como
+prueba** ante una ARL o una auditoría — y de una regla: quien firma no tiene que
+estar delante de ti, así que toda firma se puede pedir por enlace al correo y todo
+documento firmado sale en PDF.
+
+Construida por **Iván Ocón Barrios — IOB Soluciones** (Bogotá, Colombia).
+
+## Cómo se levanta
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Variables de entorno (en `.env.local` para desarrollo y en Vercel para producción):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Para qué |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` | conexión a Supabase |
+| `NEXT_PUBLIC_APP_URL` | dominio con el que se arman los enlaces de firma |
+| `RESEND_API_KEY` · `RESEND_FROM` | envío de correos |
+| `SUPABASE_SERVICE_ROLE_KEY` | **secreta**, solo servidor: registro directo y cron |
+| `CRON_SECRET` | **secreta**: sin ella el cron de recordatorios se niega a correr |
 
-## Learn More
+Las `NEXT_PUBLIC_*` se incrustan **en el build**: si cambian, hay que redeployar.
 
-To learn more about Next.js, take a look at the following resources:
+## Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js 16 (App Router, Server Actions) · TypeScript · Supabase (PostgreSQL + RLS +
+Storage) · `@react-pdf/renderer` · SheetJS · Resend · Vercel.
+Estilos **en línea**, sin Tailwind.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentación
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [`CLAUDE.md`](CLAUDE.md) — contexto del proyecto, decisiones de arquitectura y
+  convenciones. **Es el documento que hay que leer antes de tocar código.**
+- [`docs/DOCUMENTACION-TECNICA.md`](docs/DOCUMENTACION-TECNICA.md) — inventario de
+  lo implementado y deuda técnica.
+- [`docs/PLAN-DE-TRABAJO.md`](docs/PLAN-DE-TRABAJO.md) — ruta de trabajo por fases.
+- Manual de uso para el usuario final: dentro de la aplicación, en `/panel/manual`.
