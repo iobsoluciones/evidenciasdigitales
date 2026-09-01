@@ -47,6 +47,10 @@ export type Miembro = {
   suplente: boolean;
   rol: RolComite;
   frente: Frente | null;
+  firmado: boolean;
+  firma_url: string | null;
+  firmado_en: string | null;
+  tiene_token: boolean;
   activo: boolean;
   motivo_salida: string | null;
 };
@@ -82,6 +86,8 @@ export type Comite = {
   id: string; tipo: TipoComite; codigo: string; estado: string;
   periodo_inicio: string; periodo_fin: string; fecha_conformacion: string | null;
   acta_conformacion: string | null; observaciones: string | null;
+  acta_lugar: string | null; acta_forma_eleccion: string | null;
+  acta_estado: 'borrador' | 'cerrada'; acta_fecha_cierre: string | null;
   nomenclatura: string | null; version_doc: string | null; titulo_doc: string | null;
 };
 
@@ -238,4 +244,110 @@ export async function enviarOrganigrama(
 
   if (!envio.ok) return { ok: false, mensaje: envio.mensaje };
   return { ok: true, mensaje: `Organigrama enviado a ${lista.length} destinatario(s).` };
+}
+
+/* ================================================================
+   Acta de conformación — regla §5.21
+   ================================================================
+   El organigrama demuestra quién está; el acta demuestra que el comité
+   se conformó, cómo se eligió y que sus integrantes lo aceptaron. Las
+   firmas se piden por enlace porque los representantes de los
+   trabajadores están en su puesto, no en la oficina del consultor.
+   ================================================================ */
+
+export async function guardarActa(
+  comiteId: string,
+  datos: { lugar: string; formaEleccion: string; observaciones: string }
+): Promise<Res> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('guardar_acta_comite', {
+    p_comite: comiteId,
+    p_lugar: datos.lugar || null,
+    p_forma: datos.formaEleccion || null,
+    p_observaciones: datos.observaciones || null,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const r = data as { ok: boolean; error?: string };
+  if (!r.ok) return { ok: false, mensaje: r.error ?? 'No se pudo guardar.' };
+
+  revalidatePath('/panel/comites');
+  return { ok: true, mensaje: 'Acta guardada.' };
+}
+
+/** Genera el enlace de firma del integrante y lo devuelve siempre. */
+export async function obtenerEnlaceFirmaComite(miembroId: string): Promise<Res & { enlace?: string }> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('generar_token_firma_comite', {
+    p_miembro: miembroId,
+  });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const t = data as { ok: boolean; error?: string; token?: string };
+  if (!t.ok || !t.token) return { ok: false, mensaje: t.error ?? 'No se pudo generar el enlace.' };
+
+  const { urlBase } = await import('./url-base');
+  const url = `${await urlBase()}/m/${t.token}`;
+
+  revalidatePath('/panel/comites');
+  return { ok: true, mensaje: url, enlace: url };
+}
+
+export async function cerrarActa(comiteId: string): Promise<Res> {
+  const supabase = await crearClienteServidor();
+  const { data, error } = await supabase.rpc('cerrar_acta_comite', { p_comite: comiteId });
+  if (error) return { ok: false, mensaje: error.message };
+
+  const r = data as { ok: boolean; error?: string; conforme?: boolean };
+  if (!r.ok) return { ok: false, mensaje: r.error ?? 'No se pudo cerrar.' };
+
+  revalidatePath('/panel/comites');
+  revalidatePath('/panel');
+  return {
+    ok: true,
+    mensaje: r.conforme
+      ? 'Acta cerrada. El comité cumple la composición exigida.'
+      : 'Acta cerrada. Ojo: queda registrado que el comité no cumple la composición exigida.',
+  };
+}
+
+/** Envía el acta por correo con el PDF adjunto. */
+export async function enviarActaComite(
+  comiteId: string, destinatarios: string, mensaje: string
+): Promise<Res> {
+  const lista = destinatarios.split(/[,;\n]+/).map((c) => c.trim()).filter(Boolean);
+  if (lista.length === 0) return { ok: false, mensaje: 'Indica al menos un correo.' };
+
+  const invalidos = lista.filter((c) => !/^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]{2,}$/.test(c));
+  if (invalidos.length > 0) {
+    return { ok: false, mensaje: `Correo(s) inválido(s): ${invalidos.join(', ')}` };
+  }
+
+  const { generarActaComite } = await import('./pdf/generarActaComite');
+  const pdf = await generarActaComite(comiteId);
+  if (!pdf.ok) return { ok: false, mensaje: pdf.error };
+
+  const { enviarCorreo } = await import('./correo');
+  const extra = mensaje.trim()
+    ? `<p style="background:#F7F7F4;border-left:3px solid #14263F;padding:10px 14px;color:#374151;margin:16px 0;">
+         ${mensaje.replace(/</g, '&lt;').replace(/\n/g, '<br>')}
+       </p>` : '';
+
+  const envio = await enviarCorreo({
+    para: lista.join(','),
+    asunto: `${pdf.titulo} — ${pdf.empresa}`,
+    html: `
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#14263F;max-width:560px;">
+  <h2 style="margin-bottom:4px;">${pdf.titulo}</h2>
+  <p style="color:#5B6470;margin-top:0;">${pdf.empresa}</p>
+  ${extra}
+  <p>Adjunto el acta de conformación con los integrantes, la forma de elección y
+     sus firmas.</p>
+</div>`.trim(),
+    adjuntos: [{ filename: pdf.nombreArchivo, content: pdf.buffer }],
+    registro: { tipo: 'otro' },
+  });
+
+  if (!envio.ok) return { ok: false, mensaje: envio.mensaje };
+  return { ok: true, mensaje: `Acta enviada a ${lista.length} destinatario(s).` };
 }

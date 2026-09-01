@@ -233,6 +233,11 @@ trabajadores activos y `validar_comite(comite)` dice qué falta.
 - **Organigrama en PDF** pensado como cartelera (se imprime y se publica), con envío por
   correo. Al **retirar un empleado** sale de sus comités pero **no se borra**: queda
   inactivo con su motivo, porque el acta de conformación sigue nombrándolo.
+- **Acta de conformación** aparte del organigrama: el organigrama demuestra quién está, el
+  acta demuestra que se conformó, cómo se eligió y que los integrantes lo aceptaron. Cada
+  uno firma desde `/m/[token]`, y `cerrar_acta_comite` exige **todas** las firmas.
+  El acta **imprime la validación aunque salga en contra**: ocultar que faltan dos
+  suplentes no engaña al auditor, solo le quita credibilidad al documento entero.
 
 ### Emergencias — amenazas y simulacros (fase 3.2)
 Estándar 5.1.1 · Dec. 1072 art. 2.2.4.6.25.
@@ -676,7 +681,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | Investigación de evento | sí | sí (`/i/[token]`) | sí | sí |
 | **Inspección** | sí | **falta** | sí | sí |
 | Plan anual (firma del empleador) | sí | sí (`/a/[token]`) | sí | sí |
-| **Acta de conformación de comité** | **falta** | **falta** | organigrama sí | sí |
+| Acta de conformación de comité | sí | sí (`/m/[token]`) | sí | sí |
 | Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
 | Permiso de alto riesgo | sí | sí (`/p/[token]`) | sí | sí |
 | Análisis de amenazas | no lleva firma capturada | — | sí | sí |

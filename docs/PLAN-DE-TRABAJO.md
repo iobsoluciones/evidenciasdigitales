@@ -670,8 +670,10 @@ Estado y trabajo que abre, en orden:
 2. ~~**Plan anual**~~ — **hecho (31-ago-2026).** PDF apaisado con el cronograma marcado
    con letra (P/E), aprobación remota en `/a/[token]` con el plan completo a la vista, y
    envío por correo.
-3. **Acta de conformación de comité** — no captura firmas todavía. Con firmas de todos
-   los integrantes por enlace, cierra el estándar 1.1.6 con evidencia real.
+3. ~~**Acta de conformación de comité**~~ — **hecha (31-ago-2026).** Acta aparte del
+   organigrama, con firma de cada integrante por enlace (`/m/[token]`), cierre que exige
+   todas las firmas, PDF y envío. El acta imprime la validación de la norma aunque salga
+   en contra.
 4. **Autoevaluación** — no lleva firma capturada; el PDF deja el espacio para la del
    empleador. Decidir si se captura o se deja como documento impreso.
 

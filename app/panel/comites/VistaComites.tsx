@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import {
   crearComite, guardarMiembro, quitarMiembro, enviarOrganigrama,
+  guardarActa, obtenerEnlaceFirmaComite, cerrarActa, enviarActaComite,
   type ComiteResumen, type Comite, type Miembro, type Validacion,
   type TipoComite, type Parte, type RolComite, type Frente,
 } from '@/lib/acciones-comites';
@@ -94,6 +95,12 @@ export default function VistaComites({
   const [enviando, setEnviando] = useState(false);
   const [correo, setCorreo] = useState({ para: '', mensaje: '' });
   const [subiendoFoto, setSubiendoFoto] = useState<string | null>(null);
+  const [acta, setActa] = useState<{
+    lugar: string; formaEleccion: string; observaciones: string;
+  } | null>(null);
+  const [enlace, setEnlace] = useState<{ nombre: string; url: string } | null>(null);
+  const [enviandoActa, setEnviandoActa] = useState(false);
+  const [correoActa, setCorreoActa] = useState({ para: '', mensaje: '' });
 
   const c = detalle?.comite;
   const miembros = detalle?.miembros ?? [];
@@ -278,6 +285,119 @@ export default function VistaComites({
               la empresa. La norma habla de trabajadores: si hay contratistas, ajusta la
               composición a criterio propio.
             </p>
+          </section>
+
+          {/* ---------- El acta de conformación ---------- */}
+          <section style={s.bloque}>
+            <div style={s.h3}>
+              Acta de conformación
+              {c.acta_estado === 'cerrada' && (
+                <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A', marginLeft: 10 }}>
+                  Cerrada
+                </span>
+              )}
+            </div>
+            <p style={s.nota}>
+              El organigrama demuestra quién está; el acta demuestra que el comité
+              se conformó, cómo se eligió y que sus integrantes lo aceptaron. Cada
+              uno firma desde su enlace: los representantes de los trabajadores
+              están en su puesto, no en la oficina.
+            </p>
+
+            <div style={s.barraActa}>
+              <a href={`/api/pdf-acta-comite/${c.id}`} target="_blank" rel="noopener"
+                style={{ ...s.botonMini, padding: '8px 14px' }}>
+                Descargar acta
+              </a>
+              <button type="button" style={{ ...s.botonMini, padding: '8px 14px' }}
+                onClick={() => setEnviandoActa(true)}>
+                Enviar acta
+              </button>
+              {c.acta_estado !== 'cerrada' && (
+                <>
+                  <button type="button" style={{ ...s.botonMini, padding: '8px 14px' }}
+                    onClick={() => setActa({
+                      lugar: c.acta_lugar ?? '',
+                      formaEleccion: c.acta_forma_eleccion ?? '',
+                      observaciones: c.observaciones ?? '',
+                    })}>
+                    Editar datos del acta
+                  </button>
+                  <button type="button" disabled={pendiente}
+                    style={{ ...s.botonLleno, background: color, padding: '8px 16px' }}
+                    onClick={() => correr(() => cerrarActa(c.id))}>
+                    Cerrar acta
+                  </button>
+                </>
+              )}
+            </div>
+
+            {acta && (
+              <div style={s.subBloqueActa}>
+                <Campo etiqueta="Lugar de la reunión">
+                  <input value={acta.lugar} style={s.input}
+                    placeholder="Sala de juntas de la sede principal"
+                    onChange={(e) => setActa({ ...acta, lugar: e.target.value })} />
+                </Campo>
+                <Campo etiqueta="Cómo se eligieron" ayuda="Los de los trabajadores por votación; los del empleador por designación.">
+                  <textarea rows={2} value={acta.formaEleccion}
+                    style={{ ...s.input, resize: 'vertical' }}
+                    onChange={(e) => setActa({ ...acta, formaEleccion: e.target.value })} />
+                </Campo>
+                <Campo etiqueta="Observaciones">
+                  <textarea rows={2} value={acta.observaciones}
+                    style={{ ...s.input, resize: 'vertical' }}
+                    onChange={(e) => setActa({ ...acta, observaciones: e.target.value })} />
+                </Campo>
+                <div style={s.acciones}>
+                  <button type="button" style={s.botonPlano} onClick={() => setActa(null)}>
+                    Cancelar
+                  </button>
+                  <button type="button" disabled={pendiente}
+                    style={{ ...s.botonLleno, background: color }}
+                    onClick={() => {
+                      correr(() => guardarActa(c.id, acta));
+                      setActa(null);
+                    }}>
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {enlace && (
+              <div style={s.enlaceCaja}>
+                <div style={s.enlaceTitulo}>Enlace de firma de {enlace.nombre}</div>
+                <code style={s.enlaceUrl}>{enlace.url}</code>
+              </div>
+            )}
+
+            {enviandoActa && (
+              <div style={s.subBloqueActa}>
+                <Campo etiqueta="Destinatarios" ayuda="Separa varios con coma.">
+                  <input value={correoActa.para} style={s.input}
+                    onChange={(e) => setCorreoActa({ ...correoActa, para: e.target.value })} />
+                </Campo>
+                <Campo etiqueta="Mensaje">
+                  <textarea rows={2} value={correoActa.mensaje}
+                    style={{ ...s.input, resize: 'vertical' }}
+                    onChange={(e) => setCorreoActa({ ...correoActa, mensaje: e.target.value })} />
+                </Campo>
+                <div style={s.acciones}>
+                  <button type="button" style={s.botonPlano} onClick={() => setEnviandoActa(false)}>
+                    Cancelar
+                  </button>
+                  <button type="button" disabled={pendiente}
+                    style={{ ...s.botonLleno, background: color }}
+                    onClick={() => {
+                      correr(() => enviarActaComite(c.id, correoActa.para, correoActa.mensaje));
+                      setEnviandoActa(false);
+                    }}>
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* Envío por correo */}
@@ -497,6 +617,28 @@ export default function VistaComites({
                               }}>
                               Foto
                             </button>
+                            {!m.firmado && c.acta_estado !== 'cerrada' && (
+                              <button type="button" style={s.botonMini} disabled={pendiente}
+                                onClick={() => {
+                                  startTransition(async () => {
+                                    const r = await obtenerEnlaceFirmaComite(m.id);
+                                    if (r.enlace) {
+                                      setEnlace({ nombre: m.nombre, url: r.enlace });
+                                      setAviso({ tipo: 'ok', texto: 'Enlace listo, arriba en el acta.' });
+                                    } else {
+                                      setAviso({ tipo: 'error', texto: r.mensaje });
+                                    }
+                                    router.refresh();
+                                  });
+                                }}>
+                                Firma
+                              </button>
+                            )}
+                            {m.firmado && (
+                              <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>
+                                Firmó
+                              </span>
+                            )}
                             <button type="button" style={s.botonMini}
                               onClick={() => setForm({
                                 id: m.id, empleadoId: m.empleado_id ?? '',
@@ -710,6 +852,20 @@ const s: Record<string, React.CSSProperties> = {
   botonLleno: {
     color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
+  },
+  barraActa: { display: 'flex', gap: 8, flexWrap: 'wrap' },
+  subBloqueActa: {
+    background: '#FAFAF8', border: '1px solid #E4E4DF', borderRadius: 10,
+    padding: '13px 15px', marginTop: 12,
+  },
+  enlaceCaja: {
+    background: '#F7F7F4', border: '1px solid #E4E4DF',
+    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+  },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceUrl: {
+    display: 'block', fontFamily: "'Consolas','Courier New',monospace",
+    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
   },
   botonMini: {
     background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,

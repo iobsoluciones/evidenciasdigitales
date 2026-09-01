@@ -432,6 +432,7 @@ códigos indistinguibles en la misma acta.
 | Matriz legal | `MatrizLegal` | `/api/pdf-matriz-legal/[empresaId]` |
 | Rendición de cuentas | `ActaRendicion` | `/api/pdf-rendicion/[id]` |
 | Plan anual de trabajo | `PlanAnual` | `/api/pdf-plan-anual/[id]` |
+| Acta de conformación de comité | `ActaComite` | `/api/pdf-acta-comite/[id]` |
 
 **`EncabezadoDoc`** es el encabezado único de todos: tres plantillas
 (`linea` / `tabla` / `lateral`), posición del logo y qué datos se muestran. Se
