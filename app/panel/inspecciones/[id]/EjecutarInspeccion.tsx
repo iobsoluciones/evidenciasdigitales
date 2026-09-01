@@ -25,9 +25,9 @@ import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
 
 const OPCIONES: Array<{ v: ResultadoCriterio; t: string; color: string }> = [
-  { v: 'cumple', t: 'Cumple', color: '#15803D' },
-  { v: 'no_cumple', t: 'No cumple', color: '#9B1C1C' },
-  { v: 'no_aplica', t: 'No aplica', color: '#5B6470' },
+  { v: 'cumple', t: 'Cumple', color: 'var(--bien)' },
+  { v: 'no_cumple', t: 'No cumple', color: 'var(--mal)' },
+  { v: 'no_aplica', t: 'No aplica', color: 'var(--texto-suave)' },
 ];
 
 export default function EjecutarInspeccion({
@@ -215,8 +215,8 @@ export default function EjecutarInspeccion({
         {cerrada && insp.puntaje !== null && (
           <div style={{
             ...s.veredicto,
-            background: insp.cumple ? '#DCFCE7' : '#FEE2E2',
-            color: insp.cumple ? '#15803D' : '#9B1C1C',
+            background: insp.cumple ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+            color: insp.cumple ? 'var(--bien)' : 'var(--mal)',
           }}>
             <div style={{ fontSize: 22, fontWeight: 700 }}>{insp.puntaje}%</div>
             <div style={{ fontSize: 11 }}>{insp.cumple ? 'CUMPLE' : 'NO CUMPLE'}</div>
@@ -236,8 +236,8 @@ export default function EjecutarInspeccion({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -269,7 +269,7 @@ export default function EjecutarInspeccion({
                 disabled={ocupado || cerrada}
                 style={{
                   ...s.botonOpcion,
-                  borderColor: actual.resultado === o.v ? o.color : '#DFDFD8',
+                  borderColor: actual.resultado === o.v ? o.color : 'var(--borde-fuerte)',
                   background: actual.resultado === o.v ? o.color : '#fff',
                   color: actual.resultado === o.v ? '#fff' : o.color,
                 }}
@@ -313,7 +313,7 @@ export default function EjecutarInspeccion({
                 <button
                   onClick={guardarHallazgo}
                   disabled={ocupado}
-                  style={{ ...s.btn, background: ocupado ? '#C5C5BD' : color }}
+                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
                 >
                   Guardar y continuar
                 </button>
@@ -350,13 +350,13 @@ export default function EjecutarInspeccion({
             <h2 style={s.h2}>Resumen</h2>
 
             <div style={s.kpis}>
-              <Kpi v={String(resumen.cumple)} l="Cumplen" color="#15803D" />
-              <Kpi v={String(resumen.no_cumple)} l="Incumplen" color={resumen.no_cumple > 0 ? '#9B1C1C' : undefined} />
+              <Kpi v={String(resumen.cumple)} l="Cumplen" color="var(--bien)" />
+              <Kpi v={String(resumen.no_cumple)} l="Incumplen" color={resumen.no_cumple > 0 ? 'var(--mal)' : undefined} />
               <Kpi v={String(resumen.no_aplica)} l="No aplican" />
               <Kpi
                 v={String(resumen.criticos_fallidos)}
                 l="Críticos fallidos"
-                color={resumen.criticos_fallidos > 0 ? '#9B1C1C' : undefined}
+                color={resumen.criticos_fallidos > 0 ? 'var(--mal)' : undefined}
               />
             </div>
 
@@ -409,9 +409,9 @@ export default function EjecutarInspeccion({
                     ...s.itemCriterio,
                     cursor: cerrada ? 'default' : 'pointer',
                     background:
-                      r.resultado === 'cumple' ? '#F0FDF4'
-                      : r.resultado === 'no_cumple' ? '#FDF2F2'
-                      : r.resultado === 'no_aplica' ? '#FBFBF9'
+                      r.resultado === 'cumple' ? 'var(--bien-fondo)'
+                      : r.resultado === 'no_cumple' ? 'var(--mal-fondo)'
+                      : r.resultado === 'no_aplica' ? 'var(--superficie-2)'
                       : '#fff',
                   }}
                 >
@@ -423,10 +423,10 @@ export default function EjecutarInspeccion({
                   <span style={{
                     ...s.resultadoItem,
                     color:
-                      r.resultado === 'cumple' ? '#15803D'
-                      : r.resultado === 'no_cumple' ? '#9B1C1C'
-                      : r.resultado === 'no_aplica' ? '#8A929C'
-                      : '#C5C5BD',
+                      r.resultado === 'cumple' ? 'var(--bien)'
+                      : r.resultado === 'no_cumple' ? 'var(--mal)'
+                      : r.resultado === 'no_aplica' ? 'var(--texto-tenue)'
+                      : 'var(--borde-fuerte)',
                   }}>
                     {r.resultado === 'cumple' ? '✓'
                      : r.resultado === 'no_cumple' ? '✗'
@@ -455,7 +455,7 @@ export default function EjecutarInspeccion({
                       disabled={resumen.respondidos < resumen.total}
                       style={{
                         ...s.btn,
-                        background: resumen.respondidos < resumen.total ? '#C5C5BD' : color,
+                        background: resumen.respondidos < resumen.total ? 'var(--borde-fuerte)' : color,
                         cursor: resumen.respondidos < resumen.total ? 'not-allowed' : 'pointer',
                       }}
                       title={resumen.respondidos < resumen.total
@@ -498,7 +498,7 @@ export default function EjecutarInspeccion({
                     <button
                       onClick={cerrar}
                       disabled={ocupado}
-                      style={{ ...s.btn, background: ocupado ? '#C5C5BD' : color }}
+                      style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
                     >
                       {pendiente ? 'Calificando…' : 'Confirmar cierre'}
                     </button>
@@ -598,58 +598,58 @@ function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
 
 const s: Record<string, React.CSSProperties> = {
   enlaceCaja: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '11px 13px', marginTop: 12,
   },
-  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto)', marginBottom: 5 },
   enlaceUrl: {
     display: 'block', fontFamily: "'Consolas','Courier New',monospace",
-    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all', lineHeight: 1.5,
   },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 14, flexWrap: 'wrap', marginTop: 12, marginBottom: 14,
   },
   codigo: {
-    fontSize: 11, color: '#A3AAB3', letterSpacing: .5,
+    fontSize: 11, color: 'var(--texto-tenue)', letterSpacing: .5,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   titulo: { fontSize: 20, margin: '3px 0', letterSpacing: -0.3 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: 0 },
   veredicto: { padding: '10px 18px', borderRadius: 8, textAlign: 'center' },
 
   barra: {
-    position: 'relative', height: 26, background: '#EFEFEA',
+    position: 'relative', height: 26, background: 'var(--superficie-3)',
     borderRadius: 13, overflow: 'hidden', marginBottom: 16,
   },
   progreso: { height: '100%', transition: 'width .2s ease' },
   textoProgreso: {
     position: 'absolute', top: 0, left: 0, right: 0, lineHeight: '26px',
-    textAlign: 'center', fontSize: 11.5, fontWeight: 600, color: '#14263F',
+    textAlign: 'center', fontSize: 11.5, fontWeight: 600, color: 'var(--texto)',
   },
 
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 22, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 14px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: 0, lineHeight: 1.6 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: 0, lineHeight: 1.6 },
 
   seccion: {
     fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase',
     letterSpacing: .7, marginBottom: 10,
   },
   numeroCriterio: {
-    fontSize: 11, color: '#8A929C', marginBottom: 8,
+    fontSize: 11, color: 'var(--texto-tenue)', marginBottom: 8,
     display: 'flex', alignItems: 'center', gap: 8,
   },
   chipCritico: {
-    fontSize: 9.5, background: '#FEE2E2', color: '#9B1C1C',
+    fontSize: 9.5, background: 'var(--mal-fondo)', color: 'var(--mal)',
     padding: '2px 8px', borderRadius: 999, fontWeight: 700,
   },
   criterio: { fontSize: 16, lineHeight: 1.5, margin: '0 0 10px', fontWeight: 500 },
   ayuda: {
-    fontSize: 12, color: '#0369A1', background: '#F0F9FF',
+    fontSize: 12, color: 'var(--info)', background: 'var(--info-fondo)',
     padding: '9px 12px', borderRadius: 6, margin: '0 0 16px', lineHeight: 1.55,
   },
 
@@ -661,12 +661,12 @@ const s: Record<string, React.CSSProperties> = {
 
   evidencia: {
     marginTop: 16, paddingTop: 16,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '10px 0 5px' },
   input: {
     width: '100%', padding: '10px 12px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 6, fontSize: 13.5,
+    borderColor: 'var(--borde-fuerte)', borderRadius: 6, fontSize: 13.5,
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
   foto: { maxHeight: 160, maxWidth: '100%', objectFit: 'contain', borderRadius: 6, marginTop: 10 },
@@ -675,37 +675,37 @@ const s: Record<string, React.CSSProperties> = {
   navegacion: {
     display: 'flex', gap: 8, justifyContent: 'space-between',
     marginTop: 18, paddingTop: 14,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   btnNav: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    color: '#14263F', padding: '8px 14px', borderRadius: 4,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    color: 'var(--texto)', padding: '8px 14px', borderRadius: 4,
     fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
 
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(110px,1fr))', gap: 10 },
-  kpi: { background: '#FBFBF9', borderRadius: 6, padding: 12, textAlign: 'center' },
-  kpiL: { fontSize: 10, color: '#8A929C', textTransform: 'uppercase', marginTop: 2 },
+  kpi: { background: 'var(--superficie-2)', borderRadius: 6, padding: 12, textAlign: 'center' },
+  kpiL: { fontSize: 10, color: 'var(--texto-tenue)', textTransform: 'uppercase', marginTop: 2 },
 
   avisoCritico: {
-    background: '#FDF2F2', color: '#9B1C1C', padding: '12px 14px',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '12px 14px',
     borderRadius: 6, fontSize: 12.5, marginTop: 14, lineHeight: 1.6,
   },
-  faltantes: { fontSize: 12.5, color: '#8A6100', marginTop: 12 },
+  faltantes: { fontSize: 12.5, color: 'var(--ambar)', marginTop: 12 },
 
   hallazgo: {
     display: 'flex', gap: 12, alignItems: 'flex-start',
-    padding: '12px 0', borderBottom: '1px solid #F4F4F0',
+    padding: '12px 0', borderBottom: '1px solid var(--superficie-3)',
   },
   criterioHallazgo: { fontSize: 12.5, fontWeight: 600, display: 'flex', gap: 7, alignItems: 'center', flexWrap: 'wrap' },
   chipCriticoMini: {
-    fontSize: 9, background: '#FEE2E2', color: '#9B1C1C',
+    fontSize: 9, background: 'var(--mal-fondo)', color: 'var(--mal)',
     padding: '2px 7px', borderRadius: 999, fontWeight: 700,
   },
-  textoHallazgo: { fontSize: 12, color: '#5B6470', margin: '4px 0 0', lineHeight: 1.5 },
+  textoHallazgo: { fontSize: 12, color: 'var(--texto-suave)', margin: '4px 0 0', lineHeight: 1.5 },
   miniatura: { width: 54, height: 54, objectFit: 'cover', borderRadius: 4 },
   btnMini: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline',
   },
 
@@ -713,41 +713,41 @@ const s: Record<string, React.CSSProperties> = {
   itemCriterio: {
     display: 'flex', gap: 10, alignItems: 'center',
     padding: '8px 10px', borderRadius: 4, fontSize: 12,
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#EFEFEA',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     fontFamily: 'inherit',
   },
   ordenItem: {
-    fontSize: 10, color: '#A3AAB3', width: 18,
+    fontSize: 10, color: 'var(--texto-tenue)', width: 18,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   puntoCritico: {
     display: 'inline-block', width: 6, height: 6, borderRadius: '50%',
-    background: '#9B1C1C', marginLeft: 6,
+    background: 'var(--mal)', marginLeft: 6,
   },
   resultadoItem: { fontSize: 15, fontWeight: 700, width: 18, textAlign: 'center' },
 
   dosFirmas: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 18, marginTop: 14 },
-  pieFirma: { fontSize: 11, color: '#8A929C', textAlign: 'center', margin: '6px 0 0' },
+  pieFirma: { fontSize: 11, color: 'var(--texto-tenue)', textAlign: 'center', margin: '6px 0 0' },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 14 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 20px', borderRadius: 6,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 20px', borderRadius: 6,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 20px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, display: 'inline-block',
   },
   btnBorrar: {
-    background: '#fff', color: '#9B1C1C',
+    background: 'var(--superficie)', color: 'var(--mal)',
     borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
     padding: '11px 20px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

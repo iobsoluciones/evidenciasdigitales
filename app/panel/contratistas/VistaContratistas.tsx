@@ -14,10 +14,10 @@ import {
 } from '@/lib/acciones-contratistas';
 
 const CONCEPTOS: Record<Concepto, { t: string; fondo: string; color: string }> = {
-  sin_evaluar: { t: 'Sin evaluar', fondo: '#F0F0EC', color: '#5B6470' },
-  aprobado: { t: 'Aprobado', fondo: '#E6F4EA', color: '#1E6B3A' },
-  aprobado_con_condiciones: { t: 'Con condiciones', fondo: '#FEF3C7', color: '#92400E' },
-  rechazado: { t: 'Rechazado', fondo: '#FDF2F2', color: '#9B1C1C' },
+  sin_evaluar: { t: 'Sin evaluar', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
+  aprobado: { t: 'Aprobado', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  aprobado_con_condiciones: { t: 'Con condiciones', fondo: 'var(--ambar-fondo)', color: 'var(--aviso)' },
+  rechazado: { t: 'Rechazado', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
 };
 
 /** Clases de riesgo del Dec. 1607 de 2002, en números romanos. */
@@ -71,34 +71,34 @@ export default function VistaContratistas({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
 
       {activos.length > 0 && (
         <div style={s.resumen}>
-          <div style={{ ...s.tarjeta, border: '1px solid #E4E4DF', background: '#fff' }}>
+          <div style={{ ...s.tarjeta, border: '1px solid var(--borde)', background: 'var(--superficie)' }}>
             <span style={{ ...s.tarjetaN, color }}>{activos.length}</span>
             <span style={s.tarjetaT}>Contratistas activos</span>
           </div>
           <div style={{
             ...s.tarjeta,
-            background: conFaltantes > 0 ? '#FDF2F2' : '#E6F4EA',
+            background: conFaltantes > 0 ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
           }}>
             <span style={{
               ...s.tarjetaN,
-              color: conFaltantes > 0 ? '#9B1C1C' : '#1E6B3A',
+              color: conFaltantes > 0 ? 'var(--mal)' : 'var(--bien)',
             }}>{conFaltantes}</span>
             <span style={{
               ...s.tarjetaT,
-              color: conFaltantes > 0 ? '#9B1C1C' : '#1E6B3A',
+              color: conFaltantes > 0 ? 'var(--mal)' : 'var(--bien)',
             }}>
               Con soportes faltantes o vencidos
             </span>
           </div>
-          <div style={{ ...s.tarjeta, border: '1px solid #E4E4DF', background: '#fff' }}>
+          <div style={{ ...s.tarjeta, border: '1px solid var(--borde)', background: 'var(--superficie)' }}>
             <span style={s.tarjetaN}>
               {activos.reduce((n, x) => n + x.personas, 0)}
             </span>
@@ -208,12 +208,12 @@ export default function VistaContratistas({
                         {x.clase_riesgo ? ` · riesgo ${x.clase_riesgo}` : ''}
                       </div>
                       {x.estado !== 'activo' && (
-                        <span style={{ ...s.chip, background: '#F0F0EC', color: '#5B6470' }}>
+                        <span style={{ ...s.chip, background: 'var(--superficie-3)', color: 'var(--texto-suave)' }}>
                           {x.estado === 'terminado' ? 'Terminado' : 'Suspendido'}
                         </span>
                       )}
                       {x.contrato_vencido && x.estado === 'activo' && (
-                        <span style={{ ...s.chip, background: '#FEF3C7', color: '#92400E' }}>
+                        <span style={{ ...s.chip, background: 'var(--ambar-fondo)', color: 'var(--aviso)' }}>
                           Contrato vencido
                         </span>
                       )}
@@ -221,20 +221,20 @@ export default function VistaContratistas({
                     <td style={{ ...s.td, textAlign: 'center' }}>{x.personas}</td>
                     <td style={{ ...s.td, textAlign: 'center' }}>
                       {x.pendientes === 0 && x.vencidos === 0 ? (
-                        <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>
+                        <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                           Al día
                         </span>
                       ) : (
                         <>
                           {x.pendientes > 0 && (
-                            <div style={{ ...s.chip, background: '#FDF2F2', color: '#9B1C1C' }}>
+                            <div style={{ ...s.chip, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
                               {x.pendientes} sin entregar
                             </div>
                           )}
                           {x.vencidos > 0 && (
                             <div style={{
-                              ...s.chip, background: '#FEF3C7',
-                              color: '#92400E', marginTop: 3,
+                              ...s.chip, background: 'var(--ambar-fondo)',
+                              color: 'var(--aviso)', marginTop: 3,
                             }}>
                               {x.vencidos} vencido(s)
                             </div>
@@ -274,7 +274,7 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   resumen: {
@@ -282,45 +282,45 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))',
   },
   tarjeta: {
-    borderRadius: 10, padding: '12px 14px',
+    borderRadius: 8, padding: '12px 14px',
     display: 'flex', flexDirection: 'column', gap: 2,
   },
   tarjetaN: {
     fontSize: 22, fontWeight: 700, lineHeight: 1.1,
-    color: '#14263F', fontVariantNumeric: 'tabular-nums',
+    color: 'var(--texto)', fontVariantNumeric: 'tabular-nums',
   },
-  tarjetaT: { fontSize: 11.5, color: '#5B6470' },
+  tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)' },
 
   barra: { display: 'flex', marginBottom: 16 },
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14, width: '100%',
   },
-  h3: { fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10 },
-  nota: { fontSize: 13, color: '#5B6470', lineHeight: 1.65, margin: 0, maxWidth: 660 },
+  h3: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10 },
+  nota: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.65, margin: 0, maxWidth: 660 },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '2px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '2px 0 0', lineHeight: 1.5 },
 
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 12, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 680 },
   th: {
-    textAlign: 'center', padding: '10px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'center', padding: '10px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '10px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
-  tdNombre: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC', minWidth: 260 },
-  enlace: { fontSize: 13, fontWeight: 700, color: '#14263F' },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2, lineHeight: 1.4 },
+  td: { padding: '10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
+  tdNombre: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', minWidth: 260 },
+  enlace: { fontSize: 13, fontWeight: 700, color: 'var(--texto)' },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2, lineHeight: 1.4 },
   chip: {
     fontSize: 10.5, fontWeight: 700, padding: '3px 10px',
     borderRadius: 20, whiteSpace: 'nowrap', display: 'inline-block', marginTop: 3,
@@ -328,11 +328,11 @@ const s: Record<string, React.CSSProperties> = {
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
 };

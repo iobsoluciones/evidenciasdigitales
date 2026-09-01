@@ -24,10 +24,10 @@ import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
 
 /** Escala física, de mejor a peor. El orden importa: define el deterioro. */
 const ESTADOS: Array<{ v: EstadoFisico; t: string; color: string }> = [
-  { v: 'nuevo', t: 'Nuevo', color: '#15803D' },
-  { v: 'bueno', t: 'Bueno', color: '#15803D' },
-  { v: 'regular', t: 'Regular', color: '#8A6100' },
-  { v: 'malo', t: 'Malo', color: '#9B1C1C' },
+  { v: 'nuevo', t: 'Nuevo', color: 'var(--bien)' },
+  { v: 'bueno', t: 'Bueno', color: 'var(--bien)' },
+  { v: 'regular', t: 'Regular', color: 'var(--ambar)' },
+  { v: 'malo', t: 'Malo', color: 'var(--mal)' },
 ];
 
 const DESTINOS: Array<{ v: DestinoUnidad; t: string; nota: string }> = [
@@ -163,8 +163,8 @@ export default function VistaDevoluciones({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -208,7 +208,7 @@ export default function VistaDevoluciones({
               <article key={it.id} style={{
                 ...e.card,
                 borderLeftWidth: 3,
-                borderLeftColor: it.empleado_inactivo ? '#9B1C1C' : '#E4E4DF',
+                borderLeftColor: it.empleado_inactivo ? 'var(--mal)' : 'var(--borde)',
               }}>
                 <div style={e.cabeceraItem}>
                   <div style={{ flex: 1, minWidth: 200 }}>
@@ -227,7 +227,7 @@ export default function VistaDevoluciones({
                     </div>
                     <div style={{
                       ...e.dias,
-                      color: it.dias > 365 ? '#9B1C1C' : '#8A929C',
+                      color: it.dias > 365 ? 'var(--mal)' : 'var(--texto-tenue)',
                     }}>
                       {it.dias} día{it.dias === 1 ? '' : 's'} en uso
                     </div>
@@ -254,7 +254,7 @@ export default function VistaDevoluciones({
                         <span style={e.etiquetaComp}>Se entregó</span>
                         <div style={{
                           ...e.estadoEntregado,
-                          color: ESTADOS.find((x) => x.v === it.estado_entrega)?.color ?? '#5B6470',
+                          color: ESTADOS.find((x) => x.v === it.estado_entrega)?.color ?? 'var(--texto-suave)',
                         }}>
                           {ESTADOS.find((x) => x.v === it.estado_entrega)?.t ?? 'Sin registrar'}
                         </div>
@@ -277,9 +277,9 @@ export default function VistaDevoluciones({
                               onClick={() => setF({ ...f, estado: x.v })}
                               style={{
                                 ...e.botonEstado,
-                                borderColor: f.estado === x.v ? x.color : '#DFDFD8',
+                                borderColor: f.estado === x.v ? x.color : 'var(--borde-fuerte)',
                                 background: f.estado === x.v ? x.color + '14' : '#fff',
-                                color: f.estado === x.v ? x.color : '#5B6470',
+                                color: f.estado === x.v ? x.color : 'var(--texto-suave)',
                                 fontWeight: f.estado === x.v ? 700 : 500,
                               }}
                             >
@@ -359,7 +359,7 @@ export default function VistaDevoluciones({
                       <button
                         onClick={() => registrar(it)}
                         disabled={ocupado}
-                        style={{ ...e.btn, background: ocupado ? '#C5C5BD' : color }}
+                        style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
                       >
                         {pendiente ? 'Registrando…' : 'Confirmar devolución'}
                       </button>
@@ -412,8 +412,8 @@ export default function VistaDevoluciones({
                     <td style={e.td}>
                       <span style={{
                         ...e.chipEstado,
-                        background: peor ? '#FEE2E2' : '#F0FDF4',
-                        color: peor ? '#9B1C1C' : '#15803D',
+                        background: peor ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+                        color: peor ? 'var(--mal)' : 'var(--bien)',
                       }}>
                         {ESTADOS.find((x) => x.v === d.estado_devolucion)?.t ?? '—'}
                         {peor && ` ▾${d.deterioro}`}
@@ -449,59 +449,59 @@ export default function VistaDevoluciones({
 
 const e: Record<string, React.CSSProperties> = {
   enlaceActa: {
-    display: 'inline-block', border: '1px solid #E4E4DF', borderRadius: 7,
+    display: 'inline-block', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '4px 12px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', textDecoration: 'none', whiteSpace: 'nowrap',
+    color: 'var(--texto)', textDecoration: 'none', whiteSpace: 'nowrap',
   },
-  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #E4E4DF', marginBottom: 16 },
+  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid var(--borde)', marginBottom: 16 },
   pestana: {
     background: 'none', border: 'none', padding: '10px 18px', fontSize: 13,
-    cursor: 'pointer', fontFamily: 'inherit', color: '#8A929C',
+    cursor: 'pointer', fontFamily: 'inherit', color: 'var(--texto-tenue)',
     borderBottomWidth: 2, borderBottomStyle: 'solid', borderBottomColor: 'transparent',
     marginBottom: -1,
   },
   activa: { fontWeight: 700 },
 
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 18, marginBottom: 12,
   },
   cabeceraItem: { display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' },
   codigoItem: {
-    fontSize: 10, color: '#A3AAB3',
+    fontSize: 10, color: 'var(--texto-tenue)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   nombreItem: { fontSize: 14, margin: '3px 0 4px', fontWeight: 600 },
-  metaItem: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  metaItem: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11 },
   quien: { minWidth: 190 },
   dias: { fontSize: 11, marginTop: 3 },
   chipRetirado: {
     display: 'inline-block', marginTop: 5, fontSize: 10,
-    background: '#FEE2E2', color: '#9B1C1C', padding: '2px 8px',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '2px 8px',
     borderRadius: 999, fontWeight: 600,
   },
 
   alertaRetirados: {
-    background: '#FDF2F2', color: '#9B1C1C', padding: '12px 15px',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '12px 15px',
     borderRadius: 6, fontSize: 12.5, marginBottom: 14, lineHeight: 1.6,
   },
 
   formulario: {
     marginTop: 16, paddingTop: 16,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   comparacion: {
     display: 'flex', gap: 14, alignItems: 'flex-start',
-    background: '#FBFBF9', borderRadius: 6, padding: 14, marginBottom: 14,
+    background: 'var(--superficie-2)', borderRadius: 6, padding: 14, marginBottom: 14,
     flexWrap: 'wrap',
   },
   ladoComparacion: { flex: 1, minWidth: 190 },
   etiquetaComp: {
-    fontSize: 10, textTransform: 'uppercase', letterSpacing: .6, color: '#8A929C',
+    fontSize: 10, textTransform: 'uppercase', letterSpacing: .6, color: 'var(--texto-tenue)',
   },
   estadoEntregado: { fontSize: 16, fontWeight: 700, marginTop: 4 },
-  flecha: { fontSize: 18, color: '#C5C5BD', alignSelf: 'center' },
+  flecha: { fontSize: 18, color: 'var(--borde-fuerte)', alignSelf: 'center' },
   opcionesEstado: { display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 5 },
   botonEstado: {
     borderWidth: 1.5, borderStyle: 'solid', borderRadius: 4,
@@ -511,47 +511,47 @@ const e: Record<string, React.CSSProperties> = {
     maxHeight: 90, maxWidth: '100%', objectFit: 'contain',
     marginTop: 8, borderRadius: 4, display: 'block',
   },
-  accesorios: { fontSize: 11, color: '#5B6470', marginTop: 6 },
+  accesorios: { fontSize: 11, color: 'var(--texto-suave)', marginTop: 6 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 14 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
-    boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
+    boxSizing: 'border-box', fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  nota: { fontSize: 11, color: '#8A929C', margin: '4px 0 0', lineHeight: 1.5 },
+  nota: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 0', lineHeight: 1.5 },
   filaFoto: { display: 'flex', gap: 12, alignItems: 'center', marginTop: 14, flexWrap: 'wrap' },
 
   contenedor: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflowX: 'auto',
   },
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F4F4F0', verticalAlign: 'top' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   chipEstado: { fontSize: 10.5, fontWeight: 600, padding: '3px 9px', borderRadius: 999 },
-  obs: { fontSize: 10.5, color: '#8A929C', marginTop: 3, maxWidth: 200 },
+  obs: { fontSize: 10.5, color: 'var(--texto-tenue)', marginTop: 3, maxWidth: 200 },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 14 },
   btn: {
-    color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, display: 'inline-block',
   },
   explicacion: {
-    fontSize: 12.5, color: '#5B6470', margin: '0 0 8px',
+    fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 8px',
     lineHeight: 1.6, maxWidth: 460, marginLeft: 'auto', marginRight: 'auto',
   },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
 };

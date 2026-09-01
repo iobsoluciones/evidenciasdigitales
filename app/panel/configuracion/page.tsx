@@ -142,7 +142,7 @@ export default async function PaginaConfiguracion() {
 
       <p style={s.pie}>
         ¿Necesitas cambiar razón social, NIT o datos de contacto?{' '}
-        <Link href={`/panel/empresas/${empresa.id}`} style={{ color: '#5B6470' }}>
+        <Link href={`/panel/empresas/${empresa.id}`} style={{ color: 'var(--texto-suave)' }}>
           Editar datos de la empresa →
         </Link>
       </p>
@@ -152,7 +152,7 @@ export default async function PaginaConfiguracion() {
 
 const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
   // Se apilan por debajo de 900 px: el logo necesita ancho para verse
   dosColumnas: {
     display: 'grid',
@@ -161,10 +161,10 @@ const s: Record<string, React.CSSProperties> = {
     alignItems: 'start',
     maxWidth: 900,
   },
-  pie: { fontSize: 12.5, color: '#8A929C', marginTop: 20, maxWidth: 640 },
-  seccionPlantillas: { marginTop: 28, paddingTop: 24, borderTop: '1px solid #E4E4DF' },
+  pie: { fontSize: 12.5, color: 'var(--texto-tenue)', marginTop: 20, maxWidth: 640 },
+  seccionPlantillas: { marginTop: 28, paddingTop: 24, borderTop: '1px solid var(--borde)' },
   h2: { fontSize: 16, margin: '0 0 3px', letterSpacing: -0.2 },
-  notaSeccion: { fontSize: 12.5, color: '#5B6470', margin: '0 0 18px' },
-  vacio: { background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  notaSeccion: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 18px' },
+  vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

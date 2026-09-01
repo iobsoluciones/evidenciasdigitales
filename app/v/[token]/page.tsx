@@ -57,7 +57,7 @@ export default async function PaginaFirmaInspeccion({
       orgId={d.orgId ?? ''}
       inspeccion={d.inspeccion}
       hallazgos={d.hallazgos ?? []}
-      empresa={d.empresa ?? { nombre: '', logo_url: null, color: '#14263F' }}
+      empresa={d.empresa ?? { nombre: '', logo_url: null, color: 'var(--texto)' }}
     />
   );
 }
@@ -65,13 +65,12 @@ export default async function PaginaFirmaInspeccion({
 const s: Record<string, React.CSSProperties> = {
   pagina: {
     minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#F7F7F4', padding: 20,
-    fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif",
+    background: 'var(--fondo)', padding: 20,
   },
   caja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 14,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 14,
     padding: '30px 28px', maxWidth: 420, textAlign: 'center',
   },
-  titulo: { fontSize: 19, fontWeight: 700, color: '#14263F', margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.6 },
+  titulo: { fontSize: 19, fontWeight: 700, color: 'var(--texto)', margin: '0 0 8px' },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6 },
 };

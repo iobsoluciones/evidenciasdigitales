@@ -66,12 +66,12 @@ export default async function DetalleCapacitacion({
 
   return (
     <>
-      <Link href="/panel/capacitaciones" style={{ fontSize: 13, color: '#3b82f6' }}>
+      <Link href="/panel/capacitaciones" style={{ fontSize: 13, color: 'var(--marca)' }}>
         ← Volver al listado
       </Link>
 
-      <h1 style={{ fontSize: 22, color: '#1e3a8a', margin: '12px 0 2px' }}>{c.tema}</h1>
-      <p style={{ color: '#6b7280', fontSize: 13, marginTop: 0 }}>
+      <h1 style={{ fontSize: 22, color: 'var(--texto)', margin: '12px 0 2px' }}>{c.tema}</h1>
+      <p style={{ color: 'var(--texto-suave)', fontSize: 13, marginTop: 0 }}>
         {c.codigo} · {c.instructor} · {c.estado}
       </p>
 
@@ -145,7 +145,7 @@ export default async function DetalleCapacitacion({
       <section style={est.tarjeta}>
         <h2 style={est.h2}>Asistentes ({lista.length})</h2>
         {lista.length === 0 ? (
-          <p style={{ color: '#6b7280', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
+          <p style={{ color: 'var(--texto-suave)', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
             Aún no hay asistentes registrados.
           </p>
         ) : (
@@ -169,8 +169,8 @@ export default async function DetalleCapacitacion({
                     <td style={est.td}>{p.identificacion}</td>
                     <td style={est.td}>
                       {p.firma_url
-                        ? <span style={{ color: '#15803d', fontWeight: 600 }}>Sí</span>
-                        : <span style={{ color: '#9ca3af' }}>—</span>}
+                        ? <span style={{ color: 'var(--bien)', fontWeight: 600 }}>Sí</span>
+                        : <span style={{ color: 'var(--texto-tenue)' }}>—</span>}
                     </td>
                     <td style={est.td}>{fmtFecha(p.created_at)}</td>
                   </tr>
@@ -186,9 +186,9 @@ export default async function DetalleCapacitacion({
 
 function Kpi({ valor, etiqueta, color }: { valor: string; etiqueta: string; color?: string }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 12, padding: 16, boxShadow: '0 4px 12px rgba(0,0,0,.04)' }}>
+    <div style={{ background: 'var(--superficie)', borderRadius: 12, padding: 16, boxShadow: '0 4px 12px rgba(0,0,0,.04)' }}>
       <div style={{ fontSize: 24, fontWeight: 700, color: color ?? 'var(--marca)' }}>{valor}</div>
-      <div style={{ fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .3 }}>{etiqueta}</div>
+      <div style={{ fontSize: 11, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .3 }}>{etiqueta}</div>
     </div>
   );
 }
@@ -196,15 +196,15 @@ function Kpi({ valor, etiqueta, color }: { valor: string; etiqueta: string; colo
 function Fila({ e, v }: { e: string; v: string }) {
   return (
     <tr>
-      <td style={{ padding: '6px 16px 6px 0', color: '#6b7280', verticalAlign: 'top' }}>{e}</td>
+      <td style={{ padding: '6px 16px 6px 0', color: 'var(--texto-suave)', verticalAlign: 'top' }}>{e}</td>
       <td style={{ padding: '6px 0' }}>{v}</td>
     </tr>
   );
 }
 
 const est: Record<string, React.CSSProperties> = {
-  tarjeta: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  tarjeta: { background: 'var(--superficie)', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   h2: { fontSize: 15, margin: '0 0 12px' },
-  th: { background: '#f8fafc', color: '#6b7280', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' },
-  td: { padding: '9px 8px', borderBottom: '1px solid #e5e7eb' },
+  th: { background: 'var(--superficie-3)', color: 'var(--texto-suave)', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid var(--borde)' },
+  td: { padding: '9px 8px', borderBottom: '1px solid var(--borde)' },
 };

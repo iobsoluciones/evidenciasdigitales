@@ -191,8 +191,8 @@ export default function RejillaHoras({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -202,7 +202,7 @@ export default function RejillaHoras({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.boton, background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color }}
+          style={{ ...e.boton, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : `Guardar ${anio}`}
         </button>
@@ -226,43 +226,43 @@ const e: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))',
   },
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '11px 13px', display: 'flex', flexDirection: 'column', gap: 3,
   },
-  tarjetaEtiqueta: { fontSize: 11, color: '#5B6470' },
+  tarjetaEtiqueta: { fontSize: 11, color: 'var(--texto-suave)' },
   tarjetaValor: { fontSize: 21, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' },
 
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13.5, minWidth: 620 },
   th: {
-    textAlign: 'right', padding: '10px 12px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'right', padding: '10px 12px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
   tdMes: {
-    padding: '6px 12px', borderBottom: '1px solid #F0F0EC',
-    fontWeight: 600, color: '#14263F', whiteSpace: 'nowrap',
+    padding: '6px 12px', borderBottom: '1px solid var(--superficie-3)',
+    fontWeight: 600, color: 'var(--texto)', whiteSpace: 'nowrap',
   },
-  td: { padding: '6px 8px', borderBottom: '1px solid #F0F0EC' },
-  inputBloqueado: { background: '#F7F7F4', color: '#5B6470', borderColor: '#EDEDE8' },
+  td: { padding: '6px 8px', borderBottom: '1px solid var(--superficie-3)' },
+  inputBloqueado: { background: 'var(--fondo)', color: 'var(--texto-suave)', borderColor: '#EDEDE8' },
   desbloquear: {
-    background: 'none', border: '1px solid #E4E4DF', borderRadius: 6,
-    padding: '4px 10px', fontSize: 11.5, color: '#5B6470',
+    background: 'none', border: '1px solid var(--borde)', borderRadius: 6,
+    padding: '4px 10px', fontSize: 11.5, color: 'var(--texto-suave)',
     cursor: 'pointer', whiteSpace: 'nowrap',
   },
-  abierto: { fontSize: 11, color: '#8A929C' },
+  abierto: { fontSize: 11, color: 'var(--texto-tenue)' },
   input: {
     width: '100%', minWidth: 90, padding: '7px 9px', textAlign: 'right',
-    border: '1px solid #E4E4DF', borderRadius: 6, fontSize: 13.5,
+    border: '1px solid var(--borde)', borderRadius: 6, fontSize: 13.5,
     fontVariantNumeric: 'tabular-nums', boxSizing: 'border-box',
   },
   aviso: { marginTop: 14, padding: '10px 13px', borderRadius: 8, fontSize: 13 },
   acciones: { display: 'flex', justifyContent: 'flex-end', marginTop: 16 },
   boton: {
-    color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 9,
+    color: 'var(--sobre-marca)', border: 'none', padding: '10px 24px', borderRadius: 8,
     fontSize: 14, fontWeight: 600, cursor: 'pointer',
   },
 };

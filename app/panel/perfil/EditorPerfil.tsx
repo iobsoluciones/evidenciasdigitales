@@ -229,7 +229,7 @@ export default function EditorPerfil({
             <button
               onClick={enviar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 12, border: 'none', cursor: 'pointer' }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12, border: 'none', cursor: 'pointer' }}
             >
               {pendiente ? 'Enviando…' : 'Enviar hoja de vida'}
             </button>
@@ -240,8 +240,8 @@ export default function EditorPerfil({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -299,7 +299,7 @@ export default function EditorPerfil({
           <div style={e.previaFoto}>
             {foto
               ? <img src={foto} alt="Perfil" style={e.foto} />
-              : <span style={{ fontSize: 12, color: '#A3AAB3' }}>Sin fotografía</span>}
+              : <span style={{ fontSize: 12, color: 'var(--texto-tenue)' }}>Sin fotografía</span>}
           </div>
           <label style={{ ...e.btn, background: color, display: 'block', textAlign: 'center', cursor: 'pointer' }}>
             {subiendo ? 'Subiendo…' : 'Cambiar fotografía'}
@@ -328,7 +328,7 @@ export default function EditorPerfil({
           {firma && !firmando ? (
             <>
               <div style={e.firmaGuardada}>
-                <span style={{ fontSize: 12, color: '#15803D', fontWeight: 600 }}>
+                <span style={{ fontSize: 12, color: 'var(--bien)', fontWeight: 600 }}>
                   ✓ Firma registrada
                 </span>
               </div>
@@ -348,7 +348,7 @@ export default function EditorPerfil({
                 <button
                   onClick={subirFirma}
                   disabled={subiendo || pendiente}
-                  style={{ ...e.btn, background: subiendo ? '#C5C5BD' : color, border: 'none', cursor: 'pointer' }}
+                  style={{ ...e.btn, background: subiendo ? 'var(--borde-fuerte)' : color, border: 'none', cursor: 'pointer' }}
                 >
                   {subiendo ? 'Guardando…' : 'Guardar firma'}
                 </button>
@@ -407,7 +407,7 @@ export default function EditorPerfil({
       <button
         onClick={guardar}
         disabled={pendiente}
-        style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, border: 'none', cursor: 'pointer', padding: '12px 26px' }}
+        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, border: 'none', cursor: 'pointer', padding: '12px 26px' }}
       >
         {pendiente ? 'Guardando…' : 'Guardar perfil'}
       </button>
@@ -519,18 +519,18 @@ function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 5px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '0 0 14px', lineHeight: 1.5 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '0 0 14px', lineHeight: 1.5 },
 
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(112px,1fr))', gap: 10 },
-  kpi: { background: '#FBFBF9', borderRadius: 6, padding: 12, textAlign: 'center' },
-  kpiL: { fontSize: 10, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
+  kpi: { background: 'var(--superficie-2)', borderRadius: 6, padding: 12, textAlign: 'center' },
+  kpiL: { fontSize: 10, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
 
   filaAcciones: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' },
-  bloque: { marginTop: 14, paddingTop: 14, borderTop: '1px solid #EFEFEA', maxWidth: 480 },
+  bloque: { marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--borde)', maxWidth: 480 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16, alignItems: 'start' },
   dosCampos: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
@@ -538,13 +538,13 @@ const e: Record<string, React.CSSProperties> = {
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
 
   previaFoto: {
-    width: '100%', height: 170, background: '#FBFBF9',
-    borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8', borderRadius: 6,
+    width: '100%', height: 170, background: 'var(--superficie-2)',
+    borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)', borderRadius: 6,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     marginBottom: 12, overflow: 'hidden',
   },
@@ -552,25 +552,25 @@ const e: Record<string, React.CSSProperties> = {
 
   itemLista: { display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 8 },
   gridItem: { flex: 1, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 },
-  x: { background: 'none', border: 'none', color: '#9B1C1C', fontSize: 18, cursor: 'pointer', padding: '6px 4px' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 18, cursor: 'pointer', padding: '6px 4px' },
   enlace: { background: 'none', border: 'none', fontSize: 12.5, cursor: 'pointer', padding: '6px 0', fontWeight: 600 },
 
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', padding: '10px 18px', borderRadius: 4,
+    background: 'var(--superficie)', color: 'var(--texto)', borderWidth: 1, borderStyle: 'solid',
+    borderColor: 'var(--borde-fuerte)', padding: '10px 18px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   firmaGuardada: {
-    background: '#F0FDF4', borderWidth: 1, borderStyle: 'solid',
+    background: 'var(--bien-fondo)', borderWidth: 1, borderStyle: 'solid',
     borderColor: '#BBF7D0', borderRadius: 6, padding: '12px 14px',
     marginBottom: 10, textAlign: 'center',
   },
   btnQuitar: {
-    background: '#fff', color: '#9B1C1C', borderWidth: 1, borderStyle: 'solid',
+    background: 'var(--superficie)', color: 'var(--mal)', borderWidth: 1, borderStyle: 'solid',
     borderColor: '#F5C6C6', padding: '10px 16px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },

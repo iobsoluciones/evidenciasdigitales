@@ -54,10 +54,10 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
     gap: 16, flexWrap: 'wrap', marginBottom: 18,
   },
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: 0 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: 0 },
   boton: {
-    color: '#fff', padding: '10px 20px', borderRadius: 9, fontSize: 13.5,
+    color: 'var(--sobre-marca)', padding: '10px 20px', borderRadius: 8, fontSize: 13.5,
     fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap',
   },
 };

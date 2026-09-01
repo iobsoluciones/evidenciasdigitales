@@ -59,6 +59,6 @@ export default async function PaginaPlanAnual({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: '0 0 18px', maxWidth: 660, lineHeight: 1.6 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 18px', maxWidth: 660, lineHeight: 1.6 },
 };

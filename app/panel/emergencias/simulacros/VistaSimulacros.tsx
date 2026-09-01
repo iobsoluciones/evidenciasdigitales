@@ -69,8 +69,8 @@ export default function VistaSimulacros({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
@@ -175,11 +175,11 @@ export default function VistaSimulacros({
                     </td>
                     <td style={{ ...s.td, textAlign: 'center' }}>
                       {x.estado === 'cerrado' ? (
-                        <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>
+                        <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                           Cerrada
                         </span>
                       ) : (
-                        <span style={{ ...s.chip, background: '#FEF3C7', color: '#92400E' }}>
+                        <span style={{ ...s.chip, background: 'var(--ambar-fondo)', color: 'var(--aviso)' }}>
                           {x.sin_firmar > 0
                             ? `${x.sin_firmar} firma(s) pendiente(s)`
                             : 'Lista para cerrar'}
@@ -213,39 +213,39 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   barra: { display: 'flex', marginBottom: 16 },
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14, width: '100%',
   },
-  h3: { fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10 },
-  nota: { fontSize: 13, color: '#5B6470', lineHeight: 1.65, margin: 0, maxWidth: 640 },
+  h3: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10 },
+  nota: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.65, margin: 0, maxWidth: 640 },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '2px 0 0', lineHeight: 1.55 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '2px 0 0', lineHeight: 1.55 },
 
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 12, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 640 },
   th: {
-    textAlign: 'center', padding: '10px 8px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'center', padding: '10px 8px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '10px 8px', borderBottom: '1px solid #F0F0EC' },
-  tdNombre: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC', minWidth: 230 },
-  enlace: { fontSize: 13, fontWeight: 600, color: '#14263F' },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  td: { padding: '10px 8px', borderBottom: '1px solid var(--superficie-3)' },
+  tdNombre: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', minWidth: 230 },
+  enlace: { fontSize: 13, fontWeight: 600, color: 'var(--texto)' },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   chip: {
     fontSize: 10.5, fontWeight: 700, padding: '3px 10px',
     borderRadius: 20, whiteSpace: 'nowrap',
@@ -253,11 +253,11 @@ const s: Record<string, React.CSSProperties> = {
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
 };

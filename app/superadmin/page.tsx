@@ -78,21 +78,21 @@ export default async function PaginaSuperadmin() {
 
 function Kpi({ v, e, alerta }: { v: string; e: string; alerta?: boolean }) {
   return (
-    <div style={{ ...s.kpi, ...(alerta ? { background: '#FDF2F2', border: '1px solid #F5C6C6' } : {}) }}>
-      <div style={{ fontSize: 21, fontWeight: 700, color: alerta ? '#9B1C1C' : '#14263F' }}>{v}</div>
+    <div style={{ ...s.kpi, ...(alerta ? { background: 'var(--mal-fondo)', border: '1px solid #F5C6C6' } : {}) }}>
+      <div style={{ fontSize: 21, fontWeight: 700, color: alerta ? 'var(--mal)' : '#14263F' }}>{v}</div>
       <div style={s.kpiE}>{e}</div>
     </div>
   );
 }
 
 const s: Record<string, React.CSSProperties> = {
-  pagina: { minHeight: '100vh', background: '#F7F7F4', fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif", padding: 26, color: '#14263F' },
+  pagina: { minHeight: '100vh', background: 'var(--fondo)', padding: 26, color: 'var(--texto)' },
   wrap: { maxWidth: 1240, margin: '0 auto' },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 12, margin: '22px 0' },
-  kpi: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, padding: 15 },
-  kpiE: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .4, marginTop: 3 },
+  kpi: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, padding: 15 },
+  kpiE: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .4, marginTop: 3 },
 };

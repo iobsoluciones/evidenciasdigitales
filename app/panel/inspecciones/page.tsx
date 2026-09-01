@@ -43,12 +43,12 @@ export default async function PaginaInspecciones() {
           <Link href="/panel/inspecciones/programadas" style={s.btnSec}>
             Cronograma
             {vencidas > 0 && (
-              <span style={{ ...s.pastilla, background: '#FEE2E2', color: '#9B1C1C' }}>
+              <span style={{ ...s.pastilla, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
                 {vencidas} vencida{vencidas !== 1 ? 's' : ''}
               </span>
             )}
             {vencidas === 0 && proximas > 0 && (
-              <span style={{ ...s.pastilla, background: '#FEF9C3', color: '#8A6100' }}>
+              <span style={{ ...s.pastilla, background: 'var(--ambar-fondo)', color: 'var(--ambar)' }}>
                 {proximas} esta semana
               </span>
             )}
@@ -74,19 +74,19 @@ export default async function PaginaInspecciones() {
 const s: Record<string, React.CSSProperties> = {
   btnSec: {
     display: 'inline-flex', alignItems: 'center', gap: 8,
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '9px 15px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none',
   },
   pastilla: {
-    borderRadius: 10, padding: '1px 8px', fontSize: 11, fontWeight: 700,
+    borderRadius: 8, padding: '1px 8px', fontSize: 11, fontWeight: 700,
   },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 16, flexWrap: 'wrap', marginBottom: 20,
   },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
-  vacio: { background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
+  vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

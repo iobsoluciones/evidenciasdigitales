@@ -144,7 +144,7 @@ export default function VistaInventario({
             style={{
               ...e.botonVista,
               background: vista === 'tarjetas' ? color : 'transparent',
-              color: vista === 'tarjetas' ? '#fff' : '#5B6470',
+              color: vista === 'tarjetas' ? '#fff' : 'var(--texto-suave)',
             }}
           >
             <span aria-hidden="true" style={{ fontSize: 13 }}>▦</span> Tarjetas
@@ -155,7 +155,7 @@ export default function VistaInventario({
             style={{
               ...e.botonVista,
               background: vista === 'lista' ? color : 'transparent',
-              color: vista === 'lista' ? '#fff' : '#5B6470',
+              color: vista === 'lista' ? '#fff' : 'var(--texto-suave)',
             }}
           >
             <span aria-hidden="true" style={{ fontSize: 13 }}>☰</span> Lista
@@ -232,26 +232,26 @@ export default function VistaInventario({
                       </Link>
                       {a.modelo && <div style={e.modelo}>{a.modelo}</div>}
                     </td>
-                    <td style={{ ...e.td, color: '#5B6470' }}>{a.categoria ?? '—'}</td>
-                    <td style={{ ...e.td, color: '#5B6470' }}>{a.marca ?? '—'}</td>
+                    <td style={{ ...e.td, color: 'var(--texto-suave)' }}>{a.categoria ?? '—'}</td>
+                    <td style={{ ...e.td, color: 'var(--texto-suave)' }}>{a.marca ?? '—'}</td>
                     <td style={{
                       ...e.td, textAlign: 'center', fontWeight: 700,
-                      color: alerta ? '#9B1C1C' : '#15803D',
+                      color: alerta ? 'var(--mal)' : 'var(--bien)',
                     }}>
                       {a.tipo === 'consumible'
                         ? `${a.existencia ?? 0}`
                         : `${a.disponibles ?? 0} / ${a.unidades ?? 0}`}
                     </td>
                     {pestana === 'consumible' && (
-                      <td style={{ ...e.td, textAlign: 'center', color: '#8A929C' }}>
+                      <td style={{ ...e.td, textAlign: 'center', color: 'var(--texto-tenue)' }}>
                         {a.stock_minimo}
                       </td>
                     )}
                     <td style={e.td}>
                       <span style={{
                         ...e.chipEstado,
-                        background: alerta ? '#FEE2E2' : '#F0FDF4',
-                        color: alerta ? '#9B1C1C' : '#15803D',
+                        background: alerta ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+                        color: alerta ? 'var(--mal)' : 'var(--bien)',
                       }}>
                         {alerta
                           ? (pestana === 'consumible' ? 'Bajo mínimo' : 'Sin disponibles')
@@ -291,7 +291,7 @@ function Encabezado({
       style={{
         ...e.th,
         cursor: 'pointer',
-        color: activo ? '#14263F' : '#8A929C',
+        color: activo ? '#14263F' : 'var(--texto-tenue)',
         textAlign: alineado ?? 'left',
       }}
       title={`Ordenar por ${texto.toLowerCase()}`}
@@ -322,8 +322,8 @@ function Tarjeta({ a, alerta }: { a: Articulo; alerta: boolean }) {
 
         <div style={{
           ...e.estado,
-          background: alerta ? '#FEE2E2' : '#F0FDF4',
-          color: alerta ? '#9B1C1C' : '#15803D',
+          background: alerta ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+          color: alerta ? 'var(--mal)' : 'var(--bien)',
         }}>
           {a.tipo === 'consumible' ? (
             <>
@@ -340,10 +340,10 @@ function Tarjeta({ a, alerta }: { a: Articulo; alerta: boolean }) {
 }
 
 const e: Record<string, React.CSSProperties> = {
-  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #E4E4DF', marginBottom: 16 },
+  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid var(--borde)', marginBottom: 16 },
   pestana: {
     background: 'none', border: 'none', padding: '10px 18px', fontSize: 13,
-    cursor: 'pointer', fontFamily: 'inherit', color: '#8A929C',
+    cursor: 'pointer', fontFamily: 'inherit', color: 'var(--texto-tenue)',
     borderBottomWidth: 2, borderBottomStyle: 'solid', borderBottomColor: 'transparent',
     marginBottom: -1,
   },
@@ -351,18 +351,18 @@ const e: Record<string, React.CSSProperties> = {
 
   controles: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 16 },
   select: {
-    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', background: '#fff',
+    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  conteo: { fontSize: 12, color: '#8A929C' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)' },
   btn: {
-    color: '#fff', padding: '9px 16px', borderRadius: 4, fontSize: 12.5,
+    color: 'var(--sobre-marca)', padding: '9px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
     marginLeft: 'auto',
   },
 
   selectorVista: {
-    display: 'flex', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    display: 'flex', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, overflow: 'hidden',
   },
   botonVista: {
@@ -372,64 +372,64 @@ const e: Record<string, React.CSSProperties> = {
   },
 
   alerta: {
-    background: '#FEFCE8', color: '#8A6100', padding: '11px 15px',
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', padding: '11px 15px',
     borderRadius: 6, fontSize: 13, marginBottom: 16,
   },
 
   /* -------- Tarjetas -------- */
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(230px,1fr))', gap: 16 },
   tarjeta: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflow: 'hidden', textDecoration: 'none',
     color: 'inherit', display: 'block',
   },
   zonaFoto: {
-    height: 130, background: '#FBFBF9', display: 'flex',
+    height: 130, background: 'var(--superficie-2)', display: 'flex',
     alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
   },
   foto: { maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' },
-  sinFoto: { fontSize: 11, color: '#C5C5BD' },
+  sinFoto: { fontSize: 11, color: 'var(--borde-fuerte)' },
   cuerpo: { padding: 14 },
   codigo: {
-    fontSize: 10, color: '#A3AAB3', letterSpacing: .4,
+    fontSize: 10, color: 'var(--texto-tenue)', letterSpacing: .4,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   nombre: { fontSize: 13.5, margin: '3px 0 8px', fontWeight: 600, lineHeight: 1.35 },
   meta: { display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 },
-  chip: { fontSize: 9.5, background: '#F4F4F0', color: '#5B6470', padding: '2px 7px', borderRadius: 3 },
-  marca: { fontSize: 10.5, color: '#8A929C' },
+  chip: { fontSize: 9.5, background: 'var(--superficie-3)', color: 'var(--texto-suave)', padding: '2px 7px', borderRadius: 3 },
+  marca: { fontSize: 10.5, color: 'var(--texto-tenue)' },
   estado: { fontSize: 12, padding: '6px 10px', borderRadius: 4, textAlign: 'center' },
   minimo: { fontWeight: 400, opacity: .75 },
 
   /* -------- Lista -------- */
   contenedorTabla: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 12.5 },
   th: {
-    background: '#F7F7F4', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '10px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '10px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
     letterSpacing: .3, whiteSpace: 'nowrap', userSelect: 'none',
   },
   flecha: { fontSize: 9, marginLeft: 5, opacity: .7 },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F4F4F0', verticalAlign: 'middle' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'middle' },
   mono: {
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
-    fontSize: 11.5, color: '#5B6470', whiteSpace: 'nowrap',
+    fontSize: 11.5, color: 'var(--texto-suave)', whiteSpace: 'nowrap',
   },
-  enlaceNombre: { color: '#14263F', textDecoration: 'none', fontWeight: 600 },
-  modelo: { fontSize: 10.5, color: '#A3AAB3', marginTop: 1 },
+  enlaceNombre: { color: 'var(--texto)', textDecoration: 'none', fontWeight: 600 },
+  modelo: { fontSize: 10.5, color: 'var(--texto-tenue)', marginTop: 1 },
   chipEstado: {
     fontSize: 10.5, fontWeight: 600, padding: '3px 9px',
     borderRadius: 999, whiteSpace: 'nowrap',
   },
   enlaceVer: {
-    fontSize: 11.5, color: '#14263F', textDecoration: 'underline', whiteSpace: 'nowrap',
+    fontSize: 11.5, color: 'var(--texto)', textDecoration: 'underline', whiteSpace: 'nowrap',
   },
 
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
 };

@@ -108,7 +108,7 @@ export default function EditorMembrete({
               type="color"
               value={f.color_primario}
               onChange={(ev) => setF({ ...f, color_primario: ev.target.value })}
-              style={{ width: 46, height: 34, padding: 2, border: '1px solid #DFDFD8', borderRadius: 4 }}
+              style={{ width: 46, height: 34, padding: 2, border: '1px solid var(--borde-fuerte)', borderRadius: 4 }}
             />
             <input
               value={f.color_primario}
@@ -119,7 +119,7 @@ export default function EditorMembrete({
 
           <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
             <button onClick={guardar} disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? '#C5C5BD' : f.color_primario }}>
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : f.color_primario }}>
               {pendiente ? 'Guardando…' : 'Guardar membrete'}
             </button>
             <button onClick={cancelar} style={e.btnSec}>Cancelar</button>
@@ -130,8 +130,8 @@ export default function EditorMembrete({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -164,29 +164,29 @@ function Fila({ k, v, mono, color }: { k: string; v: string; mono?: boolean; col
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, marginBottom: 0,
   },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
   h2: { fontSize: 14.5, margin: 0, fontWeight: 600 },
   btnEditar: {
-    background: '#fff', border: '1px solid #DFDFD8', color: '#14263F',
+    background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', color: 'var(--texto)',
     padding: '6px 14px', borderRadius: 4, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
-    padding: '8px 0', borderBottom: '1px solid #F4F4F0', fontSize: 13,
+    padding: '8px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 13,
   },
-  clave: { color: '#8A929C', margin: 0 },
-  valor: { margin: 0, fontWeight: 600, textAlign: 'right', color: '#14263F' },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
+  valor: { margin: 0, fontWeight: 600, textAlign: 'right', color: 'var(--texto)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 14 },
-  btn: { color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnSec: { background: '#fff', color: '#14263F', border: '1px solid #DFDFD8', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnSec: { background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
-  legal: { fontSize: 11, color: '#8A929C', marginTop: 14, lineHeight: 1.5 },
+  legal: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.5 },
 };

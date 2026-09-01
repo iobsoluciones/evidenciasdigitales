@@ -107,8 +107,8 @@ export default function FirmaRemota({
     return (
       <div style={s.caja}>
         <div style={{
-          width: 60, height: 60, borderRadius: '50%', background: '#DCFCE7',
-          color: '#15803D', fontSize: 30, lineHeight: '60px',
+          width: 60, height: 60, borderRadius: '50%', background: 'var(--bien-fondo)',
+          color: 'var(--bien)', fontSize: 30, lineHeight: '60px',
           margin: '0 auto 16px', textAlign: 'center',
         }}>
           ✓
@@ -201,7 +201,7 @@ export default function FirmaRemota({
         disabled={enviando}
         style={{
           ...s.boton,
-          background: enviando ? '#C5C5BD' : color,
+          background: enviando ? 'var(--borde-fuerte)' : color,
           cursor: enviando ? 'not-allowed' : 'pointer',
         }}
       >
@@ -226,49 +226,49 @@ function Fila({ k, v }: { k: string; v: string }) {
 
 const s: Record<string, React.CSSProperties> = {
   caja: {
-    background: '#fff', borderRadius: 12, padding: 22,
+    background: 'var(--superficie)', borderRadius: 12, padding: 22,
     maxWidth: 520, margin: '0 auto',
     boxShadow: '0 1px 3px rgba(20,38,63,.08)',
   },
   encabezado: {
     textAlign: 'center', paddingBottom: 16, marginBottom: 16,
-    borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: '#EFEFEA',
+    borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: 'var(--borde)',
   },
   logo: { maxHeight: 44, maxWidth: 130, objectFit: 'contain', marginBottom: 10 },
   empresa: { fontSize: 16, fontWeight: 700 },
-  subtitulo: { fontSize: 12, color: '#8A929C', marginTop: 3 },
+  subtitulo: { fontSize: 12, color: 'var(--texto-tenue)', marginTop: 3 },
 
   datos: { marginBottom: 18 },
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
     padding: '6px 0', borderBottomWidth: 1, borderBottomStyle: 'solid',
-    borderBottomColor: '#F4F4F0', fontSize: 13,
+    borderBottomColor: 'var(--superficie-3)', fontSize: 13,
   },
-  clave: { color: '#8A929C' },
+  clave: { color: 'var(--texto-tenue)' },
   valor: { fontWeight: 600, textAlign: 'right' },
 
   h2: { fontSize: 13.5, margin: '0 0 10px', fontWeight: 600 },
   items: { display: 'grid', gap: 8 },
   item: {
     display: 'flex', gap: 10, alignItems: 'center', padding: 10,
-    background: '#FBFBF9', borderRadius: 6,
+    background: 'var(--superficie-2)', borderRadius: 6,
   },
-  fotoItem: { width: 44, height: 44, objectFit: 'contain', borderRadius: 4, background: '#fff' },
-  detalleItem: { fontSize: 11.5, color: '#5B6470', marginTop: 2 },
-  accesorios: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  fotoItem: { width: 44, height: 44, objectFit: 'contain', borderRadius: 4, background: 'var(--superficie)' },
+  detalleItem: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 2 },
+  accesorios: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
 
   observaciones: {
-    fontSize: 12.5, color: '#5B6470', marginTop: 14,
-    padding: 12, background: '#FBFBF9', borderRadius: 6, lineHeight: 1.6,
+    fontSize: 12.5, color: 'var(--texto-suave)', marginTop: 14,
+    padding: 12, background: 'var(--superficie-2)', borderRadius: 6, lineHeight: 1.6,
   },
 
   declaracion: {
     marginTop: 18, padding: 14, borderRadius: 8,
-    background: '#FAFAF8',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie-2)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
   },
   textoDeclaracion: {
-    fontSize: 12, lineHeight: 1.7, color: '#374151',
+    fontSize: 12, lineHeight: 1.7, color: 'var(--texto-suave)',
     margin: '0 0 12px', textAlign: 'justify',
   },
   aceptar: { display: 'flex', alignItems: 'center', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
@@ -276,20 +276,20 @@ const s: Record<string, React.CSSProperties> = {
   label: { display: 'block', fontSize: 13, fontWeight: 600, margin: '18px 0 6px' },
   input: {
     width: '100%', padding: '12px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 8, fontSize: 15,
+    borderColor: 'var(--borde-fuerte)', borderRadius: 8, fontSize: 15,
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
 
   error: {
-    marginTop: 14, padding: '11px 14px', background: '#FDF2F2',
-    color: '#9B1C1C', borderRadius: 8, fontSize: 13,
+    marginTop: 14, padding: '11px 14px', background: 'var(--mal-fondo)',
+    color: 'var(--mal)', borderRadius: 8, fontSize: 13,
   },
   boton: {
     display: 'block', width: '100%', marginTop: 20, padding: 15,
-    color: '#fff', border: 'none', borderRadius: 10,
+    color: 'var(--sobre-marca)', border: 'none', borderRadius: 8,
     fontSize: 15, fontWeight: 600,
   },
   titulo: { fontSize: 19, margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.6 },
-  notaPie: { fontSize: 11, color: '#8A929C', textAlign: 'center', marginTop: 14 },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6 },
+  notaPie: { fontSize: 11, color: 'var(--texto-tenue)', textAlign: 'center', marginTop: 14 },
 };

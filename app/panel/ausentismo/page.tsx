@@ -68,8 +68,8 @@ export default async function PaginaAusentismo({
             style={{
               ...s.anio,
               background: a === anio ? empresa.color_primario : '#fff',
-              color: a === anio ? '#fff' : '#5B6470',
-              borderColor: a === anio ? empresa.color_primario : '#E4E4DF',
+              color: a === anio ? '#fff' : 'var(--texto-suave)',
+              borderColor: a === anio ? empresa.color_primario : 'var(--borde)',
             }}>
             {a}
           </a>
@@ -94,8 +94,8 @@ export default async function PaginaAusentismo({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: '0 0 14px', maxWidth: 720, lineHeight: 1.6 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 14px', maxWidth: 720, lineHeight: 1.6 },
   anios: { display: 'flex', gap: 6, marginBottom: 16 },
   anio: {
     borderWidth: 1, borderStyle: 'solid', borderRadius: 8,

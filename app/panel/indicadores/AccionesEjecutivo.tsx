@@ -112,7 +112,7 @@ export default function AccionesEjecutivo({
             onClick={enviar}
             disabled={pendiente}
             style={{
-              ...e.btn, background: pendiente ? '#C5C5BD' : color,
+              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color,
               marginTop: 12, width: '100%', border: 'none', cursor: 'pointer',
             }}
           >
@@ -124,8 +124,8 @@ export default function AccionesEjecutivo({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -141,32 +141,32 @@ export default function AccionesEjecutivo({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 20, marginBottom: 20,
   },
   cabecera: { marginBottom: 14 },
   h2: { fontSize: 14.5, margin: '0 0 3px', fontWeight: 600 },
-  sub: { fontSize: 12, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 12, color: 'var(--texto-suave)', margin: 0 },
   controles: { display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' },
   select: {
-    padding: '9px 11px', border: '1px solid #DFDFD8', borderRadius: 4,
-    fontSize: 13, fontFamily: 'inherit', background: '#fff',
+    padding: '9px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
+    fontSize: 13, fontFamily: 'inherit', background: 'var(--superficie)',
   },
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
-  bloque: { marginTop: 16, paddingTop: 16, borderTop: '1px solid #E4E4DF', maxWidth: 520 },
+  bloque: { marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--borde)', maxWidth: 520 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 0' },
   aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 14, lineHeight: 1.5 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.5 },
 };

@@ -51,10 +51,10 @@ const CLASES: { v: Clasificacion; t: string }[] = [
 
 /** Código de color de la norma: I rojo, II naranja, III amarillo, IV verde. */
 const NIVELES: Record<string, { fondo: string; color: string }> = {
-  I: { fondo: '#FDE7E5', color: '#9B1C1C' },
-  II: { fondo: '#FCEEDF', color: '#9A3412' },
-  III: { fondo: '#F9F3DC', color: '#7C6407' },
-  IV: { fondo: '#E6F4EA', color: '#1E6B3A' },
+  I: { fondo: '#FDE7E5', color: 'var(--mal)' },
+  II: { fondo: '#FCEEDF', color: 'var(--aviso)' },
+  III: { fondo: '#F9F3DC', color: 'var(--ambar)' },
+  IV: { fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
 };
 
 const TIPOS_CONTROL: { v: TipoControl; t: string }[] = [
@@ -167,9 +167,9 @@ export default function VistaPeligros({
       {resumen && (
         <div style={s.tarjetas}>
           <Tarjeta n={resumen.total} t="Peligros identificados" c={color} />
-          <Tarjeta n={resumen.nivel_i} t="Nivel I — no aceptable" c={resumen.nivel_i ? '#9B1C1C' : color} />
-          <Tarjeta n={resumen.nivel_ii} t="Nivel II" c={resumen.nivel_ii ? '#9A3412' : color} />
-          <Tarjeta n={resumen.sin_controles} t="Sin controles enlazados" c={resumen.sin_controles ? '#9A3412' : color} />
+          <Tarjeta n={resumen.nivel_i} t="Nivel I — no aceptable" c={resumen.nivel_i ? 'var(--mal)' : color} />
+          <Tarjeta n={resumen.nivel_ii} t="Nivel II" c={resumen.nivel_ii ? 'var(--aviso)' : color} />
+          <Tarjeta n={resumen.sin_controles} t="Sin controles enlazados" c={resumen.sin_controles ? 'var(--aviso)' : color} />
         </div>
       )}
 
@@ -203,8 +203,8 @@ export default function VistaPeligros({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -331,7 +331,7 @@ export default function VistaPeligros({
           <div style={s.acciones}>
             <button onClick={() => setForm(null)} style={s.botonPlano} type="button">Cancelar</button>
             <button onClick={guardar} disabled={pendiente} type="button"
-              style={{ ...s.botonLleno, background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color }}>
+              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar peligro'}
             </button>
           </div>
@@ -357,7 +357,7 @@ export default function VistaPeligros({
                     <button key={o.id} onClick={() => alternar(tipo, o.id)} type="button"
                       style={{
                         ...s.opcion,
-                        ...(marcado ? { borderColor: color, background: '#fff', color, fontWeight: 700 } : {}),
+                        ...(marcado ? { borderColor: color, background: 'var(--superficie)', color, fontWeight: 700 } : {}),
                       }}>
                       {marcado ? '✓ ' : ''}{o.nombre}
                     </button>
@@ -370,7 +370,7 @@ export default function VistaPeligros({
             <button onClick={() => { setEnlazando(null); setSeleccion([]); }}
               style={s.botonPlano} type="button">Cancelar</button>
             <button onClick={guardarEnlaces} disabled={pendiente} type="button"
-              style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}>
+              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
               Guardar controles
             </button>
           </div>
@@ -423,8 +423,8 @@ export default function VistaPeligros({
                     </td>
                     <td style={s.td}>
                       {p.controles > 0
-                        ? <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>{p.controles}</span>
-                        : <span style={{ ...s.chip, background: '#FFF7ED', color: '#9A3412' }}>Ninguno</span>}
+                        ? <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>{p.controles}</span>
+                        : <span style={{ ...s.chip, background: 'var(--aviso-fondo)', color: 'var(--aviso)' }}>Ninguno</span>}
                     </td>
                     <td style={s.td}>
                       <div style={{ display: 'flex', gap: 4 }}>
@@ -454,7 +454,7 @@ export default function VistaPeligros({
                           Editar
                         </button>
                         <button type="button" onClick={() => borrar(p.id)}
-                          style={{ ...s.botonMini, color: '#9B1C1C' }}>
+                          style={{ ...s.botonMini, color: 'var(--mal)' }}>
                           Borrar
                         </button>
                       </div>
@@ -504,7 +504,7 @@ function Selector({
           <button key={o.v} onClick={() => onChange(o.v)} type="button" title={o.d}
             style={{
               ...s.opcion,
-              ...(valor === o.v ? { borderColor: '#14263F', background: '#14263F', color: '#fff', fontWeight: 700 } : {}),
+              ...(valor === o.v ? { borderColor: '#14263F', background: 'var(--marca)', color: 'var(--sobre-marca)', fontWeight: 700 } : {}),
             }}>
             {o.v} · {o.t}
           </button>
@@ -520,93 +520,93 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))',
   },
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2,
   },
   tarjetaN: { fontSize: 24, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' },
-  tarjetaT: { fontSize: 11.5, color: '#5B6470', lineHeight: 1.4 },
+  tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   avisoControles: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', color: '#7C2D12',
-    borderRadius: 9, padding: '11px 14px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 14,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    borderRadius: 8, padding: '11px 14px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 14,
   },
   controles: { display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap' },
   buscador: {
-    flex: '1 1 240px', padding: '9px 12px', border: '1px solid #E4E4DF',
+    flex: '1 1 240px', padding: '9px 12px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
   },
   aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
 
   form: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '16px 18px', marginBottom: 16,
   },
-  formTitulo: { fontSize: 15, fontWeight: 700, color: '#14263F', marginBottom: 10 },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 10px' },
+  formTitulo: { fontSize: 15, fontWeight: 700, color: 'var(--texto)', marginBottom: 10 },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 10px' },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
 
   valoracion: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--fondo)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '14px 16px', margin: '6px 0 14px',
   },
-  valTitulo: { fontSize: 13.5, fontWeight: 700, color: '#14263F', marginBottom: 4 },
+  valTitulo: { fontSize: 13.5, fontWeight: 700, color: 'var(--texto)', marginBottom: 4 },
   opciones: { display: 'flex', gap: 6, flexWrap: 'wrap' },
   opcion: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
-    padding: '6px 12px', fontSize: 12, color: '#14263F', cursor: 'pointer',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
+    padding: '6px 12px', fontSize: 12, color: 'var(--texto)', cursor: 'pointer',
     textAlign: 'left',
   },
-  grupoTitulo: { fontSize: 12, fontWeight: 700, color: '#5B6470', marginBottom: 6 },
-  resultado: { borderRadius: 9, padding: '12px 14px', marginTop: 12 },
+  grupoTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto-suave)', marginBottom: 6 },
+  resultado: { borderRadius: 8, padding: '12px 14px', marginTop: 12 },
   resultadoCifras: {
-    display: 'flex', gap: 18, fontSize: 12.5, color: '#374151',
+    display: 'flex', gap: 18, fontSize: 12.5, color: 'var(--texto-suave)',
     flexWrap: 'wrap', fontVariantNumeric: 'tabular-nums',
   },
   resultadoNivel: { fontSize: 15, fontWeight: 700, marginTop: 6 },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap',
   },
 
   vacio: {
-    fontSize: 13.5, color: '#5B6470', lineHeight: 1.65, background: '#fff',
-    border: '1px solid #E4E4DF', borderRadius: 10, padding: '18px 20px', maxWidth: 640,
+    fontSize: 13.5, color: 'var(--texto-suave)', lineHeight: 1.65, background: 'var(--superficie)',
+    border: '1px solid var(--borde)', borderRadius: 8, padding: '18px 20px', maxWidth: 640,
   },
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10, overflowX: 'auto',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 940 },
   th: {
-    textAlign: 'left', padding: '10px 10px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'left', padding: '10px 10px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   tdNum: {
-    padding: '9px 10px', borderBottom: '1px solid #F0F0EC',
-    textAlign: 'center', fontVariantNumeric: 'tabular-nums', color: '#14263F',
+    padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)',
+    textAlign: 'center', fontVariantNumeric: 'tabular-nums', color: 'var(--texto)',
   },
   codigo: { fontFamily: "'Consolas','Courier New',monospace", fontWeight: 600 },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2, maxWidth: 220 },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2, maxWidth: 220 },
   chip: {
     display: 'inline-block', padding: '3px 10px', borderRadius: 20,
     fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 10px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

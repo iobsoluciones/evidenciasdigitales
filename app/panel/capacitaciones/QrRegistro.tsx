@@ -104,12 +104,12 @@ export default function QrRegistro({
 
 const e: Record<string, React.CSSProperties> = {
   btn: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '9px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     cursor: 'pointer', fontFamily: 'inherit',
   },
   btnPrincipal: {
-    color: '#fff', border: 'none', padding: '9px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 16px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   velo: {
@@ -118,19 +118,19 @@ const e: Record<string, React.CSSProperties> = {
     padding: 20, zIndex: 60,
   },
   modal: {
-    background: '#fff', borderRadius: 10, padding: 24,
+    background: 'var(--superficie)', borderRadius: 8, padding: 24,
     width: '100%', maxWidth: 420, textAlign: 'center',
   },
   titulo: { fontSize: 17, margin: '0 0 6px' },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: '0 0 18px', lineHeight: 1.5 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.5 },
   cajaQR: {
-    display: 'inline-flex', padding: 14, background: '#fff',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF', borderRadius: 8,
+    display: 'inline-flex', padding: 14, background: 'var(--superficie)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)', borderRadius: 8,
   },
   url: {
-    fontSize: 11.5, color: '#5B6470', wordBreak: 'break-all',
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all',
     fontFamily: 'ui-monospace,monospace', margin: '14px 0 18px',
   },
   acciones: { display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' },
-  aviso: { fontSize: 12, color: '#15803D', margin: '14px 0 0' },
+  aviso: { fontSize: 12, color: 'var(--bien)', margin: '14px 0 0' },
 };

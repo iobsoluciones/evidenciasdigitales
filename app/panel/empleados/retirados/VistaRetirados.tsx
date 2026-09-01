@@ -67,8 +67,8 @@ export default function VistaRetirados({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -108,12 +108,12 @@ export default function VistaRetirados({
                     <td style={e.td}>{em.nombres}</td>
                     <td style={e.td}>{em.cargo ?? '—'}</td>
                     <td style={e.td}>{em.area ?? '—'}</td>
-                    <td style={{ ...e.td, whiteSpace: 'nowrap', color: '#5B6470' }}>{fecha(em.fecha_retiro)}</td>
+                    <td style={{ ...e.td, whiteSpace: 'nowrap', color: 'var(--texto-suave)' }}>{fecha(em.fecha_retiro)}</td>
                     <td style={{ ...e.td, textAlign: 'center' }}>{em.asistencias}</td>
                     <td style={{
                       ...e.td, textAlign: 'center', fontWeight: 600,
-                      color: em.promedio === null ? '#A3AAB3'
-                           : em.promedio >= 70 ? '#15803D' : '#9B1C1C',
+                      color: em.promedio === null ? 'var(--texto-tenue)'
+                           : em.promedio >= 70 ? 'var(--bien)' : 'var(--mal)',
                     }}>
                       {em.promedio !== null ? `${em.promedio}%` : '—'}
                     </td>
@@ -125,7 +125,7 @@ export default function VistaRetirados({
                             <button
                               onClick={() => reincorporar(em.id)}
                               disabled={pendiente}
-                              style={{ ...e.btnMini, background: color, color: '#fff', borderColor: color }}
+                              style={{ ...e.btnMini, background: color, color: 'var(--sobre-marca)', borderColor: color }}
                             >
                               {pendiente ? 'Un momento…' : 'Confirmar'}
                             </button>
@@ -137,7 +137,7 @@ export default function VistaRetirados({
                           <button
                             onClick={() => { setAviso(null); setConfirmando(em.id); }}
                             disabled={pendiente}
-                            style={{ ...e.btnMini, color: '#15803D' }}
+                            style={{ ...e.btnMini, color: 'var(--bien)' }}
                           >
                             Reincorporar
                           </button>
@@ -157,47 +157,47 @@ export default function VistaRetirados({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 8, padding: 20,
   },
   intro: {
-    fontSize: 12.5, color: '#5B6470', margin: '0 0 16px',
+    fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 16px',
     lineHeight: 1.5, maxWidth: 720,
   },
   aviso: {
-    padding: '10px 12px', borderRadius: 5, fontSize: 12.5,
+    padding: '10px 12px', borderRadius: 6, fontSize: 12.5,
     margin: '0 0 14px',
   },
   barra: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     gap: 10, flexWrap: 'wrap', margin: '0 0 12px',
   },
-  conteo: { fontSize: 12, color: '#5B6470' },
+  conteo: { fontSize: 12, color: 'var(--texto-suave)' },
   input: {
-    border: '1px solid #DFDFD8', borderRadius: 5, padding: '8px 10px',
-    fontSize: 13, fontFamily: 'inherit', color: '#14263F', width: '100%',
+    border: '1px solid var(--borde-fuerte)', borderRadius: 6, padding: '8px 10px',
+    fontSize: 13, fontFamily: 'inherit', color: 'var(--texto)', width: '100%',
   },
   th: {
     textAlign: 'left', fontSize: 10.5, letterSpacing: .6,
-    textTransform: 'uppercase', color: '#8A929C', fontWeight: 600,
-    padding: '0 8px 8px', borderBottom: '1px solid #E4E4DF',
+    textTransform: 'uppercase', color: 'var(--texto-tenue)', fontWeight: 600,
+    padding: '0 8px 8px', borderBottom: '1px solid var(--borde)',
   },
   td: {
     padding: '10px 8px', borderBottom: '1px solid #F1F1EC',
-    color: '#14263F', verticalAlign: 'middle',
+    color: 'var(--texto)', verticalAlign: 'middle',
   },
   btnVer: {
-    fontSize: 11.5, color: '#14263F', textDecoration: 'none',
-    border: '1px solid #DFDFD8', borderRadius: 4, padding: '4px 9px',
-    marginRight: 6, background: '#fff', display: 'inline-block',
+    fontSize: 11.5, color: 'var(--texto)', textDecoration: 'none',
+    border: '1px solid var(--borde-fuerte)', borderRadius: 4, padding: '4px 9px',
+    marginRight: 6, background: 'var(--superficie)', display: 'inline-block',
   },
   btnMini: {
-    fontSize: 11.5, color: '#14263F', background: '#fff',
-    border: '1px solid #DFDFD8', borderRadius: 4, padding: '4px 9px',
+    fontSize: 11.5, color: 'var(--texto)', background: 'var(--superficie)',
+    border: '1px solid var(--borde-fuerte)', borderRadius: 4, padding: '4px 9px',
     marginRight: 6, cursor: 'pointer', fontFamily: 'inherit',
   },
   vacio: {
-    fontSize: 13, color: '#5B6470', textAlign: 'center',
+    fontSize: 13, color: 'var(--texto-suave)', textAlign: 'center',
     padding: '28px 0', margin: 0,
   },
 };

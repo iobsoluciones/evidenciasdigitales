@@ -87,7 +87,7 @@ export default function ListaInspecciones({
         <span style={e.conteo}>
           {lista.length} de {inspecciones.length}
           {noCumplen > 0 && (
-            <strong style={{ color: '#9B1C1C' }}> · {noCumplen} no cumplen</strong>
+            <strong style={{ color: 'var(--mal)' }}> · {noCumplen} no cumplen</strong>
           )}
         </span>
       </div>
@@ -109,7 +109,7 @@ export default function ListaInspecciones({
                   <strong>{i.nombre}</strong>
                   <div style={e.meta}>{TIPOS[i.tipo] ?? i.tipo}</div>
                 </td>
-                <td style={{ ...e.td, color: '#5B6470' }}>{i.objeto_nombre ?? '—'}</td>
+                <td style={{ ...e.td, color: 'var(--texto-suave)' }}>{i.objeto_nombre ?? '—'}</td>
                 <td style={{ ...e.td, whiteSpace: 'nowrap' }}>{fmt(i.fecha)}</td>
                 <td style={e.td}>
                   {i.respondidos} / {i.criterios}
@@ -119,15 +119,15 @@ export default function ListaInspecciones({
                 </td>
                 <td style={e.td}>
                   {i.estado === 'borrador' ? (
-                    <span style={{ ...e.chip, background: '#FEF9C3', color: '#8A6100' }}>
+                    <span style={{ ...e.chip, background: 'var(--ambar-fondo)', color: 'var(--ambar)' }}>
                       Sin cerrar
                     </span>
                   ) : i.cumple ? (
-                    <span style={{ ...e.chip, background: '#DCFCE7', color: '#15803D' }}>
+                    <span style={{ ...e.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                       Cumple · {i.puntaje}%
                     </span>
                   ) : (
-                    <span style={{ ...e.chip, background: '#FEE2E2', color: '#9B1C1C' }}>
+                    <span style={{ ...e.chip, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
                       No cumple · {i.puntaje}%
                     </span>
                   )}
@@ -160,44 +160,44 @@ export default function ListaInspecciones({
 const e: Record<string, React.CSSProperties> = {
   controles: { display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 14 },
   input: {
-    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', minWidth: 250,
   },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#5B6470', cursor: 'pointer' },
-  conteo: { fontSize: 12, color: '#8A929C', marginLeft: 'auto' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)', marginLeft: 'auto' },
 
   contenedor: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflowX: 'auto',
   },
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
     whiteSpace: 'nowrap',
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F4F4F0', verticalAlign: 'top' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11.5 },
-  meta: { fontSize: 10.5, color: '#A3AAB3', marginTop: 2 },
-  hallazgos: { fontSize: 10.5, color: '#9B1C1C', marginTop: 2 },
+  meta: { fontSize: 10.5, color: 'var(--texto-tenue)', marginTop: 2 },
+  hallazgos: { fontSize: 10.5, color: 'var(--mal)', marginTop: 2 },
   chip: { fontSize: 10.5, fontWeight: 600, padding: '3px 9px', borderRadius: 999, whiteSpace: 'nowrap' },
-  enlace: { fontSize: 11.5, color: '#14263F', textDecoration: 'underline', marginRight: 10 },
+  enlace: { fontSize: 11.5, color: 'var(--texto)', textDecoration: 'underline', marginRight: 10 },
 
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 14, lineHeight: 1.6, maxWidth: 680 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.6, maxWidth: 680 },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
   explicacion: {
-    fontSize: 12.5, color: '#5B6470', margin: 0, lineHeight: 1.6,
+    fontSize: 12.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6,
     maxWidth: 420, marginLeft: 'auto', marginRight: 'auto',
   },
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

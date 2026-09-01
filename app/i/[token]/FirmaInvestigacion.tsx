@@ -141,7 +141,7 @@ export default function FirmaInvestigacion({
         <button
           onClick={firmar}
           disabled={pendiente}
-          style={{ ...s.boton, background: pendiente ? '#cbd5e1' : color }}
+          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Registrando…' : 'Firmar'}
         </button>
@@ -166,11 +166,10 @@ function Dato({ e, v }: { e: string; v: string }) {
 const s: Record<string, React.CSSProperties> = {
   pagina: {
     minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#F7F7F4', padding: 20,
-    fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif", color: '#14263F',
+    background: 'var(--fondo)', padding: 20, color: 'var(--texto)',
   },
   caja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 14,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 14,
     padding: '26px 24px', maxWidth: 420, width: '100%', textAlign: 'center',
   },
   cabecera: {
@@ -178,37 +177,37 @@ const s: Record<string, React.CSSProperties> = {
   },
   logo: { maxHeight: 44, maxWidth: 150, objectFit: 'contain', marginBottom: 8 },
   empresa: { fontSize: 15, fontWeight: 700 },
-  doc: { fontSize: 11.5, color: '#5B6470', marginTop: 2 },
+  doc: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 2 },
 
   saludo: { fontSize: 14, lineHeight: 1.65, margin: '0 0 16px' },
 
   datos: {
-    display: 'grid', gap: 1, background: '#E4E4DF',
-    border: '1px solid #E4E4DF', borderRadius: 9, overflow: 'hidden', marginBottom: 14,
+    display: 'grid', gap: 1, background: 'var(--borde)',
+    border: '1px solid var(--borde)', borderRadius: 8, overflow: 'hidden', marginBottom: 14,
   },
-  dato: { background: '#F7F7F4', padding: '9px 12px', display: 'flex', flexDirection: 'column', gap: 2 },
-  datoE: { fontSize: 10, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .4 },
+  dato: { background: 'var(--fondo)', padding: '9px 12px', display: 'flex', flexDirection: 'column', gap: 2 },
+  datoE: { fontSize: 10, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .4 },
   datoV: { fontSize: 13.5, fontWeight: 600 },
 
   descripcion: {
-    borderLeftWidth: 3, borderLeftStyle: 'solid', background: '#FAFAF8',
+    borderLeftWidth: 3, borderLeftStyle: 'solid', background: 'var(--superficie-2)',
     padding: '11px 14px', fontSize: 13.5, lineHeight: 1.6,
-    color: '#374151', marginBottom: 16, textAlign: 'left',
+    color: 'var(--texto-suave)', marginBottom: 16, textAlign: 'left',
   },
-  aviso: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 16px' },
+  aviso: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 16px' },
 
   zonaFirma: { display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 },
   etiquetaFirma: { fontSize: 12, fontWeight: 600, textAlign: 'left' },
 
   error: {
-    background: '#FDF2F2', color: '#9B1C1C', borderRadius: 8,
+    background: 'var(--mal-fondo)', color: 'var(--mal)', borderRadius: 8,
     padding: '10px 13px', fontSize: 13, marginBottom: 12, textAlign: 'left',
   },
   boton: {
-    width: '100%', color: '#fff', border: 'none', padding: 14,
-    borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer',
+    width: '100%', color: 'var(--sobre-marca)', border: 'none', padding: 14,
+    borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: 'pointer',
   },
-  pie: { fontSize: 11, color: '#8A929C', marginTop: 14, lineHeight: 1.5 },
+  pie: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.5 },
 
   exito: {
     width: 46, height: 46, borderRadius: '50%', margin: '0 auto 12px',
@@ -216,5 +215,5 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 25, fontWeight: 700,
   },
   titulo: { fontSize: 19, fontWeight: 700, margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.65 },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.65 },
 };

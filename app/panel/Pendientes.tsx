@@ -20,22 +20,21 @@
  * atrasada, y esa es justo la pregunta que se hace quien abre el panel.
  */
 import Link from 'next/link';
-import { conAlfa } from '@/lib/color';
 import type { Pendientes as Datos, Severidad, Semaforo } from '@/lib/acciones-pendientes';
 
 const TONOS: Record<Severidad, {
   fondo: string; color: string; borde: string; texto: string; que: string;
 }> = {
   critico: {
-    fondo: '#FDF2F2', color: '#9B1C1C', borde: '#9B1C1C', texto: 'Crítico',
+    fondo: 'var(--mal-fondo)', color: 'var(--mal)', borde: 'var(--mal)', texto: 'Crítico',
     que: 'Plazo de ley encima o gente expuesta hoy',
   },
   alto: {
-    fondo: '#FFF7ED', color: '#9A3412', borde: '#9A3412', texto: 'Alto',
+    fondo: 'var(--aviso-fondo)', color: 'var(--aviso)', borde: 'var(--aviso)', texto: 'Alto',
     que: 'Vencido o a punto de vencer',
   },
   medio: {
-    fondo: '#F9F6E7', color: '#7C6407', borde: '#B08900', texto: 'Medio',
+    fondo: 'var(--ambar-fondo)', color: 'var(--ambar)', borde: 'var(--ambar)', texto: 'Medio',
     que: 'Conviene resolverlo este mes',
   },
 };
@@ -49,9 +48,9 @@ function plazo(dias: number): string {
 }
 
 const CRITERIOS: Record<string, { t: string; fondo: string; color: string }> = {
-  critico: { t: 'Crítico', fondo: '#FDF2F2', color: '#9B1C1C' },
-  moderadamente_aceptable: { t: 'Moderadamente aceptable', fondo: '#FFF7ED', color: '#9A3412' },
-  aceptable: { t: 'Aceptable', fondo: '#E6F4EA', color: '#1E6B3A' },
+  critico: { t: 'Crítico', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  moderadamente_aceptable: { t: 'Moderadamente aceptable', fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+  aceptable: { t: 'Aceptable', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
 };
 
 /** El semáforo va junto a los pendientes: uno dice cómo está el sistema
@@ -89,7 +88,7 @@ export default function Pendientes({
 
   if (resumen.total === 0) {
     return (
-      <section style={{ ...s.caja, borderLeft: `4px solid #1E6B3A` }}>
+      <section style={{ ...s.caja, borderLeft: '4px solid var(--bien)' }}>
         <div style={s.cabecera}>
           <h2 style={s.titulo}>Nada pendiente en {empresa}</h2>
           <Semaforo s={semaforo} />
@@ -109,7 +108,7 @@ export default function Pendientes({
     .filter((g) => g.suyos.length > 0);
 
   return (
-    <section style={{ ...s.caja, borderLeft: `4px solid ${resumen.criticos > 0 ? '#9B1C1C' : color}` }}>
+    <section style={{ ...s.caja, borderLeft: `4px solid ${resumen.criticos > 0 ? 'var(--mal)' : color}` }}>
       <div style={s.cabecera}>
         <div>
           <h2 style={s.titulo}>Qué hay que hacer en {empresa}</h2>
@@ -129,7 +128,7 @@ export default function Pendientes({
           return (
             <div
               key={sev}
-              style={{ ...s.grupo, background: t.fondo, borderColor: conAlfa(t.color, 0.22) }}
+              style={{ ...s.grupo, background: t.fondo, borderColor: `color-mix(in srgb, ${t.color} 30%, transparent)` }}
             >
               <div style={s.grupoCabecera}>
                 <span style={{ ...s.grupoCifra, color: t.color }}>{suyos.length}</span>
@@ -150,7 +149,7 @@ export default function Pendientes({
                         </span>
                       </span>
                       {i.dias !== 0 && (
-                        <span style={{ ...s.dias, color: i.dias < 0 ? '#9B1C1C' : '#5B6470' }}>
+                        <span style={{ ...s.dias, color: i.dias < 0 ? 'var(--mal)' : 'var(--texto-suave)' }}>
                           {plazo(i.dias)}
                         </span>
                       )}
@@ -168,7 +167,7 @@ export default function Pendientes({
 
 const s: Record<string, React.CSSProperties> = {
   caja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '18px 20px', marginBottom: 22,
   },
   cabecera: {
@@ -185,7 +184,7 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit, minmax(min(290px, 100%), 1fr))',
   },
   grupo: {
-    borderWidth: 1, borderStyle: 'solid', borderRadius: 10,
+    borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '12px 13px 13px',
   },
   grupoCabecera: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 },
@@ -197,30 +196,30 @@ const s: Record<string, React.CSSProperties> = {
   grupoTitulo: {
     fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .6,
   },
-  grupoQue: { fontSize: 11, color: '#6B7480', lineHeight: 1.35 },
-  titulo: { fontSize: 17, fontWeight: 700, color: '#14263F', margin: 0 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: '3px 0 0' },
+  grupoQue: { fontSize: 11, color: 'var(--texto-suave)', lineHeight: 1.35 },
+  titulo: { fontSize: 17, fontWeight: 700, color: 'var(--texto)', margin: 0 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '3px 0 0' },
   semaforo: {
-    display: 'flex', alignItems: 'center', gap: 9, borderRadius: 9,
+    display: 'flex', alignItems: 'center', gap: 9, borderRadius: 8,
     padding: '7px 13px', textDecoration: 'none', marginRight: 4,
   },
   semCifra: { fontSize: 21, fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' },
   semTexto: { display: 'flex', flexDirection: 'column', fontSize: 11.5, fontWeight: 700, lineHeight: 1.35 },
   semAnio: { fontSize: 10, fontWeight: 400, opacity: .85 },
-  vacio: { fontSize: 13.5, color: '#5B6470', lineHeight: 1.6, margin: 0, maxWidth: 560 },
+  vacio: { fontSize: 13.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: 0, maxWidth: 560 },
 
   lista: { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 },
   // Fondo blanco: la fila va DENTRO de una tarjeta ya teñida con el
   // color de su severidad, y sobre ese tinte el gris de antes se perdía.
   item: {
     display: 'flex', alignItems: 'center', gap: 10,
-    background: '#fff', borderLeftWidth: 3, borderLeftStyle: 'solid',
+    background: 'var(--superficie)', borderLeftWidth: 3, borderLeftStyle: 'solid',
     borderRadius: '0 8px 8px 0', padding: '9px 12px',
     textDecoration: 'none', color: 'inherit', flexWrap: 'wrap',
   },
   cuerpo: { display: 'flex', flexDirection: 'column', gap: 2, flex: '1 1 160px', minWidth: 0 },
-  itemTitulo: { fontSize: 13.5, fontWeight: 600, color: '#14263F', lineHeight: 1.4 },
-  itemDetalle: { fontSize: 11.5, color: '#8A929C', lineHeight: 1.4 },
+  itemTitulo: { fontSize: 13.5, fontWeight: 600, color: 'var(--texto)', lineHeight: 1.4 },
+  itemDetalle: { fontSize: 11.5, color: 'var(--texto-tenue)', lineHeight: 1.4 },
   dias: {
     fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
     fontVariantNumeric: 'tabular-nums', flexShrink: 0,

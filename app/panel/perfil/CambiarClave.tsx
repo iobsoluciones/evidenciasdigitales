@@ -97,8 +97,8 @@ export default function CambiarClave({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -145,7 +145,7 @@ export default function CambiarClave({
             <button
               onClick={cambiar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
             >
               {pendiente ? 'Guardando…' : 'Guardar contraseña'}
             </button>
@@ -165,25 +165,25 @@ export default function CambiarClave({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 18,
   },
   h2: { fontSize: 15, margin: '0 0 3px', fontWeight: 600 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: '0 0 16px' },
-  aviso: { padding: '10px 12px', borderRadius: 5, fontSize: 12.5, margin: '0 0 14px' },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 16px' },
+  aviso: { padding: '10px 12px', borderRadius: 6, fontSize: 12.5, margin: '0 0 14px' },
   formulario: { maxWidth: 360 },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   acciones: { display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' },
   btn: {
-    color: '#fff', border: 'none', padding: '9px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 16px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '9px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     cursor: 'pointer', fontFamily: 'inherit',
   },

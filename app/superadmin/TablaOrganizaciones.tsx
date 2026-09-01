@@ -108,14 +108,14 @@ export default function TablaOrganizaciones({
                       onChange={(e) => cambiarEstado(o, e.target.value)}
                       style={{
                         ...s.select,
-                        background: o.estado === 'activo' ? '#f0fdf4' : '#fef2f2',
-                        color: o.estado === 'activo' ? '#15803d' : '#b91c1c',
+                        background: o.estado === 'activo' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+                        color: o.estado === 'activo' ? 'var(--bien)' : 'var(--mal)',
                       }}
                     >
                       {ESTADOS.map((e) => <option key={e} value={e}>{e}</option>)}
                     </select>
                   </td>
-                  <td style={{ ...s.td, color: critico ? '#b91c1c' : undefined, fontWeight: critico ? 600 : 400 }}>
+                  <td style={{ ...s.td, color: critico ? 'var(--mal)' : undefined, fontWeight: critico ? 600 : 400 }}>
                     {fmt(o.fecha_expiracion)}
                     {d !== null && (
                       <span style={{ fontSize: 11, display: 'block', opacity: .8 }}>
@@ -127,11 +127,11 @@ export default function TablaOrganizaciones({
                     <span style={{
                       fontWeight: 600,
                       color: o.max_empresas !== null && o.empresas >= o.max_empresas
-                        ? '#9B1C1C' : '#14263F',
+                        ? 'var(--mal)' : '#14263F',
                     }}>
                       {o.empresas}
                     </span>
-                    <span style={{ color: '#8A929C' }}>
+                    <span style={{ color: 'var(--texto-tenue)' }}>
                       {o.max_empresas !== null ? ` / ${o.max_empresas}` : ' / ∞'}
                     </span>
                   </td>
@@ -147,7 +147,7 @@ export default function TablaOrganizaciones({
       </div>
 
       {lista.length === 0 && (
-        <p style={{ textAlign: 'center', color: '#6b7280', padding: '30px 0', fontSize: 13 }}>
+        <p style={{ textAlign: 'center', color: 'var(--texto-suave)', padding: '30px 0', fontSize: 13 }}>
           Sin organizaciones registradas.
         </p>
       )}
@@ -156,11 +156,11 @@ export default function TablaOrganizaciones({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  card: { background: '#fff', borderRadius: 14, padding: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
-  th: { background: '#f8fafc', color: '#6b7280', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', whiteSpace: 'nowrap' },
-  td: { padding: '10px 8px', borderBottom: '1px solid #e5e7eb', verticalAlign: 'middle' },
-  code: { background: '#f1f5f9', padding: '2px 6px', borderRadius: 4, fontSize: 12 },
-  select: { padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 12 },
-  input: { padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, minWidth: 200 },
-  aviso: { padding: '10px 14px', background: '#f0fdf4', color: '#15803d', borderRadius: 8, fontSize: 13, marginBottom: 14 },
+  card: { background: 'var(--superficie)', borderRadius: 14, padding: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  th: { background: 'var(--superficie-3)', color: 'var(--texto-suave)', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap' },
+  td: { padding: '10px 8px', borderBottom: '1px solid var(--borde)', verticalAlign: 'middle' },
+  code: { background: 'var(--superficie-3)', padding: '2px 6px', borderRadius: 4, fontSize: 12 },
+  select: { padding: '5px 8px', border: '1px solid var(--borde-fuerte)', borderRadius: 6, fontSize: 12 },
+  input: { padding: '8px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 13, minWidth: 200 },
+  aviso: { padding: '10px 14px', background: 'var(--bien-fondo)', color: 'var(--bien)', borderRadius: 8, fontSize: 13, marginBottom: 14 },
 };

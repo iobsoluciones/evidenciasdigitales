@@ -44,7 +44,7 @@ export default function AccionesReporte({
             sin bloquear la interfaz mientras se genera el archivo. */}
         <a
           href={`/api/pdf/${capacitacionId}`}
-          style={{ ...est.btn, background: color, color: '#fff', textDecoration: 'none' }}
+          style={{ ...est.btn, background: color, color: 'var(--sobre-marca)', textDecoration: 'none' }}
         >
           Descargar PDF
         </a>
@@ -52,7 +52,7 @@ export default function AccionesReporte({
         {/* Excel: enlace directo, el navegador gestiona la descarga */}
         <a
           href={`/api/excel/${capacitacionId}`}
-          style={{ ...est.btn, background: '#15803d', color: '#fff', textDecoration: 'none' }}
+          style={{ ...est.btn, background: 'var(--bien)', color: 'var(--sobre-marca)', textDecoration: 'none' }}
         >
           Descargar Excel
         </a>
@@ -92,8 +92,8 @@ export default function AccionesReporte({
             disabled={pendiente}
             style={{
               ...est.btn,
-              background: pendiente ? '#cbd5e1' : color,
-              color: '#fff',
+              background: pendiente ? 'var(--borde-fuerte)' : color,
+              color: 'var(--sobre-marca)',
               marginTop: 12,
               width: '100%',
               cursor: pendiente ? 'not-allowed' : 'pointer',
@@ -107,8 +107,8 @@ export default function AccionesReporte({
       {aviso && (
         <div style={{
           ...est.aviso,
-          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -118,15 +118,15 @@ export default function AccionesReporte({
 }
 
 const est: Record<string, React.CSSProperties> = {
-  tarjeta: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  tarjeta: { background: 'var(--superficie)', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   h2: { fontSize: 15, margin: '0 0 14px' },
   fila: { display: 'flex', gap: 10, flexWrap: 'wrap' },
   btn: { border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'inline-block' },
-  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  nota: { fontSize: 11.5, color: '#6b7280', margin: '10px 0 0' },
-  bloque: { marginTop: 16, paddingTop: 16, borderTop: '1px solid #e5e7eb' },
+  btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  nota: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '10px 0 0' },
+  bloque: { marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--borde)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6 },
-  input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
-  ayuda: { fontSize: 11, color: '#6b7280', margin: '4px 0 0' },
+  input: { width: '100%', padding: '9px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  ayuda: { fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' },
   aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13 },
 };

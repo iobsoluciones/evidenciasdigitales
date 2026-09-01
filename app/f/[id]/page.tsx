@@ -92,12 +92,12 @@ function Marco({
 }) {
   return (
     <main style={{
-      minHeight: '100vh', background: 'linear-gradient(135deg,#f1f5f9,#e2e8f0)',
+      minHeight: '100vh', background: 'var(--fondo)',
       display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-      padding: 20, fontFamily: "'Segoe UI',Roboto,Arial,sans-serif",
+      padding: 20,
     }}>
       <div style={{
-        width: '100%', maxWidth: 520, background: '#fff', borderRadius: 18,
+        width: '100%', maxWidth: 520, background: 'var(--superficie)', borderRadius: 18,
         boxShadow: '0 10px 30px rgba(0,0,0,.08)', padding: '28px 26px 32px', marginTop: 24,
       }}>
         {logo && (
@@ -112,11 +112,11 @@ function Marco({
 }
 
 const est: Record<string, React.CSSProperties> = {
-  titulo: { fontSize: 21, color: '#1e3a8a', textAlign: 'center', margin: '0 0 2px' },
-  sub: { fontSize: 13, color: '#6b7280', textAlign: 'center', margin: '0 0 20px' },
-  ficha: { background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 18, marginBottom: 18 },
-  tema: { fontSize: 17, margin: '0 0 10px', color: '#1f2937' },
-  dato: { fontSize: 13, color: '#6b7280', marginBottom: 4 },
-  error: { padding: 14, borderRadius: 10, background: '#fef2f2', color: '#dc2626', fontSize: 14, textAlign: 'center' },
-  aviso: { padding: '11px 14px', borderRadius: 8, background: '#fefce8', color: '#a16207', fontSize: 13, marginBottom: 16 },
+  titulo: { fontSize: 21, color: 'var(--texto)', textAlign: 'center', margin: '0 0 2px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', textAlign: 'center', margin: '0 0 20px' },
+  ficha: { background: 'var(--superficie-3)', border: '1px solid var(--borde)', borderRadius: 12, padding: 18, marginBottom: 18 },
+  tema: { fontSize: 17, margin: '0 0 10px', color: 'var(--texto)' },
+  dato: { fontSize: 13, color: 'var(--texto-suave)', marginBottom: 4 },
+  error: { padding: 14, borderRadius: 8, background: 'var(--mal-fondo)', color: 'var(--mal)', fontSize: 14, textAlign: 'center' },
+  aviso: { padding: '11px 14px', borderRadius: 8, background: 'var(--ambar-fondo)', color: '#a16207', fontSize: 13, marginBottom: 16 },
 };

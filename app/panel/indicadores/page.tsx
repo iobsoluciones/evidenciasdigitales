@@ -41,12 +41,12 @@ export default async function PaginaIndicadores() {
 
   if (!empresa) {
     return (
-      <div style={{ background:'#fff', border:'1px dashed #DFDFD8', borderRadius:8,
+      <div style={{ background: 'var(--superficie)', border:'1px dashed var(--borde-fuerte)', borderRadius:8,
                     padding:'40px 24px', textAlign:'center' }}>
         <p style={{ margin:'0 0 14px', fontSize:14 }}>
           Agrega una empresa para ver sus indicadores.
         </p>
-        <Link href="/panel/empresas/nueva" style={{ background:'#14263F', color:'#fff',
+        <Link href="/panel/empresas/nueva" style={{ background: 'var(--marca)', color: 'var(--sobre-marca)',
               padding:'10px 18px', borderRadius:4, fontSize:13, fontWeight:600,
               textDecoration:'none' }}>Agregar empresa</Link>
       </div>
@@ -80,7 +80,7 @@ export default async function PaginaIndicadores() {
       }}>
         <div>
           <h1 style={{ fontSize: 22, marginBottom: 3, letterSpacing: -0.4 }}>Indicadores</h1>
-          <p style={{ color: '#5B6470', fontSize: 13, marginTop: 0 }}>
+          <p style={{ color: 'var(--texto-suave)', fontSize: 13, marginTop: 0 }}>
             {empresa.nombre} · últimos 12 meses
           </p>
         </div>
@@ -88,14 +88,14 @@ export default async function PaginaIndicadores() {
             denominador de los indicadores del art. 30 de la Res. 0312. */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <Link href="/panel/indicadores/legales" style={{
-          border: '1px solid #14263F', background: '#14263F', color: '#fff',
+          border: '1px solid #14263F', background: 'var(--marca)', color: 'var(--sobre-marca)',
           padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
           textDecoration: 'none', whiteSpace: 'nowrap',
         }}>
           Indicadores del art. 30
         </Link>
         <Link href="/panel/horas" style={{
-          border: '1px solid #E4E4DF', background: '#fff', color: '#14263F',
+          border: '1px solid var(--borde)', background: 'var(--superficie)', color: 'var(--texto)',
           padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
           textDecoration: 'none', whiteSpace: 'nowrap',
         }}>
@@ -119,11 +119,11 @@ export default async function PaginaIndicadores() {
       {activa && (
         <section style={est.activa}>
           <div>
-            <div style={{ fontSize: 11, color: '#15803d', fontWeight: 600, textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 11, color: 'var(--bien)', fontWeight: 600, textTransform: 'uppercase' }}>
               Capacitación activa
             </div>
             <div style={{ fontSize: 15, fontWeight: 600, marginTop: 3 }}>{activa.tema}</div>
-            <div style={{ fontSize: 12, color: '#6b7280' }}>
+            <div style={{ fontSize: 12, color: 'var(--texto-suave)' }}>
               {activa.codigo} · {activa.instructor}
             </div>
           </div>
@@ -184,7 +184,7 @@ export default async function PaginaIndicadores() {
 
       {/* ---------- Verificación de aislamiento ---------- */}
       <section style={est.aislamiento}>
-        <strong style={{ color: '#14263F' }}>Empresa:</strong>{' '}
+        <strong style={{ color: 'var(--texto)' }}>Empresa:</strong>{' '}
         {empresa.nombre} · Nomenclatura vigente: {empresa.nomenclatura ?? '—'}
         <div style={{ marginTop: 4 }}>
           Todos los datos de esta pantalla están filtrados por Row Level Security.
@@ -209,10 +209,10 @@ function TarjetaParticipacion({
 }) {
   const p = datos?.porcentaje ?? 100;
   const tono = p >= 80
-    ? { fondo: '#f0fdf4', borde: '#dcfce7', texto: '#15803d' }
+    ? { fondo: 'var(--bien-fondo)', borde: 'var(--bien-fondo)', texto: 'var(--bien)' }
     : p >= 50
-    ? { fondo: '#fefce8', borde: '#fef08a', texto: '#a16207' }
-    : { fondo: '#fef2f2', borde: '#fecaca', texto: '#b91c1c' };
+    ? { fondo: 'var(--ambar-fondo)', borde: '#fef08a', texto: '#a16207' }
+    : { fondo: 'var(--mal-fondo)', borde: 'var(--mal-fondo)', texto: 'var(--mal)' };
 
   const sinMeta = datos?.sinMeta ?? 0;
 
@@ -226,27 +226,27 @@ function TarjetaParticipacion({
         <div style={{ fontSize: 40, fontWeight: 700, color: tono.texto, lineHeight: 1 }}>
           {p}%
         </div>
-        <div style={{ fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .3, marginTop: 4 }}>
+        <div style={{ fontSize: 11, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 4 }}>
           Participación general
         </div>
       </div>
 
       <div style={{ flex: 1, minWidth: 200 }}>
         {/* Barra de progreso: la lectura visual es más rápida que el número */}
-        <div style={{ background: '#fff', borderRadius: 6, height: 12, overflow: 'hidden', border: `1px solid ${tono.borde}` }}>
+        <div style={{ background: 'var(--superficie)', borderRadius: 6, height: 12, overflow: 'hidden', border: `1px solid ${tono.borde}` }}>
           <div style={{
             width: `${Math.min(p, 100)}%`, height: '100%',
             background: tono.texto, borderRadius: 6,
           }} />
         </div>
-        <div style={{ fontSize: 12, color: '#374151', marginTop: 8 }}>
+        <div style={{ fontSize: 12, color: 'var(--texto-suave)', marginTop: 8 }}>
           {datos
             ? <>{datos.registrados} de {datos.esperados} participantes esperados,
                 en {datos.conMeta} capacitación(es) con meta definida.</>
             : 'Aún no hay capacitaciones con meta definida.'}
         </div>
         {sinMeta > 0 && (
-          <div style={{ fontSize: 11, color: '#6b7280', marginTop: 3 }}>
+          <div style={{ fontSize: 11, color: 'var(--texto-suave)', marginTop: 3 }}>
             {sinMeta} capacitación(es) sin meta no entran en este cálculo.
           </div>
         )}
@@ -269,23 +269,23 @@ const est: Record<string, React.CSSProperties> = {
     display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))',
     gap: 14, margin: '20px 0',
   },
-  kpi: { background: '#fff', borderRadius: 12, padding: 16, boxShadow: '0 4px 12px rgba(0,0,0,.04)' },
-  kpiEtiqueta: { fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .3 },
+  kpi: { background: 'var(--superficie)', borderRadius: 12, padding: 16, boxShadow: '0 4px 12px rgba(0,0,0,.04)' },
+  kpiEtiqueta: { fontSize: 11, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .3 },
 
   activa: {
-    background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 12,
+    background: 'var(--bien-fondo)', border: '1px solid var(--bien-fondo)', borderRadius: 12,
     padding: '14px 18px', marginBottom: 20, display: 'flex',
     justifyContent: 'space-between', alignItems: 'center', gap: 14, flexWrap: 'wrap',
   },
   enlace: {
-    color: '#fff', padding: '8px 16px', borderRadius: 8,
+    color: 'var(--sobre-marca)', padding: '8px 16px', borderRadius: 8,
     fontSize: 12.5, fontWeight: 600, textDecoration: 'none',
   },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 20 },
 
   aislamiento: {
-    fontSize: 11.5, color: '#6b7280', background: '#f8fafc',
-    border: '1px solid #e2e8f0', borderRadius: 10, padding: 14,
+    fontSize: 11.5, color: 'var(--texto-suave)', background: 'var(--superficie-3)',
+    border: '1px solid var(--borde)', borderRadius: 8, padding: 14,
   },
 };

@@ -182,7 +182,7 @@ export default function EditorCriterios({
             <section style={{
               ...e.criterio,
               borderLeftWidth: 3,
-              borderLeftColor: it.critico ? '#9B1C1C' : '#E4E4DF',
+              borderLeftColor: it.critico ? 'var(--mal)' : 'var(--borde)',
             }}>
               <div style={e.cabeceraCriterio}>
                 <span style={e.numero}>{i + 1}</span>
@@ -283,8 +283,8 @@ export default function EditorCriterios({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -294,7 +294,7 @@ export default function EditorCriterios({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Guardando…' : 'Guardar lista'}
         </button>
@@ -306,27 +306,27 @@ export default function EditorCriterios({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 18, maxWidth: 760,
   },
   h2: { fontSize: 14.5, margin: '0 0 4px', fontWeight: 600 },
 
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '14px 0 5px' },
-  labelMini: { display: 'block', fontSize: 11, color: '#8A929C', margin: '10px 0 4px' },
+  labelMini: { display: 'block', fontSize: 11, color: 'var(--texto-tenue)', margin: '10px 0 4px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
-    boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
+    boxSizing: 'border-box', fontFamily: 'inherit', background: 'var(--superficie)',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))', gap: 12 },
   tres: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 10 },
 
   resumen: {
     display: 'flex', gap: 20, flexWrap: 'wrap', marginTop: 16, padding: '11px 14px',
-    background: '#FBFBF9', borderRadius: 6, fontSize: 12.5, color: '#5B6470',
+    background: 'var(--superficie-2)', borderRadius: 6, fontSize: 12.5, color: 'var(--texto-suave)',
   },
   avisoBase: {
-    fontSize: 11.5, color: '#0369A1', background: '#F0F9FF',
+    fontSize: 11.5, color: 'var(--info)', background: 'var(--info-fondo)',
     padding: '10px 12px', borderRadius: 6, marginTop: 12, lineHeight: 1.6,
   },
 
@@ -335,39 +335,39 @@ const e: Record<string, React.CSSProperties> = {
     letterSpacing: .6, margin: '18px 0 8px',
   },
   criterio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 16, marginBottom: 10, maxWidth: 760,
   },
   cabeceraCriterio: { display: 'flex', gap: 8, alignItems: 'center' },
   numero: {
-    fontSize: 11, color: '#A3AAB3', fontWeight: 700,
+    fontSize: 11, color: 'var(--texto-tenue)', fontWeight: 700,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   flechas: { display: 'flex', gap: 2, marginLeft: 'auto' },
   flecha: {
-    background: 'none', borderWidth: 1, borderStyle: 'solid', borderColor: '#EFEFEA',
-    borderRadius: 3, color: '#8A929C', fontSize: 10,
+    background: 'none', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
+    borderRadius: 3, color: 'var(--texto-tenue)', fontSize: 10,
     cursor: 'pointer', padding: '2px 6px',
   },
-  x: { background: 'none', border: 'none', color: '#9B1C1C', fontSize: 18, cursor: 'pointer', padding: '0 4px' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 18, cursor: 'pointer', padding: '0 4px' },
 
   check: { display: 'flex', alignItems: 'center', fontSize: 12.5, marginTop: 12, cursor: 'pointer', fontWeight: 600 },
-  notaCritico: { fontSize: 11, color: '#8A929C', margin: '3px 0 0', lineHeight: 1.5 },
+  notaCritico: { fontSize: 11, color: 'var(--texto-tenue)', margin: '3px 0 0', lineHeight: 1.5 },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 14, maxWidth: 760 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

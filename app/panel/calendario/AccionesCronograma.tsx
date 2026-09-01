@@ -94,7 +94,7 @@ export default function AccionesCronograma({
             onClick={enviar}
             disabled={pendiente}
             style={{
-              ...e.btn, background: pendiente ? '#C5C5BD' : color,
+              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color,
               marginTop: 12, width: '100%', border: 'none', cursor: 'pointer',
             }}
           >
@@ -106,8 +106,8 @@ export default function AccionesCronograma({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -118,24 +118,24 @@ export default function AccionesCronograma({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 18, marginBottom: 18,
   },
   fila: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' },
   h2: { fontSize: 14, margin: '0 0 2px', fontWeight: 600 },
-  sub: { fontSize: 11.5, color: '#8A929C', margin: 0 },
+  sub: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: 0 },
   btn: {
-    color: '#fff', padding: '9px 16px', borderRadius: 4, fontSize: 12.5,
+    color: 'var(--sobre-marca)', padding: '9px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '9px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
-  bloque: { marginTop: 14, paddingTop: 14, borderTop: '1px solid #EFEFEA', maxWidth: 520 },
+  bloque: { marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--borde)', maxWidth: 520 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   aviso: { marginTop: 12, padding: '10px 14px', borderRadius: 6, fontSize: 13 },

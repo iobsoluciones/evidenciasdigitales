@@ -76,7 +76,7 @@ export default function ListaEntregas({
         <span style={e.conteo}>
           {lista.length} de {entregas.length}
           {sinDevolver > 0 && (
-            <strong style={{ color: '#0369A1' }}> · {sinDevolver} equipo(s) en uso</strong>
+            <strong style={{ color: 'var(--info)' }}> · {sinDevolver} equipo(s) en uso</strong>
           )}
         </span>
       </div>
@@ -98,7 +98,7 @@ export default function ListaEntregas({
                   <strong>{x.nombres}</strong>
                   <div style={e.cedula}>{x.identificacion}</div>
                 </td>
-                <td style={{ ...e.td, color: '#5B6470' }}>{x.area ?? '—'}</td>
+                <td style={{ ...e.td, color: 'var(--texto-suave)' }}>{x.area ?? '—'}</td>
                 <td style={{ ...e.td, whiteSpace: 'nowrap' }}>{fmt(x.fecha_entrega)}</td>
                 <td style={e.td}>
                   {x.items}
@@ -108,15 +108,15 @@ export default function ListaEntregas({
                 </td>
                 <td style={e.td}>
                   {x.estado === 'borrador' ? (
-                    <span style={{ ...e.chip, background: '#FEF9C3', color: '#8A6100' }}>
+                    <span style={{ ...e.chip, background: 'var(--ambar-fondo)', color: 'var(--ambar)' }}>
                       Sin firmar
                     </span>
                   ) : x.estado === 'firmada' ? (
-                    <span style={{ ...e.chip, background: '#DCFCE7', color: '#15803D' }}>
+                    <span style={{ ...e.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                       Firmada
                     </span>
                   ) : (
-                    <span style={{ ...e.chip, background: '#F4F4F0', color: '#8A929C' }}>
+                    <span style={{ ...e.chip, background: 'var(--superficie-3)', color: 'var(--texto-tenue)' }}>
                       Anulada
                     </span>
                   )}
@@ -141,36 +141,36 @@ export default function ListaEntregas({
 const e: Record<string, React.CSSProperties> = {
   controles: { display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 14 },
   input: {
-    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', minWidth: 240,
   },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#5B6470', cursor: 'pointer' },
-  conteo: { fontSize: 12, color: '#8A929C', marginLeft: 'auto' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)', marginLeft: 'auto' },
 
   contenedor: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflowX: 'auto',
   },
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F4F4F0' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)' },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11.5 },
   cedula: {
-    fontSize: 10.5, color: '#A3AAB3',
+    fontSize: 10.5, color: 'var(--texto-tenue)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
-  enUso: { fontSize: 10.5, color: '#0369A1' },
+  enUso: { fontSize: 10.5, color: 'var(--info)' },
   chip: { fontSize: 10.5, fontWeight: 600, padding: '3px 9px', borderRadius: 999, whiteSpace: 'nowrap' },
-  enlace: { fontSize: 11.5, color: '#14263F', textDecoration: 'underline', marginRight: 10 },
+  enlace: { fontSize: 11.5, color: 'var(--texto)', textDecoration: 'underline', marginRight: 10 },
 
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
 };

@@ -25,10 +25,10 @@ const RIESGOS = [
 ];
 
 const CONCEPTOS: { v: Concepto; t: string; fondo: string; color: string }[] = [
-  { v: 'sin_evaluar', t: 'Sin evaluar', fondo: '#F0F0EC', color: '#5B6470' },
-  { v: 'aprobado', t: 'Aprobado', fondo: '#E6F4EA', color: '#1E6B3A' },
-  { v: 'aprobado_con_condiciones', t: 'Con condiciones', fondo: '#FEF3C7', color: '#92400E' },
-  { v: 'rechazado', t: 'Rechazado', fondo: '#FDF2F2', color: '#9B1C1C' },
+  { v: 'sin_evaluar', t: 'Sin evaluar', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
+  { v: 'aprobado', t: 'Aprobado', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  { v: 'aprobado_con_condiciones', t: 'Con condiciones', fondo: 'var(--ambar-fondo)', color: 'var(--aviso)' },
+  { v: 'rechazado', t: 'Rechazado', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
 ];
 
 const ESTADOS: { v: EstadoContratista; t: string }[] = [
@@ -119,8 +119,8 @@ export default function EditorContratista({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
@@ -244,7 +244,7 @@ export default function EditorContratista({
           <button type="button" onClick={guardar} disabled={pendiente}
             style={{
               ...s.botonLleno,
-              background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color,
+              background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
             }}>
             {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
           </button>
@@ -273,20 +273,20 @@ export default function EditorContratista({
             <div style={s.reqCab}>
               <span style={{
                 ...s.etiqueta,
-                background: r.obligatorio ? '#FDF2F2' : '#F0F0EC',
-                color: r.obligatorio ? '#9B1C1C' : '#5B6470',
+                background: r.obligatorio ? 'var(--mal-fondo)' : 'var(--superficie-3)',
+                color: r.obligatorio ? 'var(--mal)' : 'var(--texto-suave)',
               }}>
                 {r.obligatorio ? 'NORMA' : 'CRITERIO TÉCNICO'}
               </span>
               <span style={s.reqTexto}>{r.texto}</span>
               <span style={{
                 ...s.chip,
-                background: r.vencido ? '#FDF2F2'
-                  : r.estado === 'entregado' ? '#E6F4EA'
-                  : r.estado === 'no_aplica' ? '#F0F0EC' : '#FEF3C7',
-                color: r.vencido ? '#9B1C1C'
-                  : r.estado === 'entregado' ? '#1E6B3A'
-                  : r.estado === 'no_aplica' ? '#5B6470' : '#92400E',
+                background: r.vencido ? 'var(--mal-fondo)'
+                  : r.estado === 'entregado' ? 'var(--bien-fondo)'
+                  : r.estado === 'no_aplica' ? 'var(--superficie-3)' : 'var(--ambar-fondo)',
+                color: r.vencido ? 'var(--mal)'
+                  : r.estado === 'entregado' ? 'var(--bien)'
+                  : r.estado === 'no_aplica' ? 'var(--texto-suave)' : 'var(--aviso)',
               }}>
                 {r.vencido ? 'Vencido'
                   : r.estado === 'entregado' ? 'Entregado'
@@ -390,16 +390,16 @@ export default function EditorContratista({
             {p.examen_vence && (
               <span style={{
                 ...s.chip,
-                background: p.examen_vencido ? '#FDF2F2' : '#E6F4EA',
-                color: p.examen_vencido ? '#9B1C1C' : '#1E6B3A',
+                background: p.examen_vencido ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+                color: p.examen_vencido ? 'var(--mal)' : 'var(--bien)',
               }}>
                 {p.examen_vencido ? 'Examen vencido' : 'Examen vigente'}
               </span>
             )}
             <span style={{
               ...s.chip,
-              background: p.induccion_recibida ? '#E6F4EA' : '#FEF3C7',
-              color: p.induccion_recibida ? '#1E6B3A' : '#92400E',
+              background: p.induccion_recibida ? 'var(--bien-fondo)' : 'var(--ambar-fondo)',
+              color: p.induccion_recibida ? 'var(--bien)' : 'var(--aviso)',
             }}>
               {p.induccion_recibida ? 'Con inducción' : 'Sin inducción'}
             </span>
@@ -416,7 +416,7 @@ export default function EditorContratista({
                 })}>
                 Editar
               </button>
-              <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+              <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
                 disabled={pendiente}
                 onClick={() => correr(() => eliminarPersona(p.id, contratista.id))}>
                 Quitar
@@ -509,70 +509,70 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   alerta: {
-    background: '#FDF2F2', border: '1px solid #F3C7C7', borderRadius: 10,
-    padding: '12px 15px', fontSize: 13, color: '#9B1C1C',
+    background: 'var(--mal-fondo)', border: '1px solid #F3C7C7', borderRadius: 8,
+    padding: '12px 15px', fontSize: 13, color: 'var(--mal)',
     lineHeight: 1.6, marginBottom: 14,
   },
 
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14,
   },
   subBloque: {
-    background: '#FAFAF8', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie-2)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '13px 15px', marginTop: 10,
   },
   h3: {
-    fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10,
+    fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10,
     display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap',
   },
-  h4: { fontSize: 13, fontWeight: 700, color: '#14263F', marginBottom: 8 },
-  contador: { fontSize: 11.5, fontWeight: 600, color: '#92400E' },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
-  vacio: { fontSize: 12.5, color: '#9CA3AF', fontStyle: 'italic', margin: '0 0 8px' },
+  h4: { fontSize: 13, fontWeight: 700, color: 'var(--texto)', marginBottom: 8 },
+  contador: { fontSize: 11.5, fontWeight: 600, color: 'var(--aviso)' },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', fontStyle: 'italic', margin: '0 0 8px' },
   subtitulo: {
-    fontSize: 11, fontWeight: 700, color: '#8A929C', letterSpacing: .5,
+    fontSize: 11, fontWeight: 700, color: 'var(--texto-tenue)', letterSpacing: .5,
     textTransform: 'uppercase', margin: '12px 0 8px',
   },
 
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '4px 0 0', lineHeight: 1.5 },
   check: {
     display: 'flex', alignItems: 'center', gap: 8,
-    fontSize: 13, color: '#14263F', cursor: 'pointer', margin: '2px 0 10px',
+    fontSize: 13, color: 'var(--texto)', cursor: 'pointer', margin: '2px 0 10px',
   },
 
   opciones: { display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 },
   opcion: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
-    padding: '7px 16px', fontSize: 12.5, color: '#5B6470', cursor: 'pointer',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
+    padding: '7px 16px', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer',
   },
 
-  requisito: { padding: '10px 0', borderTop: '1px solid #F0F0EC' },
+  requisito: { padding: '10px 0', borderTop: '1px solid var(--superficie-3)' },
   reqCab: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
   etiqueta: {
     fontSize: 9.5, fontWeight: 700, letterSpacing: .3,
     padding: '2px 7px', borderRadius: 4, whiteSpace: 'nowrap',
   },
-  reqTexto: { fontSize: 12.5, color: '#14263F', flex: '1 1 240px', lineHeight: 1.45 },
-  reqPie: { fontSize: 11, color: '#8A929C', marginTop: 4, lineHeight: 1.45 },
+  reqTexto: { fontSize: 12.5, color: 'var(--texto)', flex: '1 1 240px', lineHeight: 1.45 },
+  reqPie: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 4, lineHeight: 1.45 },
 
   persona: {
     display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap',
-    padding: '10px 0', borderTop: '1px solid #F0F0EC',
+    padding: '10px 0', borderTop: '1px solid var(--superficie-3)',
   },
-  personaNombre: { fontSize: 13, fontWeight: 700, color: '#14263F' },
-  personaMeta: { fontSize: 11.5, color: '#8A929C', marginTop: 2 },
+  personaNombre: { fontSize: 13, fontWeight: 700, color: 'var(--texto)' },
+  personaMeta: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 2 },
   accionesPersona: { display: 'flex', gap: 4, flexWrap: 'wrap' },
   chip: {
     fontSize: 10.5, fontWeight: 700, padding: '3px 10px',
@@ -581,21 +581,21 @@ const s: Record<string, React.CSSProperties> = {
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 16px', fontSize: 13, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer',
+    color: 'var(--texto)', cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

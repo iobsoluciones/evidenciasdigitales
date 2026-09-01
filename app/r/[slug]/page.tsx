@@ -85,7 +85,7 @@ export default async function PaginaRegistro({
       <p style={est.sub}>{cap.org_nombre}</p>
 
       <div style={est.ficha}>
-        <span style={{ ...est.etiqueta, background: cap.dentro_horario ? '#16a34a' : '#6b7280' }}>
+        <span style={{ ...est.etiqueta, background: cap.dentro_horario ? 'var(--bien)' : 'var(--texto-suave)' }}>
           {cap.dentro_horario ? 'Capacitación activa' : 'Fuera de horario'}
         </span>
         <h2 style={est.tema}>{cap.tema}</h2>
@@ -118,12 +118,12 @@ function Marco({
 }) {
   return (
     <main style={{
-      minHeight: '100vh', background: 'linear-gradient(135deg,#f1f5f9,#e2e8f0)',
+      minHeight: '100vh', background: 'var(--fondo)',
       display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-      padding: 20, fontFamily: "'Segoe UI',Roboto,Arial,sans-serif",
+      padding: 20,
     }}>
       <div style={{
-        width: '100%', maxWidth: 520, background: '#fff', borderRadius: 18,
+        width: '100%', maxWidth: 520, background: 'var(--superficie)', borderRadius: 18,
         boxShadow: '0 10px 30px rgba(0,0,0,.08)', padding: '28px 26px 32px',
         marginTop: 24, ['--marca' as string]: color,
       }}>
@@ -140,18 +140,18 @@ function Marco({
 
 function Dato({ e, v }: { e: string; v: string }) {
   return (
-    <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 4 }}>
-      <strong style={{ color: '#1f2937' }}>{e}:</strong> {v}
+    <div style={{ fontSize: 13, color: 'var(--texto-suave)', marginBottom: 4 }}>
+      <strong style={{ color: 'var(--texto)' }}>{e}:</strong> {v}
     </div>
   );
 }
 
 const est: Record<string, React.CSSProperties> = {
-  titulo: { fontSize: 21, color: '#1e3a8a', textAlign: 'center', margin: '0 0 2px' },
-  sub: { fontSize: 13, color: '#6b7280', textAlign: 'center', margin: '0 0 20px' },
-  ficha: { background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 18, marginBottom: 20 },
-  etiqueta: { display: 'inline-block', color: '#fff', fontSize: 11, padding: '3px 10px', borderRadius: 999, textTransform: 'uppercase', marginBottom: 8 },
-  tema: { fontSize: 17, margin: '0 0 10px', color: '#1f2937' },
-  descripcion: { marginTop: 10, paddingTop: 10, borderTop: '1px dashed #cbd5e1', fontSize: 12, color: '#6b7280', lineHeight: 1.5 },
-  mensaje: { padding: 14, borderRadius: 10, background: '#fef2f2', color: '#dc2626', fontSize: 14, textAlign: 'center' },
+  titulo: { fontSize: 21, color: 'var(--texto)', textAlign: 'center', margin: '0 0 2px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', textAlign: 'center', margin: '0 0 20px' },
+  ficha: { background: 'var(--superficie-3)', border: '1px solid var(--borde)', borderRadius: 12, padding: 18, marginBottom: 20 },
+  etiqueta: { display: 'inline-block', color: 'var(--sobre-marca)', fontSize: 11, padding: '3px 10px', borderRadius: 999, textTransform: 'uppercase', marginBottom: 8 },
+  tema: { fontSize: 17, margin: '0 0 10px', color: 'var(--texto)' },
+  descripcion: { marginTop: 10, paddingTop: 10, borderTop: '1px dashed var(--borde-fuerte)', fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.5 },
+  mensaje: { padding: 14, borderRadius: 8, background: 'var(--mal-fondo)', color: 'var(--mal)', fontSize: 14, textAlign: 'center' },
 };

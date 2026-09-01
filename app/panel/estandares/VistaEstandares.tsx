@@ -124,8 +124,8 @@ export default function VistaEstandares({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -181,7 +181,7 @@ export default function VistaEstandares({
         {conjuntos.map((x) => (
           <article key={x.id} style={{
             ...s.tarjeta,
-            borderColor: c?.id === x.id ? color : '#E4E4DF',
+            borderColor: c?.id === x.id ? color : 'var(--borde)',
             boxShadow: c?.id === x.id ? `0 0 0 1px ${color}` : undefined,
           }}>
             <div style={s.tarjetaCab}>
@@ -193,7 +193,7 @@ export default function VistaEstandares({
               <span>{x.estandares} estándares</span>
               <span style={{
                 fontWeight: 700,
-                color: Math.abs(Number(x.peso_total) - 100) < 0.01 ? '#1E6B3A' : '#9A3412',
+                color: Math.abs(Number(x.peso_total) - 100) < 0.01 ? 'var(--bien)' : 'var(--aviso)',
               }}>
                 {x.peso_total} puntos
               </span>
@@ -210,7 +210,7 @@ export default function VistaEstandares({
                 Duplicar
               </button>
               {!x.es_sistema && (
-                <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }} disabled={pendiente}
+                <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }} disabled={pendiente}
                   onClick={() => correr(() => eliminarConjunto(x.id))}>
                   Borrar
                 </button>
@@ -286,7 +286,7 @@ export default function VistaEstandares({
               )}
               <p style={s.sub}>
                 {c.estandares} estándares ·{' '}
-                <strong style={{ color: suma100 ? '#1E6B3A' : '#9A3412' }}>
+                <strong style={{ color: suma100 ? 'var(--bien)' : 'var(--aviso)' }}>
                   {c.peso_total} puntos
                 </strong>
                 {c.es_sistema && ' · no editable'}
@@ -427,7 +427,7 @@ export default function VistaEstandares({
                               Editar
                             </button>
                             <button type="button" disabled={pendiente}
-                              style={{ ...s.botonMini, color: '#9B1C1C' }}
+                              style={{ ...s.botonMini, color: 'var(--mal)' }}
                               onClick={() => correr(() => eliminarItem(i.id))}>
                               Quitar
                             </button>
@@ -449,36 +449,36 @@ export default function VistaEstandares({
 const s: Record<string, React.CSSProperties> = {
   aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
   errores: {
-    background: '#FDF2F2', border: '1px solid #F5C6C6', borderRadius: 9,
+    background: 'var(--mal-fondo)', border: '1px solid #F5C6C6', borderRadius: 8,
     padding: '12px 15px', marginBottom: 14,
   },
-  erroresTitulo: { fontSize: 13, fontWeight: 700, color: '#9B1C1C', marginBottom: 7 },
+  erroresTitulo: { fontSize: 13, fontWeight: 700, color: 'var(--mal)', marginBottom: 7 },
   listaErrores: { margin: 0, paddingLeft: 18 },
-  errorItem: { fontSize: 12.5, color: '#9B1C1C', lineHeight: 1.6 },
+  errorItem: { fontSize: 12.5, color: 'var(--mal)', lineHeight: 1.6 },
 
   rejilla: {
     display: 'grid', gap: 12, marginBottom: 14,
     gridTemplateColumns: 'repeat(auto-fill,minmax(250px,1fr))',
   },
   tarjeta: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 12,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 12,
     padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 5,
   },
   tarjetaCab: { display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap' },
-  tarjetaNombre: { fontSize: 14, fontWeight: 700, color: '#14263F', margin: 0, flex: 1 },
+  tarjetaNombre: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', margin: 0, flex: 1 },
   sistema: {
-    fontSize: 9.5, fontWeight: 700, background: '#F0F0EC', color: '#5B6470',
+    fontSize: 9.5, fontWeight: 700, background: 'var(--superficie-3)', color: 'var(--texto-suave)',
     padding: '2px 8px', borderRadius: 20, textTransform: 'uppercase', letterSpacing: .4,
   },
-  norma: { fontSize: 11.5, color: '#8A929C' },
-  desc: { fontSize: 12, color: '#5B6470', margin: '4px 0 0', lineHeight: 1.5 },
+  norma: { fontSize: 11.5, color: 'var(--texto-tenue)' },
+  desc: { fontSize: 12, color: 'var(--texto-suave)', margin: '4px 0 0', lineHeight: 1.5 },
   editorFila: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '12px 14px',
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '12px 14px',
   },
   cifras: {
     display: 'flex', justifyContent: 'space-between', fontSize: 12,
-    color: '#5B6470', marginTop: 2, fontVariantNumeric: 'tabular-nums',
+    color: 'var(--texto-suave)', marginTop: 2, fontVariantNumeric: 'tabular-nums',
   },
   tarjetaAcciones: { display: 'flex', gap: 5, marginTop: 8, flexWrap: 'wrap' },
 
@@ -486,61 +486,61 @@ const s: Record<string, React.CSSProperties> = {
   formNuevo: { display: 'flex', gap: 8, flexWrap: 'wrap', width: '100%', alignItems: 'center' },
 
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '16px 18px',
   },
   detalleCab: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 14, flexWrap: 'wrap', marginBottom: 12,
   },
-  h2: { fontSize: 16, fontWeight: 700, color: '#14263F', margin: 0 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: '3px 0 0' },
-  nota: { fontSize: 13, color: '#5B6470', lineHeight: 1.65, margin: 0, maxWidth: 620 },
+  h2: { fontSize: 16, fontWeight: 700, color: 'var(--texto)', margin: 0 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '3px 0 0' },
+  nota: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.65, margin: 0, maxWidth: 620 },
   avisoPeso: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
     borderRadius: 8, padding: '10px 13px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 12,
   },
   avisoSistema: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF', color: '#5B6470',
+    background: 'var(--fondo)', border: '1px solid var(--borde)', color: 'var(--texto-suave)',
     borderRadius: 8, padding: '10px 13px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 12,
   },
 
-  contenedor: { overflowX: 'auto', border: '1px solid #E4E4DF', borderRadius: 9 },
+  contenedor: { overflowX: 'auto', border: '1px solid var(--borde)', borderRadius: 8 },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 640 },
   th: {
-    textAlign: 'left', padding: '9px 10px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'left', padding: '9px 10px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '8px 10px', borderBottom: '1px solid #F0F0EC', color: '#14263F' },
+  td: { padding: '8px 10px', borderBottom: '1px solid var(--superficie-3)', color: 'var(--texto)' },
   tdCodigo: {
-    padding: '8px 10px', borderBottom: '1px solid #F0F0EC',
+    padding: '8px 10px', borderBottom: '1px solid var(--superficie-3)',
     fontFamily: "'Consolas','Courier New',monospace", fontWeight: 600, whiteSpace: 'nowrap',
   },
   tdPeso: {
-    padding: '8px 10px', borderBottom: '1px solid #F0F0EC',
+    padding: '8px 10px', borderBottom: '1px solid var(--superficie-3)',
     textAlign: 'right', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap',
   },
 
   input: {
-    padding: '8px 11px', border: '1px solid #E4E4DF', borderRadius: 8,
+    padding: '8px 11px', border: '1px solid var(--borde)', borderRadius: 8,
     fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '8px 16px', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap', textDecoration: 'none',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap', textDecoration: 'none',
   },
 };

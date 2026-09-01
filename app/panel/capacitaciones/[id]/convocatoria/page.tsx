@@ -63,13 +63,13 @@ export default async function PaginaConvocatoria({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   titulo: { fontSize: 22, margin: '12px 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 20px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 20px' },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 12 },
   aviso: {
-    background: '#FEFCE8', color: '#8A6100', padding: '11px 15px',
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', padding: '11px 15px',
     borderRadius: 6, fontSize: 13, marginBottom: 18,
   },
-  enlace: { fontSize: 12.5, color: '#5B6470', textDecoration: 'none' },
+  enlace: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
 };

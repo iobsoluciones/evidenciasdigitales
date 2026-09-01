@@ -1,0 +1,269 @@
+/*
+ * CIMIENTOS VISUALES
+ * ---------------------------------------------------------------
+ * Hasta ahora el proyecto no tenía ni una hoja de estilos: todo iba en
+ * línea, con 3.872 colores escritos a mano, y el `body` heredaba la
+ * fuente por omisión del navegador —Times New Roman— porque nadie la
+ * había declarado.
+ *
+ * Aquí viven las tres cosas que no pueden ir en línea:
+ *
+ *  1. LOS COLORES COMO VARIABLES. Un estilo en línea sí puede leer
+ *     `var(--x)`, así que no hace falta rehacer la arquitectura para
+ *     tener tema claro y oscuro: basta con que los colores dejen de ser
+ *     literales. El tema se cambia en un solo sitio —el atributo
+ *     `data-tema` del <html>— y toda la aplicación lo sigue.
+ *
+ *  2. LO QUE APLICA A TODO: la tipografía, el reset y el foco. Un
+ *     estado de foco escrito componente a componente se olvida en el
+ *     noveno; aquí se declara una vez y cubre las 52 pantallas.
+ *
+ *  3. LOS ESTADOS (:hover, :focus-visible, ::selection), que la
+ *     propiedad `style` de React no sabe expresar.
+ *
+ * Los PDF NO usan nada de esto: react-pdf no entiende `var()` y un
+ * documento que se imprime va siempre sobre papel blanco.
+ */
+
+/* ================================================================ *
+ *  Tema claro (el de partida)
+ * ================================================================ */
+:root {
+  /* Superficies, de atrás hacia adelante */
+  --fondo: #f4f4f1;
+  --superficie: #ffffff;
+  --superficie-2: #fafaf8;
+  --superficie-3: #f0f0ec;
+
+  /* Texto, de más a menos peso */
+  --texto: #14263f;
+  --texto-suave: #55606e;
+  --texto-tenue: #838d99;
+
+  /* Trazos */
+  --borde: #e3e3de;
+  --borde-fuerte: #d4d4cd;
+
+  /* Marca: el azul institucional. El color del cliente NO vive aquí,
+     viene de la base de datos y se aplica sobre la barra superior. */
+  --marca: #14263f;
+  --marca-viva: #1d3a61;
+  --sobre-marca: #ffffff;
+  /* Para superficies GRANDES de marca —el panel del ingreso—. El azul
+     de botón, extendido a media pantalla, deslumbra en tema oscuro. */
+  --marca-panel: #14263f;
+
+  /* Estados. Cada uno con su tinte de fondo y su color de texto:
+     usarlos en pareja es lo que garantiza el contraste en los dos temas. */
+  --mal: #9b1c1c;
+  --mal-fondo: #fdf2f2;
+  --aviso: #9a3412;
+  --aviso-fondo: #fff7ed;
+  --ambar: #7c6407;
+  --ambar-fondo: #f9f6e7;
+  --bien: #1e6b3a;
+  --bien-fondo: #e6f4ea;
+  --info: #0369a1;
+  --info-fondo: #f0f9ff;
+
+  /* Sombra: en claro es una sombra; en oscuro casi no se ve y el
+     relieve lo dan los bordes. */
+  --sombra: 0 1px 2px rgba(20, 38, 63, .05);
+
+  /* Las cuatro fases del PHVA. No son el color de la empresa: son otra
+     señal y por eso tienen su propia familia de testigos. */
+  --fase-planear: #2a6f97;   --fase-planear-fondo: #e8f1f7;
+  --fase-hacer: #1b5e4a;     --fase-hacer-fondo: #e6f1ec;
+  --fase-verificar: #b45309; --fase-verificar-fondo: #fdf1e0;
+  --fase-actuar: #7a3e9d;    --fase-actuar-fondo: #f2eaf7;
+
+  color-scheme: light;
+}
+
+/* ================================================================ *
+ *  Tema oscuro
+ * ================================================================ *
+ * No es el claro invertido. Un negro puro con blanco puro encima
+ * vibra y cansa a las dos horas, que es justo lo que dura una jornada
+ * cargando datos: las superficies son azuladas y el texto se queda en
+ * un blanco roto. Los tintes de estado bajan de luminosidad y suben de
+ * saturación para seguir leyéndose sin encender la pantalla entera.
+ */
+:root[data-tema='oscuro'] {
+  --fondo: #12161c;
+  --superficie: #1a1f27;
+  --superficie-2: #20262f;
+  --superficie-3: #272e38;
+
+  --texto: #e8ecf1;
+  --texto-suave: #a7b1bd;
+  --texto-tenue: #7d8794;
+
+  --borde: #2b323c;
+  --borde-fuerte: #3a424e;
+
+  /* El azul institucional sobre fondo oscuro desaparece: se aclara
+     hasta que un botón primario vuelva a verse como un botón. */
+  --marca: #3f6da8;
+  --marca-viva: #5285c2;
+  --sobre-marca: #ffffff;
+  --marca-panel: #16233a;
+
+  --mal: #f2a0a0;
+  --mal-fondo: #3a1e1e;
+  --aviso: #f5b985;
+  --aviso-fondo: #3a2718;
+  --ambar: #e8ce78;
+  --ambar-fondo: #332c14;
+  --bien: #86d3a2;
+  --bien-fondo: #16301f;
+  --info: #7cc4ea;
+  --info-fondo: #13293a;
+
+  --sombra: 0 1px 2px rgba(0, 0, 0, .35);
+
+  /* Sobre fondo oscuro los cuatro colores se aclaran para seguir
+     distinguiéndose entre sí, que es lo único que tienen que hacer. */
+  --fase-planear: #7fb3d5;   --fase-planear-fondo: #182a3a;
+  --fase-hacer: #6ec49e;     --fase-hacer-fondo: #142c24;
+  --fase-verificar: #e9a45c; --fase-verificar-fondo: #33240f;
+  --fase-actuar: #c89ae0;    --fase-actuar-fondo: #2a1b36;
+
+  color-scheme: dark;
+}
+
+/* ================================================================ *
+ *  Reset
+ * ================================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  /* La escala arranca en 14: por debajo, una tabla de datos deja de
+     leerse cómoda en una pantalla de portátil a un metro. */
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Los títulos se equilibran solos en vez de dejar una palabra huérfana
+   en la última línea. */
+h1, h2, h3, h4 { text-wrap: balance; }
+
+/* Los formularios no heredan la fuente por omisión en ningún navegador:
+   hay que decírselo. */
+input, textarea, select, button { font: inherit; color: inherit; }
+
+/* Cualquier cifra en columna se alinea por el dígito, no por el ancho
+   de cada número. */
+table, .cifra { font-variant-numeric: tabular-nums; }
+
+img, svg { vertical-align: middle; }
+
+/* ================================================================ *
+ *  Estados
+ * ================================================================ */
+
+/* Foco visible SOLO con teclado: quien navega con el ratón no ve un
+   anillo en cada clic, y quien navega con Tab nunca se pierde. Antes
+   no existía en ninguna pantalla, así que la aplicación no se podía
+   recorrer sin ratón. */
+:focus-visible {
+  outline: 2px solid var(--marca-viva);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+a { color: inherit; }
+
+button, [role='button'], a[href], label, summary {
+  cursor: pointer;
+}
+
+button:disabled, [aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+::selection { background: var(--marca-viva); color: #fff; }
+
+/* Barras de desplazamiento discretas y acordes al tema. */
+* { scrollbar-color: var(--borde-fuerte) transparent; scrollbar-width: thin; }
+
+/* Quien pide menos movimiento en su sistema, lo obtiene. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Al imprimir, el tema oscuro gastaría un cartucho por página. */
+@media print {
+  :root, :root[data-tema='oscuro'] {
+    --fondo: #fff; --superficie: #fff; --superficie-2: #fff;
+    --texto: #000; --texto-suave: #333; --borde: #999;
+    color-scheme: light;
+  }
+}
+
+/* ================================================================ *
+ *  El color de la empresa como TEXTO
+ * ================================================================ *
+ * El menú lateral marca el módulo abierto con el color del cliente. Ese
+ * color lo elige el consultor, así que sobre fondo claro hay que
+ * oscurecerlo y sobre fondo oscuro aclararlo. El componente calcula las
+ * dos versiones —no sabe qué tema tiene el navegador— y aquí se elige.
+ */
+.lateral { --marca-empresa: var(--marca-empresa-claro); }
+:root[data-tema='oscuro'] .lateral { --marca-empresa: var(--marca-empresa-oscuro); }
+
+/* ================================================================ *
+ *  Página comercial
+ * ================================================================ *
+ * Se queda siempre en claro. Es una pieza de marca con su propia
+ * composición —cabecera oscura sobre cuerpo claro— y no una pantalla de
+ * trabajo: seguir el tema del sistema operativo la descuadraría sin que
+ * nadie se lo haya pedido. El tema es una comodidad para quien pasa el
+ * día dentro de la aplicación.
+ */
+.comercial {
+  --fondo: #f4f4f1; --superficie: #ffffff; --superficie-2: #fafaf8;
+  --texto: #14263f; --texto-suave: #55606e; --texto-tenue: #838d99;
+  --borde: #e3e3de; --borde-fuerte: #d4d4cd;
+  background: var(--fondo);
+  color: var(--texto);
+  color-scheme: light;
+}
+
+/* ================================================================ *
+ *  Respuesta al puntero
+ * ================================================================ *
+ * No había ninguna: nada de la aplicación reaccionaba al pasar por
+ * encima, y eso es la mitad de la sensación de "esto no está acabado".
+ *
+ * Se resuelve con `filter` a propósito. Los colores van en estilos EN
+ * LÍNEA, y un estilo en línea le gana a la hoja: una regla de hover
+ * sobre `background` se escribiría, no daría error y no haría nada
+ * —ya pasó una vez en este proyecto—. `filter` no lo usa nadie en
+ * línea, así que aquí sí manda.
+ */
+a[href]:hover, button:not(:disabled):hover, [role='button']:hover, summary:hover {
+  filter: brightness(.96);
+  transition: filter .14s ease;
+}
+/* Sobre fondo oscuro oscurecer no se nota: hay que aclarar. */
+:root[data-tema='oscuro'] a[href]:hover,
+:root[data-tema='oscuro'] button:not(:disabled):hover,
+:root[data-tema='oscuro'] [role='button']:hover,
+:root[data-tema='oscuro'] summary:hover {
+  filter: brightness(1.14);
+}
+button:not(:disabled):active, a[href]:active { filter: brightness(.92); }

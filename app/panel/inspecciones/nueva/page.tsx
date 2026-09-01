@@ -46,7 +46,7 @@ export default async function PaginaNuevaInspeccion({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   titulo: { fontSize: 22, margin: '12px 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px', maxWidth: 580, lineHeight: 1.5 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px', maxWidth: 580, lineHeight: 1.5 },
 };

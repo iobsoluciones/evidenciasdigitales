@@ -24,7 +24,7 @@ export default async function PaginaEntrega({
     <>
       <Link
         href="/panel/dotacion/entregas"
-        style={{ fontSize: 13, color: '#5B6470', textDecoration: 'none' }}
+        style={{ fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' }}
       >
         ← Entregas
       </Link>

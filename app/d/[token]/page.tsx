@@ -77,15 +77,14 @@ export default async function PaginaFirmaRemota({
 
 const s: Record<string, React.CSSProperties> = {
   pagina: {
-    minHeight: '100vh', background: '#F7F7F4', padding: '24px 16px',
-    fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif", color: '#14263F',
+    minHeight: '100vh', background: 'var(--fondo)', padding: '24px 16px', color: 'var(--texto)',
   },
   caja: {
-    background: '#fff', borderRadius: 12, padding: '40px 26px',
+    background: 'var(--superficie)', borderRadius: 12, padding: '40px 26px',
     maxWidth: 460, margin: '40px auto', textAlign: 'center',
     boxShadow: '0 1px 3px rgba(20,38,63,.08)',
   },
   titulo: { fontSize: 19, margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.6 },
-  notaPie: { fontSize: 12, color: '#8A929C', marginTop: 16 },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6 },
+  notaPie: { fontSize: 12, color: 'var(--texto-tenue)', marginTop: 16 },
 };

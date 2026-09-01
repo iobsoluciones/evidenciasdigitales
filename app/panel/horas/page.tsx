@@ -67,7 +67,7 @@ export default async function PaginaHoras({
               style={{
                 ...s.anio,
                 ...(a === anio
-                  ? { background: color, color: '#fff', borderColor: color }
+                  ? { background: color, color: 'var(--sobre-marca)', borderColor: color }
                   : {}),
               }}
             >
@@ -102,28 +102,28 @@ export default async function PaginaHoras({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 12.5, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
     gap: 16, flexWrap: 'wrap', margin: '10px 0 16px',
   },
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: 0 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: 0 },
   anios: { display: 'flex', gap: 6, flexWrap: 'wrap' },
   anio: {
-    border: '1px solid #E4E4DF', background: '#fff', color: '#5B6470',
+    border: '1px solid var(--borde)', background: 'var(--superficie)', color: 'var(--texto-suave)',
     padding: '6px 14px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
     textDecoration: 'none',
   },
   nota: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', color: '#7C2D12',
-    borderRadius: 9, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    borderRadius: 8, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
     marginBottom: 18,
   },
-  vacio: { fontSize: 14, color: '#5B6470' },
+  vacio: { fontSize: 14, color: 'var(--texto-suave)' },
   pie: {
-    marginTop: 26, paddingTop: 18, borderTop: '1px solid #E4E4DF',
-    fontSize: 13, color: '#5B6470',
+    marginTop: 26, paddingTop: 18, borderTop: '1px solid var(--borde)',
+    fontSize: 13, color: 'var(--texto-suave)',
   },
   lista: { margin: '8px 0 0', paddingLeft: 20, lineHeight: 1.7 },
 };

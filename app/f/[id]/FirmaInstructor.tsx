@@ -78,15 +78,15 @@ export default function FirmaInstructor({
     return (
       <div style={{ textAlign: 'center', padding: '26px 0' }}>
         <div style={{
-          width: 60, height: 60, borderRadius: '50%', background: '#dcfce7',
-          color: '#15803d', fontSize: 30, lineHeight: '60px', margin: '0 auto 16px',
+          width: 60, height: 60, borderRadius: '50%', background: 'var(--bien-fondo)',
+          color: 'var(--bien)', fontSize: 30, lineHeight: '60px', margin: '0 auto 16px',
         }}>
           ✓
         </div>
-        <h2 style={{ fontSize: 18, color: '#15803d', margin: '0 0 6px' }}>
+        <h2 style={{ fontSize: 18, color: 'var(--bien)', margin: '0 0 6px' }}>
           Firma registrada
         </h2>
-        <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--texto-suave)', margin: 0 }}>
           Gracias. Ya puedes cerrar esta página.
         </p>
       </div>
@@ -102,17 +102,17 @@ export default function FirmaInstructor({
 
       {error && (
         <div style={{
-          marginTop: 14, padding: '11px 14px', background: '#fef2f2',
-          color: '#dc2626', borderRadius: 8, fontSize: 13,
+          marginTop: 14, padding: '11px 14px', background: 'var(--mal-fondo)',
+          color: 'var(--mal)', borderRadius: 8, fontSize: 13,
         }}>
           {error}
         </div>
       )}
 
       <button onClick={guardar} disabled={guardando} style={{
-        width: '100%', marginTop: 20, padding: 14, color: '#fff', border: 'none',
-        borderRadius: 10, fontSize: 15, fontWeight: 600,
-        background: guardando ? '#cbd5e1' : color,
+        width: '100%', marginTop: 20, padding: 14, color: 'var(--sobre-marca)', border: 'none',
+        borderRadius: 8, fontSize: 15, fontWeight: 600,
+        background: guardando ? 'var(--borde-fuerte)' : color,
         cursor: guardando ? 'not-allowed' : 'pointer',
       }}>
         {guardando ? 'Guardando…' : 'Registrar mi firma'}

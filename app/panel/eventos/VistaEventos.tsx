@@ -20,20 +20,20 @@ const TIPOS: Record<string, string> = {
 };
 
 const ESTADOS: Record<string, { texto: string; fondo: string; color: string }> = {
-  abierto: { texto: 'Sin investigar', fondo: '#FDF2F2', color: '#9B1C1C' },
-  en_investigacion: { texto: 'En investigación', fondo: '#FFF7ED', color: '#9A3412' },
-  cerrado: { texto: 'Cerrada', fondo: '#E6F4EA', color: '#1E6B3A' },
+  abierto: { texto: 'Sin investigar', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  en_investigacion: { texto: 'En investigación', fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+  cerrado: { texto: 'Cerrada', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
 };
 
 /** Semáforo del plazo legal. Es la señal principal de la pantalla. */
 function plazo(e: EventoLista): { texto: string; fondo: string; color: string } {
-  if (e.fecha_cierre) return { texto: 'Cumplido', fondo: '#E6F4EA', color: '#1E6B3A' };
+  if (e.fecha_cierre) return { texto: 'Cumplido', fondo: 'var(--bien-fondo)', color: 'var(--bien)' };
   const d = e.dias_restantes;
-  if (d === null) return { texto: '—', fondo: '#F0F0EC', color: '#5B6470' };
-  if (d < 0) return { texto: `Vencido hace ${Math.abs(d)} d`, fondo: '#FDF2F2', color: '#9B1C1C' };
-  if (d <= 3) return { texto: `Faltan ${d} d`, fondo: '#FDF2F2', color: '#9B1C1C' };
-  if (d <= 7) return { texto: `Faltan ${d} d`, fondo: '#FFF7ED', color: '#9A3412' };
-  return { texto: `Faltan ${d} d`, fondo: '#E6F4EA', color: '#1E6B3A' };
+  if (d === null) return { texto: '—', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' };
+  if (d < 0) return { texto: `Vencido hace ${Math.abs(d)} d`, fondo: 'var(--mal-fondo)', color: 'var(--mal)' };
+  if (d <= 3) return { texto: `Faltan ${d} d`, fondo: 'var(--mal-fondo)', color: 'var(--mal)' };
+  if (d <= 7) return { texto: `Faltan ${d} d`, fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' };
+  return { texto: `Faltan ${d} d`, fondo: 'var(--bien-fondo)', color: 'var(--bien)' };
 }
 
 const fmt = (iso: string) =>
@@ -73,9 +73,9 @@ export default function VistaEventos({
     <>
       <div style={s.tarjetas}>
         <Tarjeta n={eventos.length} t="Eventos registrados" c={color} />
-        <Tarjeta n={pendientes} t="Sin cerrar" c={pendientes ? '#9A3412' : color} />
-        <Tarjeta n={vencidos} t="Fuera del plazo de 15 días" c={vencidos ? '#9B1C1C' : color} />
-        <Tarjeta n={sinReportarArl} t="Accidentes sin reportar a la ARL" c={sinReportarArl ? '#9B1C1C' : color} />
+        <Tarjeta n={pendientes} t="Sin cerrar" c={pendientes ? 'var(--aviso)' : color} />
+        <Tarjeta n={vencidos} t="Fuera del plazo de 15 días" c={vencidos ? 'var(--mal)' : color} />
+        <Tarjeta n={sinReportarArl} t="Accidentes sin reportar a la ARL" c={sinReportarArl ? 'var(--mal)' : color} />
       </div>
 
       {sinReportarArl > 0 && (
@@ -104,7 +104,7 @@ export default function VistaEventos({
               onClick={() => setFiltro(v)}
               style={{
                 ...s.filtro,
-                ...(filtro === v ? { background: color, color: '#fff', borderColor: color } : {}),
+                ...(filtro === v ? { background: color, color: 'var(--sobre-marca)', borderColor: color } : {}),
               }}
             >
               {t}
@@ -190,15 +190,15 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))',
   },
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2,
   },
   tarjetaN: { fontSize: 24, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' },
-  tarjetaT: { fontSize: 11.5, color: '#5B6470', lineHeight: 1.4 },
+  tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   alerta: {
-    background: '#FDF2F2', border: '1px solid #F5C6C6', color: '#9B1C1C',
-    borderRadius: 9, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
+    background: 'var(--mal-fondo)', border: '1px solid #F5C6C6', color: 'var(--mal)',
+    borderRadius: 8, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
     marginBottom: 16,
   },
 
@@ -206,41 +206,41 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center',
   },
   buscador: {
-    flex: '1 1 240px', padding: '9px 12px', border: '1px solid #E4E4DF',
+    flex: '1 1 240px', padding: '9px 12px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
   },
   filtros: { display: 'flex', gap: 6 },
   filtro: {
-    border: '1px solid #E4E4DF', background: '#fff', color: '#5B6470',
+    border: '1px solid var(--borde)', background: 'var(--superficie)', color: 'var(--texto-suave)',
     padding: '8px 14px', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
 
   vacio: {
-    fontSize: 13.5, color: '#5B6470', lineHeight: 1.65, background: '#fff',
-    border: '1px solid #E4E4DF', borderRadius: 10, padding: '18px 20px', maxWidth: 620,
+    fontSize: 13.5, color: 'var(--texto-suave)', lineHeight: 1.65, background: 'var(--superficie)',
+    border: '1px solid var(--borde)', borderRadius: 8, padding: '18px 20px', maxWidth: 620,
   },
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10, overflowX: 'auto',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 820 },
   th: {
-    textAlign: 'left', padding: '10px 12px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'left', padding: '10px 12px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
+  td: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   codigo: { fontFamily: "'Consolas','Courier New',monospace", fontWeight: 600 },
   gravedad: {
-    fontSize: 9.5, fontWeight: 700, color: '#9B1C1C', letterSpacing: .5, marginTop: 3,
+    fontSize: 9.5, fontWeight: 700, color: 'var(--mal)', letterSpacing: .5, marginTop: 3,
   },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   chip: {
     display: 'inline-block', padding: '3px 9px', borderRadius: 20,
     fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
   },
   enlace: {
-    display: 'inline-block', border: '1px solid #E4E4DF', borderRadius: 7,
+    display: 'inline-block', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 13px', fontSize: 12, fontWeight: 600,
-    color: '#14263F', textDecoration: 'none', whiteSpace: 'nowrap',
+    color: 'var(--texto)', textDecoration: 'none', whiteSpace: 'nowrap',
   },
 };

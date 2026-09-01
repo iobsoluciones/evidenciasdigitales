@@ -133,7 +133,7 @@ function Lista({
                 <button
                   onClick={agregar}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: '#fff' }}
+                  style={{ ...est.btn, background: color, color: 'var(--sobre-marca)' }}
                 >
                   +
                 </button>
@@ -155,7 +155,7 @@ function Lista({
                 <button
                   onClick={agregarVarios}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: '#fff', flex: 1 }}
+                  style={{ ...est.btn, background: color, color: 'var(--sobre-marca)', flex: 1 }}
                 >
                   {pendiente ? 'Cargando…' : 'Cargar'}
                 </button>
@@ -171,7 +171,7 @@ function Lista({
       {aviso && (
         <p style={{
           ...est.aviso,
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </p>
@@ -181,19 +181,19 @@ function Lista({
 }
 
 const est: Record<string, React.CSSProperties> = {
-  tarjeta: { background: '#fff', borderRadius: 14, padding: 22, marginTop: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  tarjeta: { background: 'var(--superficie)', borderRadius: 14, padding: 22, marginTop: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   h2: { fontSize: 15, margin: '0 0 6px' },
-  intro: { fontSize: 12, color: '#6b7280', margin: '0 0 18px', lineHeight: 1.5 },
+  intro: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.5 },
   columnas: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 20 },
-  h3: { fontSize: 12, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4, margin: '0 0 8px' },
-  caja: { border: '1px solid #e5e7eb', borderRadius: 8, maxHeight: 180, overflowY: 'auto', marginBottom: 8, background: '#f8fafc' },
-  item: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', fontSize: 12.5, borderBottom: '1px solid #e5e7eb' },
-  x: { background: 'none', border: 'none', color: '#dc2626', fontSize: 16, cursor: 'pointer', lineHeight: 1, padding: '0 2px' },
-  vacio: { fontSize: 11.5, color: '#9ca3af', padding: 12, margin: 0, textAlign: 'center' },
+  h3: { fontSize: 12, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .4, margin: '0 0 8px' },
+  caja: { border: '1px solid var(--borde)', borderRadius: 8, maxHeight: 180, overflowY: 'auto', marginBottom: 8, background: 'var(--superficie-3)' },
+  item: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', fontSize: 12.5, borderBottom: '1px solid var(--borde)' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 16, cursor: 'pointer', lineHeight: 1, padding: '0 2px' },
+  vacio: { fontSize: 11.5, color: 'var(--texto-tenue)', padding: 12, margin: 0, textAlign: 'center' },
   fila: { display: 'flex', gap: 6 },
-  input: { flex: 1, width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 12.5, boxSizing: 'border-box', fontFamily: 'inherit' },
+  input: { flex: 1, width: '100%', padding: '8px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 12.5, boxSizing: 'border-box', fontFamily: 'inherit' },
   btn: { border: 'none', padding: '8px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer' },
-  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer' },
-  enlace: { background: 'none', border: 'none', color: '#3b82f6', fontSize: 11.5, cursor: 'pointer', padding: '6px 0 0' },
+  btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '8px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer' },
+  enlace: { background: 'none', border: 'none', color: 'var(--marca)', fontSize: 11.5, cursor: 'pointer', padding: '6px 0 0' },
   aviso: { fontSize: 11.5, margin: '8px 0 0' },
 };

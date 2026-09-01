@@ -63,7 +63,7 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
             onClick={() => setF({ ...f, tipo: t.v })}
             style={{
               ...e.opcion,
-              borderColor: f.tipo === t.v ? color : '#DFDFD8',
+              borderColor: f.tipo === t.v ? color : 'var(--borde-fuerte)',
               background: f.tipo === t.v ? '#F7FBFA' : '#fff',
             }}
           >
@@ -117,8 +117,8 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -128,7 +128,7 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
         <button
           onClick={crear}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Creando…' : 'Crear y agregar criterios'}
         </button>
@@ -140,14 +140,14 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 22, maxWidth: 700,
   },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '14px 0 6px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
-    boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
+    boxSizing: 'border-box', fontFamily: 'inherit', background: 'var(--superficie)',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))', gap: 12 },
 
@@ -156,16 +156,16 @@ const e: Record<string, React.CSSProperties> = {
     borderWidth: 2, borderStyle: 'solid', borderRadius: 8, padding: 14,
     cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit',
   },
-  notaOpcion: { fontSize: 11, color: '#5B6470', margin: '5px 0 0', lineHeight: 1.5 },
+  notaOpcion: { fontSize: 11, color: 'var(--texto-suave)', margin: '5px 0 0', lineHeight: 1.5 },
 
   aviso: { marginTop: 16, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

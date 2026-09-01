@@ -104,7 +104,7 @@ export default function CargaLogo({
         {previa ? (
           <img src={previa} alt="Logo" style={{ maxHeight: 110, maxWidth: '100%', objectFit: 'contain' }} />
         ) : (
-          <span style={{ color: '#9ca3af', fontSize: 12 }}>Sin logo cargado</span>
+          <span style={{ color: 'var(--texto-tenue)', fontSize: 12 }}>Sin logo cargado</span>
         )}
       </div>
 
@@ -121,7 +121,7 @@ export default function CargaLogo({
             }}
             style={{ fontSize: 12, marginTop: 10 }}
           />
-          <p style={{ fontSize: 11, color: '#6b7280', margin: '6px 0 0' }}>
+          <p style={{ fontSize: 11, color: 'var(--texto-suave)', margin: '6px 0 0' }}>
             PNG, JPG, GIF o WEBP · máximo 2 MB. Aparece en las actas de esta empresa.
           </p>
 
@@ -134,14 +134,14 @@ export default function CargaLogo({
       )}
 
       {subiendo && (
-        <p style={{ fontSize: 12, color: '#3b82f6', marginTop: 8 }}>Subiendo imagen…</p>
+        <p style={{ fontSize: 12, color: 'var(--marca)', marginTop: 8 }}>Subiendo imagen…</p>
       )}
 
       {aviso && (
         <div style={{
           ...est.aviso,
-          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -152,19 +152,19 @@ export default function CargaLogo({
 
 const est: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, marginBottom: 0,
   },
   h2: { fontSize: 14.5, margin: '0 0 14px', fontWeight: 600 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 8 },
   previa: {
-    border: '1px dashed #DFDFD8', borderRadius: 6, padding: 20,
-    background: '#FBFBF9', textAlign: 'center', minHeight: 150,
+    border: '1px dashed var(--borde-fuerte)', borderRadius: 6, padding: 20,
+    background: 'var(--superficie-2)', textAlign: 'center', minHeight: 150,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   btnQuitar: {
-    display: 'block', marginTop: 10, background: '#f1f5f9',
-    color: '#b91c1c', border: '1px solid #fca5a5', padding: '7px 14px',
+    display: 'block', marginTop: 10, background: 'var(--superficie-3)',
+    color: 'var(--mal)', border: '1px solid #fca5a5', padding: '7px 14px',
     borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
   aviso: { marginTop: 12, padding: '10px 14px', borderRadius: 8, fontSize: 13 },

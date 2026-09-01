@@ -181,8 +181,8 @@ export default function CargaUnidades({
           {aviso && (
             <div style={{
               ...e.aviso,
-              background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-              color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+              background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+              color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
             }}>
               {aviso.texto}
             </div>
@@ -205,32 +205,32 @@ export default function CargaUnidades({
 const e: Record<string, React.CSSProperties> = {
   bloque: {
     marginTop: 14, paddingTop: 14,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   enlace: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0,
   },
   cerrar: {
-    background: 'none', border: 'none', color: '#8A929C',
+    background: 'none', border: 'none', color: 'var(--texto-tenue)',
     fontSize: 11.5, cursor: 'pointer', padding: 0,
   },
   acciones: { display: 'flex', gap: 8, flexWrap: 'wrap' },
   btn: {
-    color: '#fff', padding: '8px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', padding: '8px 16px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '10px 0 0', lineHeight: 1.6 },
-  aviso: { marginTop: 10, padding: '9px 12px', borderRadius: 5, fontSize: 12 },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '10px 0 0', lineHeight: 1.6 },
+  aviso: { marginTop: 10, padding: '9px 12px', borderRadius: 6, fontSize: 12 },
   errores: {
-    marginTop: 10, padding: '10px 12px', borderRadius: 5,
-    background: '#FEFCE8', color: '#8A6100', maxHeight: 150, overflowY: 'auto',
+    marginTop: 10, padding: '10px 12px', borderRadius: 6,
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', maxHeight: 150, overflowY: 'auto',
   },
 };

@@ -12,6 +12,7 @@ import { listarEmpresas, empresaActiva } from '@/lib/empresa-activa';
 import MenuLateral from './MenuLateral';
 import SelectorEmpresa from './SelectorEmpresa';
 import BotonSalir from './BotonSalir';
+import BotonTema from './BotonTema';
 import BotonMenu from './BotonMenu';
 import AccesosRapidos from './AccesosRapidos';
 import { contrasteSobre, conAlfa } from '@/lib/color';
@@ -54,9 +55,8 @@ export default async function LayoutPanel({
       ['--marca' as string]: marca,
       display: 'flex',
       minHeight: '100vh',
-      background: '#F7F7F4',
-      fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif",
-      color: '#14263F',
+      background: 'var(--fondo)',
+      color: 'var(--texto)',
     }}>
       <MenuLateral
         color={marca}
@@ -93,6 +93,7 @@ export default async function LayoutPanel({
               Manual
             </Link>
             <BotonSalir contraste={contraste} />
+            <BotonTema contraste={contraste} />
           </div>
         </header>
 
@@ -119,8 +120,8 @@ const est: Record<string, React.CSSProperties> = {
   },
   acciones: { display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' },
   alerta: {
-    background: '#FDF2F2', color: '#9B1C1C', padding: '11px 26px',
-    fontSize: 13, borderBottom: '1px solid #F5C6C6',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '11px 26px',
+    fontSize: 13, borderBottom: '1px solid var(--borde)',
   },
   contenido: { padding: '26px', maxWidth: 1180, overflowX: 'auto' },
   manual: {

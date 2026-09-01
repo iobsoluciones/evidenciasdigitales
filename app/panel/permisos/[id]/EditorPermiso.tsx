@@ -33,9 +33,9 @@ const ROLES: { v: RolPermiso; t: string }[] = [
 ];
 
 const RESULTADOS: { v: ResultadoReq; t: string; fondo: string; color: string }[] = [
-  { v: 'cumple', t: 'Cumple', fondo: '#E6F4EA', color: '#1E6B3A' },
-  { v: 'no_cumple', t: 'No cumple', fondo: '#FDF2F2', color: '#9B1C1C' },
-  { v: 'no_aplica', t: 'No aplica', fondo: '#F0F0EC', color: '#5B6470' },
+  { v: 'cumple', t: 'Cumple', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  { v: 'no_cumple', t: 'No cumple', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  { v: 'no_aplica', t: 'No aplica', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
 ];
 
 const VACIO = {
@@ -165,8 +165,8 @@ export default function EditorPermiso({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
@@ -174,14 +174,14 @@ export default function EditorPermiso({
       {/* ---------- Estado ---------- */}
       <div style={{
         ...s.estado,
-        background: permiso.vencido ? '#FDF2F2'
-          : permiso.estado === 'autorizado' ? '#E6F4EA' : '#F7F7F4',
+        background: permiso.vencido ? 'var(--mal-fondo)'
+          : permiso.estado === 'autorizado' ? 'var(--bien-fondo)' : 'var(--fondo)',
         borderColor: permiso.vencido ? '#F3C7C7'
-          : permiso.estado === 'autorizado' ? '#BFE3CB' : '#E4E4DF',
+          : permiso.estado === 'autorizado' ? '#BFE3CB' : 'var(--borde)',
       }}>
         <strong style={{
-          color: permiso.vencido ? '#9B1C1C'
-            : permiso.estado === 'autorizado' ? '#1E6B3A' : '#5B6470',
+          color: permiso.vencido ? 'var(--mal)'
+            : permiso.estado === 'autorizado' ? 'var(--bien)' : 'var(--texto-suave)',
         }}>
           {permiso.vencido ? 'VENCIDO'
             : permiso.estado === 'borrador' ? 'BORRADOR'
@@ -221,7 +221,7 @@ export default function EditorPermiso({
           </button>
         )}
         {permiso.estado !== 'cerrado' && permiso.estado !== 'cancelado' && (
-          <button type="button" style={{ ...s.botonSec, color: '#9B1C1C' }}
+          <button type="button" style={{ ...s.botonSec, color: 'var(--mal)' }}
             onClick={() => setCancelando({ texto: '' })}>
             Cancelar
           </button>
@@ -292,7 +292,7 @@ export default function EditorPermiso({
               Volver
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: '#9B1C1C' }}
+              style={{ ...s.botonLleno, background: 'var(--mal)' }}
               onClick={() => {
                 correr(() => cancelarPermiso(permiso.id, cancelando.texto));
                 setCancelando(null);
@@ -396,7 +396,7 @@ export default function EditorPermiso({
             <button type="button" onClick={guardar} disabled={pendiente}
               style={{
                 ...s.botonLleno,
-                background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color,
+                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
               }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -427,8 +427,8 @@ export default function EditorPermiso({
             <div style={s.reqCab}>
               <span style={{
                 ...s.etiqueta,
-                background: r.obligatorio ? '#FDF2F2' : '#F0F0EC',
-                color: r.obligatorio ? '#9B1C1C' : '#5B6470',
+                background: r.obligatorio ? 'var(--mal-fondo)' : 'var(--superficie-3)',
+                color: r.obligatorio ? 'var(--mal)' : 'var(--texto-suave)',
               }}>
                 {r.obligatorio ? 'NORMA' : 'CRITERIO TÉCNICO'}
               </span>
@@ -487,10 +487,10 @@ export default function EditorPermiso({
                 {q.rol !== 'autoriza' && apt && (
                   <div style={{
                     ...s.aptitud,
-                    background: apt.apto === false ? '#FDF2F2'
-                      : apt.apto === null ? '#F0F0EC' : '#E6F4EA',
-                    color: apt.apto === false ? '#9B1C1C'
-                      : apt.apto === null ? '#5B6470' : '#1E6B3A',
+                    background: apt.apto === false ? 'var(--mal-fondo)'
+                      : apt.apto === null ? 'var(--superficie-3)' : 'var(--bien-fondo)',
+                    color: apt.apto === false ? 'var(--mal)'
+                      : apt.apto === null ? 'var(--texto-suave)' : 'var(--bien)',
                   }}>
                     {apt.detalle}
                   </div>
@@ -499,8 +499,8 @@ export default function EditorPermiso({
 
               <span style={{
                 ...s.chip,
-                background: q.firmado ? '#E6F4EA' : '#FEF3C7',
-                color: q.firmado ? '#1E6B3A' : '#92400E',
+                background: q.firmado ? 'var(--bien-fondo)' : 'var(--ambar-fondo)',
+                color: q.firmado ? 'var(--bien)' : 'var(--aviso)',
               }}>
                 {q.firmado ? 'Firmó' : q.tiene_token ? 'Enlace enviado' : 'Sin firmar'}
               </span>
@@ -528,7 +528,7 @@ export default function EditorPermiso({
                     Editar
                   </button>
                   {!q.firmado && (
-                    <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+                    <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
                       disabled={pendiente}
                       onClick={() => correr(() => eliminarParticipante(q.id, permiso.id))}>
                       Quitar
@@ -655,64 +655,64 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   estado: {
-    borderWidth: 1, borderStyle: 'solid', borderRadius: 10,
-    padding: '12px 15px', fontSize: 13, color: '#374151',
+    borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    padding: '12px 15px', fontSize: 13, color: 'var(--texto-suave)',
     lineHeight: 1.6, marginBottom: 14,
   },
   barra: { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 },
 
   bloque: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 12, padding: '15px 17px', marginBottom: 14,
   },
   subBloque: {
-    background: '#FAFAF8', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie-2)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '13px 15px', marginTop: 10,
   },
   h3: {
-    fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10,
+    fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10,
     display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap',
   },
-  h4: { fontSize: 13, fontWeight: 700, color: '#14263F', marginBottom: 8 },
-  contador: { fontSize: 11.5, fontWeight: 600, color: '#92400E' },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
-  parrafo: { fontSize: 13, color: '#374151', lineHeight: 1.65, margin: 0 },
-  vacio: { fontSize: 12.5, color: '#9CA3AF', fontStyle: 'italic', margin: '0 0 8px' },
+  h4: { fontSize: 13, fontWeight: 700, color: 'var(--texto)', marginBottom: 8 },
+  contador: { fontSize: 11.5, fontWeight: 600, color: 'var(--aviso)' },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
+  parrafo: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.65, margin: 0 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', fontStyle: 'italic', margin: '0 0 8px' },
 
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '4px 0 0', lineHeight: 1.5 },
 
-  requisito: { padding: '11px 0', borderTop: '1px solid #F0F0EC' },
+  requisito: { padding: '11px 0', borderTop: '1px solid var(--superficie-3)' },
   reqCab: { display: 'flex', gap: 8, alignItems: 'baseline', flexWrap: 'wrap' },
   etiqueta: {
     fontSize: 9.5, fontWeight: 700, letterSpacing: .3,
     padding: '2px 7px', borderRadius: 4, whiteSpace: 'nowrap',
   },
-  reqTexto: { fontSize: 13, color: '#14263F', flex: '1 1 240px', lineHeight: 1.45 },
-  fundamento: { fontSize: 11, color: '#8A929C', margin: '3px 0 7px' },
+  reqTexto: { fontSize: 13, color: 'var(--texto)', flex: '1 1 240px', lineHeight: 1.45 },
+  fundamento: { fontSize: 11, color: 'var(--texto-tenue)', margin: '3px 0 7px' },
   opciones: { display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' },
   opcion: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
-    padding: '7px 16px', fontSize: 12.5, color: '#5B6470',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
+    padding: '7px 16px', fontSize: 12.5, color: 'var(--texto-suave)',
   },
-  observacion: { fontSize: 11.5, color: '#5B6470', fontStyle: 'italic', marginLeft: 6 },
+  observacion: { fontSize: 11.5, color: 'var(--texto-suave)', fontStyle: 'italic', marginLeft: 6 },
 
   persona: {
     display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap',
-    padding: '11px 0', borderTop: '1px solid #F0F0EC',
+    padding: '11px 0', borderTop: '1px solid var(--superficie-3)',
   },
-  personaNombre: { fontSize: 13, fontWeight: 700, color: '#14263F' },
-  personaMeta: { fontSize: 11.5, color: '#8A929C', marginTop: 2, lineHeight: 1.4 },
+  personaNombre: { fontSize: 13, fontWeight: 700, color: 'var(--texto)' },
+  personaMeta: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 2, lineHeight: 1.4 },
   aptitud: {
     fontSize: 11.5, borderRadius: 7, padding: '5px 9px',
     marginTop: 5, lineHeight: 1.45, display: 'inline-block',
@@ -724,32 +724,32 @@ const s: Record<string, React.CSSProperties> = {
   accionesPersona: { display: 'flex', gap: 4, flexWrap: 'wrap' },
 
   enlaceCaja: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '11px 13px', marginTop: 12,
   },
-  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto)', marginBottom: 5 },
   enlaceUrl: {
     display: 'block', fontFamily: "'Consolas','Courier New',monospace",
-    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all', lineHeight: 1.5,
   },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 16px', fontSize: 13, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer',
+    color: 'var(--texto)', cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

@@ -29,10 +29,10 @@ const NOMBRE_MES = [
 ];
 
 const ESTADOS: { v: EstadoActividad; t: string; fondo: string; color: string }[] = [
-  { v: 'pendiente', t: 'Pendiente', fondo: '#F0F0EC', color: '#5B6470' },
-  { v: 'en_curso', t: 'En curso', fondo: '#FFF7ED', color: '#9A3412' },
-  { v: 'cumplida', t: 'Cumplida', fondo: '#E6F4EA', color: '#1E6B3A' },
-  { v: 'no_aplica', t: 'No aplica', fondo: '#F0F0EC', color: '#8A929C' },
+  { v: 'pendiente', t: 'Pendiente', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
+  { v: 'en_curso', t: 'En curso', fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+  { v: 'cumplida', t: 'Cumplida', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  { v: 'no_aplica', t: 'No aplica', fondo: 'var(--superficie-3)', color: 'var(--texto-tenue)' },
 ];
 
 const ACT_VACIA = {
@@ -150,7 +150,7 @@ export default function VistaPlanAnual({
           <button
             onClick={() => correr('crear', () => crearPlan(anio))}
             disabled={pendiente}
-            style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}
+            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}
             type="button"
           >
             {pendiente ? 'Creando…' : `Crear el plan de ${anio}`}
@@ -338,9 +338,9 @@ export default function VistaPlanAnual({
               disabled={pendiente} type="button"
               style={{
                 ...s.botonSec,
-                borderColor: hecho === 'cab' ? '#1E6B3A' : color,
-                color: hecho === 'cab' ? '#1E6B3A' : color,
-                background: hecho === 'cab' ? '#E6F4EA' : '#fff',
+                borderColor: hecho === 'cab' ? 'var(--bien)' : color,
+                color: hecho === 'cab' ? 'var(--bien)' : color,
+                background: hecho === 'cab' ? 'var(--bien-fondo)' : '#fff',
               }}>
               {hecho === 'cab' ? '✓ Guardado' : 'Guardar'}
             </button>
@@ -404,7 +404,7 @@ export default function VistaPlanAnual({
                     style={{
                       ...s.mes,
                       ...(act.meses.includes(i + 1)
-                        ? { background: color, color: '#fff', borderColor: color } : {}),
+                        ? { background: color, color: 'var(--sobre-marca)', borderColor: color } : {}),
                     }}>{m}</button>
                 ))}
               </div>
@@ -418,7 +418,7 @@ export default function VistaPlanAnual({
                     style={{
                       ...s.mes,
                       ...(act.ejecutados.includes(i + 1)
-                        ? { background: '#1E6B3A', color: '#fff', borderColor: '#1E6B3A' } : {}),
+                        ? { background: 'var(--bien)', color: 'var(--sobre-marca)', borderColor: 'var(--bien)' } : {}),
                     }}>{m}</button>
                 ))}
               </div>
@@ -437,7 +437,7 @@ export default function VistaPlanAnual({
                 correr('act', () => guardarActividad(plan.id, act));
                 setAct(null);
               }} disabled={pendiente} type="button"
-                style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}>
+                style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
                 Guardar actividad
               </button>
             </div>
@@ -477,7 +477,7 @@ export default function VistaPlanAnual({
                           <td key={i} style={s.tdMes}>
                             <span style={{
                               ...s.celdaMes,
-                              background: ejec ? '#1E6B3A' : prog ? color : 'transparent',
+                              background: ejec ? 'var(--bien)' : prog ? color : 'transparent',
                               opacity: ejec || prog ? 1 : 0.15,
                             }} />
                           </td>
@@ -498,7 +498,7 @@ export default function VistaPlanAnual({
                                 meses: a.meses_programados, ejecutados: a.meses_ejecutados,
                                 estado: a.estado,
                               })}>Editar</button>
-                            <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+                            <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
                               onClick={() => correr('del', () => eliminarActividad(a.id))}>
                               Borrar
                             </button>
@@ -532,7 +532,7 @@ export default function VistaPlanAnual({
                 style={{
                   ...s.botonLleno,
                   background: actividades.length === 0 ? '#D8DCDF' : color,
-                  color: actividades.length === 0 ? '#8A929C' : '#fff',
+                  color: actividades.length === 0 ? 'var(--texto-tenue)' : '#fff',
                   cursor: actividades.length === 0 ? 'not-allowed' : 'pointer',
                 }}>
                 Aprobar y firmar
@@ -559,7 +559,7 @@ export default function VistaPlanAnual({
                   Cancelar
                 </button>
                 <button onClick={firmarYAprobar} disabled={pendiente} type="button"
-                  style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}>
+                  style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
                   {pendiente ? 'Aprobando…' : 'Firmar y aprobar'}
                 </button>
               </div>
@@ -594,8 +594,8 @@ function Aviso({ a }: { a: { tipo: 'ok' | 'error'; texto: string } }) {
   return (
     <div style={{
       ...s.aviso,
-      background: a.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-      color: a.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+      background: a.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+      color: a.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
     }}>
       {a.texto}
     </div>
@@ -613,11 +613,11 @@ function Campo({ etiqueta, children }: { etiqueta: string; children: React.React
 
 const s: Record<string, React.CSSProperties> = {
   vacio: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '22px 24px', maxWidth: 620, marginBottom: 16,
   },
-  vacioTitulo: { fontSize: 17, fontWeight: 700, color: '#14263F', margin: '0 0 8px' },
-  vacioTexto: { fontSize: 13.5, color: '#5B6470', lineHeight: 1.65, margin: '0 0 16px' },
+  vacioTitulo: { fontSize: 17, fontWeight: 700, color: 'var(--texto)', margin: '0 0 8px' },
+  vacioTexto: { fontSize: 13.5, color: 'var(--texto-suave)', lineHeight: 1.65, margin: '0 0 16px' },
 
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
@@ -625,111 +625,111 @@ const s: Record<string, React.CSSProperties> = {
   },
   codigo: {
     fontFamily: "'Consolas','Courier New',monospace", fontSize: 11.5,
-    color: '#5B6470', fontWeight: 600, letterSpacing: .5,
+    color: 'var(--texto-suave)', fontWeight: 600, letterSpacing: .5,
   },
-  tituloPlan: { fontSize: 20, fontWeight: 700, color: '#14263F', margin: '3px 0 3px' },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: 0 },
+  tituloPlan: { fontSize: 20, fontWeight: 700, color: 'var(--texto)', margin: '3px 0 3px' },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: 0 },
   avance: {
     display: 'flex', alignItems: 'center', gap: 12,
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10, padding: '10px 16px',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, padding: '10px 16px',
   },
   avanceCifra: { fontSize: 28, fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' },
-  avanceDetalle: { fontSize: 12, color: '#5B6470', lineHeight: 1.45 },
-  avanceMeses: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  avanceDetalle: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.45 },
+  avanceMeses: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
 
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '16px 18px', marginBottom: 14,
   },
   filaTitulo: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     gap: 12, flexWrap: 'wrap',
   },
-  h3: { fontSize: 14.5, fontWeight: 700, color: '#14263F', margin: '0 0 10px' },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px' },
+  h3: { fontSize: 14.5, fontWeight: 700, color: 'var(--texto)', margin: '0 0 10px' },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px' },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
 
   formActividad: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 10, padding: '14px 16px', marginBottom: 14,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '14px 16px', marginBottom: 14,
   },
   meses: { display: 'flex', gap: 4, flexWrap: 'wrap' },
   mes: {
-    width: 30, height: 30, border: '1px solid #E4E4DF', borderRadius: 6,
-    background: '#fff', fontSize: 11.5, fontWeight: 700, color: '#5B6470', cursor: 'pointer',
+    width: 30, height: 30, border: '1px solid var(--borde)', borderRadius: 6,
+    background: 'var(--superficie)', fontSize: 11.5, fontWeight: 700, color: 'var(--texto-suave)', cursor: 'pointer',
   },
 
-  contenedor: { overflowX: 'auto', border: '1px solid #E4E4DF', borderRadius: 10 },
+  contenedor: { overflowX: 'auto', border: '1px solid var(--borde)', borderRadius: 8 },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 12.5, minWidth: 820 },
   th: {
-    textAlign: 'left', padding: '9px 10px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'left', padding: '9px 10px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
   thMes: {
-    padding: '9px 2px', background: '#F7F7F4', color: '#5B6470',
-    fontSize: 10, fontWeight: 700, borderBottom: '1px solid #E4E4DF',
+    padding: '9px 2px', background: 'var(--fondo)', color: 'var(--texto-suave)',
+    fontSize: 10, fontWeight: 700, borderBottom: '1px solid var(--borde)',
     textAlign: 'center', width: 22,
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
-  tdMes: { padding: '9px 2px', borderBottom: '1px solid #F0F0EC', textAlign: 'center' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
+  tdMes: { padding: '9px 2px', borderBottom: '1px solid var(--superficie-3)', textAlign: 'center' },
   celdaMes: {
     display: 'inline-block', width: 14, height: 14, borderRadius: 3, background: '#C8CDD2',
   },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
-  atrasada: { fontSize: 10.5, fontWeight: 700, color: '#9B1C1C', marginTop: 3 },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
+  atrasada: { fontSize: 10.5, fontWeight: 700, color: 'var(--mal)', marginTop: 3 },
   chip: {
     display: 'inline-block', padding: '3px 9px', borderRadius: 20,
     fontSize: 10.5, fontWeight: 700, whiteSpace: 'nowrap',
   },
   itemPlan: {
-    fontSize: 12.5, color: '#5B6470', padding: '7px 0',
-    borderBottom: '1px solid #F0F0EC',
+    fontSize: 12.5, color: 'var(--texto-suave)', padding: '7px 0',
+    borderBottom: '1px solid var(--superficie-3)',
   },
 
   aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   barraDoc: { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 },
   botonDoc: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 16px', fontSize: 13, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer',
+    color: 'var(--texto)', cursor: 'pointer',
   },
   botonPlanoDoc: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
-  notaDoc: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 10px', lineHeight: 1.55 },
+  notaDoc: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '4px 0 10px', lineHeight: 1.55 },
   enlaceCaja: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '11px 13px', marginBottom: 14,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '11px 13px', marginBottom: 14,
   },
-  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto)', marginBottom: 5 },
   enlaceUrl: {
     display: 'block', fontFamily: "'Consolas','Courier New',monospace",
-    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all', lineHeight: 1.5,
   },
   botonSec: {
     borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '8px 16px', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

@@ -115,8 +115,8 @@ export default function EditorRendicion({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
@@ -207,7 +207,7 @@ export default function EditorRendicion({
             <button type="button" onClick={guardar} disabled={pendiente}
               style={{
                 ...s.botonLleno,
-                background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color,
+                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
               }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -249,8 +249,8 @@ export default function EditorRendicion({
               </div>
               <span style={{
                 ...s.chip,
-                background: q.firmado ? '#E6F4EA' : '#FEF3C7',
-                color: q.firmado ? '#1E6B3A' : '#92400E',
+                background: q.firmado ? 'var(--bien-fondo)' : 'var(--ambar-fondo)',
+                color: q.firmado ? 'var(--bien)' : 'var(--aviso)',
               }}>
                 {q.firmado ? 'Rindió cuentas' : q.tiene_token ? 'Enlace enviado' : 'Pendiente'}
               </span>
@@ -280,7 +280,7 @@ export default function EditorRendicion({
                     Editar
                   </button>
                   {!q.firmado && (
-                    <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+                    <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
                       disabled={pendiente}
                       onClick={() => correr(() => eliminarResponsable(q.id, rendicion.id))}>
                       Quitar
@@ -391,55 +391,55 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   cerrada: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 10,
-    padding: '12px 15px', fontSize: 13, color: '#374151',
+    background: 'var(--fondo)', border: '1px solid var(--borde)', borderRadius: 8,
+    padding: '12px 15px', fontSize: 13, color: 'var(--texto-suave)',
     lineHeight: 1.6, marginBottom: 12,
   },
   barra: { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 },
 
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14,
   },
   subBloque: {
-    background: '#FAFAF8', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie-2)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '13px 15px', marginTop: 10,
   },
   h3: {
-    fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10,
+    fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10,
     display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap',
   },
-  h4: { fontSize: 13, fontWeight: 700, color: '#14263F', marginBottom: 8 },
-  contador: { fontSize: 11.5, fontWeight: 600, color: '#92400E' },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
-  vacio: { fontSize: 12.5, color: '#9CA3AF', fontStyle: 'italic', margin: '0 0 8px' },
+  h4: { fontSize: 13, fontWeight: 700, color: 'var(--texto)', marginBottom: 8 },
+  contador: { fontSize: 11.5, fontWeight: 600, color: 'var(--aviso)' },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px', maxWidth: 640 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', fontStyle: 'italic', margin: '0 0 8px' },
 
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '4px 0 0', lineHeight: 1.5 },
 
-  persona: { padding: '12px 0', borderTop: '1px solid #F0F0EC' },
+  persona: { padding: '12px 0', borderTop: '1px solid var(--superficie-3)' },
   personaCab: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' },
-  personaNombre: { fontSize: 13, fontWeight: 700, color: '#14263F' },
-  personaMeta: { fontSize: 11.5, color: '#8A929C', marginTop: 2 },
+  personaNombre: { fontSize: 13, fontWeight: 700, color: 'var(--texto)' },
+  personaMeta: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 2 },
   accionesPersona: { display: 'flex', gap: 4, flexWrap: 'wrap' },
   campoTexto: { marginTop: 8 },
   etiquetaTexto: {
-    fontSize: 10, fontWeight: 700, color: '#8A929C',
+    fontSize: 10, fontWeight: 700, color: 'var(--texto-tenue)',
     letterSpacing: .4, textTransform: 'uppercase',
   },
-  parrafo: { fontSize: 12.5, color: '#374151', lineHeight: 1.6, margin: '3px 0 0' },
+  parrafo: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '3px 0 0' },
   parrafoVacio: {
-    fontSize: 12.5, color: '#9CA3AF', fontStyle: 'italic',
+    fontSize: 12.5, color: 'var(--texto-tenue)', fontStyle: 'italic',
     lineHeight: 1.6, margin: '3px 0 0',
   },
   chip: {
@@ -448,32 +448,32 @@ const s: Record<string, React.CSSProperties> = {
   },
 
   enlaceCaja: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '11px 13px', marginTop: 12,
   },
-  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto)', marginBottom: 5 },
   enlaceUrl: {
     display: 'block', fontFamily: "'Consolas','Courier New',monospace",
-    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all', lineHeight: 1.5,
   },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 16px', fontSize: 13, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer',
+    color: 'var(--texto)', cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

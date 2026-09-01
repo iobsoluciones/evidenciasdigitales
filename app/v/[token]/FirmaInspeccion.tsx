@@ -110,8 +110,8 @@ export default function FirmaInspeccion({
         {inspeccion.puntaje !== null && (
           <div style={{
             ...s.veredicto,
-            background: inspeccion.cumple ? '#E6F4EA' : '#FDF2F2',
-            color: inspeccion.cumple ? '#1E6B3A' : '#9B1C1C',
+            background: inspeccion.cumple ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+            color: inspeccion.cumple ? 'var(--bien)' : 'var(--mal)',
           }}>
             <span style={s.puntaje}>{inspeccion.puntaje}%</span>
             <span style={s.veredictoTexto}>
@@ -160,7 +160,7 @@ export default function FirmaInspeccion({
         {error && <div style={s.error}>{error}</div>}
 
         <button onClick={firmar} disabled={pendiente}
-          style={{ ...s.boton, background: pendiente ? '#cbd5e1' : color }}>
+          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : color }}>
           {pendiente ? 'Registrando…' : 'Firmar'}
         </button>
 
@@ -175,11 +175,10 @@ export default function FirmaInspeccion({
 const s: Record<string, React.CSSProperties> = {
   pagina: {
     minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#F7F7F4', padding: 20,
-    fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif", color: '#14263F',
+    background: 'var(--fondo)', padding: 20, color: 'var(--texto)',
   },
   caja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 14,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 14,
     padding: '26px 24px', maxWidth: 420, width: '100%', textAlign: 'center',
   },
   cabecera: {
@@ -187,55 +186,55 @@ const s: Record<string, React.CSSProperties> = {
   },
   logo: { maxHeight: 44, maxWidth: 150, objectFit: 'contain', marginBottom: 8 },
   empresa: { fontSize: 15, fontWeight: 700 },
-  doc: { fontSize: 11.5, color: '#5B6470', marginTop: 2 },
+  doc: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 2 },
 
   saludo: { fontSize: 14, lineHeight: 1.65, margin: '0 0 14px' },
 
   veredicto: {
-    borderRadius: 10, padding: '12px 16px', marginBottom: 14,
+    borderRadius: 8, padding: '12px 16px', marginBottom: 14,
     display: 'flex', alignItems: 'baseline', gap: 12,
   },
   puntaje: { fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums' },
   veredictoTexto: { fontSize: 14, fontWeight: 700 },
 
   seccion: {
-    fontSize: 11, fontWeight: 700, color: '#8A929C', letterSpacing: .5,
+    fontSize: 11, fontWeight: 700, color: 'var(--texto-tenue)', letterSpacing: .5,
     textTransform: 'uppercase', marginBottom: 8,
   },
   lista: {
-    border: '1px solid #E4E4DF', borderRadius: 9,
+    border: '1px solid var(--borde)', borderRadius: 8,
     marginBottom: 14, maxHeight: 240, overflowY: 'auto',
   },
-  hallazgo: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC' },
+  hallazgo: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)' },
   hCriterio: { fontSize: 12.5, fontWeight: 600, lineHeight: 1.45 },
   critico: {
-    fontSize: 9.5, fontWeight: 700, color: '#9B1C1C', background: '#FDF2F2',
+    fontSize: 9.5, fontWeight: 700, color: 'var(--mal)', background: 'var(--mal-fondo)',
     padding: '2px 6px', borderRadius: 4, marginRight: 6,
   },
-  hSeccion: { fontSize: 11, color: '#8A929C', marginTop: 2 },
-  hTexto: { fontSize: 12, color: '#374151', marginTop: 4, lineHeight: 1.5 },
+  hSeccion: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
+  hTexto: { fontSize: 12, color: 'var(--texto-suave)', marginTop: 4, lineHeight: 1.5 },
 
   campo: { marginTop: 8 },
   label: { display: 'block', fontSize: 12.5, fontWeight: 600, marginBottom: 5 },
   input: {
-    width: '100%', padding: '10px 12px', border: '1px solid #E4E4DF',
-    borderRadius: 9, fontSize: 13.5, boxSizing: 'border-box',
-    fontFamily: 'inherit', color: '#14263F',
+    width: '100%', padding: '10px 12px', border: '1px solid var(--borde)',
+    borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
+    fontFamily: 'inherit', color: 'var(--texto)',
   },
 
-  aviso: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '14px 0' },
+  aviso: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '14px 0' },
 
   zonaFirma: { display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 },
 
   error: {
-    background: '#FDF2F2', color: '#9B1C1C', borderRadius: 8,
+    background: 'var(--mal-fondo)', color: 'var(--mal)', borderRadius: 8,
     padding: '10px 13px', fontSize: 13, marginBottom: 12,
   },
   boton: {
-    width: '100%', color: '#fff', border: 'none', padding: 14,
-    borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer',
+    width: '100%', color: 'var(--sobre-marca)', border: 'none', padding: 14,
+    borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: 'pointer',
   },
-  pie: { fontSize: 11, color: '#8A929C', marginTop: 14, textAlign: 'center' },
+  pie: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 14, textAlign: 'center' },
 
   exito: {
     width: 46, height: 46, borderRadius: '50%', margin: '0 auto 12px',
@@ -243,5 +242,5 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 25, fontWeight: 700,
   },
   titulo: { fontSize: 19, fontWeight: 700, margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.65 },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.65 },
 };

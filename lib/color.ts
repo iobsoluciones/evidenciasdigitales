@@ -75,6 +75,32 @@ export function paraTexto(color: string): string {
   return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/**
+ * El mismo color, ACLARADO lo justo para que se lea sobre un fondo
+ * oscuro. Es el reflejo de `paraTexto`: en tema claro el color de la
+ * empresa hay que oscurecerlo y en tema oscuro hay que aclararlo, o el
+ * azul marino de un cliente se pierde contra la barra lateral.
+ *
+ * Se calculan los dos y decide el CSS, porque el servidor no sabe qué
+ * tema tiene guardado el navegador de quien pide la página.
+ */
+export function aclarar(color: string): string {
+  const rgb = aRgb(color);
+  if (!rgb) return color;
+
+  let [r, g, b] = rgb;
+  let intentos = 0;
+  // 0.45 deja el texto legible sobre las superficies del tema oscuro.
+  while (luminancia([r, g, b]) < 0.45 && intentos < 14) {
+    r = Math.min(255, Math.round(r * 1.18) + 6);
+    g = Math.min(255, Math.round(g * 1.18) + 6);
+    b = Math.min(255, Math.round(b * 1.18) + 6);
+    intentos += 1;
+  }
+
+  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+
 /** `#1B5E4A` + 0.18 → `rgba(27,94,74,0.18)`. Para velos y bordes. */
 export function conAlfa(color: string, alfa: number): string {
   const rgb = aRgb(color);

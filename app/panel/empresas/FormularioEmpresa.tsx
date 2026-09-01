@@ -130,12 +130,12 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
               style={{
                 ...s.input, borderRadius: '0 4px 4px 0', borderLeft: 'none',
                 fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
-                background: edicion ? '#F4F4F0' : '#fff',
+                background: edicion ? 'var(--superficie-3)' : '#fff',
               }}
             />
           </div>
           {!edicion && slugEstado.estado === 'ocupado' && (
-            <p style={{ ...s.ayuda, color: '#9B1C1C' }}>
+            <p style={{ ...s.ayuda, color: 'var(--mal)' }}>
               {slugEstado.motivo === 'Ya está en uso.'
                 ? 'Ese identificador ya lo usa otra empresa. El enlace público es único en todo el sistema.'
                 : slugEstado.motivo}
@@ -155,7 +155,7 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
           )}
 
           {!edicion && slugEstado.estado === 'libre' && (
-            <p style={{ ...s.ayuda, color: '#15803D' }}>
+            <p style={{ ...s.ayuda, color: 'var(--bien)' }}>
               Disponible. El enlace será /r/{f.slug}
             </p>
           )}
@@ -227,7 +227,7 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
             type="color"
             value={f.color_primario}
             onChange={(e) => setF({ ...f, color_primario: e.target.value })}
-            style={{ width: 48, height: 36, padding: 2, border: '1px solid #DFDFD8', borderRadius: 4 }}
+            style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--borde-fuerte)', borderRadius: 4 }}
           />
           <input
             value={f.color_primario}
@@ -243,8 +243,8 @@ export default function FormularioEmpresa({ empresa }: { empresa?: Empresa }) {
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -291,41 +291,41 @@ function Campo({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   titulo: { fontSize: 22, margin: '12px 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, marginBottom: 16, maxWidth: 640,
   },
   h2: { fontSize: 14.5, margin: '0 0 4px', fontWeight: 600 },
-  nota: { fontSize: 12, color: '#5B6470', margin: '0 0 16px' },
-  notaColor: { fontSize: 11.5, color: '#8A929C' },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 16px' },
+  notaColor: { fontSize: 11.5, color: 'var(--texto-tenue)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '5px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '5px 0 0' },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 14 },
   usarSugerencia: {
     background: 'none', border: 'none', padding: 0,
-    color: '#14263F', fontWeight: 700, fontSize: 'inherit',
+    color: 'var(--texto)', fontWeight: 700, fontSize: 'inherit',
     fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'underline',
   },
   slugFila: { display: 'flex', alignItems: 'stretch' },
   slugPrefijo: {
-    background: '#F4F4F0', border: '1px solid #DFDFD8', borderRight: 'none',
-    borderRadius: '4px 0 0 4px', padding: '9px 10px', fontSize: 13, color: '#8A929C',
+    background: 'var(--superficie-3)', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
+    borderRadius: '4px 0 0 4px', padding: '9px 10px', fontSize: 13, color: 'var(--texto-tenue)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   aviso: { padding: '11px 15px', borderRadius: 6, fontSize: 13, marginBottom: 16, maxWidth: 640 },
   btn: {
-    background: '#14263F', color: '#fff', border: 'none', padding: '11px 22px',
+    background: 'var(--marca)', color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px',
     borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

@@ -36,7 +36,7 @@ export default async function PaginaNuevaEntrega() {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   titulo: { fontSize: 22, margin: '12px 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
 };

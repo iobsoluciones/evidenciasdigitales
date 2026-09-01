@@ -31,11 +31,11 @@ const PERIODICIDADES = [
 ];
 
 const ESTADOS: Record<EstadoProgramacion, { t: string; c: string; f: string }> = {
-  vencida: { t: 'Vencida', c: '#9B1C1C', f: '#FEE2E2' },
-  proxima: { t: 'Esta semana', c: '#8A6100', f: '#FEF9C3' },
+  vencida: { t: 'Vencida', c: 'var(--mal)', f: 'var(--mal-fondo)' },
+  proxima: { t: 'Esta semana', c: 'var(--ambar)', f: 'var(--ambar-fondo)' },
   pendiente: { t: 'Programada', c: '#1D4ED8', f: '#EFF6FF' },
-  cumplida: { t: 'Realizada', c: '#15803D', f: '#F0FDF4' },
-  cancelada: { t: 'Cancelada', c: '#8A929C', f: '#F4F4F0' },
+  cumplida: { t: 'Realizada', c: 'var(--bien)', f: 'var(--bien-fondo)' },
+  cancelada: { t: 'Cancelada', c: 'var(--texto-tenue)', f: 'var(--superficie-3)' },
 };
 
 const VACIO = {
@@ -104,12 +104,12 @@ export default function VistaProgramadas({
       <div style={e.cabecera}>
         <div style={e.contadores}>
           {vencidas.length > 0 && (
-            <span style={{ ...e.contador, background: '#FEE2E2', color: '#9B1C1C' }}>
+            <span style={{ ...e.contador, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
               {vencidas.length} vencida{vencidas.length !== 1 ? 's' : ''}
             </span>
           )}
           {proximas.length > 0 && (
-            <span style={{ ...e.contador, background: '#FEF9C3', color: '#8A6100' }}>
+            <span style={{ ...e.contador, background: 'var(--ambar-fondo)', color: 'var(--ambar)' }}>
               {proximas.length} esta semana
             </span>
           )}
@@ -118,7 +118,7 @@ export default function VistaProgramadas({
 
         <button
           onClick={() => { setAviso(null); setAbierto(!abierto); }}
-          style={{ ...e.btn, background: abierto ? '#8A929C' : color }}
+          style={{ ...e.btn, background: abierto ? 'var(--texto-tenue)' : color }}
         >
           {abierto ? 'Cancelar' : '+ Programar inspección'}
         </button>
@@ -127,8 +127,8 @@ export default function VistaProgramadas({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -213,7 +213,7 @@ export default function VistaProgramadas({
           <button
             onClick={guardar}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 14 }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 14 }}
           >
             {pendiente ? 'Guardando…' : 'Programar'}
           </button>
@@ -238,8 +238,8 @@ export default function VistaProgramadas({
             return (
               <article key={p.id} style={{
                 ...e.fila,
-                borderLeftColor: p.estado_real === 'vencida' ? '#9B1C1C'
-                               : p.estado_real === 'proxima' ? '#E8C766' : '#E4E4DF',
+                borderLeftColor: p.estado_real === 'vencida' ? 'var(--mal)'
+                               : p.estado_real === 'proxima' ? '#E8C766' : 'var(--borde)',
               }}>
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={e.nombre}>{p.nombre}</div>
@@ -269,14 +269,14 @@ export default function VistaProgramadas({
                     <button
                       onClick={() => realizar(p.id)}
                       disabled={pendiente}
-                      style={{ ...e.btnMini, color: '#15803D' }}
+                      style={{ ...e.btnMini, color: 'var(--bien)' }}
                     >
                       Ya se hizo
                     </button>
                     <button
                       onClick={() => cancelar(p.id)}
                       disabled={pendiente}
-                      style={{ ...e.btnMini, color: '#9B1C1C' }}
+                      style={{ ...e.btnMini, color: 'var(--mal)' }}
                     >
                       Cancelar
                     </button>
@@ -298,47 +298,47 @@ const e: Record<string, React.CSSProperties> = {
   },
   contadores: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
   contador: { padding: '4px 11px', borderRadius: 11, fontSize: 12, fontWeight: 700 },
-  total: { fontSize: 12, color: '#5B6470' },
+  total: { fontSize: 12, color: 'var(--texto-suave)' },
   btn: {
-    color: '#fff', border: 'none', padding: '9px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 16px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
-  aviso: { padding: '10px 13px', borderRadius: 5, fontSize: 12.5, marginBottom: 14 },
+  aviso: { padding: '10px 13px', borderRadius: 6, fontSize: 12.5, marginBottom: 14 },
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 18, marginBottom: 18, maxWidth: 620,
   },
   h2: { fontSize: 15, margin: '0 0 14px', fontWeight: 600 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, marginTop: 10 },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 12 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '14px 0 0', lineHeight: 1.5 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '14px 0 0', lineHeight: 1.5 },
   lista: { display: 'flex', flexDirection: 'column', gap: 10 },
   fila: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 14, flexWrap: 'wrap',
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderLeftWidth: 3, borderLeftStyle: 'solid',
     borderRadius: 6, padding: '13px 15px',
   },
-  nombre: { fontSize: 13.5, fontWeight: 600, color: '#14263F' },
-  meta: { fontSize: 11.5, color: '#5B6470', marginTop: 3 },
-  notas: { fontSize: 11.5, color: '#8A929C', marginTop: 5, fontStyle: 'italic' },
+  nombre: { fontSize: 13.5, fontWeight: 600, color: 'var(--texto)' },
+  meta: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 3 },
+  notas: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 5, fontStyle: 'italic' },
   derecha: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 7 },
-  chip: { padding: '3px 10px', borderRadius: 10, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' },
+  chip: { padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap' },
   acciones: { display: 'flex', gap: 6, flexWrap: 'wrap' },
   btnMini: {
-    fontSize: 11.5, color: '#14263F', background: '#fff',
-    border: '1px solid #DFDFD8', borderRadius: 4, padding: '4px 9px',
+    fontSize: 11.5, color: 'var(--texto)', background: 'var(--superficie)',
+    border: '1px solid var(--borde-fuerte)', borderRadius: 4, padding: '4px 9px',
     cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none',
     display: 'inline-block',
   },
   vacio: {
-    background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
     padding: '36px 24px', textAlign: 'center',
   },
-  explicacion: { fontSize: 12.5, color: '#5B6470', margin: 0, lineHeight: 1.6, maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' },
+  explicacion: { fontSize: 12.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6, maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' },
 };

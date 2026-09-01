@@ -153,8 +153,8 @@ export default function FormularioPlantilla({
         {aviso && (
           <div style={{
             ...e.aviso,
-            background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-            color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+            background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+            color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           }}>
             {aviso.texto}
           </div>
@@ -164,7 +164,7 @@ export default function FormularioPlantilla({
           <button
             onClick={crear}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
           >
             {pendiente ? 'Creando…' : 'Crear plantilla'}
           </button>
@@ -195,34 +195,34 @@ function Campo({
 }
 
 const e: Record<string, React.CSSProperties> = {
-  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #E4E4DF', marginBottom: 18 },
+  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid var(--borde)', marginBottom: 18 },
   pestana: {
     background: 'none', border: 'none', padding: '10px 18px', fontSize: 13,
-    cursor: 'pointer', fontFamily: 'inherit', color: '#8A929C',
+    cursor: 'pointer', fontFamily: 'inherit', color: 'var(--texto-tenue)',
     borderBottomWidth: 2, borderBottomStyle: 'solid', borderBottomColor: 'transparent',
     marginBottom: -1,
   },
   activa: { fontWeight: 700 },
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, maxWidth: 660,
   },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '14px 0 5px' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '5px 0 0' },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '5px 0 0' },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12 },
   tres: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))', gap: 12 },
   check: { display: 'flex', alignItems: 'center', fontSize: 12.5, marginTop: 16, cursor: 'pointer' },
   aviso: { marginTop: 16, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

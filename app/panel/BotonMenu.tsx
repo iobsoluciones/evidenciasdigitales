@@ -38,7 +38,7 @@ export default function BotonMenu({ color }: { color: string }) {
 
 const e: Record<string, React.CSSProperties> = {
   boton: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '9px 11px', cursor: 'pointer',
     flexDirection: 'column', gap: 4, alignItems: 'center', justifyContent: 'center',
     flexShrink: 0,

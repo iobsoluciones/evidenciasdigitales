@@ -24,11 +24,11 @@ const SIMBOLO: Record<EstadoCelda, string> = {
 };
 
 const TONO: Record<EstadoCelda, { fondo: string; texto: string }> = {
-  asistio: { fondo: '#DCFCE7', texto: '#15803D' },
-  falto: { fondo: '#FEE2E2', texto: '#9B1C1C' },
+  asistio: { fondo: 'var(--bien-fondo)', texto: 'var(--bien)' },
+  falto: { fondo: 'var(--mal-fondo)', texto: 'var(--mal)' },
   // Ámbar, no rojo: nadie puede faltar a algo que aún no ocurre
-  programada: { fondo: '#FEF9C3', texto: '#8A6100' },
-  no_aplica: { fondo: 'transparent', texto: '#C5C5BD' },
+  programada: { fondo: 'var(--ambar-fondo)', texto: 'var(--ambar)' },
+  no_aplica: { fondo: 'transparent', texto: 'var(--borde-fuerte)' },
 };
 
 export default function VistaMatriz({
@@ -108,7 +108,7 @@ export default function VistaMatriz({
         <span style={s.conteo}>
           {filas.length} de {matriz.empleados.length} empleados ·{' '}
           {matriz.capacitaciones.length} capacitaciones
-          {huecos > 0 && <strong style={{ color: '#9B1C1C' }}> · {huecos} inasistencias</strong>}
+          {huecos > 0 && <strong style={{ color: 'var(--mal)' }}> · {huecos} inasistencias</strong>}
         </span>
       </div>
 
@@ -136,7 +136,7 @@ export default function VistaMatriz({
                   </div>
                   <div style={{
                     ...s.fechaCap,
-                    color: c.futura ? '#8A6100' : '#A3AAB3',
+                    color: c.futura ? 'var(--ambar)' : 'var(--texto-tenue)',
                     fontWeight: c.futura ? 700 : 400,
                   }}>
                     {fmt(c.fecha)}
@@ -231,7 +231,7 @@ function Marca({ estado, texto }: { estado: EstadoCelda; texto: string }) {
       <span style={{
         ...s.marca,
         background: tono.fondo, color: tono.texto,
-        border: estado === 'no_aplica' ? '1px solid #EFEFEA' : 'none',
+        border: estado === 'no_aplica' ? '1px solid var(--borde)' : 'none',
       }}>
         {SIMBOLO[estado]}
       </span>
@@ -246,94 +246,94 @@ const s: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap', marginBottom: 12,
   },
   select: {
-    padding: '8px 11px', border: '1px solid #DFDFD8', borderRadius: 4,
-    fontSize: 12.5, fontFamily: 'inherit', background: '#fff',
+    padding: '8px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
+    fontSize: 12.5, fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#5B6470', cursor: 'pointer' },
-  conteo: { fontSize: 12, color: '#8A929C', marginLeft: 'auto' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)', marginLeft: 'auto' },
 
   leyenda: { display: 'flex', gap: 20, marginBottom: 14, flexWrap: 'wrap' },
-  leyendaItem: { display: 'flex', alignItems: 'center', gap: 7, fontSize: 11.5, color: '#5B6470' },
+  leyendaItem: { display: 'flex', alignItems: 'center', gap: 7, fontSize: 11.5, color: 'var(--texto-suave)' },
   marca: {
     width: 20, height: 20, borderRadius: 3, display: 'inline-flex',
     alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700,
   },
 
   contenedor: {
-    overflowX: 'auto', border: '1px solid #E4E4DF',
-    borderRadius: 8, background: '#fff',
+    overflowX: 'auto', border: '1px solid var(--borde)',
+    borderRadius: 8, background: 'var(--superficie)',
   },
   tabla: { borderCollapse: 'separate', borderSpacing: 0, fontSize: 12 },
 
   thFijo: {
-    position: 'sticky', left: 0, zIndex: 3, background: '#F7F7F4',
+    position: 'sticky', left: 0, zIndex: 3, background: 'var(--fondo)',
     minWidth: 180, textAlign: 'left', padding: '8px 10px',
-    borderBottom: '1px solid #E4E4DF', borderRight: '1px solid #E4E4DF',
+    borderBottom: '1px solid var(--borde)', borderRight: '1px solid var(--borde)',
   },
-  esquina: { verticalAlign: 'bottom', fontSize: 11, color: '#8A929C', textTransform: 'uppercase' },
+  esquina: { verticalAlign: 'bottom', fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase' },
   thArea: {
-    position: 'sticky', left: 180, zIndex: 3, background: '#F7F7F4',
+    position: 'sticky', left: 180, zIndex: 3, background: 'var(--fondo)',
     minWidth: 110, textAlign: 'left', padding: '8px 10px', verticalAlign: 'bottom',
-    fontSize: 11, color: '#8A929C', textTransform: 'uppercase',
-    borderBottom: '1px solid #E4E4DF', borderRight: '1px solid #E4E4DF',
+    fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase',
+    borderBottom: '1px solid var(--borde)', borderRight: '1px solid var(--borde)',
   },
   thCap: {
-    background: '#F7F7F4', padding: '8px 4px', minWidth: 46, maxWidth: 46,
-    verticalAlign: 'bottom', borderBottom: '1px solid #E4E4DF',
-    borderRight: '1px solid #F4F4F0',
+    background: 'var(--fondo)', padding: '8px 4px', minWidth: 46, maxWidth: 46,
+    verticalAlign: 'bottom', borderBottom: '1px solid var(--borde)',
+    borderRight: '1px solid var(--superficie-3)',
   },
   rotado: {
     writingMode: 'vertical-rl', transform: 'rotate(180deg)',
     height: 150, fontSize: 10.5, fontWeight: 500,
     whiteSpace: 'nowrap', margin: '0 auto',
   },
-  enlaceCap: { color: '#14263F', textDecoration: 'none' },
+  enlaceCap: { color: 'var(--texto)', textDecoration: 'none' },
   fechaCap: {
-    fontSize: 8.5, color: '#A3AAB3', marginTop: 4, textAlign: 'center',
+    fontSize: 8.5, color: 'var(--texto-tenue)', marginTop: 4, textAlign: 'center',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   thTotal: {
-    background: '#F7F7F4', padding: '8px 10px', verticalAlign: 'bottom',
-    fontSize: 11, color: '#8A929C', textTransform: 'uppercase',
-    borderBottom: '1px solid #E4E4DF', borderLeft: '1px solid #E4E4DF',
+    background: 'var(--fondo)', padding: '8px 10px', verticalAlign: 'bottom',
+    fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase',
+    borderBottom: '1px solid var(--borde)', borderLeft: '1px solid var(--borde)',
   },
 
   tdFijo: {
-    position: 'sticky', left: 0, zIndex: 2, background: '#fff',
-    padding: '7px 10px', borderBottom: '1px solid #F4F4F0',
-    borderRight: '1px solid #E4E4DF', minWidth: 180,
+    position: 'sticky', left: 0, zIndex: 2, background: 'var(--superficie)',
+    padding: '7px 10px', borderBottom: '1px solid var(--superficie-3)',
+    borderRight: '1px solid var(--borde)', minWidth: 180,
   },
-  enlaceEmp: { color: '#14263F', textDecoration: 'none', fontWeight: 500 },
+  enlaceEmp: { color: 'var(--texto)', textDecoration: 'none', fontWeight: 500 },
   cedula: {
-    fontSize: 10, color: '#A3AAB3',
+    fontSize: 10, color: 'var(--texto-tenue)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   tdArea: {
-    position: 'sticky', left: 180, zIndex: 2, background: '#fff',
-    padding: '7px 10px', fontSize: 11, color: '#5B6470',
-    borderBottom: '1px solid #F4F4F0', borderRight: '1px solid #E4E4DF',
+    position: 'sticky', left: 180, zIndex: 2, background: 'var(--superficie)',
+    padding: '7px 10px', fontSize: 11, color: 'var(--texto-suave)',
+    borderBottom: '1px solid var(--superficie-3)', borderRight: '1px solid var(--borde)',
     minWidth: 110,
   },
   celda: {
     textAlign: 'center', padding: '7px 3px', fontSize: 13, fontWeight: 700,
-    borderBottom: '1px solid #F4F4F0', borderRight: '1px solid #F4F4F0',
+    borderBottom: '1px solid var(--superficie-3)', borderRight: '1px solid var(--superficie-3)',
   },
   puntaje: { fontSize: 8, fontWeight: 400, marginTop: 1 },
   tdTotal: {
     textAlign: 'center', padding: '7px 10px', fontWeight: 600,
-    borderBottom: '1px solid #F4F4F0', borderLeft: '1px solid #E4E4DF',
-    background: '#FBFBF9',
+    borderBottom: '1px solid var(--superficie-3)', borderLeft: '1px solid var(--borde)',
+    background: 'var(--superficie-2)',
   },
-  deConvocadas: { color: '#A3AAB3', fontWeight: 400, fontSize: 10.5 },
-  pie: { background: '#F7F7F4', fontWeight: 600, fontSize: 11, borderTop: '1px solid #E4E4DF' },
+  deConvocadas: { color: 'var(--texto-tenue)', fontWeight: 400, fontSize: 10.5 },
+  pie: { background: 'var(--fondo)', fontWeight: 600, fontSize: 11, borderTop: '1px solid var(--borde)' },
 
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 14, lineHeight: 1.6, maxWidth: 700 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.6, maxWidth: 700 },
   vacio: {
-    background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
     padding: '40px 24px', textAlign: 'center',
   },
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
 };

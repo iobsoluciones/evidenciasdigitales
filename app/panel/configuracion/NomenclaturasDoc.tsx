@@ -132,7 +132,7 @@ export default function NomenclaturasDoc({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color }}
+              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}
             >
               {pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -143,8 +143,8 @@ export default function NomenclaturasDoc({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -155,54 +155,54 @@ export default function NomenclaturasDoc({
 
 const s: Record<string, React.CSSProperties> = {
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '18px 20px', marginTop: 18,
   },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     gap: 12, marginBottom: 14,
   },
-  h2: { fontSize: 15.5, fontWeight: 700, color: '#14263F', margin: 0 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: '3px 0 0' },
+  h2: { fontSize: 15.5, fontWeight: 700, color: 'var(--texto)', margin: 0 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '3px 0 0' },
   boton: {
-    background: '#fff', border: '1px solid', padding: '6px 15px',
+    background: 'var(--superficie)', border: '1px solid', padding: '6px 15px',
     borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
   lista: { display: 'flex', flexDirection: 'column' },
   fila: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    gap: 14, padding: '11px 0', borderTop: '1px solid #F0F0EC', flexWrap: 'wrap',
+    gap: 14, padding: '11px 0', borderTop: '1px solid var(--superficie-3)', flexWrap: 'wrap',
   },
   izquierda: { display: 'flex', flexDirection: 'column', gap: 2, flex: '1 1 200px', minWidth: 170 },
-  etiqueta: { fontSize: 13.5, fontWeight: 600, color: '#14263F' },
-  detalle: { fontSize: 11.5, color: '#5B6470', lineHeight: 1.45 },
+  etiqueta: { fontSize: 13.5, fontWeight: 600, color: 'var(--texto)' },
+  detalle: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.45 },
   campos: { display: 'flex', gap: 7, flex: '1 1 200px', justifyContent: 'flex-end' },
   input: {
-    padding: '7px 10px', border: '1px solid #E4E4DF', borderRadius: 7,
+    padding: '7px 10px', border: '1px solid var(--borde)', borderRadius: 7,
     fontSize: 12.5, fontFamily: "'Consolas','Courier New',monospace",
     boxSizing: 'border-box', minWidth: 0,
   },
   valores: { display: 'flex', alignItems: 'center', gap: 9 },
   mono: {
     fontFamily: "'Consolas','Courier New',monospace", fontSize: 13,
-    color: '#14263F', fontWeight: 600,
+    color: 'var(--texto)', fontWeight: 600,
   },
   version: {
-    fontSize: 11, fontWeight: 700, color: '#5B6470', background: '#F7F7F4',
-    border: '1px solid #E4E4DF', borderRadius: 20, padding: '2px 9px',
+    fontSize: 11, fontWeight: 700, color: 'var(--texto-suave)', background: 'var(--fondo)',
+    border: '1px solid var(--borde)', borderRadius: 20, padding: '2px 9px',
   },
   nota: {
-    fontSize: 12, color: '#7C2D12', background: '#FFF7ED',
+    fontSize: 12, color: '#7C2D12', background: 'var(--aviso-fondo)',
     border: '1px solid #FED7AA', borderRadius: 8, padding: '10px 12px',
     margin: '14px 0 0', lineHeight: 1.55,
   },
   acciones: { display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, cursor: 'pointer', padding: '8px 12px',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '8px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '8px 20px', borderRadius: 8,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   aviso: { marginTop: 12, padding: '9px 12px', borderRadius: 8, fontSize: 12.5 },

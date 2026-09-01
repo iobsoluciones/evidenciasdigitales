@@ -116,11 +116,11 @@ export default function EditorPreguntasPlantilla({
 
         <div style={{
           ...e.puntaje,
-          background: excede ? '#FDF2F2' : suma === 100 ? '#F0FDF4' : '#FBFBF9',
-          borderColor: excede ? '#F5C6C6' : suma === 100 ? '#BBF7D0' : '#EFEFEA',
+          background: excede ? 'var(--mal-fondo)' : suma === 100 ? 'var(--bien-fondo)' : 'var(--superficie-2)',
+          borderColor: excede ? '#F5C6C6' : suma === 100 ? '#BBF7D0' : 'var(--superficie-3)',
         }}>
           <div>
-            <strong style={{ fontSize: 13, color: excede ? '#9B1C1C' : '#14263F' }}>
+            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : '#14263F' }}>
               {suma} de 100 puntos
             </strong>
             <p style={{ ...e.nota, margin: '2px 0 0' }}>
@@ -238,8 +238,8 @@ export default function EditorPreguntasPlantilla({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -251,7 +251,7 @@ export default function EditorPreguntasPlantilla({
           disabled={pendiente || excede}
           style={{
             ...e.btn,
-            background: pendiente || excede ? '#C5C5BD' : color,
+            background: pendiente || excede ? 'var(--borde-fuerte)' : color,
             cursor: pendiente || excede ? 'not-allowed' : 'pointer',
           }}
           title={excede ? 'La suma de puntajes supera 100' : ''}
@@ -266,14 +266,14 @@ export default function EditorPreguntasPlantilla({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 20, marginBottom: 14, maxWidth: 720,
   },
   h2: { fontSize: 14.5, margin: '0 0 4px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C' },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(170px,1fr))', gap: 12 },
@@ -285,23 +285,23 @@ const e: Record<string, React.CSSProperties> = {
     borderRadius: 6, borderWidth: 1, borderStyle: 'solid',
   },
   btnRepartir: {
-    background: '#fff', border: '1px solid #DFDFD8', color: '#14263F',
+    background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', color: 'var(--texto)',
     padding: '7px 14px', borderRadius: 4, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
 
   cabeceraPregunta: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   filaOpcion: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 },
-  x: { background: 'none', border: 'none', color: '#9B1C1C', fontSize: 17, cursor: 'pointer', padding: '0 4px' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 17, cursor: 'pointer', padding: '0 4px' },
   enlace: { background: 'none', border: 'none', fontSize: 12, cursor: 'pointer', padding: '6px 0', fontWeight: 600 },
-  btnBorrar: { background: 'none', border: 'none', color: '#9B1C1C', fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline' },
+  btnBorrar: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline' },
 
-  btn: { color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600 },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600 },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

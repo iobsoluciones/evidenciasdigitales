@@ -145,36 +145,36 @@ export default function BloqueKardex({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 18,
   },
   h2: { fontSize: 14.5, margin: '0 0 4px', fontWeight: 600 },
-  sub: { fontSize: 12, color: '#5B6470', margin: 0, lineHeight: 1.55, maxWidth: 620 },
+  sub: { fontSize: 12, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.55, maxWidth: 620 },
 
   campos: { display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
   input: {
     width: '100%', padding: '9px 11px',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff',
+    fontFamily: 'inherit', background: 'var(--superficie)',
   },
 
   acciones: { display: 'flex', gap: 12, alignItems: 'center', marginTop: 16, flexWrap: 'wrap' },
   btn: {
-    color: '#fff', padding: '10px 20px', borderRadius: 4, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '10px 20px', borderRadius: 4, fontSize: 13,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   enlace: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12, cursor: 'pointer', textDecoration: 'underline',
   },
 
   detalle: {
     marginTop: 16, paddingTop: 14,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
-  lista: { margin: '8px 0 0', paddingLeft: 18, fontSize: 12, color: '#5B6470', lineHeight: 1.8 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '10px 0 0', lineHeight: 1.55 },
-  vacio: { fontSize: 12.5, color: '#8A929C', margin: 0 },
+  lista: { margin: '8px 0 0', paddingLeft: 18, fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.8 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '10px 0 0', lineHeight: 1.55 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', margin: 0 },
 };

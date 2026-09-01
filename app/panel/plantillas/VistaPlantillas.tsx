@@ -165,7 +165,7 @@ function Pestana({
       onClick={onClick}
       style={{
         ...e.pestana,
-        color: activa ? color : '#8A929C',
+        color: activa ? color : 'var(--texto-tenue)',
         borderBottomColor: activa ? color : 'transparent',
         fontWeight: activa ? 700 : 500,
       }}
@@ -179,7 +179,7 @@ function Dato({ k, v, destacado }: { k: string; v: string; destacado?: boolean }
   return (
     <div style={e.fila}>
       <dt style={e.clave}>{k}</dt>
-      <dd style={{ ...e.valor, color: destacado ? '#15803D' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...e.valor, color: destacado ? 'var(--bien)' : '#14263F' }}>{v}</dd>
     </div>
   );
 }
@@ -193,46 +193,46 @@ function Vacio({ texto }: { texto: string }) {
 }
 
 const e: Record<string, React.CSSProperties> = {
-  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #E4E4DF', marginBottom: 20 },
+  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid var(--borde)', marginBottom: 20 },
   pestana: {
     background: 'none', border: 'none', padding: '10px 16px', fontSize: 13,
     cursor: 'pointer', fontFamily: 'inherit',
     borderBottomWidth: 2, borderBottomStyle: 'solid', marginBottom: -1,
   },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(270px,1fr))', gap: 16 },
-  tarjeta: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, overflow: 'hidden' },
+  tarjeta: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, overflow: 'hidden' },
   franja: { height: 3 },
   cuerpo: { padding: 18 },
   nombre: { fontSize: 14.5, margin: '0 0 3px', fontWeight: 600 },
-  tema: { fontSize: 12, color: '#5B6470', margin: '0 0 12px', lineHeight: 1.5 },
+  tema: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 12px', lineHeight: 1.5 },
   datos: { margin: 0 },
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 10,
-    padding: '5px 0', borderBottom: '1px solid #F4F4F0', fontSize: 12,
+    padding: '5px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 12,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valor: { margin: 0, fontWeight: 600, textAlign: 'right' },
   subtemas: { display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 12 },
   chip: {
-    fontSize: 10, background: '#F0F9FF', color: '#0369A1',
+    fontSize: 10, background: 'var(--info-fondo)', color: 'var(--info)',
     padding: '3px 8px', borderRadius: 999,
   },
   pie: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    marginTop: 14, paddingTop: 10, borderTop: '1px solid #F4F4F0',
+    marginTop: 14, paddingTop: 10, borderTop: '1px solid var(--superficie-3)',
   },
-  fecha: { fontSize: 11, color: '#A3AAB3' },
+  fecha: { fontSize: 11, color: 'var(--texto-tenue)' },
   btnBorrar: {
-    background: 'none', border: 'none', color: '#9B1C1C',
+    background: 'none', border: 'none', color: 'var(--mal)',
     fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline',
   },
   vacio: {
-    background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
     padding: '40px 24px', textAlign: 'center', display: 'flex', justifyContent: 'center',
   },
   aviso: {
-    background: '#F0FDF4', color: '#15803D', padding: '10px 14px',
+    background: 'var(--bien-fondo)', color: 'var(--bien)', padding: '10px 14px',
     borderRadius: 6, fontSize: 13, marginBottom: 16,
   },
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 20, lineHeight: 1.6, maxWidth: 640 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 20, lineHeight: 1.6, maxWidth: 640 },
 };

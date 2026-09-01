@@ -37,23 +37,23 @@ const CICLOS: Record<string, string> = {
 
 const CRITERIOS: Record<Criterio, { t: string; fondo: string; color: string; que: string }> = {
   critico: {
-    t: 'Crítico', fondo: '#FDF2F2', color: '#9B1C1C',
+    t: 'Crítico', fondo: 'var(--mal-fondo)', color: 'var(--mal)',
     que: 'Menos del 60 %. Exige plan de mejoramiento inmediato y la ARL debe hacer seguimiento.',
   },
   moderadamente_aceptable: {
-    t: 'Moderadamente aceptable', fondo: '#FFF7ED', color: '#9A3412',
+    t: 'Moderadamente aceptable', fondo: 'var(--aviso-fondo)', color: 'var(--aviso)',
     que: 'Entre 60 y 85 %. Exige plan de mejoramiento y comunicarlo a la ARL.',
   },
   aceptable: {
-    t: 'Aceptable', fondo: '#E6F4EA', color: '#1E6B3A',
+    t: 'Aceptable', fondo: 'var(--bien-fondo)', color: 'var(--bien)',
     que: 'Más del 85 %. Mantener el sistema y las evidencias al día.',
   },
 };
 
 const RESULTADOS: { v: Resultado_; t: string; fondo: string; color: string }[] = [
-  { v: 'cumple', t: 'Cumple', fondo: '#E6F4EA', color: '#1E6B3A' },
-  { v: 'no_cumple', t: 'No cumple', fondo: '#FDF2F2', color: '#9B1C1C' },
-  { v: 'no_aplica', t: 'No aplica', fondo: '#F0F0EC', color: '#5B6470' },
+  { v: 'cumple', t: 'Cumple', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  { v: 'no_cumple', t: 'No cumple', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  { v: 'no_aplica', t: 'No aplica', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
 ];
 
 export default function VistaAutoevaluacion({
@@ -149,14 +149,14 @@ export default function VistaAutoevaluacion({
           </select>
           <p style={s.ayuda}>
             Los conjuntos los mantienes tú en{' '}
-            <a href="/panel/estandares" style={{ color: '#14263F', fontWeight: 600 }}>
+            <a href="/panel/estandares" style={{ color: 'var(--texto)', fontWeight: 600 }}>
               Conjuntos de estándares
             </a>
             : ahí puedes duplicar el de 60 o importar el de 7 y 21 desde Excel.
           </p>
           <button onClick={() => correr(() => crearAutoevaluacion(anio, conjunto))}
             disabled={pendiente} type="button"
-            style={{ ...s.botonLleno, background: pendiente ? '#cbd5e1' : color, marginTop: 12 }}>
+            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}>
             {pendiente ? 'Creando…' : `Crear la autoevaluación de ${anio}`}
           </button>
         </div>
@@ -220,11 +220,11 @@ export default function VistaAutoevaluacion({
         </span>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <a href={`/api/pdf-autoevaluacion/${a.id}`} target="_blank" rel="noopener"
-            style={{ ...s.botonSec, borderColor: '#E4E4DF', color: '#5B6470', textDecoration: 'none' }}>
+            style={{ ...s.botonSec, borderColor: 'var(--borde)', color: 'var(--texto-suave)', textDecoration: 'none' }}>
             Descargar PDF
           </a>
           <button type="button" onClick={() => setEnviando(true)}
-            style={{ ...s.botonSec, borderColor: '#E4E4DF', color: '#5B6470' }}>
+            style={{ ...s.botonSec, borderColor: 'var(--borde)', color: 'var(--texto-suave)' }}>
             Enviar por correo
           </button>
           {detalle?.requiere_plan && (
@@ -245,7 +245,7 @@ export default function VistaAutoevaluacion({
               style={{
                 ...s.botonLleno,
                 background: (p?.sin_evaluar ?? 0) > 0 ? '#D8DCDF' : color,
-                color: (p?.sin_evaluar ?? 0) > 0 ? '#8A929C' : '#fff',
+                color: (p?.sin_evaluar ?? 0) > 0 ? 'var(--texto-tenue)' : '#fff',
                 cursor: (p?.sin_evaluar ?? 0) > 0 ? 'not-allowed' : 'pointer',
               }}>
               Cerrar autoevaluación
@@ -295,8 +295,8 @@ export default function VistaAutoevaluacion({
               <span style={s.h3Boton}>{CICLOS[ciclo]}</span>
               <span style={{
                 ...s.avance,
-                background: faltan === 0 ? '#E6F4EA' : '#FFF7ED',
-                color: faltan === 0 ? '#1E6B3A' : '#9A3412',
+                background: faltan === 0 ? 'var(--bien-fondo)' : 'var(--aviso-fondo)',
+                color: faltan === 0 ? 'var(--bien)' : 'var(--aviso)',
               }}>
                 {faltan === 0
                   ? `${del.length} evaluados`
@@ -380,8 +380,8 @@ function Aviso({ a }: { a: { tipo: 'ok' | 'error'; texto: string } }) {
   return (
     <div role="status" aria-live="polite" style={{
       ...s.aviso,
-      background: a.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-      color: a.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+      background: a.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+      color: a.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
       border: `1px solid ${a.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
     }}>{a.texto}</div>
   );
@@ -389,11 +389,11 @@ function Aviso({ a }: { a: { tipo: 'ok' | 'error'; texto: string } }) {
 
 const s: Record<string, React.CSSProperties> = {
   vacio: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '22px 24px', maxWidth: 620, marginBottom: 16,
   },
-  vacioTitulo: { fontSize: 17, fontWeight: 700, color: '#14263F', margin: '0 0 8px' },
-  vacioTexto: { fontSize: 13.5, color: '#5B6470', lineHeight: 1.65, margin: '0 0 14px' },
+  vacioTitulo: { fontSize: 17, fontWeight: 700, color: 'var(--texto)', margin: '0 0 8px' },
+  vacioTexto: { fontSize: 13.5, color: 'var(--texto-suave)', lineHeight: 1.65, margin: '0 0 14px' },
 
   puntaje: {
     display: 'flex', gap: 22, alignItems: 'center', flexWrap: 'wrap',
@@ -405,7 +405,7 @@ const s: Record<string, React.CSSProperties> = {
   criterioQue: { fontSize: 13, lineHeight: 1.6, margin: '0 0 8px', opacity: .9 },
   conteos: {
     display: 'flex', gap: 14, flexWrap: 'wrap', fontSize: 12,
-    color: '#374151', fontVariantNumeric: 'tabular-nums',
+    color: 'var(--texto-suave)', fontVariantNumeric: 'tabular-nums',
   },
 
   ciclos: {
@@ -413,57 +413,57 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))',
   },
   ciclo: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '11px 13px', display: 'flex', flexDirection: 'column', gap: 2,
   },
-  cicloNombre: { fontSize: 11, color: '#5B6470' },
+  cicloNombre: { fontSize: 11, color: 'var(--texto-suave)' },
   cicloPct: { fontSize: 20, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' },
-  cicloPeso: { fontSize: 10.5, color: '#8A929C' },
+  cicloPeso: { fontSize: 10.5, color: 'var(--texto-tenue)' },
 
   barra: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     gap: 12, flexWrap: 'wrap', marginBottom: 14,
   },
-  meta: { fontSize: 12.5, color: '#5B6470' },
+  meta: { fontSize: 12.5, color: 'var(--texto-suave)' },
 
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '14px 16px', marginBottom: 12,
   },
-  h3: { fontSize: 14, fontWeight: 700, color: '#14263F', margin: '0 0 10px' },
-  item: { padding: '10px 0', borderTop: '1px solid #F0F0EC' },
+  h3: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', margin: '0 0 10px' },
+  item: { padding: '10px 0', borderTop: '1px solid var(--superficie-3)' },
   itemCab: { display: 'flex', gap: 10, alignItems: 'baseline', flexWrap: 'wrap', marginBottom: 7 },
   itemCodigo: {
     fontFamily: "'Consolas','Courier New',monospace", fontSize: 11.5,
-    fontWeight: 700, color: '#5B6470', flexShrink: 0,
+    fontWeight: 700, color: 'var(--texto-suave)', flexShrink: 0,
   },
-  itemNombre: { fontSize: 13, color: '#14263F', flex: '1 1 240px', lineHeight: 1.45 },
-  itemPeso: { fontSize: 11, color: '#8A929C', flexShrink: 0, fontVariantNumeric: 'tabular-nums' },
+  itemNombre: { fontSize: 13, color: 'var(--texto)', flex: '1 1 240px', lineHeight: 1.45 },
+  itemPeso: { fontSize: 11, color: 'var(--texto-tenue)', flexShrink: 0, fontVariantNumeric: 'tabular-nums' },
   opciones: { display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' },
   opcion: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
-    padding: '5px 14px', fontSize: 12, color: '#5B6470',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
+    padding: '5px 14px', fontSize: 12, color: 'var(--texto-suave)',
   },
-  justificacion: { fontSize: 11.5, color: '#5B6470', fontStyle: 'italic', marginLeft: 6 },
+  justificacion: { fontSize: 11.5, color: 'var(--texto-suave)', fontStyle: 'italic', marginLeft: 6 },
   justif: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '12px 14px',
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '12px 14px',
   },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '5px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '5px 0 0', lineHeight: 1.5 },
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   cerrada: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 10,
-    padding: '12px 15px', fontSize: 13, color: '#374151',
+    background: 'var(--fondo)', border: '1px solid var(--borde)', borderRadius: 8,
+    padding: '12px 15px', fontSize: 13, color: 'var(--texto-suave)',
     lineHeight: 1.6, marginBottom: 12,
   },
   cabecera: {
@@ -472,23 +472,23 @@ const s: Record<string, React.CSSProperties> = {
     textAlign: 'left',
   },
   chevron: { fontSize: 12, width: 12, flexShrink: 0 },
-  h3Boton: { fontSize: 14, fontWeight: 700, color: '#14263F', flex: 1 },
+  h3Boton: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', flex: 1 },
   avance: {
     fontSize: 11, fontWeight: 600, borderRadius: 20,
     padding: '3px 10px', whiteSpace: 'nowrap',
   },
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '8px 16px', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
-  otroAnio: { fontSize: 12.5, color: '#5B6470', padding: '7px 0', borderTop: '1px solid #F0F0EC' },
+  otroAnio: { fontSize: 12.5, color: 'var(--texto-suave)', padding: '7px 0', borderTop: '1px solid var(--superficie-3)' },
 };

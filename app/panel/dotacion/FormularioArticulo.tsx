@@ -248,8 +248,8 @@ export default function FormularioArticulo({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -259,7 +259,7 @@ export default function FormularioArticulo({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Guardando…' : edicion ? 'Guardar cambios' : 'Crear artículo'}
         </button>
@@ -287,7 +287,7 @@ function Opcion({
       onClick={onClick}
       style={{
         ...e.opcion,
-        borderColor: activa ? color : '#DFDFD8',
+        borderColor: activa ? color : 'var(--borde-fuerte)',
         background: activa ? '#F7FBFA' : '#fff',
       }}
     >
@@ -302,24 +302,24 @@ function Opcion({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 22, marginBottom: 16, maxWidth: 720,
   },
   h2: { fontSize: 14.5, margin: '0 0 5px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '10px 0 0', lineHeight: 1.55 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '10px 0 0', lineHeight: 1.55 },
 
   opciones: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 12, marginTop: 14 },
   opcion: {
     borderWidth: 2, borderStyle: 'solid', borderRadius: 8, padding: 16,
     cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit',
   },
-  opcionTexto: { fontSize: 11.5, color: '#5B6470', margin: '6px 0 0', lineHeight: 1.5 },
-  opcionEjemplos: { fontSize: 10.5, color: '#A3AAB3', margin: '6px 0 0', fontStyle: 'italic' },
+  opcionTexto: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '6px 0 0', lineHeight: 1.5 },
+  opcionEjemplos: { fontSize: 10.5, color: 'var(--texto-tenue)', margin: '6px 0 0', fontStyle: 'italic' },
 
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '14px 0 5px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12 },
@@ -328,14 +328,14 @@ const e: Record<string, React.CSSProperties> = {
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16, maxWidth: 720 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },
-  pie: { fontSize: 11.5, color: '#8A929C', marginTop: 14, maxWidth: 720 },
+  pie: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, maxWidth: 720 },
 };

@@ -175,8 +175,8 @@ export default function Convocatoria({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -261,8 +261,8 @@ export default function Convocatoria({
                       <span style={{ fontWeight: 600, flex: 1, textAlign: 'left' }}>{area}</span>
                       <span style={{
                         ...e.contador,
-                        background: todos ? '#DCFCE7' : algunos ? '#FEF9C3' : '#EFEFEA',
-                        color: todos ? '#15803D' : algunos ? '#8A6100' : '#8A929C',
+                        background: todos ? 'var(--bien-fondo)' : algunos ? 'var(--ambar-fondo)' : 'var(--superficie-3)',
+                        color: todos ? 'var(--bien)' : algunos ? 'var(--ambar)' : 'var(--texto-tenue)',
                       }}>
                         {marcados}/{buscando ? `${lista.length} de ${totalArea}` : lista.length}
                       </span>
@@ -276,8 +276,8 @@ export default function Convocatoria({
                         key={em.id}
                         style={{
                           ...e.persona,
-                          background: elegidos.has(em.id) ? '#F0F9FF' : '#fff',
-                          borderColor: elegidos.has(em.id) ? color : '#EFEFEA',
+                          background: elegidos.has(em.id) ? 'var(--info-fondo)' : '#fff',
+                          borderColor: elegidos.has(em.id) ? color : 'var(--superficie-3)',
                         }}
                       >
                         <input
@@ -312,7 +312,7 @@ export default function Convocatoria({
               disabled={pendiente || !hayCambios || soloLectura}
               style={{
                 ...e.btn,
-                background: pendiente || !hayCambios || soloLectura ? '#C5C5BD' : color,
+                background: pendiente || !hayCambios || soloLectura ? 'var(--borde-fuerte)' : color,
                 cursor: pendiente || !hayCambios || soloLectura ? 'not-allowed' : 'pointer',
               }}
             >
@@ -330,7 +330,7 @@ export default function Convocatoria({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 20, marginBottom: 20,
   },
   cabecera: {
@@ -338,22 +338,22 @@ const e: Record<string, React.CSSProperties> = {
     gap: 14, flexWrap: 'wrap',
   },
   h2: { fontSize: 14.5, margin: '0 0 3px', fontWeight: 600 },
-  sub: { fontSize: 12, color: '#5B6470', margin: 0 },
-  vacio: { fontSize: 12.5, color: '#5B6470', margin: '10px 0 0', lineHeight: 1.6 },
+  sub: { fontSize: 12, color: 'var(--texto-suave)', margin: 0 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '10px 0 0', lineHeight: 1.6 },
 
   resumen: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '10px 12px', background: '#FBFBF9', borderRadius: 6,
+    padding: '10px 12px', background: 'var(--superficie-2)', borderRadius: 6,
     margin: '16px 0 12px', flexWrap: 'wrap', gap: 10,
   },
   enlace: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12, cursor: 'pointer', textDecoration: 'underline',
   },
 
   deshabilitada: {
-    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
-    padding: '10px 12px', borderRadius: 5, margin: '0 0 4px', lineHeight: 1.5,
+    fontSize: 12, color: 'var(--ambar)', background: 'var(--ambar-fondo)',
+    padding: '10px 12px', borderRadius: 6, margin: '0 0 4px', lineHeight: 1.5,
   },
   barraBusqueda: {
     display: 'flex', alignItems: 'center', gap: 10,
@@ -361,31 +361,31 @@ const e: Record<string, React.CSSProperties> = {
   },
   buscador: {
     flex: '1 1 240px', minWidth: 200, padding: '8px 11px',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    borderRadius: 4, fontSize: 13, fontFamily: 'inherit', color: '#14263F',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 4, fontSize: 13, fontFamily: 'inherit', color: 'var(--texto)',
   },
   resultado: {
-    fontSize: 12, color: '#5B6470', display: 'flex',
+    fontSize: 12, color: 'var(--texto-suave)', display: 'flex',
     alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
   },
   botonArea: {
     display: 'flex', alignItems: 'center', gap: 8, flex: 1,
     background: 'none', border: 'none', padding: 0,
-    font: 'inherit', fontSize: 13, color: '#14263F', cursor: 'pointer',
+    font: 'inherit', fontSize: 13, color: 'var(--texto)', cursor: 'pointer',
   },
   flecha: {
-    display: 'inline-block', fontSize: 15, color: '#8A929C',
+    display: 'inline-block', fontSize: 15, color: 'var(--texto-tenue)',
     transition: 'transform .15s', width: 10, flexShrink: 0,
   },
   sinResultados: {
-    fontSize: 12.5, color: '#5B6470', textAlign: 'center',
+    fontSize: 12.5, color: 'var(--texto-suave)', textAlign: 'center',
     padding: '22px 0', margin: 0,
   },
   areas: { display: 'grid', gap: 12, maxHeight: 420, overflowY: 'auto' },
-  area: { border: '1px solid #EFEFEA', borderRadius: 6, overflow: 'hidden' },
+  area: { border: '1px solid var(--borde)', borderRadius: 6, overflow: 'hidden' },
   encabezadoArea: {
     display: 'flex', alignItems: 'center', padding: '10px 12px',
-    background: '#F7F7F4', fontSize: 12.5, cursor: 'pointer',
+    background: 'var(--fondo)', fontSize: 12.5, cursor: 'pointer',
   },
   contador: {
     fontSize: 10.5, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
@@ -396,18 +396,18 @@ const e: Record<string, React.CSSProperties> = {
     borderWidth: 1, borderStyle: 'solid', borderRadius: 4,
     fontSize: 12.5, cursor: 'pointer',
   },
-  cargo: { color: '#8A929C', fontSize: 11.5 },
+  cargo: { color: 'var(--texto-tenue)', fontSize: 11.5 },
   cedula: {
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
-    fontSize: 11, color: '#A3AAB3',
+    fontSize: 11, color: 'var(--texto-tenue)',
   },
 
   acciones: { display: 'flex', gap: 14, alignItems: 'center', marginTop: 16, flexWrap: 'wrap' },
-  btn: { color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600 },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600 },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
-  nota: { fontSize: 11.5, color: '#8A929C' },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)' },
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginTop: 14 },
 };

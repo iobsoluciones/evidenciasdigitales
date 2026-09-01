@@ -272,7 +272,7 @@ export default function VistaCalendario({
               : 'Selecciona una empresa para crear capacitaciones'}
             style={{
               ...s.btn,
-              background: empresaActiva ? color : '#C5C5BD',
+              background: empresaActiva ? color : 'var(--borde-fuerte)',
               cursor: empresaActiva ? 'pointer' : 'not-allowed',
             }}
           >
@@ -296,7 +296,7 @@ export default function VistaCalendario({
             style={{
               ...s.botonModo,
               background: porSemana ? 'transparent' : color,
-              color: porSemana ? '#5B6470' : '#fff',
+              color: porSemana ? 'var(--texto-suave)' : '#fff',
             }}
           >
             Mes
@@ -306,7 +306,7 @@ export default function VistaCalendario({
             style={{
               ...s.botonModo,
               background: porSemana ? color : 'transparent',
-              color: porSemana ? '#fff' : '#5B6470',
+              color: porSemana ? '#fff' : 'var(--texto-suave)',
             }}
           >
             Semana
@@ -317,8 +317,8 @@ export default function VistaCalendario({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -348,10 +348,10 @@ export default function VistaCalendario({
           <span style={{ ...s.punto, background: color }} /> Capacitación creada
         </span>
         <span style={s.leyendaItem}>
-          <span style={{ ...s.punto, background: '#fff', borderWidth: 1.5, borderStyle: 'solid', borderColor: color }} /> Anotación de agenda
+          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'solid', borderColor: color }} /> Anotación de agenda
         </span>
         <span style={s.leyendaItem}>
-          <span style={{ ...s.punto, background: '#fff', borderWidth: 1.5, borderStyle: 'dashed', borderColor: color }} /> Inspección programada
+          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'dashed', borderColor: color }} /> Inspección programada
         </span>
         <span style={s.leyendaNota}>
           Clic en un día para anotar; en una anotación para editarla; en una
@@ -457,7 +457,7 @@ export default function VistaCalendario({
 
             <div style={s.modalAcciones}>
               <button onClick={guardarCapacitacion} disabled={pendiente}
-                style={{ ...s.btn, background: pendiente ? '#C5C5BD' : color, flex: 1 }}>
+                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : color, flex: 1 }}>
                 {pendiente ? 'Creando…' : 'Crear capacitación'}
               </button>
               <button onClick={() => setCapAbierta(false)} style={s.btnSec}>Cancelar</button>
@@ -541,7 +541,7 @@ export default function VistaCalendario({
 
             <div style={s.modalAcciones}>
               <button onClick={guardar} disabled={pendiente}
-                style={{ ...s.btn, background: pendiente ? '#C5C5BD' : color, flex: 1 }}>
+                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : color, flex: 1 }}>
                 {pendiente ? 'Guardando…' : 'Guardar'}
               </button>
               {editando && (
@@ -595,8 +595,8 @@ function Semana({
               onClick={() => onDia(d.iso)}
               style={{
                 ...w.columna,
-                background: d.esHoy ? '#FEF9E7' : d.finDeSemana ? '#FAFAF8' : '#fff',
-                borderColor: d.esHoy ? '#E8C766' : '#EFEFEA',
+                background: d.esHoy ? '#FEF9E7' : d.finDeSemana ? 'var(--superficie-2)' : '#fff',
+                borderColor: d.esHoy ? '#E8C766' : 'var(--superficie-3)',
               }}
               title="Clic para anotar"
             >
@@ -693,8 +693,8 @@ function Mes({
               onClick={() => onDia(iso)}
               style={{
                 ...m.celda,
-                background: esHoy(d) ? '#FEF9E7' : finDeSemana ? '#FAFAF8' : '#fff',
-                borderColor: esHoy(d) ? '#E8C766' : '#EFEFEA',
+                background: esHoy(d) ? '#FEF9E7' : finDeSemana ? 'var(--superficie-2)' : '#fff',
+                borderColor: esHoy(d) ? '#E8C766' : 'var(--superficie-3)',
               }}
               title="Clic para anotar"
             >
@@ -740,12 +740,12 @@ function Mes({
 const s: Record<string, React.CSSProperties> = {
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 18 },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
   acciones: { display: 'flex', gap: 10, flexWrap: 'wrap' },
   selectorModo: {
     display: 'inline-flex', gap: 2, marginLeft: 'auto',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    borderRadius: 5, padding: 2, background: '#fff',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 6, padding: 2, background: 'var(--superficie)',
   },
   botonModo: {
     border: 'none', borderRadius: 4, padding: '6px 14px',
@@ -753,57 +753,57 @@ const s: Record<string, React.CSSProperties> = {
   },
   convertir: {
     display: 'block', width: '100%', marginTop: 14,
-    background: '#F4F7FB', color: '#14263F',
+    background: '#F4F7FB', color: 'var(--texto)',
     borderWidth: 1, borderStyle: 'solid', borderColor: '#D3DEEC',
     borderRadius: 4, padding: '9px 12px', fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   check: {
     display: 'flex', alignItems: 'center', gap: 8,
-    fontSize: 12.5, color: '#14263F', marginTop: 10, cursor: 'pointer',
+    fontSize: 12.5, color: 'var(--texto)', marginTop: 10, cursor: 'pointer',
   },
   notaModal: {
-    fontSize: 11.5, color: '#8A929C', margin: '14px 0 0', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-tenue)', margin: '14px 0 0', lineHeight: 1.5,
   },
-  btn: { color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnSec: { background: '#fff', color: '#14263F', border: '1px solid #DFDFD8', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
-  btnBorrar: { background: '#fff', color: '#9B1C1C', border: '1px solid #F5C6C6', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnSec: { background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
+  btnBorrar: { background: 'var(--superficie)', color: 'var(--mal)', border: '1px solid #F5C6C6', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
 
   navegacion: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 },
-  flecha: { background: '#fff', border: '1px solid #DFDFD8', width: 30, height: 30, borderRadius: 4, fontSize: 17, cursor: 'pointer', color: '#14263F', lineHeight: 1 },
+  flecha: { background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', width: 30, height: 30, borderRadius: 4, fontSize: 17, cursor: 'pointer', color: 'var(--texto)', lineHeight: 1 },
   rango: { fontSize: 14, fontWeight: 600, minWidth: 230 },
-  hoy: { background: 'none', border: 'none', color: '#5B6470', fontSize: 12.5, cursor: 'pointer', textDecoration: 'underline' },
+  hoy: { background: 'none', border: 'none', color: 'var(--texto-suave)', fontSize: 12.5, cursor: 'pointer', textDecoration: 'underline' },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
 
 
-  leyenda: { display: 'flex', gap: 20, alignItems: 'center', marginTop: 18, flexWrap: 'wrap', fontSize: 11.5, color: '#5B6470' },
+  leyenda: { display: 'flex', gap: 20, alignItems: 'center', marginTop: 18, flexWrap: 'wrap', fontSize: 11.5, color: 'var(--texto-suave)' },
   leyendaItem: { display: 'flex', alignItems: 'center', gap: 7 },
   punto: { width: 9, height: 9, borderRadius: 2, display: 'inline-block' },
-  leyendaNota: { color: '#8A929C', fontStyle: 'italic' },
+  leyendaNota: { color: 'var(--texto-tenue)', fontStyle: 'italic' },
 
   velo: { position: 'fixed', inset: 0, background: 'rgba(20,38,63,.45)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '50px 16px', overflowY: 'auto', zIndex: 100 },
-  modal: { background: '#fff', borderRadius: 8, padding: 24, width: '100%', maxWidth: 460 },
+  modal: { background: 'var(--superficie)', borderRadius: 8, padding: 24, width: '100%', maxWidth: 460 },
   modalTitulo: { fontSize: 17, margin: '0 0 3px' },
-  modalSub: { fontSize: 12, color: '#5B6470', margin: '0 0 14px' },
+  modalSub: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 14px' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
-  input: { width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8', borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  input: { width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
   dos: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
   modalAcciones: { display: 'flex', gap: 10, marginTop: 20, flexWrap: 'wrap' },
 };
 
 const m: Record<string, React.CSSProperties> = {
-  mes: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, padding: 14 },
+  mes: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, padding: 14 },
   titulo: { fontSize: 13.5, margin: '0 0 10px', fontWeight: 600 },
-  anio: { color: '#8A929C', fontWeight: 400 },
+  anio: { color: 'var(--texto-tenue)', fontWeight: 400 },
   rejilla: { display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 2 },
-  diaSemana: { fontSize: 9.5, color: '#8A929C', textAlign: 'center', padding: '3px 0', fontWeight: 600 },
+  diaSemana: { fontSize: 9.5, color: 'var(--texto-tenue)', textAlign: 'center', padding: '3px 0', fontWeight: 600 },
   celdaVacia: { minHeight: 116 },
   celda: {
     minHeight: 116, borderWidth: 1, borderStyle: 'solid', borderRadius: 3,
     padding: 5, cursor: 'pointer', overflow: 'hidden',
   },
-  numero: { fontSize: 12, color: '#5B6470', marginBottom: 4 },
+  numero: { fontSize: 12, color: 'var(--texto-suave)', marginBottom: 4 },
   evento: {
     // Con un solo mes cabe el nombre completo en dos lineas en vez de
     // cortarlo con puntos suspensivos a los pocos caracteres.
@@ -812,7 +812,7 @@ const m: Record<string, React.CSSProperties> = {
     display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
   } as React.CSSProperties,
   hora: { fontWeight: 700, marginRight: 4 },
-  mas: { fontSize: 10, color: '#8A929C', paddingLeft: 4 },
+  mas: { fontSize: 10, color: 'var(--texto-tenue)', paddingLeft: 4 },
 };
 
 /* Vista de semana: columnas altas, sin recortes. */
@@ -824,11 +824,11 @@ const w: Record<string, React.CSSProperties> = {
   },
   cabecera: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
-    marginBottom: 8, paddingBottom: 6, borderBottom: '1px solid #EFEFEA',
+    marginBottom: 8, paddingBottom: 6, borderBottom: '1px solid var(--borde)',
   },
-  diaSemana: { fontSize: 10, color: '#8A929C', fontWeight: 600, letterSpacing: .5 },
-  numero: { fontSize: 15, color: '#14263F' },
-  libre: { fontSize: 11, color: '#C5C5BD', textAlign: 'center', margin: '18px 0 0' },
+  diaSemana: { fontSize: 10, color: 'var(--texto-tenue)', fontWeight: 600, letterSpacing: .5 },
+  numero: { fontSize: 15, color: 'var(--texto)' },
+  libre: { fontSize: 11, color: 'var(--borde-fuerte)', textAlign: 'center', margin: '18px 0 0' },
   evento: {
     padding: '7px 8px', borderRadius: 4, marginBottom: 6, cursor: 'pointer',
   },

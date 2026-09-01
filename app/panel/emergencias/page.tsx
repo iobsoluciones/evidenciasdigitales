@@ -55,8 +55,8 @@ export default async function PaginaEmergencias() {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: '0 0 10px', maxWidth: 720, lineHeight: 1.6 },
-  enlace: { fontSize: 12.5, color: '#8A929C', margin: '0 0 18px' },
-  a: { color: '#14263F', fontWeight: 600 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 10px', maxWidth: 720, lineHeight: 1.6 },
+  enlace: { fontSize: 12.5, color: 'var(--texto-tenue)', margin: '0 0 18px' },
+  a: { color: 'var(--texto)', fontWeight: 600 },
 };

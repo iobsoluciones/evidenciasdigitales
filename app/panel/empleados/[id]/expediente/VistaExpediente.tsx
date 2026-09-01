@@ -16,11 +16,11 @@ import Link from 'next/link';
 import type { Expediente, EstadoDotacion } from '@/lib/acciones-expediente';
 
 const TONO: Record<EstadoDotacion, { fondo: string; texto: string; t: string }> = {
-  vigente: { fondo: '#DCFCE7', texto: '#15803D', t: 'Vigente' },
-  por_vencer: { fondo: '#FEF9C3', texto: '#8A6100', t: 'Por vencer' },
-  vencido: { fondo: '#FEE2E2', texto: '#9B1C1C', t: 'Vencido' },
-  sin_vencimiento: { fondo: '#F0F9FF', texto: '#0369A1', t: 'Sin vencimiento' },
-  nunca: { fondo: '#F4F4F0', texto: '#8A929C', t: 'No entregado' },
+  vigente: { fondo: 'var(--bien-fondo)', texto: 'var(--bien)', t: 'Vigente' },
+  por_vencer: { fondo: 'var(--ambar-fondo)', texto: 'var(--ambar)', t: 'Por vencer' },
+  vencido: { fondo: 'var(--mal-fondo)', texto: 'var(--mal)', t: 'Vencido' },
+  sin_vencimiento: { fondo: 'var(--info-fondo)', texto: 'var(--info)', t: 'Sin vencimiento' },
+  nunca: { fondo: 'var(--superficie-3)', texto: 'var(--texto-tenue)', t: 'No entregado' },
 };
 
 export default function VistaExpediente({
@@ -70,14 +70,14 @@ export default function VistaExpediente({
       {/* ---------- El veredicto ---------- */}
       <section style={{
         ...s.veredicto,
-        background: alDia ? '#F0FDF4' : '#FEFCE8',
-        borderColor: alDia ? '#BBF7D0' : '#FDE68A',
+        background: alDia ? 'var(--bien-fondo)' : 'var(--ambar-fondo)',
+        borderColor: alDia ? '#BBF7D0' : 'var(--ambar-fondo)',
       }}>
         <div style={{ fontSize: 24 }}>{alDia ? '✓' : '!'}</div>
         <div style={{ flex: 1, minWidth: 220 }}>
           <strong style={{
             fontSize: 14.5,
-            color: alDia ? '#15803D' : '#8A6100',
+            color: alDia ? 'var(--bien)' : 'var(--ambar)',
           }}>
             {alDia ? 'Al día' : 'Requiere atención'}
           </strong>
@@ -100,11 +100,11 @@ export default function VistaExpediente({
         <Kpi
           v={cap.promedio !== null ? `${cap.promedio}%` : '—'}
           l="Promedio"
-          color={cap.promedio === null ? undefined : cap.promedio >= 70 ? '#15803D' : '#9B1C1C'}
+          color={cap.promedio === null ? undefined : cap.promedio >= 70 ? 'var(--bien)' : 'var(--mal)'}
         />
         <Kpi v={String(dotacion.length)} l="Dotación recibida" />
-        <Kpi v={String(vencidos)} l="Vencidos" color={vencidos > 0 ? '#9B1C1C' : undefined} />
-        <Kpi v={String(equipos.length)} l="Equipos en uso" color={equipos.length > 0 ? '#0369A1' : undefined} />
+        <Kpi v={String(vencidos)} l="Vencidos" color={vencidos > 0 ? 'var(--mal)' : undefined} />
+        <Kpi v={String(equipos.length)} l="Equipos en uso" color={equipos.length > 0 ? 'var(--info)' : undefined} />
       </div>
 
       <div style={s.dos}>
@@ -138,7 +138,7 @@ export default function VistaExpediente({
               {cap.debiles.map((d, i) => (
                 <div key={i} style={s.filaDebil}>
                   <span>{d.subtema}</span>
-                  <span style={{ fontWeight: 700, color: '#9B1C1C' }}>{d.aciertos}%</span>
+                  <span style={{ fontWeight: 700, color: 'var(--mal)' }}>{d.aciertos}%</span>
                 </div>
               ))}
               <p style={s.notaDebiles}>
@@ -263,7 +263,7 @@ export default function VistaExpediente({
                 <span style={s.fechaActa}>{fmt(a.fecha)}</span>
                 <span style={s.itemsActa}>{a.items} elemento(s)</span>
                 {a.estado === 'borrador' && (
-                  <span style={{ ...s.chip, background: '#FEF9C3', color: '#8A6100' }}>
+                  <span style={{ ...s.chip, background: 'var(--ambar-fondo)', color: 'var(--ambar)' }}>
                     Sin firmar
                   </span>
                 )}
@@ -289,7 +289,7 @@ function Fila({ k, v, alerta }: { k: string; v: string; alerta?: boolean }) {
   return (
     <div style={s.fila}>
       <dt style={s.clave}>{k}</dt>
-      <dd style={{ ...s.valorFila, color: alerta ? '#9B1C1C' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...s.valorFila, color: alerta ? 'var(--mal)' : '#14263F' }}>{v}</dd>
     </div>
   );
 }
@@ -300,11 +300,11 @@ const s: Record<string, React.CSSProperties> = {
     gap: 14, flexWrap: 'wrap', marginTop: 12, marginBottom: 18,
   },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11.5 },
   chipInactivo: {
     fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 999,
-    background: '#FEE2E2', color: '#9B1C1C',
+    background: 'var(--mal-fondo)', color: 'var(--mal)',
   },
 
   veredicto: {
@@ -314,20 +314,20 @@ const s: Record<string, React.CSSProperties> = {
   },
   listaPendientes: {
     margin: '6px 0 0', paddingLeft: 18, fontSize: 12.5,
-    color: '#8A6100', lineHeight: 1.8,
+    color: 'var(--ambar)', lineHeight: 1.8,
   },
-  notaVeredicto: { fontSize: 12.5, color: '#15803D', margin: '4px 0 0' },
+  notaVeredicto: { fontSize: 12.5, color: 'var(--bien)', margin: '4px 0 0' },
 
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(118px,1fr))', gap: 12, marginBottom: 18 },
   kpi: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 14, textAlign: 'center',
   },
-  kpiL: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
+  kpiL: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 16, alignItems: 'start' },
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 16,
   },
   cabeceraSeccion: {
@@ -335,52 +335,52 @@ const s: Record<string, React.CSSProperties> = {
     gap: 12, flexWrap: 'wrap', marginBottom: 12,
   },
   h2: { fontSize: 14.5, margin: 0, fontWeight: 600 },
-  enlace: { fontSize: 11.5, color: '#5B6470', textDecoration: 'none' },
+  enlace: { fontSize: 11.5, color: 'var(--texto-suave)', textDecoration: 'none' },
 
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
-    padding: '7px 0', borderBottom: '1px solid #F4F4F0', fontSize: 12.5,
+    padding: '7px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 12.5,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valorFila: { margin: 0, fontWeight: 600, textAlign: 'right' },
 
   debiles: {
-    marginTop: 14, padding: 12, background: '#FEFCE8', borderRadius: 6,
+    marginTop: 14, padding: 12, background: 'var(--ambar-fondo)', borderRadius: 6,
   },
   filaDebil: {
     display: 'flex', justifyContent: 'space-between',
-    fontSize: 12, padding: '4px 0', color: '#8A6100',
+    fontSize: 12, padding: '4px 0', color: 'var(--ambar)',
   },
-  notaDebiles: { fontSize: 11, color: '#8A6100', margin: '6px 0 0', lineHeight: 1.55 },
+  notaDebiles: { fontSize: 11, color: 'var(--ambar)', margin: '6px 0 0', lineHeight: 1.55 },
 
   equipo: {
     display: 'flex', gap: 10, alignItems: 'flex-start',
-    padding: '10px 0', borderBottom: '1px solid #F4F4F0',
+    padding: '10px 0', borderBottom: '1px solid var(--superficie-3)',
   },
-  metaEquipo: { fontSize: 11, color: '#8A929C', marginTop: 2 },
-  valor: { fontSize: 11.5, fontWeight: 600, color: '#0369A1', whiteSpace: 'nowrap' },
+  metaEquipo: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
+  valor: { fontSize: 11.5, fontWeight: 600, color: 'var(--info)', whiteSpace: 'nowrap' },
 
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 8px', borderBottom: '1px solid #F4F4F0', verticalAlign: 'middle' },
-  miniatura: { width: 32, height: 32, objectFit: 'contain', background: '#FBFBF9', borderRadius: 3 },
-  codigoArt: { fontSize: 10, color: '#A3AAB3', fontFamily: 'ui-monospace,monospace' },
+  td: { padding: '9px 8px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'middle' },
+  miniatura: { width: 32, height: 32, objectFit: 'contain', background: 'var(--superficie-2)', borderRadius: 3 },
+  codigoArt: { fontSize: 10, color: 'var(--texto-tenue)', fontFamily: 'ui-monospace,monospace' },
   chip: { fontSize: 10.5, fontWeight: 600, padding: '3px 9px', borderRadius: 999, whiteSpace: 'nowrap' },
   avisoVencer: {
-    fontSize: 12, color: '#8A6100', marginTop: 12,
-    padding: '10px 12px', background: '#FEFCE8', borderRadius: 6,
+    fontSize: 12, color: 'var(--ambar)', marginTop: 12,
+    padding: '10px 12px', background: 'var(--ambar-fondo)', borderRadius: 6,
   },
 
   actas: { display: 'grid', gap: 6 },
   acta: {
     display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap',
-    padding: '9px 12px', background: '#FBFBF9', borderRadius: 5,
-    textDecoration: 'none', color: '#14263F', fontSize: 12.5,
+    padding: '9px 12px', background: 'var(--superficie-2)', borderRadius: 6,
+    textDecoration: 'none', color: 'var(--texto)', fontSize: 12.5,
   },
-  fechaActa: { color: '#5B6470' },
-  itemsActa: { color: '#8A929C', fontSize: 11.5, marginLeft: 'auto' },
+  fechaActa: { color: 'var(--texto-suave)' },
+  itemsActa: { color: 'var(--texto-tenue)', fontSize: 11.5, marginLeft: 'auto' },
 
-  vacio: { fontSize: 12.5, color: '#8A929C', margin: 0, padding: '16px 0', textAlign: 'center' },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', margin: 0, padding: '16px 0', textAlign: 'center' },
 };

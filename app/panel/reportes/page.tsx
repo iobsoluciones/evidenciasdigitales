@@ -74,7 +74,7 @@ export default async function PaginaReportes() {
             { texto: 'Capacitaciones (Excel)', href: '/api/excel/matriz-capacitaciones', principal: true },
             { texto: 'Dotación (Excel)', href: '/api/excel/matriz-dotacion' },
           ]}
-          color="#15803D"
+          color="var(--bien)"
         />
 
         <Tarjeta
@@ -84,7 +84,7 @@ export default async function PaginaReportes() {
             { texto: 'Descargar Excel', href: '/api/excel/inspecciones', principal: true },
             { texto: 'Ver indicadores', href: '/panel/inspecciones/indicadores' },
           ]}
-          color="#15803D"
+          color="var(--bien)"
         />
 
         <Tarjeta
@@ -93,7 +93,7 @@ export default async function PaginaReportes() {
           acciones={[
             { texto: 'Descargar Excel', href: '/api/excel/todo', principal: true },
           ]}
-          color="#15803D"
+          color="var(--bien)"
         />
 
         <Tarjeta
@@ -140,7 +140,7 @@ function Tarjeta({
               key={a.href}
               href={a.href}
               style={a.principal
-                ? { ...s.btnAccion, background: color, color: '#fff' }
+                ? { ...s.btnAccion, background: color, color: 'var(--sobre-marca)' }
                 : s.btnSec}
             >
               {a.texto}
@@ -154,11 +154,11 @@ function Tarjeta({
 
 const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px', maxWidth: 620, lineHeight: 1.5 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px', maxWidth: 620, lineHeight: 1.5 },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(290px,1fr))', gap: 16, alignItems: 'stretch' },
   tarjeta: {
-    background: '#fff',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflow: 'hidden',
     // La tarjeta es el contenedor flex: asi el cuerpo puede crecer y
     // los botones quedan siempre dentro del recuadro.
@@ -168,18 +168,18 @@ const s: Record<string, React.CSSProperties> = {
   franja: { height: 3, flexShrink: 0 },
   cuerpo: { padding: 18, display: 'flex', flexDirection: 'column', flex: 1 },
   tarjetaTitulo: { fontSize: 14.5, margin: '0 0 6px', fontWeight: 600 },
-  tarjetaTexto: { fontSize: 12.5, color: '#5B6470', margin: '0 0 18px', lineHeight: 1.55, flex: 1 },
+  tarjetaTexto: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.55, flex: 1 },
   acciones: { display: 'flex', gap: 8, flexWrap: 'wrap', flexShrink: 0 },
   btnAccion: {
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none',
   },
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 20, lineHeight: 1.6 },
-  vacio: { background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 20, lineHeight: 1.6 },
+  vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

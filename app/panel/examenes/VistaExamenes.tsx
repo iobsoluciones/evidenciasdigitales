@@ -30,10 +30,10 @@ const TIPOS: { v: TipoExamen; t: string }[] = [
 ];
 
 const CONCEPTOS: { v: Concepto; t: string; fondo: string; color: string }[] = [
-  { v: 'apto', t: 'Apto', fondo: '#E6F4EA', color: '#1E6B3A' },
-  { v: 'apto_con_restricciones', t: 'Apto con restricciones', fondo: '#FFF7ED', color: '#9A3412' },
-  { v: 'no_apto', t: 'No apto', fondo: '#FDF2F2', color: '#9B1C1C' },
-  { v: 'aplazado', t: 'Aplazado', fondo: '#F0F0EC', color: '#5B6470' },
+  { v: 'apto', t: 'Apto', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
+  { v: 'apto_con_restricciones', t: 'Apto con restricciones', fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+  { v: 'no_apto', t: 'No apto', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  { v: 'aplazado', t: 'Aplazado', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
 ];
 
 const VACIO = {
@@ -117,10 +117,10 @@ export default function VistaExamenes({
   return (
     <>
       <div style={s.tarjetas}>
-        <Tarjeta n={sinExamen} t="Sin ningún examen" c={sinExamen ? '#9B1C1C' : color} />
-        <Tarjeta n={vencidos} t="Vencidos" c={vencidos ? '#9B1C1C' : color} />
-        <Tarjeta n={porVencer} t="Vencen en 60 días" c={porVencer ? '#9A3412' : color} />
-        <Tarjeta n={restringidos} t="Con restricciones médicas" c={restringidos ? '#9A3412' : color} />
+        <Tarjeta n={sinExamen} t="Sin ningún examen" c={sinExamen ? 'var(--mal)' : color} />
+        <Tarjeta n={vencidos} t="Vencidos" c={vencidos ? 'var(--mal)' : color} />
+        <Tarjeta n={porVencer} t="Vencen en 60 días" c={porVencer ? 'var(--aviso)' : color} />
+        <Tarjeta n={restringidos} t="Con restricciones médicas" c={restringidos ? 'var(--aviso)' : color} />
       </div>
 
       {restringidos > 0 && (
@@ -143,8 +143,8 @@ export default function VistaExamenes({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -255,7 +255,7 @@ export default function VistaExamenes({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...s.botonLleno, background: hecho ? '#1E6B3A' : pendiente ? '#cbd5e1' : color }}
+              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}
               type="button"
             >
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar examen'}
@@ -296,19 +296,19 @@ export default function VistaExamenes({
                   <td style={s.td}>{fmt(f.fecha_vence)}</td>
                   <td style={s.td}>
                     {f.sin_examen ? (
-                      <span style={{ ...s.chip, background: '#FDF2F2', color: '#9B1C1C' }}>
+                      <span style={{ ...s.chip, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
                         Sin examen
                       </span>
                     ) : f.vencido ? (
-                      <span style={{ ...s.chip, background: '#FDF2F2', color: '#9B1C1C' }}>
+                      <span style={{ ...s.chip, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>
                         Vencido
                       </span>
                     ) : f.dias_para_vencer !== null && f.dias_para_vencer <= 60 ? (
-                      <span style={{ ...s.chip, background: '#FFF7ED', color: '#9A3412' }}>
+                      <span style={{ ...s.chip, background: 'var(--aviso-fondo)', color: 'var(--aviso)' }}>
                         Faltan {f.dias_para_vencer} d
                       </span>
                     ) : (
-                      <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>
+                      <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                         Al día
                       </span>
                     )}
@@ -321,7 +321,7 @@ export default function VistaExamenes({
                       {f.examen_id && (
                         <button
                           onClick={() => borrar(f.examen_id!)}
-                          style={{ ...s.botonMini, color: '#9B1C1C' }}
+                          style={{ ...s.botonMini, color: 'var(--mal)' }}
                           type="button"
                         >
                           Borrar
@@ -368,68 +368,68 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))',
   },
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2,
   },
   tarjetaN: { fontSize: 24, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' },
-  tarjetaT: { fontSize: 11.5, color: '#5B6470', lineHeight: 1.4 },
+  tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   restricciones: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', color: '#7C2D12',
-    borderRadius: 9, padding: '11px 14px', fontSize: 12.5,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    borderRadius: 8, padding: '11px 14px', fontSize: 12.5,
     lineHeight: 1.6, marginBottom: 14,
   },
   controles: { display: 'flex', gap: 10, marginBottom: 14 },
   buscador: {
-    flex: '1 1 240px', padding: '9px 12px', border: '1px solid #E4E4DF',
+    flex: '1 1 240px', padding: '9px 12px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
   },
   aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
 
   form: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '16px 18px', marginBottom: 16,
   },
-  formTitulo: { fontSize: 15, fontWeight: 700, color: '#14263F', marginBottom: 6 },
-  nota: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px' },
+  formTitulo: { fontSize: 15, fontWeight: 700, color: 'var(--texto)', marginBottom: 6 },
+  nota: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px' },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 0' },
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
 
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 10, overflowX: 'auto',
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 760 },
   th: {
-    textAlign: 'left', padding: '10px 12px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'left', padding: '10px 12px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
+  td: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   filaSin: { background: '#FFFBFA' },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
-  restr: { fontSize: 11, color: '#9A3412', marginTop: 4, lineHeight: 1.45, maxWidth: 220 },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
+  restr: { fontSize: 11, color: 'var(--aviso)', marginTop: 4, lineHeight: 1.45, maxWidth: 220 },
   chip: {
     display: 'inline-block', padding: '3px 9px', borderRadius: 20,
     fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

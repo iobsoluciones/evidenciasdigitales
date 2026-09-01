@@ -56,10 +56,10 @@ export default async function PaginaFichaEmpleado({
         <Kpi
           v={t.promedio !== null ? `${t.promedio}%` : '—'}
           l="Promedio"
-          color={t.promedio === null ? undefined : t.promedio >= 70 ? '#15803D' : '#9B1C1C'}
+          color={t.promedio === null ? undefined : t.promedio >= 70 ? 'var(--bien)' : 'var(--mal)'}
         />
-        <Kpi v={String(t.aprobadas)} l="Aprobadas" color="#15803D" />
-        <Kpi v={String(t.reprobadas)} l="Reprobadas" color={t.reprobadas > 0 ? '#9B1C1C' : undefined} />
+        <Kpi v={String(t.aprobadas)} l="Aprobadas" color="var(--bien)" />
+        <Kpi v={String(t.reprobadas)} l="Reprobadas" color={t.reprobadas > 0 ? 'var(--mal)' : undefined} />
         <Kpi v={String(t.conReintento)} l="Con reintento" />
       </div>
 
@@ -117,7 +117,7 @@ export default async function PaginaFichaEmpleado({
                 {ficha.historial!.map((h) => (
                   <tr key={h.id}>
                     <td style={{ ...s.td, ...s.mono }}>
-                      <Link href={`/panel/capacitaciones/${h.id}`} style={{ color: '#5B6470' }}>
+                      <Link href={`/panel/capacitaciones/${h.id}`} style={{ color: 'var(--texto-suave)' }}>
                         {h.codigo}
                       </Link>
                     </td>
@@ -126,8 +126,8 @@ export default async function PaginaFichaEmpleado({
                     <td style={s.td}>{h.instructor}</td>
                     <td style={{
                       ...s.td, fontWeight: 600,
-                      color: h.puntaje === null ? '#A3AAB3'
-                           : h.puntaje >= 70 ? '#15803D' : '#9B1C1C',
+                      color: h.puntaje === null ? 'var(--texto-tenue)'
+                           : h.puntaje >= 70 ? 'var(--bien)' : 'var(--mal)',
                     }}>
                       {h.puntaje !== null ? `${h.puntaje}%` : '—'}
                       {h.intentos > 1 && (
@@ -136,10 +136,10 @@ export default async function PaginaFichaEmpleado({
                     </td>
                     <td style={s.td}>
                       {h.aprobo === null
-                        ? <span style={{ color: '#A3AAB3' }}>Sin evaluar</span>
+                        ? <span style={{ color: 'var(--texto-tenue)' }}>Sin evaluar</span>
                         : h.aprobo
-                        ? <span style={{ color: '#15803D', fontWeight: 600 }}>Aprobó</span>
-                        : <span style={{ color: '#9B1C1C', fontWeight: 600 }}>Reprobó</span>}
+                        ? <span style={{ color: 'var(--bien)', fontWeight: 600 }}>Aprobó</span>
+                        : <span style={{ color: 'var(--mal)', fontWeight: 600 }}>Reprobó</span>}
                     </td>
                   </tr>
                 ))}
@@ -162,31 +162,31 @@ function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   cabecera: { marginTop: 12, marginBottom: 18 },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 12 },
 
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(118px,1fr))', gap: 12, marginBottom: 18 },
-  kpi: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, padding: 14, textAlign: 'center' },
-  kpiL: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
+  kpi: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, padding: 14, textAlign: 'center' },
+  kpiL: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
 
   alerta: {
-    background: '#FEFCE8', border: '1px solid #FDE68A', borderRadius: 8,
+    background: 'var(--ambar-fondo)', border: '1px solid var(--ambar-fondo)', borderRadius: 8,
     padding: '14px 16px', marginBottom: 18,
   },
-  alertaTexto: { fontSize: 12.5, color: '#8A6100', margin: '5px 0 0', lineHeight: 1.5 },
+  alertaTexto: { fontSize: 12.5, color: 'var(--ambar)', margin: '5px 0 0', lineHeight: 1.5 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(310px,1fr))', gap: 18 },
 
-  card: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, padding: 20, marginTop: 4 },
+  card: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, padding: 20, marginTop: 4 },
   h2: { fontSize: 14.5, margin: '0 0 14px', fontWeight: 600 },
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 8px', borderBottom: '1px solid #F4F4F0' },
-  reintento: { fontSize: 10.5, color: '#8A6100', fontWeight: 400 },
-  vacio: { fontSize: 12.5, color: '#8A929C', textAlign: 'center', padding: '24px 0', margin: 0 },
+  td: { padding: '9px 8px', borderBottom: '1px solid var(--superficie-3)' },
+  reintento: { fontSize: 10.5, color: 'var(--ambar)', fontWeight: 400 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', textAlign: 'center', padding: '24px 0', margin: 0 },
 };

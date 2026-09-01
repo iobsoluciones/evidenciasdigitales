@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 
-const MARCA = '#1e3a8a';
 
 export default function PaginaRegistro() {
   const router = useRouter();
@@ -147,11 +146,11 @@ export default function PaginaRegistro() {
             onChange={(v) => setF({ ...f, clave: v })}
             ayuda="Mínimo 8 caracteres." />
 
-          {error && <div style={{ ...s.mensaje, background: '#fef2f2', color: '#dc2626' }}>{error}</div>}
-          {aviso && <div style={{ ...s.mensaje, background: '#f0fdf4', color: '#15803d' }}>{aviso}</div>}
+          {error && <div style={{ ...s.mensaje, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>{error}</div>}
+          {aviso && <div style={{ ...s.mensaje, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>{aviso}</div>}
 
           <button type="submit" disabled={cargando} style={{
-            ...s.boton, background: cargando ? '#cbd5e1' : MARCA,
+            ...s.boton, background: cargando ? 'var(--borde-fuerte)' : 'var(--marca)',
             cursor: cargando ? 'not-allowed' : 'pointer',
           }}>
             {cargando ? 'Creando…' : 'Crear cuenta'}
@@ -159,14 +158,14 @@ export default function PaginaRegistro() {
         </form>
 
         <p style={s.pie}>
-          ¿Ya tienes cuenta? <Link href="/login" style={{ color: '#3b82f6' }}>Inicia sesión</Link>
+          ¿Ya tienes cuenta? <Link href="/login" style={{ color: 'var(--marca)' }}>Inicia sesión</Link>
         </p>
 
         {/* Salida para quien no recibe el correo de confirmación.
             Temporal: se retira cuando haya dominio y cuenta de envío. */}
         <div style={s.alterna}>
           ¿No te llega el correo de confirmación?{' '}
-          <Link href="/registro/directo" style={{ color: '#3b82f6', fontWeight: 600 }}>
+          <Link href="/registro/directo" style={{ color: 'var(--marca)', fontWeight: 600 }}>
             Crea tu cuenta sin correo
           </Link>
         </div>
@@ -204,36 +203,35 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   pantalla: {
     minHeight: '100vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-    background: 'linear-gradient(135deg,#f1f5f9,#e2e8f0)', padding: '40px 20px',
-    fontFamily: "'Segoe UI',Roboto,Arial,sans-serif",
+    background: 'var(--fondo)', padding: '40px 20px',
   },
   tarjeta: {
-    width: '100%', maxWidth: 440, background: '#fff', borderRadius: 18,
+    width: '100%', maxWidth: 440, background: 'var(--superficie)', borderRadius: 18,
     boxShadow: '0 10px 30px rgba(0,0,0,.08)', padding: '28px 30px 32px',
   },
-  volver: { fontSize: 12.5, color: '#6b7280', textDecoration: 'none' },
-  titulo: { fontSize: 22, color: MARCA, margin: '14px 0 2px' },
-  sub: { fontSize: 13, color: '#6b7280', margin: '0 0 22px' },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
+  titulo: { fontSize: 22, color: 'var(--texto)', margin: '14px 0 2px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
   label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 },
   input: {
-    width: '100%', padding: '11px 12px', border: '1px solid #cbd5e1',
+    width: '100%', padding: '11px 12px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 8, fontSize: 14, boxSizing: 'border-box',
   },
   slugFila: { display: 'flex', alignItems: 'stretch' },
   slugPrefijo: {
-    background: '#f1f5f9', border: '1px solid #cbd5e1', borderRight: 'none',
-    borderRadius: '8px 0 0 8px', padding: '11px 10px', fontSize: 14, color: '#6b7280',
+    background: 'var(--superficie-3)', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
+    borderRadius: '8px 0 0 8px', padding: '11px 10px', fontSize: 14, color: 'var(--texto-suave)',
   },
-  ayuda: { fontSize: 11, color: '#6b7280', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' },
   mensaje: { marginTop: 16, padding: '11px 14px', borderRadius: 8, fontSize: 13 },
   boton: {
-    width: '100%', marginTop: 20, padding: 14, color: '#fff', border: 'none',
-    borderRadius: 10, fontSize: 15, fontWeight: 600,
+    width: '100%', marginTop: 20, padding: 14, color: 'var(--sobre-marca)', border: 'none',
+    borderRadius: 8, fontSize: 15, fontWeight: 600,
   },
-  pie: { fontSize: 13, textAlign: 'center', marginTop: 18, color: '#6b7280' },
+  pie: { fontSize: 13, textAlign: 'center', marginTop: 18, color: 'var(--texto-suave)' },
   alterna: {
-    marginTop: 16, paddingTop: 14, borderTop: '1px solid #E4E4DF',
-    fontSize: 12.5, color: '#6b7280', textAlign: 'center', lineHeight: 1.6,
+    marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--borde)',
+    fontSize: 12.5, color: 'var(--texto-suave)', textAlign: 'center', lineHeight: 1.6,
   },
-  legal: { fontSize: 10.5, color: '#9ca3af', textAlign: 'center', marginTop: 14, lineHeight: 1.5 },
+  legal: { fontSize: 10.5, color: 'var(--texto-tenue)', textAlign: 'center', marginTop: 14, lineHeight: 1.5 },
 };

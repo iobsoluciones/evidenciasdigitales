@@ -47,7 +47,7 @@ export default function BloqueEvaluacion({
           {hayResultados && (
             <a
               href={`/api/pdf-evaluacion/${capacitacionId}`}
-              style={{ ...e.btn, background: '#15803d' }}
+              style={{ ...e.btn, background: 'var(--bien)' }}
             >
               Informe PDF
             </a>
@@ -62,7 +62,7 @@ export default function BloqueEvaluacion({
           ) : (
             <span
               title="Marca «lleva evaluación» al editar la capacitación"
-              style={{ ...e.btn, background: '#C5C5BD', cursor: 'not-allowed' }}
+              style={{ ...e.btn, background: 'var(--borde-fuerte)', cursor: 'not-allowed' }}
             >
               Crear evaluación
             </span>
@@ -96,9 +96,9 @@ export default function BloqueEvaluacion({
           <div style={e.kpis}>
             <Kpi v={String(estadisticas.evaluados)} l="Evaluados" />
             <Kpi v={`${estadisticas.promedio ?? 0}%`} l="Promedio" color={color} />
-            <Kpi v={String(estadisticas.aprobados)} l="Aprobados" color="#15803d" />
+            <Kpi v={String(estadisticas.aprobados)} l="Aprobados" color="var(--bien)" />
             <Kpi v={String(estadisticas.reprobados)} l="Reprobados"
-                 color={estadisticas.reprobados > 0 ? '#b91c1c' : undefined} />
+                 color={estadisticas.reprobados > 0 ? 'var(--mal)' : undefined} />
           </div>
 
           {/* ---------- Por subtema ---------- */}
@@ -116,8 +116,8 @@ export default function BloqueEvaluacion({
           ) : (
             <div style={{ marginBottom: 20 }}>
               {estadisticas.porSubtema.map((s) => {
-                const tono = s.aciertos_pct >= 80 ? '#15803d'
-                           : s.aciertos_pct >= 60 ? '#a16207' : '#b91c1c';
+                const tono = s.aciertos_pct >= 80 ? 'var(--bien)'
+                           : s.aciertos_pct >= 60 ? '#a16207' : 'var(--mal)';
                 return (
                   <div key={s.etiqueta} style={e.fila}>
                     <div style={e.etiqueta} title={s.etiqueta}>{s.etiqueta}</div>
@@ -153,7 +153,7 @@ export default function BloqueEvaluacion({
                     <td style={e.td}>{p.subtema ?? '—'}</td>
                     <td style={{
                       ...e.td, fontWeight: 600,
-                      color: p.aciertos_pct >= 60 ? '#15803d' : '#b91c1c',
+                      color: p.aciertos_pct >= 60 ? 'var(--bien)' : 'var(--mal)',
                     }}>
                       {p.aciertos_pct}%
                     </td>
@@ -178,25 +178,25 @@ function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
 }
 
 const e: Record<string, React.CSSProperties> = {
-  card: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  card: { background: 'var(--superficie)', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, gap: 12, flexWrap: 'wrap' },
   h2: { fontSize: 15, margin: 0 },
-  h3: { fontSize: 12, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4, margin: '18px 0 4px' },
-  nota: { fontSize: 11.5, color: '#6b7280', margin: '0 0 12px' },
-  btn: { color: '#fff', padding: '9px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600, textDecoration: 'none' },
-  vacio: { fontSize: 12.5, color: '#6b7280', lineHeight: 1.6, margin: 0 },
+  h3: { fontSize: 12, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .4, margin: '18px 0 4px' },
+  nota: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '0 0 12px' },
+  btn: { color: 'var(--sobre-marca)', padding: '9px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600, textDecoration: 'none' },
+  vacio: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: 0 },
   deshabilitada: {
-    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
-    padding: '10px 12px', borderRadius: 5, margin: 0, lineHeight: 1.5,
+    fontSize: 12, color: 'var(--ambar)', background: 'var(--ambar-fondo)',
+    padding: '10px 12px', borderRadius: 6, margin: 0, lineHeight: 1.5,
   },
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(110px,1fr))', gap: 12, marginBottom: 6 },
-  kpi: { background: '#f8fafc', borderRadius: 10, padding: 12, textAlign: 'center' },
-  kpiL: { fontSize: 10.5, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
+  kpi: { background: 'var(--superficie-3)', borderRadius: 8, padding: 12, textAlign: 'center' },
+  kpiL: { fontSize: 10.5, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
   fila: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 7 },
-  etiqueta: { width: 130, fontSize: 12, color: '#374151', textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 },
-  pista: { flex: 1, background: '#f1f5f9', borderRadius: 4, height: 18, overflow: 'hidden' },
+  etiqueta: { width: 130, fontSize: 12, color: 'var(--texto-suave)', textAlign: 'right', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 0 },
+  pista: { flex: 1, background: 'var(--superficie-3)', borderRadius: 4, height: 18, overflow: 'hidden' },
   valor: { width: 46, fontSize: 12, fontWeight: 600, textAlign: 'right', flexShrink: 0 },
-  detalle: { width: 46, fontSize: 11, color: '#9ca3af', textAlign: 'right', flexShrink: 0 },
-  th: { background: '#f8fafc', color: '#6b7280', fontSize: 10.5, textTransform: 'uppercase', padding: '8px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' },
-  td: { padding: '8px', borderBottom: '1px solid #e5e7eb', lineHeight: 1.4 },
+  detalle: { width: 46, fontSize: 11, color: 'var(--texto-tenue)', textAlign: 'right', flexShrink: 0 },
+  th: { background: 'var(--superficie-3)', color: 'var(--texto-suave)', fontSize: 10.5, textTransform: 'uppercase', padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)' },
+  td: { padding: '8px', borderBottom: '1px solid var(--borde)', lineHeight: 1.4 },
 };

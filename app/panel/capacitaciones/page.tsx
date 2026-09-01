@@ -46,7 +46,7 @@ export default async function PaginaCapacitaciones() {
 
   if (error) {
     return (
-      <div style={{ background: '#FDF2F2', color: '#9B1C1C', padding: 16, borderRadius: 6 }}>
+      <div style={{ background: 'var(--mal-fondo)', color: 'var(--mal)', padding: 16, borderRadius: 6 }}>
         Error al cargar: {error.message}
       </div>
     );
@@ -66,10 +66,10 @@ export default async function PaginaCapacitaciones() {
 }
 
 const vacio: React.CSSProperties = {
-  background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+  background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
   padding: '40px 24px', textAlign: 'center',
 };
 const boton: React.CSSProperties = {
-  background: '#14263F', color: '#fff', padding: '10px 18px',
+  background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px',
   borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none',
 };

@@ -50,9 +50,9 @@ export default async function PaginaRetirados() {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 12.5, color: '#5B6470', textDecoration: 'none', display: 'inline-block', marginBottom: 10 },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none', display: 'inline-block', marginBottom: 10 },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px' },
-  vacio: { background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
+  vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

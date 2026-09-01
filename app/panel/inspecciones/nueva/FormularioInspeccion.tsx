@@ -135,7 +135,7 @@ export default function FormularioInspeccion({
           </div>
           <div style={e.filaPrevia}>
             <span style={e.clave}>Críticos</span>
-            <span style={{ color: elegida.criticos > 0 ? '#9B1C1C' : '#5B6470', fontWeight: 600 }}>
+            <span style={{ color: elegida.criticos > 0 ? 'var(--mal)' : 'var(--texto-suave)', fontWeight: 600 }}>
               {elegida.criticos}
             </span>
           </div>
@@ -228,8 +228,8 @@ export default function FormularioInspeccion({
       {aviso && (
         <div style={{
           ...e.avisoCaja,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -241,7 +241,7 @@ export default function FormularioInspeccion({
           disabled={pendiente || !plantillaId}
           style={{
             ...e.btn,
-            background: pendiente || !plantillaId ? '#C5C5BD' : color,
+            background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : color,
             border: 'none',
             cursor: pendiente || !plantillaId ? 'not-allowed' : 'pointer',
           }}
@@ -256,54 +256,54 @@ export default function FormularioInspeccion({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 22, maxWidth: 660,
   },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '16px 0 6px' },
   input: {
     width: '100%', padding: '10px 12px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 5, fontSize: 13.5,
-    boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 6, fontSize: 13.5,
+    boxSizing: 'border-box', fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '5px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '5px 0 0', lineHeight: 1.5 },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 14 },
 
   previa: {
-    background: '#FBFBF9', borderRadius: 6, padding: 14, marginTop: 12,
+    background: 'var(--superficie-2)', borderRadius: 6, padding: 14, marginTop: 12,
   },
   filaPrevia: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
     padding: '4px 0', fontSize: 12.5,
   },
-  clave: { color: '#8A929C' },
+  clave: { color: 'var(--texto-tenue)' },
   notaCriticos: {
-    fontSize: 11.5, color: '#9B1C1C', margin: '8px 0 0',
+    fontSize: 11.5, color: 'var(--mal)', margin: '8px 0 0',
     paddingTop: 8, borderTopWidth: 1, borderTopStyle: 'solid',
-    borderTopColor: '#EFEFEA', lineHeight: 1.55,
+    borderTopColor: 'var(--borde)', lineHeight: 1.55,
   },
 
   aviso: {
-    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
+    fontSize: 12, color: 'var(--ambar)', background: 'var(--ambar-fondo)',
     padding: '10px 12px', borderRadius: 6, margin: '4px 0 0', lineHeight: 1.55,
   },
   avisoCaja: { marginTop: 16, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
 
   btn: {
-    color: '#fff', padding: '11px 22px', borderRadius: 5, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '11px 22px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    padding: '11px 22px', borderRadius: 5, fontSize: 13, fontWeight: 600,
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    padding: '11px 22px', borderRadius: 6, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
   explicacion: {
-    fontSize: 12.5, color: '#5B6470', margin: 0, lineHeight: 1.6,
+    fontSize: 12.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6,
     maxWidth: 420, marginLeft: 'auto', marginRight: 'auto',
   },
 };

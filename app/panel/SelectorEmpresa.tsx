@@ -83,31 +83,31 @@ export default function SelectorEmpresa({
 const e: Record<string, React.CSSProperties> = {
   boton: {
     display: 'flex', alignItems: 'center', gap: 9,
-    background: '#fff', border: '1px solid #DFDFD8', borderRadius: 5,
+    background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', borderRadius: 6,
     padding: '8px 12px', fontSize: 13, cursor: 'pointer',
-    fontFamily: 'inherit', color: '#14263F', minWidth: 210,
+    fontFamily: 'inherit', color: 'var(--texto)', minWidth: 210,
   },
   punto: { width: 8, height: 8, borderRadius: '50%', flexShrink: 0 },
   nombre: {
     flex: 1, textAlign: 'left', whiteSpace: 'nowrap',
     overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 600,
   },
-  flecha: { fontSize: 11, color: '#8A929C', transition: 'transform .15s' },
+  flecha: { fontSize: 11, color: 'var(--texto-tenue)', transition: 'transform .15s' },
   velo: { position: 'fixed', inset: 0, zIndex: 40 },
   menu: {
     position: 'absolute', top: 'calc(100% + 5px)', left: 0, zIndex: 50,
-    background: '#fff', border: '1px solid #DFDFD8', borderRadius: 6,
+    background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', borderRadius: 6,
     boxShadow: '0 10px 30px rgba(20,38,63,.13)', minWidth: 280,
     maxHeight: 360, overflowY: 'auto', padding: 4,
   },
   encabezadoMenu: {
     fontSize: 10, letterSpacing: .7, textTransform: 'uppercase',
-    color: '#8A929C', padding: '8px 10px 6px',
+    color: 'var(--texto-tenue)', padding: '8px 10px 6px',
   },
   opcion: {
     display: 'flex', alignItems: 'center', gap: 9, width: '100%',
     border: 'none', padding: '9px 10px', fontSize: 13, cursor: 'pointer',
-    fontFamily: 'inherit', color: '#14263F', borderRadius: 4,
+    fontFamily: 'inherit', color: 'var(--texto)', borderRadius: 4,
   },
-  ciudad: { fontSize: 10.5, color: '#8A929C' },
+  ciudad: { fontSize: 10.5, color: 'var(--texto-tenue)' },
 };

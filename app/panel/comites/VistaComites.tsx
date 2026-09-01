@@ -153,8 +153,8 @@ export default function VistaComites({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>{aviso.texto}</div>
       )}
 
@@ -163,15 +163,15 @@ export default function VistaComites({
         {comites.map((x) => (
           <a key={x.id} href={`/panel/comites?id=${x.id}`} style={{
             ...s.tarjeta,
-            borderColor: c?.id === x.id ? color : '#E4E4DF',
+            borderColor: c?.id === x.id ? color : 'var(--borde)',
             boxShadow: c?.id === x.id ? `0 0 0 1px ${color}` : undefined,
           }}>
             <div style={s.tarjetaCab}>
               <h3 style={s.tarjetaNombre}>{TIPOS[x.tipo]?.t ?? x.tipo}</h3>
               <span style={{
                 ...s.chip,
-                background: x.conforme && !x.vencido ? '#E6F4EA' : '#FDF2F2',
-                color: x.conforme && !x.vencido ? '#1E6B3A' : '#9B1C1C',
+                background: x.conforme && !x.vencido ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+                color: x.conforme && !x.vencido ? 'var(--bien)' : 'var(--mal)',
               }}>
                 {x.vencido ? 'Vencido' : x.conforme ? 'Conforme' : 'Incompleto'}
               </span>
@@ -244,12 +244,12 @@ export default function VistaComites({
           {/* Lo que la norma exige frente a lo que hay */}
           <section style={{
             ...s.control,
-            background: v.conforme ? '#E6F4EA' : '#FFF7ED',
-            borderColor: v.conforme ? '#1E6B3A' : '#FED7AA',
+            background: v.conforme ? 'var(--bien-fondo)' : 'var(--aviso-fondo)',
+            borderColor: v.conforme ? 'var(--bien)' : '#FED7AA',
           }}>
             <div style={s.controlCab}>
               <div>
-                <div style={{ ...s.controlTitulo, color: v.conforme ? '#1E6B3A' : '#9A3412' }}>
+                <div style={{ ...s.controlTitulo, color: v.conforme ? 'var(--bien)' : 'var(--aviso)' }}>
                   {v.conforme ? 'Comité conforme a la norma' : 'El comité no cumple la composición exigida'}
                 </div>
                 <p style={s.controlNota}>
@@ -292,7 +292,7 @@ export default function VistaComites({
             <div style={s.h3}>
               Acta de conformación
               {c.acta_estado === 'cerrada' && (
-                <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A', marginLeft: 10 }}>
+                <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)', marginLeft: 10 }}>
                   Cerrada
                 </span>
               )}
@@ -551,7 +551,7 @@ export default function VistaComites({
                   <section key={frente || 'sin'} style={s.columna}>
                     <div style={{
                       ...s.columnaTitulo,
-                      background: frente ? color : '#8A929C',
+                      background: frente ? color : 'var(--texto-tenue)',
                     }}>
                       {frente
                         ? FRENTES.find((f) => f.v === frente)!.t
@@ -635,7 +635,7 @@ export default function VistaComites({
                               </button>
                             )}
                             {m.firmado && (
-                              <span style={{ ...s.chip, background: '#E6F4EA', color: '#1E6B3A' }}>
+                              <span style={{ ...s.chip, background: 'var(--bien-fondo)', color: 'var(--bien)' }}>
                                 Firmó
                               </span>
                             )}
@@ -649,7 +649,7 @@ export default function VistaComites({
                               })}>
                               Editar
                             </button>
-                            <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+                            <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
                               disabled={pendiente}
                               onClick={() => correr(() => quitarMiembro(m.id, 'Retirado del comité'))}>
                               Quitar
@@ -719,7 +719,7 @@ function Tarjeta({
       <div style={s.accionesMiembro}>
         <button type="button" style={s.botonMini} onClick={onFoto}>Foto</button>
         <button type="button" style={s.botonMini} onClick={onEditar}>Editar</button>
-        <button type="button" style={{ ...s.botonMini, color: '#9B1C1C' }}
+        <button type="button" style={{ ...s.botonMini, color: 'var(--mal)' }}
           disabled={pendiente} onClick={onQuitar}>Quitar</button>
       </div>
     </div>
@@ -748,13 +748,13 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fill,minmax(230px,1fr))',
   },
   tarjeta: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 12,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 12,
     padding: '13px 15px', textDecoration: 'none', color: 'inherit',
     display: 'flex', flexDirection: 'column', gap: 4,
   },
   tarjetaCab: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
-  tarjetaNombre: { fontSize: 13.5, fontWeight: 700, color: '#14263F', margin: 0, flex: 1 },
-  tarjetaMeta: { fontSize: 11.5, color: '#8A929C' },
+  tarjetaNombre: { fontSize: 13.5, fontWeight: 700, color: 'var(--texto)', margin: 0, flex: 1 },
+  tarjetaMeta: { fontSize: 11.5, color: 'var(--texto-tenue)' },
   chip: {
     fontSize: 10, fontWeight: 700, padding: '3px 9px',
     borderRadius: 20, whiteSpace: 'nowrap',
@@ -762,19 +762,19 @@ const s: Record<string, React.CSSProperties> = {
 
   barra: { display: 'flex', marginBottom: 16 },
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14, width: '100%',
   },
-  h3: { fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10 },
-  nota: { fontSize: 12, color: '#5B6470', lineHeight: 1.6, margin: '0 0 10px' },
+  h3: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10 },
+  nota: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 10px' },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 0' },
 
   control: {
     borderWidth: 1, borderStyle: 'solid', borderRadius: 12,
@@ -785,44 +785,44 @@ const s: Record<string, React.CSSProperties> = {
     gap: 14, flexWrap: 'wrap',
   },
   controlTitulo: { fontSize: 14.5, fontWeight: 700 },
-  controlNota: { fontSize: 12.5, color: '#374151', lineHeight: 1.6, margin: '5px 0 0', maxWidth: 620 },
-  norma: { color: '#8A929C', fontSize: 11.5 },
+  controlNota: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '5px 0 0', maxWidth: 620 },
+  norma: { color: 'var(--texto-tenue)', fontSize: 11.5 },
   fallas: { margin: '10px 0 0', paddingLeft: 18 },
-  falla: { fontSize: 12.5, color: '#9A3412', lineHeight: 1.65 },
+  falla: { fontSize: 12.5, color: 'var(--aviso)', lineHeight: 1.65 },
   recomendaciones: {
     marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,.07)',
   },
   recomendacionesTitulo: {
-    fontSize: 10.5, fontWeight: 700, color: '#5B6470',
+    fontSize: 10.5, fontWeight: 700, color: 'var(--texto-suave)',
     letterSpacing: .4, textTransform: 'uppercase',
   },
-  recomendacion: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.65 },
+  recomendacion: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.65 },
   fijo: {
     padding: '8px 11px', border: '1px solid #EDEDE8', borderRadius: 8,
-    fontSize: 13, background: '#F7F7F4', color: '#374151', fontWeight: 600,
+    fontSize: 13, background: 'var(--fondo)', color: 'var(--texto-suave)', fontWeight: 600,
   },
   salvedad: {
-    fontSize: 11.5, color: '#5B6470', lineHeight: 1.55,
+    fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.55,
     margin: '10px 0 0', paddingTop: 9, borderTop: '1px solid rgba(0,0,0,.07)',
   },
 
   columnas: { display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))' },
   columna: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 12, padding: '0 0 14px', overflow: 'hidden',
   },
   columnaTitulo: {
-    color: '#fff', fontSize: 12, fontWeight: 700,
+    color: 'var(--sobre-marca)', fontSize: 12, fontWeight: 700,
     padding: '10px 14px', textAlign: 'center',
   },
   grupo: {
-    fontSize: 10, fontWeight: 700, color: '#8A929C', letterSpacing: .5,
+    fontSize: 10, fontWeight: 700, color: 'var(--texto-tenue)', letterSpacing: .5,
     textTransform: 'uppercase', padding: '12px 14px 6px',
   },
-  vacio: { fontSize: 12, color: '#9CA3AF', fontStyle: 'italic', padding: '0 14px 6px', margin: 0 },
+  vacio: { fontSize: 12, color: 'var(--texto-tenue)', fontStyle: 'italic', padding: '0 14px 6px', margin: 0 },
   miembro: {
     display: 'flex', gap: 10, alignItems: 'center',
-    padding: '9px 14px', borderTop: '1px solid #F0F0EC', flexWrap: 'wrap',
+    padding: '9px 14px', borderTop: '1px solid var(--superficie-3)', flexWrap: 'wrap',
   },
   foto: { width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' },
   fotoVacia: {
@@ -830,46 +830,46 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 16, fontWeight: 700, flexShrink: 0,
   },
-  nombre: { fontSize: 13, fontWeight: 700, color: '#14263F', lineHeight: 1.3 },
-  cargo: { fontSize: 11, color: '#5B6470', marginTop: 1 },
+  nombre: { fontSize: 13, fontWeight: 700, color: 'var(--texto)', lineHeight: 1.3 },
+  cargo: { fontSize: 11, color: 'var(--texto-suave)', marginTop: 1 },
   rol: { fontSize: 10.5, fontWeight: 700, marginTop: 2 },
   accionesMiembro: { display: 'flex', gap: 4, flexWrap: 'wrap' },
 
   inactivo: {
-    fontSize: 12.5, color: '#5B6470', padding: '7px 0',
-    borderTop: '1px solid #F0F0EC',
+    fontSize: 12.5, color: 'var(--texto-suave)', padding: '7px 0',
+    borderTop: '1px solid var(--superficie-3)',
   },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '9px 18px', fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   barraActa: { display: 'flex', gap: 8, flexWrap: 'wrap' },
   subBloqueActa: {
-    background: '#FAFAF8', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--superficie-2)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '13px 15px', marginTop: 12,
   },
   enlaceCaja: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '11px 13px', marginTop: 12,
+    background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '11px 13px', marginTop: 12,
   },
-  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: 'var(--texto)', marginBottom: 5 },
   enlaceUrl: {
     display: 'block', fontFamily: "'Consolas','Courier New',monospace",
-    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
+    fontSize: 11.5, color: 'var(--texto-suave)', wordBreak: 'break-all', lineHeight: 1.5,
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap', textDecoration: 'none',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap', textDecoration: 'none',
   },
 };

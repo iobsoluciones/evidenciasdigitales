@@ -146,7 +146,7 @@ export default function FormularioRendicion({
         {error && <div style={s.error}>{error}</div>}
 
         <button onClick={enviar} disabled={pendiente}
-          style={{ ...s.boton, background: pendiente ? '#cbd5e1' : color }}>
+          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : color }}>
           {pendiente ? 'Registrando…' : 'Rendir cuentas y firmar'}
         </button>
 
@@ -161,11 +161,10 @@ export default function FormularioRendicion({
 const s: Record<string, React.CSSProperties> = {
   pagina: {
     minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: '#F7F7F4', padding: 20,
-    fontFamily: "'Inter','Segoe UI',Roboto,Arial,sans-serif", color: '#14263F',
+    background: 'var(--fondo)', padding: 20, color: 'var(--texto)',
   },
   caja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 14,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 14,
     padding: '26px 24px', maxWidth: 420, width: '100%', textAlign: 'center',
   },
   cabecera: {
@@ -173,41 +172,41 @@ const s: Record<string, React.CSSProperties> = {
   },
   logo: { maxHeight: 44, maxWidth: 150, objectFit: 'contain', marginBottom: 8 },
   empresa: { fontSize: 15, fontWeight: 700 },
-  doc: { fontSize: 11.5, color: '#5B6470', marginTop: 2 },
+  doc: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 2 },
 
   saludo: { fontSize: 14, lineHeight: 1.65, margin: '0 0 14px' },
 
   responsabilidades: {
-    borderLeftWidth: 3, borderLeftStyle: 'solid', background: '#FAFAF8',
+    borderLeftWidth: 3, borderLeftStyle: 'solid', background: 'var(--superficie-2)',
     padding: '11px 14px', marginBottom: 14,
   },
   etiqueta: {
-    fontSize: 10, fontWeight: 700, color: '#8A929C',
+    fontSize: 10, fontWeight: 700, color: 'var(--texto-tenue)',
     letterSpacing: .4, textTransform: 'uppercase',
   },
-  parrafo: { fontSize: 13, lineHeight: 1.6, color: '#374151', margin: '4px 0 0' },
-  alcance: { fontSize: 12, color: '#8A929C', lineHeight: 1.55, margin: '0 0 14px' },
+  parrafo: { fontSize: 13, lineHeight: 1.6, color: 'var(--texto-suave)', margin: '4px 0 0' },
+  alcance: { fontSize: 12, color: 'var(--texto-tenue)', lineHeight: 1.55, margin: '0 0 14px' },
 
   label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 },
   textarea: {
-    width: '100%', padding: '10px 12px', border: '1px solid #E4E4DF',
-    borderRadius: 9, fontSize: 13.5, boxSizing: 'border-box',
-    fontFamily: 'inherit', lineHeight: 1.6, resize: 'vertical', color: '#14263F',
+    width: '100%', padding: '10px 12px', border: '1px solid var(--borde)',
+    borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
+    fontFamily: 'inherit', lineHeight: 1.6, resize: 'vertical', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '6px 0 16px', lineHeight: 1.55 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '6px 0 16px', lineHeight: 1.55 },
 
   zonaFirma: { display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 },
   etiquetaFirma: { fontSize: 12, fontWeight: 600 },
 
   error: {
-    background: '#FDF2F2', color: '#9B1C1C', borderRadius: 8,
+    background: 'var(--mal-fondo)', color: 'var(--mal)', borderRadius: 8,
     padding: '10px 13px', fontSize: 13, marginBottom: 12,
   },
   boton: {
-    width: '100%', color: '#fff', border: 'none', padding: 14,
-    borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer',
+    width: '100%', color: 'var(--sobre-marca)', border: 'none', padding: 14,
+    borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: 'pointer',
   },
-  pie: { fontSize: 11, color: '#8A929C', marginTop: 14, lineHeight: 1.5, textAlign: 'center' },
+  pie: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.5, textAlign: 'center' },
 
   exito: {
     width: 46, height: 46, borderRadius: '50%', margin: '0 auto 12px',
@@ -215,5 +214,5 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 25, fontWeight: 700,
   },
   titulo: { fontSize: 19, fontWeight: 700, margin: '0 0 8px' },
-  texto: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.65 },
+  texto: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.65 },
 };

@@ -83,29 +83,29 @@ export default function VistaAusentismo({
       {aviso && (
         <div role="status" aria-live="polite" style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
           border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
         }}>{aviso.texto}</div>
       )}
 
       <div style={s.resumen}>
-        <div style={{ ...s.tarjeta, background: '#fff', border: '1px solid #E4E4DF' }}>
+        <div style={{ ...s.tarjeta, background: 'var(--superficie)', border: '1px solid var(--borde)' }}>
           <span style={{ ...s.tarjetaN, color }}>{resumen.dias_medicos}</span>
           <span style={s.tarjetaT}>Días por causa médica</span>
           <span style={s.tarjetaPie}>los que entran al indicador</span>
         </div>
-        <div style={{ ...s.tarjeta, background: '#fff', border: '1px solid #E4E4DF' }}>
+        <div style={{ ...s.tarjeta, background: 'var(--superficie)', border: '1px solid var(--borde)' }}>
           <span style={s.tarjetaN}>{resumen.dias_totales}</span>
           <span style={s.tarjetaT}>Días de ausencia en total</span>
           <span style={s.tarjetaPie}>incluye licencias y permisos</span>
         </div>
-        <div style={{ ...s.tarjeta, background: '#fff', border: '1px solid #E4E4DF' }}>
+        <div style={{ ...s.tarjeta, background: 'var(--superficie)', border: '1px solid var(--borde)' }}>
           <span style={s.tarjetaN}>{resumen.personas}</span>
           <span style={s.tarjetaT}>Personas ausentes</span>
           <span style={s.tarjetaPie}>{resumen.eventos} ausencia(s) registradas</span>
         </div>
-        <div style={{ ...s.tarjeta, background: '#F7F7F4' }}>
+        <div style={{ ...s.tarjeta, background: 'var(--fondo)' }}>
           <span style={{ ...s.tarjetaN, color }}>{tasa ? `${tasa}%` : '—'}</span>
           <span style={s.tarjetaT}>Ausentismo por causa médica</span>
           <span style={s.tarjetaPie}>
@@ -278,8 +278,8 @@ export default function VistaAusentismo({
                     <td style={s.td}>
                       <span style={{
                         ...s.chip,
-                        background: a.causa_medica ? '#EEF2F7' : '#F0F0EC',
-                        color: a.causa_medica ? '#374151' : '#8A929C',
+                        background: a.causa_medica ? '#EEF2F7' : 'var(--superficie-3)',
+                        color: a.causa_medica ? 'var(--texto-suave)' : 'var(--texto-tenue)',
                       }}>
                         {def?.t ?? a.origen}
                       </span>
@@ -315,7 +315,7 @@ export default function VistaAusentismo({
                         Editar
                       </button>
                       <button type="button" disabled={pendiente}
-                        style={{ ...s.botonMini, color: '#9B1C1C', marginLeft: 4 }}
+                        style={{ ...s.botonMini, color: 'var(--mal)', marginLeft: 4 }}
                         onClick={() => correr(() => eliminarAusencia(a.id))}>
                         Quitar
                       </button>
@@ -348,7 +348,7 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   aviso: {
     position: 'fixed', right: 18, bottom: 18, zIndex: 60, maxWidth: 340,
-    padding: '11px 15px', borderRadius: 9, fontSize: 13,
+    padding: '11px 15px', borderRadius: 8, fontSize: 13,
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
 
@@ -357,93 +357,93 @@ const s: Record<string, React.CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))',
   },
   tarjeta: {
-    borderRadius: 10, padding: '12px 14px',
+    borderRadius: 8, padding: '12px 14px',
     display: 'flex', flexDirection: 'column', gap: 2,
   },
   tarjetaN: {
     fontSize: 24, fontWeight: 700, lineHeight: 1.1,
-    color: '#14263F', fontVariantNumeric: 'tabular-nums',
+    color: 'var(--texto)', fontVariantNumeric: 'tabular-nums',
   },
-  tarjetaT: { fontSize: 12, color: '#374151' },
-  tarjetaPie: { fontSize: 11, color: '#8A929C', lineHeight: 1.4 },
+  tarjetaT: { fontSize: 12, color: 'var(--texto-suave)' },
+  tarjetaPie: { fontSize: 11, color: 'var(--texto-tenue)', lineHeight: 1.4 },
 
   origenes: {
     display: 'grid', gap: 8, marginBottom: 16,
     gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))',
   },
   origen: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 9,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 12px', display: 'flex', flexDirection: 'column', gap: 1,
   },
-  origenNombre: { fontSize: 12, color: '#14263F', fontWeight: 600 },
+  origenNombre: { fontSize: 12, color: 'var(--texto)', fontWeight: 600 },
   origenDias: { fontSize: 16, fontWeight: 700, fontVariantNumeric: 'tabular-nums' },
-  origenMeta: { fontSize: 10.5, color: '#8A929C' },
+  origenMeta: { fontSize: 10.5, color: 'var(--texto-tenue)' },
 
   barra: { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 },
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px', marginBottom: 14,
   },
-  h3: { fontSize: 14, fontWeight: 700, color: '#14263F', marginBottom: 10 },
-  nota: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.65, margin: '0 0 12px', maxWidth: 640 },
+  h3: { fontSize: 14, fontWeight: 700, color: 'var(--texto)', marginBottom: 10 },
+  nota: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.65, margin: '0 0 12px', maxWidth: 640 },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#14263F' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
   calculado: {
     padding: '8px 11px', border: '1px solid #EDEDE8', borderRadius: 8,
-    fontSize: 15, fontWeight: 700, background: '#FAFAF8', textAlign: 'center',
+    fontSize: 15, fontWeight: 700, background: 'var(--superficie-2)', textAlign: 'center',
     fontVariantNumeric: 'tabular-nums',
   },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '4px 0 0', lineHeight: 1.5 },
   check: {
     display: 'flex', alignItems: 'center', gap: 8,
-    fontSize: 13, color: '#14263F', cursor: 'pointer', margin: '2px 0 10px',
+    fontSize: 13, color: 'var(--texto)', cursor: 'pointer', margin: '2px 0 10px',
   },
 
   contenedor: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 12, overflowX: 'auto',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 720 },
   th: {
-    textAlign: 'center', padding: '10px', background: '#F7F7F4', color: '#5B6470',
+    textAlign: 'center', padding: '10px', background: 'var(--fondo)', color: 'var(--texto-suave)',
     fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: .4,
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  td: { padding: '10px', borderBottom: '1px solid #F0F0EC', verticalAlign: 'top' },
-  tdNombre: { padding: '10px 12px', borderBottom: '1px solid #F0F0EC', minWidth: 180 },
-  nombre: { fontSize: 13, fontWeight: 600, color: '#14263F' },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  td: { padding: '10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
+  tdNombre: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', minWidth: 180 },
+  nombre: { fontSize: 13, fontWeight: 600, color: 'var(--texto)' },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   chip: {
     fontSize: 11, fontWeight: 600, padding: '3px 9px',
     borderRadius: 20, whiteSpace: 'nowrap', display: 'inline-block',
   },
   prorroga: {
-    fontSize: 10, fontWeight: 700, color: '#92400E',
-    background: '#FEF3C7', padding: '2px 7px', borderRadius: 4, marginLeft: 5,
+    fontSize: 10, fontWeight: 700, color: 'var(--aviso)',
+    background: 'var(--ambar-fondo)', padding: '2px 7px', borderRadius: 4, marginLeft: 5,
   },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   botonSec: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '9px 16px', fontSize: 13, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer',
+    color: 'var(--texto)', cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '9px 20px', borderRadius: 8,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 20px', borderRadius: 8,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   botonMini: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 7,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 7,
     padding: '5px 11px', fontSize: 11.5, fontWeight: 600,
-    color: '#14263F', cursor: 'pointer', whiteSpace: 'nowrap',
+    color: 'var(--texto)', cursor: 'pointer', whiteSpace: 'nowrap',
   },
 };

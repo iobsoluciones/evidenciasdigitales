@@ -27,7 +27,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { EVENTO_MENU } from './BotonMenu';
-import { paraTexto } from '@/lib/color';
+import { paraTexto, aclarar } from '@/lib/color';
 
 type Enlace = { href: string; texto: string };
 type Fase = 'planear' | 'hacer' | 'verificar' | 'actuar';
@@ -48,7 +48,7 @@ const FASES: {
   v: Fase; t: string; color: string; fondo: string; icono: React.ReactNode;
 }[] = [
   {
-    v: 'planear', t: 'Planear', color: '#2A6F97', fondo: '#E8F1F7',
+    v: 'planear', t: 'Planear', color: 'var(--fase-planear)', fondo: 'var(--fase-planear-fondo)',
     // Documento con líneas: lo que se escribe antes de hacer nada.
     icono: (
       <>
@@ -58,7 +58,7 @@ const FASES: {
     ),
   },
   {
-    v: 'hacer', t: 'Hacer', color: '#1B5E4A', fondo: '#E6F1EC',
+    v: 'hacer', t: 'Hacer', color: 'var(--fase-hacer)', fondo: 'var(--fase-hacer-fondo)',
     // Engranaje: la operación.
     icono: (
       <>
@@ -68,7 +68,7 @@ const FASES: {
     ),
   },
   {
-    v: 'verificar', t: 'Verificar', color: '#B45309', fondo: '#FDF1E0',
+    v: 'verificar', t: 'Verificar', color: 'var(--fase-verificar)', fondo: 'var(--fase-verificar-fondo)',
     // Lupa: mirar lo que se hizo.
     icono: (
       <>
@@ -78,7 +78,7 @@ const FASES: {
     ),
   },
   {
-    v: 'actuar', t: 'Actuar', color: '#7A3E9D', fondo: '#F2EAF7',
+    v: 'actuar', t: 'Actuar', color: 'var(--fase-actuar)', fondo: 'var(--fase-actuar-fondo)',
     // Flecha que vuelve: la mejora continua cierra el ciclo.
     icono: (
       <>
@@ -204,10 +204,16 @@ export default function MenuLateral({
 }) {
   const ruta = usePathname();
 
-  // El color de la empresa se usa aquí como TEXTO sobre blanco. Con un
-  // amarillo claro sería ilegible, así que se oscurece lo justo. El
-  // color de fondo de los botones sí usa el original.
-  const colorTexto = paraTexto(color);
+  // El color de la empresa se usa aquí como TEXTO sobre la superficie
+  // del lateral. En tema claro hay que oscurecerlo —un amarillo sería
+  // ilegible— y en tema oscuro hay que aclararlo —un azul marino se
+  // perdería—. Se calculan los dos y decide el CSS: el servidor no sabe
+  // qué tema tiene guardado el navegador. El color de fondo de los
+  // botones sí usa el original, que ahí sí se ve.
+  const variablesMarca = {
+    '--marca-empresa-claro': paraTexto(color),
+    '--marca-empresa-oscuro': aclarar(color),
+  } as React.CSSProperties;
 
   const moduloActivo =
     MODULOS.find((m) => m.enlaces.some((x) => ruta === x.href || ruta.startsWith(x.href + '/')))?.id
@@ -235,7 +241,10 @@ export default function MenuLateral({
 
   return (
     <>
-      <nav style={e.lateral} className={movil ? 'lateral abierto' : 'lateral'}>
+      <nav
+        style={{ ...e.lateral, ...variablesMarca }}
+        className={movil ? 'lateral abierto' : 'lateral'}
+      >
         {/* ---------- El profesional ---------- */}
         <div style={e.cabecera}>
           <div style={e.nombre}>{profesional}</div>
@@ -264,9 +273,9 @@ export default function MenuLateral({
               style={{
                 ...e.cartera,
                 marginTop: i === 0 ? 0 : 6,
-                background: x.activo ? color : '#fff',
-                color: x.activo ? '#fff' : '#14263F',
-                borderColor: x.activo ? color : '#DFDFD8',
+                background: x.activo ? color : 'var(--superficie)',
+                color: x.activo ? 'var(--sobre-marca)' : 'var(--texto)',
+                borderColor: x.activo ? color : 'var(--borde-fuerte)',
               }}
             >
               <span style={e.iconoCartera} aria-hidden="true">{x.icono}</span>
@@ -296,7 +305,7 @@ export default function MenuLateral({
                   onClick={() => setAbierto(desplegado ? null : m.id)}
                   style={{
                     ...e.botonModulo,
-                    color: desplegado ? colorTexto : '#3C4650',
+                    color: desplegado ? 'var(--marca-empresa)' : 'var(--texto-suave)',
                     fontWeight: desplegado ? 700 : 600,
                   }}
                   aria-expanded={desplegado}
@@ -351,8 +360,8 @@ export default function MenuLateral({
               ...e.cartera,
               marginBottom: 6,
               background: enPerfil ? color : '#fff',
-              color: enPerfil ? '#fff' : '#14263F',
-              borderColor: enPerfil ? color : '#DFDFD8',
+              color: enPerfil ? 'var(--sobre-marca)' : 'var(--texto)',
+              borderColor: enPerfil ? color : 'var(--borde-fuerte)',
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">◉</span>
@@ -365,8 +374,8 @@ export default function MenuLateral({
             style={{
               ...e.cartera,
               background: enConfig ? color : '#fff',
-              color: enConfig ? '#fff' : '#14263F',
-              borderColor: enConfig ? color : '#DFDFD8',
+              color: enConfig ? 'var(--sobre-marca)' : 'var(--texto)',
+              borderColor: enConfig ? color : 'var(--borde-fuerte)',
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">⚙</span>
@@ -396,22 +405,22 @@ export default function MenuLateral({
 
 const e: Record<string, React.CSSProperties> = {
   lateral: {
-    width: 246, flexShrink: 0, background: '#FBFBF9',
-    borderRight: '1px solid #E4E4DF', minHeight: '100vh',
+    width: 246, flexShrink: 0, background: 'var(--superficie-2)',
+    borderRight: '1px solid var(--borde)', minHeight: '100vh',
     padding: '22px 0', display: 'flex', flexDirection: 'column',
   },
-  cabecera: { padding: '0 20px 16px', borderBottom: '1px solid #E4E4DF' },
-  nombre: { fontSize: 14.5, fontWeight: 700, lineHeight: 1.3, letterSpacing: -0.1, color: '#14263F' },
+  cabecera: { padding: '0 20px 16px', borderBottom: '1px solid var(--borde)' },
+  nombre: { fontSize: 14.5, fontWeight: 700, lineHeight: 1.3, letterSpacing: -0.1, color: 'var(--texto)' },
   meta: { display: 'flex', gap: 6, marginTop: 7, flexWrap: 'wrap' },
   etiqueta: {
     fontSize: 9.5, textTransform: 'uppercase', letterSpacing: .6,
-    background: '#EFEFEA', color: '#5B6470', padding: '2px 7px', borderRadius: 3,
+    background: 'var(--superficie-3)', color: 'var(--texto-suave)', padding: '2px 7px', borderRadius: 3,
   },
 
   cartera: {
     display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px',
     fontSize: 12.5, fontWeight: 600, textDecoration: 'none',
-    borderWidth: 1, borderStyle: 'solid', borderRadius: 5,
+    borderWidth: 1, borderStyle: 'solid', borderRadius: 6,
   },
   iconoCartera: { fontSize: 12, lineHeight: 1 },
 
@@ -430,21 +439,21 @@ const e: Record<string, React.CSSProperties> = {
     borderLeftWidth: 2, borderLeftStyle: 'solid',
     marginLeft: 17, paddingLeft: 8,
   },
-  pie: { padding: 12, borderTop: '1px solid #E4E4DF' },
+  pie: { padding: 12, borderTop: '1px solid var(--borde)' },
   botonModulo: {
     width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     background: 'none', border: 'none', padding: '9px 8px', fontSize: 13,
-    cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', borderRadius: 5,
+    cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', borderRadius: 6,
   },
-  flecha: { fontSize: 15, color: '#A3AAB3', transition: 'transform .16s ease', lineHeight: 1 },
-  pronto: { fontSize: 9.5, textTransform: 'uppercase', letterSpacing: .5, color: '#8A929C', padding: '0 8px 6px' },
+  flecha: { fontSize: 15, color: 'var(--texto-tenue)', transition: 'transform .16s ease', lineHeight: 1 },
+  pronto: { fontSize: 9.5, textTransform: 'uppercase', letterSpacing: .5, color: 'var(--texto-tenue)', padding: '0 8px 6px' },
   lista: { listStyle: 'none', margin: '2px 0 10px', padding: 0 },
   item: {
-    display: 'block', padding: '7px 12px', fontSize: 12.5, color: '#5B6470',
+    display: 'block', padding: '7px 12px', fontSize: 12.5, color: 'var(--texto-suave)',
     textDecoration: 'none', marginLeft: 8,
     borderLeftWidth: 2, borderLeftStyle: 'solid', borderLeftColor: 'transparent',
   },
-  itemInactivo: { color: '#B5BBC2', cursor: 'default' },
+  itemInactivo: { color: 'var(--texto-tenue)', cursor: 'default' },
 
   velo: { position: 'fixed', inset: 0, background: 'rgba(20,38,63,.45)', zIndex: 55 },
 };

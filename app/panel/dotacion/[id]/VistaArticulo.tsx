@@ -23,11 +23,11 @@ import CargaUnidades from './CargaUnidades';
 import type { InspeccionDeUnidad } from '@/lib/acciones-inspecciones';
 
 const ESTADOS: Array<{ v: EstadoUnidad; t: string; color: string }> = [
-  { v: 'disponible', t: 'Disponible', color: '#15803D' },
-  { v: 'asignado', t: 'Asignado', color: '#0369A1' },
-  { v: 'mantenimiento', t: 'En mantenimiento', color: '#8A6100' },
-  { v: 'baja', t: 'Dado de baja', color: '#5B6470' },
-  { v: 'perdido', t: 'Perdido', color: '#9B1C1C' },
+  { v: 'disponible', t: 'Disponible', color: 'var(--bien)' },
+  { v: 'asignado', t: 'Asignado', color: 'var(--info)' },
+  { v: 'mantenimiento', t: 'En mantenimiento', color: 'var(--ambar)' },
+  { v: 'baja', t: 'Dado de baja', color: 'var(--texto-suave)' },
+  { v: 'perdido', t: 'Perdido', color: 'var(--mal)' },
 ];
 
 const UNIDAD_VACIA = {
@@ -137,8 +137,8 @@ export default function VistaArticulo({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -182,8 +182,8 @@ export default function VistaArticulo({
           {esConsumible && (
             <div style={{
               ...e.existencia,
-              background: a.bajo_minimo ? '#FEE2E2' : '#F0FDF4',
-              color: a.bajo_minimo ? '#9B1C1C' : '#15803D',
+              background: a.bajo_minimo ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+              color: a.bajo_minimo ? 'var(--mal)' : 'var(--bien)',
             }}>
               <div style={{ fontSize: 26, fontWeight: 700 }}>{ficha.existencia ?? 0}</div>
               <div style={{ fontSize: 11 }}>
@@ -220,7 +220,7 @@ export default function VistaArticulo({
             <button
               onClick={ingresar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
             >
               Registrar
             </button>
@@ -294,7 +294,7 @@ export default function VistaArticulo({
               <button
                 onClick={agregarUnidad}
                 disabled={pendiente}
-                style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 12 }}
+                style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}
               >
                 {pendiente ? 'Guardando…' : 'Registrar unidad'}
               </button>
@@ -361,13 +361,13 @@ export default function VistaArticulo({
                               {ins.estado === 'cerrada' ? (
                                 <span style={{
                                   ...e.inspeccionVeredicto,
-                                  color: ins.cumple ? '#15803D' : '#9B1C1C',
+                                  color: ins.cumple ? 'var(--bien)' : 'var(--mal)',
                                 }}>
                                   {ins.puntaje !== null ? `${ins.puntaje}%` : '—'}
                                   {ins.cumple === false ? ' · NO CUMPLE' : ''}
                                 </span>
                               ) : (
-                                <span style={{ ...e.inspeccionVeredicto, color: '#8A6100' }}>
+                                <span style={{ ...e.inspeccionVeredicto, color: 'var(--ambar)' }}>
                                   Borrador
                                 </span>
                               )}
@@ -434,7 +434,7 @@ export default function VistaArticulo({
                             <button
                               onClick={() => darDeBaja(u.id)}
                               disabled={pendiente}
-                              style={{ ...e.btnMini, color: '#9B1C1C' }}
+                              style={{ ...e.btnMini, color: 'var(--mal)' }}
                             >
                               Retirar
                             </button>
@@ -471,11 +471,11 @@ export default function VistaArticulo({
                   </td>
                   <td style={{
                     ...e.td, fontWeight: 600,
-                    color: m.cantidad > 0 ? '#15803D' : '#9B1C1C',
+                    color: m.cantidad > 0 ? 'var(--bien)' : 'var(--mal)',
                   }}>
                     {m.cantidad > 0 ? `+${m.cantidad}` : m.cantidad}
                   </td>
-                  <td style={{ ...e.td, color: '#5B6470' }}>{m.motivo ?? '—'}</td>
+                  <td style={{ ...e.td, color: 'var(--texto-suave)' }}>{m.motivo ?? '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -500,25 +500,25 @@ function Fila({ k, v }: { k: string; v: string }) {
 const e: Record<string, React.CSSProperties> = {
   cabecera: { marginTop: 12, marginBottom: 18 },
   codigo: {
-    fontSize: 11, color: '#A3AAB3', letterSpacing: .5,
+    fontSize: 11, color: 'var(--texto-tenue)', letterSpacing: .5,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   titulo: { fontSize: 22, margin: '3px 0', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16, alignItems: 'start' },
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 4px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '8px 0 0', lineHeight: 1.55 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '8px 0 0', lineHeight: 1.55 },
 
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
-    padding: '7px 0', borderBottom: '1px solid #F4F4F0', fontSize: 12.5,
+    padding: '7px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 12.5,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valor: { margin: 0, fontWeight: 600, textAlign: 'right' },
 
   existencia: { marginTop: 14, padding: 14, borderRadius: 6, textAlign: 'center' },
@@ -526,7 +526,7 @@ const e: Record<string, React.CSSProperties> = {
   filaIngreso: { display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: 14 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '12px 0 5px' },
   input: {
-    padding: '9px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    padding: '9px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, fontSize: 13, boxSizing: 'border-box',
     fontFamily: 'inherit', width: '100%',
   },
@@ -537,8 +537,8 @@ const e: Record<string, React.CSSProperties> = {
   },
   bloque: {
     marginTop: 14, paddingTop: 14, paddingBottom: 14,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
-    borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
+    borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: 'var(--borde)',
     marginBottom: 14, maxWidth: 520,
   },
   dosCampos: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
@@ -548,12 +548,12 @@ const e: Record<string, React.CSSProperties> = {
     gap: 12, marginTop: 14,
   },
   tarjetaUnidad: {
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#EFEFEA',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 6, padding: 12,
   },
   cabeceraUnidad: { display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' },
   placa: { fontSize: 13, fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace' },
-  serial: { fontSize: 10, color: '#A3AAB3', fontFamily: 'ui-monospace,monospace' },
+  serial: { fontSize: 10, color: 'var(--texto-tenue)', fontFamily: 'ui-monospace,monospace' },
   chipEstado: { fontSize: 9.5, padding: '3px 8px', borderRadius: 999, fontWeight: 600, whiteSpace: 'nowrap' },
   inspecciones: {
     marginTop: 10, paddingTop: 9,
@@ -561,60 +561,60 @@ const e: Record<string, React.CSSProperties> = {
   },
   inspeccionesTitulo: {
     fontSize: 10, letterSpacing: .5, textTransform: 'uppercase',
-    color: '#8A929C', fontWeight: 600, marginBottom: 5,
+    color: 'var(--texto-tenue)', fontWeight: 600, marginBottom: 5,
   },
   inspeccionFila: {
     display: 'flex', alignItems: 'baseline', gap: 7,
-    fontSize: 11, color: '#14263F', textDecoration: 'none',
+    fontSize: 11, color: 'var(--texto)', textDecoration: 'none',
     padding: '3px 0',
   },
-  inspeccionFecha: { color: '#5B6470', whiteSpace: 'nowrap' },
+  inspeccionFecha: { color: 'var(--texto-suave)', whiteSpace: 'nowrap' },
   inspeccionCodigo: {
-    fontFamily: 'ui-monospace,monospace', fontSize: 10, color: '#8A929C',
+    fontFamily: 'ui-monospace,monospace', fontSize: 10, color: 'var(--texto-tenue)',
     flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
   },
   inspeccionVeredicto: { fontWeight: 600, whiteSpace: 'nowrap' },
-  inspeccionMas: { fontSize: 10.5, color: '#8A929C', marginTop: 4 },
-  asignado: { fontSize: 11, color: '#0369A1', marginTop: 6 },
+  inspeccionMas: { fontSize: 10.5, color: 'var(--texto-tenue)', marginTop: 4 },
+  asignado: { fontSize: 11, color: 'var(--info)', marginTop: 6 },
 
   zonaFotoUnidad: {
-    height: 90, background: '#FBFBF9', borderRadius: 4, marginTop: 10,
+    height: 90, background: 'var(--superficie-2)', borderRadius: 4, marginTop: 10,
     display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
   },
   fotoUnidad: { maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' },
-  sinFoto: { fontSize: 10.5, color: '#C5C5BD' },
+  sinFoto: { fontSize: 10.5, color: 'var(--borde-fuerte)' },
 
   accionesUnidad: { display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap', alignItems: 'center' },
   btnMini: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 11, cursor: 'pointer', textDecoration: 'underline', padding: 0,
   },
   selectMini: {
     fontSize: 10.5, padding: '3px 6px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 3, fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 3, fontFamily: 'inherit', background: 'var(--superficie)',
   },
 
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '8px', borderBottom: '1px solid #F4F4F0' },
-  chip: { fontSize: 10.5, background: '#F4F4F0', color: '#5B6470', padding: '2px 8px', borderRadius: 3 },
+  td: { padding: '8px', borderBottom: '1px solid var(--superficie-3)' },
+  chip: { fontSize: 10.5, background: 'var(--superficie-3)', color: 'var(--texto-suave)', padding: '2px 8px', borderRadius: 3 },
 
-  vacio: { fontSize: 12.5, color: '#8A929C', textAlign: 'center', padding: '24px 0', margin: 0 },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', textAlign: 'center', padding: '24px 0', margin: 0 },
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
   btn: {
-    color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '10px 20px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

@@ -141,33 +141,33 @@ export function Panel({
 
 const est: Record<string, React.CSSProperties> = {
   panel: {
-    background: '#fff', borderRadius: 14, padding: 20,
+    background: 'var(--superficie)', borderRadius: 14, padding: 20,
     boxShadow: '0 6px 18px rgba(0,0,0,.05)', marginBottom: 20,
   },
-  titulo: { fontSize: 14, margin: '0 0 2px', color: '#1f2937' },
-  descripcion: { fontSize: 11.5, color: '#6b7280', margin: '0 0 16px' },
+  titulo: { fontSize: 14, margin: '0 0 2px', color: 'var(--texto)' },
+  descripcion: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '0 0 16px' },
 
   filaBarra: { display: 'flex', alignItems: 'center', marginBottom: 7, gap: 10 },
   etiquetaBarra: {
-    width: 110, fontSize: 11.5, color: '#374151', textAlign: 'right',
+    width: 110, fontSize: 11.5, color: 'var(--texto-suave)', textAlign: 'right',
     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
     flexShrink: 0,
   },
-  pista: { flex: 1, background: '#f1f5f9', borderRadius: 4, height: 18, overflow: 'hidden' },
+  pista: { flex: 1, background: 'var(--superficie-3)', borderRadius: 4, height: 18, overflow: 'hidden' },
   barra: { height: '100%', borderRadius: 4, transition: 'width .3s' },
-  valorBarra: { width: 32, fontSize: 12, fontWeight: 600, color: '#1f2937', textAlign: 'right', flexShrink: 0 },
+  valorBarra: { width: 32, fontSize: 12, fontWeight: 600, color: 'var(--texto)', textAlign: 'right', flexShrink: 0 },
 
   zonaColumnas: {
     display: 'flex', alignItems: 'flex-end', gap: 6,
-    borderBottom: '1px solid #e5e7eb', paddingBottom: 0,
+    borderBottom: '1px solid var(--borde)', paddingBottom: 0,
   },
   columna: {
     flex: 1, display: 'flex', flexDirection: 'column',
     alignItems: 'center', justifyContent: 'flex-end', height: '100%',
   },
-  valorColumna: { fontSize: 10, fontWeight: 600, color: '#1f2937', marginBottom: 3, minHeight: 13 },
+  valorColumna: { fontSize: 10, fontWeight: 600, color: 'var(--texto)', marginBottom: 3, minHeight: 13 },
   barraColumna: { width: '100%', maxWidth: 42, borderRadius: '4px 4px 0 0' },
-  etiquetaColumna: { fontSize: 9.5, color: '#6b7280', marginTop: 5, whiteSpace: 'nowrap' },
+  etiquetaColumna: { fontSize: 9.5, color: 'var(--texto-suave)', marginTop: 5, whiteSpace: 'nowrap' },
 
-  vacio: { fontSize: 12, color: '#9ca3af', textAlign: 'center', padding: '20px 0', margin: 0 },
+  vacio: { fontSize: 12, color: 'var(--texto-tenue)', textAlign: 'center', padding: '20px 0', margin: 0 },
 };

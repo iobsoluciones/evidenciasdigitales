@@ -63,27 +63,27 @@ export default async function PaginaSubmanual({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 12.5, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
   cabecera: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '18px 22px', marginTop: 12,
   },
   numero: { fontSize: 10.5, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' },
-  h1: { fontSize: 24, fontWeight: 700, color: '#14263F', margin: '6px 0 6px' },
-  resumen: { fontSize: 14, color: '#5B6470', margin: 0, lineHeight: 1.6 },
+  h1: { fontSize: 24, fontWeight: 700, color: 'var(--texto)', margin: '6px 0 6px' },
+  resumen: { fontSize: 14, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6 },
   cubre: { display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 12 },
   chip: {
-    fontSize: 10, color: '#5B6470', background: '#F7F7F4',
-    border: '1px solid #E4E4DF', borderRadius: 20, padding: '2px 8px',
+    fontSize: 10, color: 'var(--texto-suave)', background: 'var(--fondo)',
+    border: '1px solid var(--borde)', borderRadius: 20, padding: '2px 8px',
   },
   navegacion: {
     display: 'flex', justifyContent: 'space-between', gap: 14,
-    marginTop: 40, paddingTop: 20, borderTop: '1px solid #E4E4DF',
+    marginTop: 40, paddingTop: 20, borderTop: '1px solid var(--borde)',
   },
   nav: {
     display: 'flex', flexDirection: 'column', gap: 3,
     textDecoration: 'none', color: 'inherit', maxWidth: '48%',
   },
-  navEtiqueta: { fontSize: 11, color: '#5B6470' },
-  navTitulo: { fontSize: 13.5, fontWeight: 600, color: '#14263F', lineHeight: 1.4 },
+  navEtiqueta: { fontSize: 11, color: 'var(--texto-suave)' },
+  navTitulo: { fontSize: 13.5, fontWeight: 600, color: 'var(--texto)', lineHeight: 1.4 },
 };

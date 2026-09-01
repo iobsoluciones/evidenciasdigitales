@@ -16,17 +16,17 @@ import {
 } from '@/lib/acciones-plan';
 
 const SEVERIDAD: Record<Severidad, { t: string; c: string; f: string }> = {
-  baja: { t: 'Baja', c: '#5B6470', f: '#F4F4F0' },
-  media: { t: 'Media', c: '#8A6100', f: '#FEF9C3' },
-  alta: { t: 'Alta', c: '#9A3412', f: '#FFEDD5' },
-  critica: { t: 'Crítica', c: '#9B1C1C', f: '#FEE2E2' },
+  baja: { t: 'Baja', c: 'var(--texto-suave)', f: 'var(--superficie-3)' },
+  media: { t: 'Media', c: 'var(--ambar)', f: 'var(--ambar-fondo)' },
+  alta: { t: 'Alta', c: 'var(--aviso)', f: 'var(--aviso-fondo)' },
+  critica: { t: 'Crítica', c: 'var(--mal)', f: 'var(--mal-fondo)' },
 };
 
 const ESTADO: Record<EstadoAccion, { t: string; c: string; f: string }> = {
-  abierta: { t: 'Abierta', c: '#0369A1', f: '#F0F9FF' },
-  en_proceso: { t: 'En proceso', c: '#8A6100', f: '#FEF9C3' },
-  vencida: { t: 'Vencida', c: '#9B1C1C', f: '#FEE2E2' },
-  cerrada: { t: 'Cerrada', c: '#15803D', f: '#F0FDF4' },
+  abierta: { t: 'Abierta', c: 'var(--info)', f: 'var(--info-fondo)' },
+  en_proceso: { t: 'En proceso', c: 'var(--ambar)', f: 'var(--ambar-fondo)' },
+  vencida: { t: 'Vencida', c: 'var(--mal)', f: 'var(--mal-fondo)' },
+  cerrada: { t: 'Cerrada', c: 'var(--bien)', f: 'var(--bien-fondo)' },
 };
 
 export default function VistaAcciones({
@@ -99,10 +99,10 @@ export default function VistaAcciones({
       {/* ---------- Contadores ---------- */}
       <div style={e.contadores}>
         <Contador n={acciones.length} etiqueta="Total" activo={filtro === ''} onClick={() => setFiltro('')} />
-        <Contador n={cuenta('vencida')} etiqueta="Vencidas" tono="#9B1C1C" activo={filtro === 'vencida'} onClick={() => setFiltro('vencida')} />
-        <Contador n={cuenta('abierta')} etiqueta="Abiertas" tono="#0369A1" activo={filtro === 'abierta'} onClick={() => setFiltro('abierta')} />
-        <Contador n={cuenta('en_proceso')} etiqueta="En proceso" tono="#8A6100" activo={filtro === 'en_proceso'} onClick={() => setFiltro('en_proceso')} />
-        <Contador n={cuenta('cerrada')} etiqueta="Cerradas" tono="#15803D" activo={filtro === 'cerrada'} onClick={() => setFiltro('cerrada')} />
+        <Contador n={cuenta('vencida')} etiqueta="Vencidas" tono="var(--mal)" activo={filtro === 'vencida'} onClick={() => setFiltro('vencida')} />
+        <Contador n={cuenta('abierta')} etiqueta="Abiertas" tono="var(--info)" activo={filtro === 'abierta'} onClick={() => setFiltro('abierta')} />
+        <Contador n={cuenta('en_proceso')} etiqueta="En proceso" tono="var(--ambar)" activo={filtro === 'en_proceso'} onClick={() => setFiltro('en_proceso')} />
+        <Contador n={cuenta('cerrada')} etiqueta="Cerradas" tono="var(--bien)" activo={filtro === 'cerrada'} onClick={() => setFiltro('cerrada')} />
       </div>
 
       {vencidas > 0 && filtro === '' && (
@@ -134,8 +134,8 @@ export default function VistaAcciones({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -164,7 +164,7 @@ export default function VistaAcciones({
                         {g.codigo ?? 'Inspección'}
                       </Link>
                     ) : (
-                      <span style={{ ...e.grupoTitulo, color: '#5B6470' }}>Sin inspección</span>
+                      <span style={{ ...e.grupoTitulo, color: 'var(--texto-suave)' }}>Sin inspección</span>
                     )}
                     <span style={e.grupoObjeto}>
                       {g.inspeccionId
@@ -177,7 +177,7 @@ export default function VistaAcciones({
                     <span>{g.acciones.length} acción{g.acciones.length !== 1 ? 'es' : ''}</span>
                     {abiertasGrupo > 0 && <span>· {abiertasGrupo} sin cerrar</span>}
                     {vencidasGrupo > 0 && (
-                      <span style={{ color: '#9B1C1C', fontWeight: 600 }}>· {vencidasGrupo} vencida{vencidasGrupo !== 1 ? 's' : ''}</span>
+                      <span style={{ color: 'var(--mal)', fontWeight: 600 }}>· {vencidasGrupo} vencida{vencidasGrupo !== 1 ? 's' : ''}</span>
                     )}
                   </div>
                 </header>
@@ -198,8 +198,8 @@ export default function VistaAcciones({
                   </div>
                   <span style={{
                     ...e.dias,
-                    color: a.estado_real === 'vencida' ? '#9B1C1C'
-                         : a.estado_real === 'cerrada' ? '#15803D' : '#8A929C',
+                    color: a.estado_real === 'vencida' ? 'var(--mal)'
+                         : a.estado_real === 'cerrada' ? 'var(--bien)' : 'var(--texto-tenue)',
                   }}>
                     {a.estado_real === 'cerrada'
                       ? `Cerrada ${fmt(a.fecha_cierre)}`
@@ -328,7 +328,7 @@ function FormularioNueva({
       <button
         onClick={() => onCrear(f, limpiar)}
         disabled={pendiente}
-        style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 12 }}
+        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}
       >
         {pendiente ? 'Guardando…' : 'Crear acción'}
       </button>
@@ -391,7 +391,7 @@ function GestionAccion({
             disabled={pendiente || !verificadoPor.trim()}
             style={{
               ...e.btnCerrar,
-              background: verificadoPor.trim() ? '#15803D' : '#C5C5BD',
+              background: verificadoPor.trim() ? 'var(--bien)' : 'var(--borde-fuerte)',
               cursor: verificadoPor.trim() ? 'pointer' : 'not-allowed',
             }}
           >
@@ -413,8 +413,8 @@ function Contador({ n, etiqueta, tono, activo, onClick }: {
   return (
     <button onClick={onClick} style={{
       ...e.contador,
-      borderColor: activo ? (tono ?? '#14263F') : '#E4E4DF',
-      background: activo ? '#FBFBF9' : '#fff',
+      borderColor: activo ? (tono ?? '#14263F') : 'var(--borde)',
+      background: activo ? 'var(--superficie-2)' : '#fff',
     }}>
       <span style={{ ...e.contadorN, color: tono ?? '#14263F' }}>{n}</span>
       <span style={e.contadorL}>{etiqueta}</span>
@@ -430,20 +430,20 @@ const e: Record<string, React.CSSProperties> = {
     display: 'flex', flexDirection: 'column', gap: 2,
   },
   contadorN: { fontSize: 20, fontWeight: 700 },
-  contadorL: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3 },
+  contadorL: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3 },
 
   alertaVencidas: {
-    background: '#FEE2E2', color: '#9B1C1C', padding: '10px 14px',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '10px 14px',
     borderRadius: 6, fontSize: 12.5, marginBottom: 14,
   },
 
   btn: {
-    color: '#fff', border: 'none', padding: '9px 18px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 18px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
 
   formulario: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 18, marginBottom: 16,
   },
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 },
@@ -451,14 +451,14 @@ const e: Record<string, React.CSSProperties> = {
   label: { display: 'block', fontSize: 11.5, fontWeight: 600, margin: '10px 0 5px' },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
-    boxSizing: 'border-box', fontFamily: 'inherit', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
+    boxSizing: 'border-box', fontFamily: 'inherit', background: 'var(--superficie)',
   },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 14 },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
-    borderRadius: 8, padding: '36px 24px', textAlign: 'center', color: '#5B6470',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 8, padding: '36px 24px', textAlign: 'center', color: 'var(--texto-suave)',
   },
 
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: 14 },
@@ -466,7 +466,7 @@ const e: Record<string, React.CSSProperties> = {
   // Agrupacion por inspeccion
   grupos: { display: 'flex', flexDirection: 'column', gap: 22 },
   grupo: {
-    borderLeftWidth: 2, borderLeftStyle: 'solid', borderLeftColor: '#E4E4DF',
+    borderLeftWidth: 2, borderLeftStyle: 'solid', borderLeftColor: 'var(--borde)',
     paddingLeft: 14,
   },
   grupoCabecera: {
@@ -474,14 +474,14 @@ const e: Record<string, React.CSSProperties> = {
     gap: 12, flexWrap: 'wrap', marginBottom: 10,
   },
   grupoTitulo: {
-    fontSize: 13.5, fontWeight: 700, color: '#14263F',
+    fontSize: 13.5, fontWeight: 700, color: 'var(--texto)',
     textDecoration: 'none', fontFamily: 'ui-monospace,monospace',
   },
-  grupoObjeto: { fontSize: 12, color: '#5B6470' },
-  grupoConteos: { fontSize: 11.5, color: '#8A929C', display: 'flex', gap: 5, flexWrap: 'wrap' },
-  limite: { color: '#8A929C' },
+  grupoObjeto: { fontSize: 12, color: 'var(--texto-suave)' },
+  grupoConteos: { fontSize: 11.5, color: 'var(--texto-tenue)', display: 'flex', gap: 5, flexWrap: 'wrap' },
+  limite: { color: 'var(--texto-tenue)' },
   tarjeta: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 16,
   },
   cabecera: {
@@ -496,48 +496,48 @@ const e: Record<string, React.CSSProperties> = {
   dias: { fontSize: 11, fontWeight: 600, whiteSpace: 'nowrap' },
 
   hallazgo: { fontSize: 13, margin: '0 0 10px', lineHeight: 1.5, fontWeight: 500 },
-  accionTexto: { fontSize: 12, color: '#374151', lineHeight: 1.55, marginBottom: 10 },
+  accionTexto: { fontSize: 12, color: 'var(--texto-suave)', lineHeight: 1.55, marginBottom: 10 },
   etiquetaMini: {
-    fontSize: 8.5, fontWeight: 700, color: '#8A929C',
+    fontSize: 8.5, fontWeight: 700, color: 'var(--texto-tenue)',
     letterSpacing: .5, marginRight: 4,
   },
   meta: {
     display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap',
-    fontSize: 11.5, color: '#5B6470', paddingTop: 10,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#F4F4F0',
+    fontSize: 11.5, color: 'var(--texto-suave)', paddingTop: 10,
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--superficie-3)',
   },
   origen: {
-    fontSize: 10.5, color: '#0369A1', textDecoration: 'none',
+    fontSize: 10.5, color: 'var(--info)', textDecoration: 'none',
     fontFamily: 'ui-monospace,monospace',
   },
   cierre: {
-    fontSize: 11, color: '#15803D', marginTop: 10, paddingTop: 8,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#F4F4F0',
+    fontSize: 11, color: 'var(--bien)', marginTop: 10, paddingTop: 8,
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--superficie-3)',
   },
 
   gestionar: {
-    background: 'none', border: 'none', color: '#5B6470', fontSize: 12,
+    background: 'none', border: 'none', color: 'var(--texto-suave)', fontSize: 12,
     cursor: 'pointer', textDecoration: 'underline', padding: '10px 0 0',
   },
   gestion: {
     marginTop: 12, paddingTop: 12,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#EFEFEA',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   botonesGestion: { marginTop: 10 },
   btnProceso: {
-    background: '#FEF9C3', color: '#8A6100', border: 'none',
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', border: 'none',
     padding: '8px 14px', borderRadius: 4, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
   zonaCierre: {
-    marginTop: 12, padding: 12, background: '#F0FDF4', borderRadius: 6,
+    marginTop: 12, padding: 12, background: 'var(--bien-fondo)', borderRadius: 6,
   },
-  notaCierre: { fontSize: 11, color: '#15803D', margin: '0 0 8px', lineHeight: 1.5 },
+  notaCierre: { fontSize: 11, color: 'var(--bien)', margin: '0 0 8px', lineHeight: 1.5 },
   btnCerrar: {
-    color: '#fff', border: 'none', padding: '9px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 16px', borderRadius: 4,
     fontSize: 12, fontWeight: 600,
   },
   eliminar: {
-    background: 'none', border: 'none', color: '#9B1C1C', fontSize: 11,
+    background: 'none', border: 'none', color: 'var(--mal)', fontSize: 11,
     cursor: 'pointer', textDecoration: 'underline', marginTop: 12, padding: 0,
   },
 };

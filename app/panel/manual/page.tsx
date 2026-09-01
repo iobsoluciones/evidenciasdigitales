@@ -40,7 +40,7 @@ export default function PaginaManual() {
             ]}
           />
         </div>
-        <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px solid #E4E4DF' }}>
+        <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px solid var(--borde)' }}>
           <p style={{ ...s.p, marginBottom: 14 }}>
             Y esta es la estructura sobre la que se apoya todo:
           </p>
@@ -88,14 +88,14 @@ export default function PaginaManual() {
 
 const s: Record<string, React.CSSProperties> = {
   cabecera: { marginBottom: 26 },
-  h1: { fontSize: 25, fontWeight: 700, color: '#14263F', margin: '0 0 6px' },
-  bajada: { fontSize: 14.5, color: '#5B6470', margin: 0, lineHeight: 1.65, maxWidth: 660 },
+  h1: { fontSize: 25, fontWeight: 700, color: 'var(--texto)', margin: '0 0 6px' },
+  bajada: { fontSize: 14.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.65, maxWidth: 660 },
   mapa: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '20px 22px',
   },
-  h2: { fontSize: 16.5, fontWeight: 700, color: '#14263F', margin: '0 0 6px' },
-  p: { fontSize: 13.5, color: '#5B6470', margin: 0, lineHeight: 1.65 },
+  h2: { fontSize: 16.5, fontWeight: 700, color: 'var(--texto)', margin: '0 0 6px' },
+  p: { fontSize: 13.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.65 },
   fase: { padding: '2px 0 2px 12px', marginBottom: 4 },
   rejilla: {
     display: 'grid', gap: 13, marginTop: 16,
@@ -103,16 +103,16 @@ const s: Record<string, React.CSSProperties> = {
   },
   tarjeta: {
     display: 'flex', flexDirection: 'column', gap: 5,
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '15px 17px 16px', textDecoration: 'none', color: 'inherit',
     minHeight: 132,
   },
   numero: { fontSize: 11, fontWeight: 700, letterSpacing: 1 },
-  tarjetaTitulo: { fontSize: 15, fontWeight: 700, color: '#14263F', lineHeight: 1.35 },
-  tarjetaResumen: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.55, flex: 1 },
+  tarjetaTitulo: { fontSize: 15, fontWeight: 700, color: 'var(--texto)', lineHeight: 1.35 },
+  tarjetaResumen: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.55, flex: 1 },
   cubre: { display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 6 },
   chip: {
-    fontSize: 10, color: '#5B6470', background: '#F7F7F4',
-    border: '1px solid #E4E4DF', borderRadius: 20, padding: '2px 8px',
+    fontSize: 10, color: 'var(--texto-suave)', background: 'var(--fondo)',
+    border: '1px solid var(--borde)', borderRadius: 20, padding: '2px 8px',
   },
 };

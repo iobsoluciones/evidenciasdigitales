@@ -47,12 +47,12 @@ export default async function PaginaInspeccion({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 13, color: '#5B6470', textDecoration: 'none' },
+  volver: { fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' },
   cabecera: { marginTop: 12, marginBottom: 18 },
   codigo: {
-    fontSize: 11, color: '#A3AAB3', letterSpacing: .5,
+    fontSize: 11, color: 'var(--texto-tenue)', letterSpacing: .5,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   titulo: { fontSize: 22, margin: '3px 0', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
 };

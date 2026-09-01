@@ -31,7 +31,7 @@ export default async function PaginaArticulo({
 
   return (
     <>
-      <Link href="/panel/dotacion" style={{ fontSize: 13, color: '#5B6470', textDecoration: 'none' }}>
+      <Link href="/panel/dotacion" style={{ fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' }}>
         ← Dotación
       </Link>
 

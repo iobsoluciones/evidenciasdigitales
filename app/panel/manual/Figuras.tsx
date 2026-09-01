@@ -11,9 +11,9 @@
  */
 
 const AZUL = '#14263F';
-const GRIS = '#5B6470';
-const BORDE = '#E4E4DF';
-const FONDO = '#F7F7F4';
+const GRIS = 'var(--texto-suave)';
+const BORDE = 'var(--borde)';
+const FONDO = 'var(--fondo)';
 
 /* ---------------------------------------------------------------- *
  *  Ventana: el marco de una pantalla del sistema
@@ -179,10 +179,10 @@ export function Tabla({
 /** Etiqueta de estado, con el mismo código de color que la aplicación. */
 export function Estado({ texto, tono }: { texto: string; tono: 'ok' | 'aviso' | 'mal' | 'neutro' }) {
   const tonos = {
-    ok: { background: '#E6F4EA', color: '#1E6B3A' },
-    aviso: { background: '#FFF7ED', color: '#9A3412' },
-    mal: { background: '#FDF2F2', color: '#9B1C1C' },
-    neutro: { background: '#F0F0EC', color: GRIS },
+    ok: { background: 'var(--bien-fondo)', color: 'var(--bien)' },
+    aviso: { background: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+    mal: { background: 'var(--mal-fondo)', color: 'var(--mal)' },
+    neutro: { background: 'var(--superficie-3)', color: GRIS },
   } as const;
   return <span style={{ ...f.estado, ...tonos[tono] }}>{texto}</span>;
 }
@@ -231,7 +231,7 @@ export function Flujo({
  * (un ítem crítico incumplido reprueba aunque el puntaje sea alto).
  */
 export function Decision({
-  pregunta, si, no, colorSi = '#1E6B3A', colorNo = '#9B1C1C',
+  pregunta, si, no, colorSi = 'var(--bien)', colorNo = 'var(--mal)',
 }: {
   pregunta: string; si: string; no: string; colorSi?: string; colorNo?: string;
 }) {
@@ -260,7 +260,7 @@ export function Jerarquia({
 }) {
   return (
     <div style={f.jerarquia}>
-      <div style={{ ...f.nodo, background: AZUL, color: '#fff', borderColor: AZUL }}>{raiz}</div>
+      <div style={{ ...f.nodo, background: AZUL, color: 'var(--sobre-marca)', borderColor: AZUL }}>{raiz}</div>
       <div style={{ ...f.flecha, color: GRIS, transform: 'rotate(90deg)', margin: '2px 0' }}>→</div>
       <div style={f.nodoFila}>
         {/* key por posición: dos ramas pueden llamarse igual. */}
@@ -342,8 +342,8 @@ function negritas(t: string): string {
 
 const f: Record<string, React.CSSProperties> = {
   ventana: {
-    border: `1px solid ${BORDE}`, borderRadius: 10, overflow: 'hidden',
-    background: '#fff', boxShadow: '0 1px 3px rgba(20,38,63,.06)',
+    border: `1px solid ${BORDE}`, borderRadius: 8, overflow: 'hidden',
+    background: 'var(--superficie)', boxShadow: '0 1px 3px rgba(20,38,63,.06)',
   },
   ventanaBarra: {
     display: 'flex', alignItems: 'center', gap: 6,
@@ -367,13 +367,13 @@ const f: Record<string, React.CSSProperties> = {
   },
   campoEtiqueta: { fontSize: 10, color: GRIS, marginBottom: 3, display: 'flex', alignItems: 'center' },
   campoCaja: {
-    border: `1px solid ${BORDE}`, borderRadius: 6, background: '#fff',
+    border: `1px solid ${BORDE}`, borderRadius: 6, background: 'var(--superficie)',
     padding: '6px 8px', fontSize: 11, color: AZUL, minHeight: 14,
   },
 
   tarjeta: {
     flex: '1 1 110px', minWidth: 95, border: `1px solid ${BORDE}`,
-    borderRadius: 8, padding: '9px 10px', background: '#fff',
+    borderRadius: 8, padding: '9px 10px', background: 'var(--superficie)',
   },
   tarjetaTitulo: { fontSize: 10, color: GRIS, display: 'flex', alignItems: 'center' },
   tarjetaDato: { fontSize: 19, fontWeight: 700, marginTop: 3, lineHeight: 1.1 },
@@ -394,17 +394,17 @@ const f: Record<string, React.CSSProperties> = {
   marca: {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
     width: 17, height: 17, borderRadius: '50%', background: '#C2410C',
-    color: '#fff', fontSize: 10.5, fontWeight: 700, flexShrink: 0,
+    color: 'var(--sobre-marca)', fontSize: 10.5, fontWeight: 700, flexShrink: 0,
   },
 
   flujo: { display: 'flex', flexWrap: 'wrap', alignItems: 'stretch', gap: 4 },
   flujoGrupo: { display: 'flex', alignItems: 'center', gap: 4, flex: '1 1 150px' },
   flujoCaja: {
-    flex: 1, border: '1px solid', borderRadius: 9, background: '#fff',
+    flex: 1, border: '1px solid', borderRadius: 8, background: 'var(--superficie)',
     padding: '10px 11px', minWidth: 120,
   },
   flujoNumero: {
-    width: 19, height: 19, borderRadius: '50%', color: '#fff',
+    width: 19, height: 19, borderRadius: '50%', color: 'var(--sobre-marca)',
     fontSize: 11, fontWeight: 700, display: 'flex',
     alignItems: 'center', justifyContent: 'center', marginBottom: 6,
   },
@@ -412,7 +412,7 @@ const f: Record<string, React.CSSProperties> = {
   flujoDetalle: { fontSize: 11, color: GRIS, marginTop: 3, lineHeight: 1.45 },
   flecha: { fontSize: 17, flexShrink: 0 },
 
-  decision: { border: `1px solid ${BORDE}`, borderRadius: 10, overflow: 'hidden', background: '#fff' },
+  decision: { border: `1px solid ${BORDE}`, borderRadius: 8, overflow: 'hidden', background: 'var(--superficie)' },
   decisionPregunta: {
     padding: '11px 14px', background: FONDO, fontSize: 12.5,
     fontWeight: 700, color: AZUL, borderBottom: `1px solid ${BORDE}`,
@@ -428,7 +428,7 @@ const f: Record<string, React.CSSProperties> = {
   nodoFila: { display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' },
   nodoRama: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 },
   nodo: {
-    border: `1px solid ${BORDE}`, borderRadius: 8, background: '#fff',
+    border: `1px solid ${BORDE}`, borderRadius: 8, background: 'var(--superficie)',
     padding: '7px 13px', fontSize: 11.5, fontWeight: 600, color: AZUL,
     textAlign: 'center', whiteSpace: 'nowrap',
   },
@@ -444,16 +444,16 @@ const f: Record<string, React.CSSProperties> = {
     borderRadius: 8, background: FONDO, padding: '12px 15px', margin: '18px 0 0',
   },
   reglaTitulo: { fontSize: 12.5, fontWeight: 700, color: AZUL, marginBottom: 5 },
-  reglaTexto: { fontSize: 13, color: '#374151', lineHeight: 1.6 },
+  reglaTexto: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.6 },
 
   ojo: {
     display: 'flex', gap: 11, alignItems: 'flex-start',
-    background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 8,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
     padding: '12px 15px', margin: '18px 0 0', fontSize: 13,
     color: '#7C2D12', lineHeight: 1.6,
   },
   ojoIcono: {
-    width: 19, height: 19, borderRadius: '50%', background: '#C2410C', color: '#fff',
+    width: 19, height: 19, borderRadius: '50%', background: '#C2410C', color: 'var(--sobre-marca)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1,
   },

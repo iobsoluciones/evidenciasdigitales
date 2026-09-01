@@ -158,12 +158,12 @@ export default function EditorEvaluacion({
 
   return (
     <>
-      <Link href={`/panel/capacitaciones/${capacitacionId}`} style={{ fontSize: 13, color: '#3b82f6' }}>
+      <Link href={`/panel/capacitaciones/${capacitacionId}`} style={{ fontSize: 13, color: 'var(--marca)' }}>
         ← Volver a la capacitación
       </Link>
 
-      <h1 style={{ fontSize: 22, color: '#1e3a8a', margin: '12px 0 2px' }}>Evaluación</h1>
-      <p style={{ color: '#6b7280', fontSize: 13, marginTop: 0 }}>{codigo} · {tema}</p>
+      <h1 style={{ fontSize: 22, color: 'var(--texto)', margin: '12px 0 2px' }}>Evaluación</h1>
+      <p style={{ color: 'var(--texto-suave)', fontSize: 13, marginTop: 0 }}>{codigo} · {tema}</p>
 
       {evaluacion && (
         <div style={e.avisoEdicion}>
@@ -175,8 +175,8 @@ export default function EditorEvaluacion({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -215,7 +215,7 @@ export default function EditorEvaluacion({
                 disabled={pendiente || !plantillaId}
                 style={{
                   ...e.btn,
-                  background: pendiente || !plantillaId ? '#cbd5e1' : color,
+                  background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : color,
                   cursor: pendiente || !plantillaId ? 'not-allowed' : 'pointer',
                 }}
               >
@@ -226,7 +226,7 @@ export default function EditorEvaluacion({
         )}
 
         {evaluacion && (
-          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #e5e7eb' }}>
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--borde)' }}>
             {!guardandoBanco ? (
               <button onClick={() => setGuardandoBanco(true)} style={e.enlace}>
                 + Guardar esta evaluación en el banco
@@ -242,7 +242,7 @@ export default function EditorEvaluacion({
                 <button
                   onClick={guardarEnBanco}
                   disabled={pendiente}
-                  style={{ ...e.btn, background: pendiente ? '#cbd5e1' : color }}
+                  style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
                 >
                   Guardar
                 </button>
@@ -296,11 +296,11 @@ export default function EditorEvaluacion({
         {/* Reparto de los 100 puntos */}
         <div style={{
           ...e.puntaje,
-          background: excede ? '#FDF2F2' : sumaPuntos === 100 ? '#F0FDF4' : '#FBFBF9',
-          borderColor: excede ? '#F5C6C6' : sumaPuntos === 100 ? '#BBF7D0' : '#EFEFEA',
+          background: excede ? 'var(--mal-fondo)' : sumaPuntos === 100 ? 'var(--bien-fondo)' : 'var(--superficie-2)',
+          borderColor: excede ? '#F5C6C6' : sumaPuntos === 100 ? '#BBF7D0' : 'var(--superficie-3)',
         }}>
           <div>
-            <strong style={{ fontSize: 13, color: excede ? '#9B1C1C' : '#14263F' }}>
+            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : '#14263F' }}>
               {sumaPuntos} de 100 puntos asignados
             </strong>
             <p style={{ ...e.nota, margin: '2px 0 0' }}>
@@ -377,8 +377,8 @@ export default function EditorEvaluacion({
                 style={{
                   ...e.input,
                   textTransform: 'uppercase',
-                  background: o.es_correcta ? '#f0fdf4' : '#fff',
-                  borderColor: o.es_correcta ? '#86efac' : '#cbd5e1',
+                  background: o.es_correcta ? 'var(--bien-fondo)' : '#fff',
+                  borderColor: o.es_correcta ? '#86efac' : 'var(--borde-fuerte)',
                 }}
               />
               {p.opciones.length > 2 && (
@@ -408,7 +408,7 @@ export default function EditorEvaluacion({
         <button onClick={guardar} disabled={pendiente || excede}
           style={{
             ...e.btn,
-            background: pendiente || excede ? '#cbd5e1' : color,
+            background: pendiente || excede ? 'var(--borde-fuerte)' : color,
             cursor: pendiente || excede ? 'not-allowed' : 'pointer',
           }}
           title={excede ? 'La suma de puntajes supera 100' : ''}>
@@ -433,35 +433,35 @@ export default function EditorEvaluacion({
 }
 
 const e: Record<string, React.CSSProperties> = {
-  card: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 16, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  card: { background: 'var(--superficie)', borderRadius: 14, padding: 20, marginBottom: 16, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   h2: { fontSize: 15, margin: '0 0 14px' },
-  h3: { fontSize: 14, margin: 0, color: '#1e3a8a' },
+  h3: { fontSize: 14, margin: 0, color: 'var(--texto)' },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
-  input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#374151', cursor: 'pointer', padding: '9px 0' },
+  input: { width: '100%', padding: '9px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer', padding: '9px 0' },
   filaOpcion: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7 },
-  x: { background: 'none', border: 'none', color: '#dc2626', fontSize: 18, cursor: 'pointer', padding: '0 4px', flexShrink: 0 },
-  enlace: { background: 'none', border: 'none', color: '#3b82f6', fontSize: 12, cursor: 'pointer', padding: '6px 0 0' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 18, cursor: 'pointer', padding: '0 4px', flexShrink: 0 },
+  enlace: { background: 'none', border: 'none', color: 'var(--marca)', fontSize: 12, cursor: 'pointer', padding: '6px 0 0' },
   acciones: { display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 6 },
-  btn: { color: '#fff', border: 'none', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnBorrar: { background: '#fff', color: '#b91c1c', border: '1px solid #fecaca', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnQuitar: { background: 'none', border: 'none', color: '#dc2626', fontSize: 12, cursor: 'pointer' },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnBorrar: { background: 'var(--superficie)', color: 'var(--mal)', border: '1px solid var(--mal-fondo)', padding: '11px 20px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnQuitar: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 12, cursor: 'pointer' },
   aviso: { padding: '10px 14px', borderRadius: 8, fontSize: 13, margin: '14px 0' },
-  tope: { fontSize: 11.5, color: '#6b7280', marginTop: 14 },
-  nota: { fontSize: 11.5, color: '#6b7280', margin: '4px 0 0' },
+  tope: { fontSize: 11.5, color: 'var(--texto-suave)', marginTop: 14 },
+  nota: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '4px 0 0' },
   puntaje: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     gap: 14, flexWrap: 'wrap', marginTop: 16, padding: '12px 14px',
     borderRadius: 6, borderWidth: 1, borderStyle: 'solid',
   },
   btnRepartir: {
-    background: '#fff', border: '1px solid #cbd5e1', color: '#1f2937',
+    background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', color: 'var(--texto)',
     padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
   avisoEdicion: {
-    background: '#FEFCE8', color: '#8A6100', padding: '10px 14px',
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', padding: '10px 14px',
     borderRadius: 6, fontSize: 12, margin: '14px 0', lineHeight: 1.5,
   },
 };

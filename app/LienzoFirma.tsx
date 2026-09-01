@@ -118,7 +118,7 @@ const LienzoFirma = forwardRef<LienzoFirmaRef, { color?: string }>(
             width: '100%',
             border: '2px dashed #cbd5e1',
             borderRadius: 8,
-            background: '#fff',
+            background: 'var(--superficie)',
             touchAction: 'none',
             cursor: 'crosshair',
             display: 'block',
@@ -129,8 +129,8 @@ const LienzoFirma = forwardRef<LienzoFirmaRef, { color?: string }>(
             type="button"
             onClick={limpiar}
             style={{
-              background: '#f1f5f9', border: '1px solid #cbd5e1',
-              color: '#1f2937', padding: '7px 16px', borderRadius: 6,
+              background: 'var(--superficie-3)', border: '1px solid var(--borde-fuerte)',
+              color: 'var(--texto)', padding: '7px 16px', borderRadius: 6,
               fontSize: 13, cursor: 'pointer',
             }}
           >

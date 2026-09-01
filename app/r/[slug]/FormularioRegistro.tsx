@@ -282,31 +282,31 @@ export default function FormularioRegistro({
       <div style={{ textAlign: 'center', padding: '26px 0' }}>
         <div style={{
           width: 60, height: 60, borderRadius: '50%',
-          background: aprobo === false ? '#FDF2F2' : '#DCFCE7',
-          color: aprobo === false ? '#9B1C1C' : '#15803D',
+          background: aprobo === false ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+          color: aprobo === false ? 'var(--mal)' : 'var(--bien)',
           fontSize: 30, lineHeight: '60px', margin: '0 auto 16px',
         }}>
           {aprobo === false ? '!' : '✓'}
         </div>
 
-        <h2 style={{ fontSize: 18, color: '#15803D', margin: '0 0 6px' }}>
+        <h2 style={{ fontSize: 18, color: 'var(--bien)', margin: '0 0 6px' }}>
           Asistencia registrada
         </h2>
 
         {resultado.puntaje !== null && (
           <div style={{
             margin: '16px auto 0', maxWidth: 280, padding: 16,
-            background: aprobo ? '#F0FDF4' : '#FDF2F2', borderRadius: 12,
+            background: aprobo ? 'var(--bien-fondo)' : 'var(--mal-fondo)', borderRadius: 12,
           }}>
-            <div style={{ fontSize: 30, fontWeight: 700, color: aprobo ? '#15803D' : '#9B1C1C' }}>
+            <div style={{ fontSize: 30, fontWeight: 700, color: aprobo ? 'var(--bien)' : 'var(--mal)' }}>
               {resultado.puntaje}%
             </div>
-            <div style={{ fontSize: 12.5, color: '#374151', marginTop: 4 }}>
+            <div style={{ fontSize: 12.5, color: 'var(--texto-suave)', marginTop: 4 }}>
               {aprobo ? 'Evaluación aprobada' : 'Evaluación no aprobada'}
               {evaluacion.puntajeMinimo ? ` · mínimo ${evaluacion.puntajeMinimo}%` : ''}
             </div>
             {resultado.intentos > 1 && (
-              <div style={{ fontSize: 11.5, color: '#8A929C', marginTop: 6 }}>
+              <div style={{ fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 6 }}>
                 Intento {resultado.intentos}
               </div>
             )}
@@ -325,13 +325,13 @@ export default function FormularioRegistro({
             >
               Reintentar evaluación
             </button>
-            <p style={{ fontSize: 11.5, color: '#8A929C', marginTop: 8 }}>
+            <p style={{ fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 8 }}>
               Tu asistencia ya quedó registrada. El reintento solo cambia la calificación.
             </p>
           </>
         )}
 
-        <p style={{ fontSize: 13, color: '#5B6470', marginTop: 16 }}>
+        <p style={{ fontSize: 13, color: 'var(--texto-suave)', marginTop: 16 }}>
           Gracias por participar. Ya puedes cerrar esta página.
         </p>
       </div>
@@ -364,7 +364,7 @@ export default function FormularioRegistro({
           <button
             onClick={enviarReintento}
             disabled={enviando}
-            style={{ ...s.boton, background: enviando ? '#C5C5BD' : color, flex: 1, marginTop: 0 }}
+            style={{ ...s.boton, background: enviando ? 'var(--borde-fuerte)' : color, flex: 1, marginTop: 0 }}
           >
             {enviando ? 'Calificando…' : 'Enviar respuestas'}
           </button>
@@ -393,7 +393,7 @@ export default function FormularioRegistro({
           autoFocus
           style={{
             ...s.input,
-            borderColor: avisoId ? (avisoId.ok ? '#86EFAC' : '#F5C6C6') : '#cbd5e1',
+            borderColor: avisoId ? (avisoId.ok ? '#86EFAC' : '#F5C6C6') : 'var(--borde-fuerte)',
           }}
         />
         <p style={s.ayuda}>
@@ -402,8 +402,8 @@ export default function FormularioRegistro({
         {avisoId && (
           <p style={{
             fontSize: 12, margin: '6px 0 0', padding: '8px 10px', borderRadius: 6,
-            background: avisoId.ok ? '#F0FDF4' : '#FDF2F2',
-            color: avisoId.ok ? '#15803D' : '#9B1C1C',
+            background: avisoId.ok ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+            color: avisoId.ok ? 'var(--bien)' : 'var(--mal)',
           }}>
             {avisoId.texto}
           </p>
@@ -454,7 +454,7 @@ export default function FormularioRegistro({
 
       <button type="submit" disabled={enviando || bloqueado} style={{
         ...s.boton,
-        background: enviando || bloqueado ? '#C5C5BD' : color,
+        background: enviando || bloqueado ? 'var(--borde-fuerte)' : color,
         cursor: enviando || bloqueado ? 'not-allowed' : 'pointer',
       }}>
         {enviando ? 'Enviando…' : 'Registrar mi asistencia'}
@@ -521,8 +521,8 @@ function Campo({
         style={{
           ...s.input,
           textTransform: mayus ? 'uppercase' : 'none',
-          background: bloqueado ? '#F4F4F0' : '#fff',
-          color: bloqueado ? '#5B6470' : '#1f2937',
+          background: bloqueado ? 'var(--superficie-3)' : '#fff',
+          color: bloqueado ? 'var(--texto-suave)' : '#1f2937',
           cursor: bloqueado ? 'not-allowed' : 'text',
         }}
       />
@@ -580,34 +580,34 @@ function CampoLista({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#1f2937' },
+  label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: 'var(--texto)' },
   input: {
     width: '100%', padding: '11px 12px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#cbd5e1', borderRadius: 8, fontSize: 14,
-    boxSizing: 'border-box', background: '#fff',
+    borderColor: 'var(--borde-fuerte)', borderRadius: 8, fontSize: 14,
+    boxSizing: 'border-box', background: 'var(--superficie)',
   },
-  ayuda: { fontSize: 11, color: '#6b7280', margin: '4px 0 0' },
-  enlace: { background: 'none', border: 'none', color: '#3b82f6', fontSize: 11.5, cursor: 'pointer', padding: '4px 0 0' },
-  evaluacion: { margin: '22px 0', padding: 18, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12 },
+  ayuda: { fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' },
+  enlace: { background: 'none', border: 'none', color: 'var(--marca)', fontSize: 11.5, cursor: 'pointer', padding: '4px 0 0' },
+  evaluacion: { margin: '22px 0', padding: 18, background: 'var(--superficie-3)', border: '1px solid var(--borde)', borderRadius: 12 },
   tituloEval: { fontSize: 15, margin: '0 0 4px' },
-  notaEval: { fontSize: 11.5, color: '#6b7280', margin: '0 0 16px', lineHeight: 1.5 },
+  notaEval: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '0 0 16px', lineHeight: 1.5 },
   pregunta: { marginBottom: 18 },
-  enunciado: { fontSize: 13.5, fontWeight: 600, color: '#1f2937', marginBottom: 4, lineHeight: 1.5 },
-  pista: { fontSize: 11, color: '#6b7280', marginBottom: 8 },
+  enunciado: { fontSize: 13.5, fontWeight: 600, color: 'var(--texto)', marginBottom: 4, lineHeight: 1.5 },
+  pista: { fontSize: 11, color: 'var(--texto-suave)', marginBottom: 8 },
   opcion: {
     display: 'flex', alignItems: 'center', padding: '10px 12px',
     borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     marginBottom: 6, fontSize: 13, cursor: 'pointer', lineHeight: 1.4,
   },
-  error: { marginTop: 14, padding: '11px 14px', background: '#FDF2F2', color: '#9B1C1C', borderRadius: 8, fontSize: 13 },
-  avisoReintento: { padding: '12px 14px', background: '#FEFCE8', color: '#8A6100', borderRadius: 8, fontSize: 12.5, marginBottom: 18, lineHeight: 1.5 },
+  error: { marginTop: 14, padding: '11px 14px', background: 'var(--mal-fondo)', color: 'var(--mal)', borderRadius: 8, fontSize: 13 },
+  avisoReintento: { padding: '12px 14px', background: 'var(--ambar-fondo)', color: 'var(--ambar)', borderRadius: 8, fontSize: 12.5, marginBottom: 18, lineHeight: 1.5 },
   boton: {
-    display: 'block', width: '100%', marginTop: 20, padding: 14, color: '#fff',
-    border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: 'pointer',
+    display: 'block', width: '100%', marginTop: 20, padding: 14, color: 'var(--sobre-marca)',
+    border: 'none', borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: 'pointer',
   },
   botonSec: {
-    background: '#fff', color: '#14263F', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', padding: '14px 20px', borderRadius: 10,
+    background: 'var(--superficie)', color: 'var(--texto)', borderWidth: 1, borderStyle: 'solid',
+    borderColor: 'var(--borde-fuerte)', padding: '14px 20px', borderRadius: 8,
     fontSize: 14, fontWeight: 600, cursor: 'pointer',
   },
 };

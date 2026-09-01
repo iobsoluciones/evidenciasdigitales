@@ -36,8 +36,8 @@ const ROLES: { v: RolEquipo; t: string }[] = [
   { v: 'otro', t: 'Otro' },
 ];
 
-const OK = '#1E6B3A';
-const OK_SUAVE = '#E6F4EA';
+const OK = 'var(--bien)';
+const OK_SUAVE = 'var(--bien-fondo)';
 
 const CLASES_INMEDIATA = ['acto', 'condicion'];
 const CLASES_BASICA = ['personal', 'trabajo'];
@@ -159,7 +159,7 @@ export default function Investigacion({
     if (hecho === clave) {
       return { ...s.botonSec, borderColor: OK, color: OK, background: OK_SUAVE };
     }
-    if (pendiente) return { ...s.botonSec, borderColor: '#E4E4DF', color: '#8A929C' };
+    if (pendiente) return { ...s.botonSec, borderColor: 'var(--borde)', color: 'var(--texto-tenue)' };
     return { ...s.botonSec, borderColor: color, color };
   }
 
@@ -292,7 +292,7 @@ export default function Investigacion({
             </div>
 
             <div style={s.filaFirma}>
-              <span style={{ ...s.estadoFirma, color: m.firma_url ? '#1E6B3A' : m.enlace_activo ? '#9A3412' : '#5B6470' }}>
+              <span style={{ ...s.estadoFirma, color: m.firma_url ? 'var(--bien)' : m.enlace_activo ? 'var(--aviso)' : 'var(--texto-suave)' }}>
                 {m.firma_url
                   ? '✓ Firmado'
                   : m.enlace_activo
@@ -324,7 +324,7 @@ export default function Investigacion({
               {!cerrada && equipo.length > 1 && (
                 <button
                   onClick={() => setEquipo((p) => p.filter((_, j) => j !== i))}
-                  style={{ ...s.botonPlano, color: '#9B1C1C' }}
+                  style={{ ...s.botonPlano, color: 'var(--mal)' }}
                   type="button"
                 >
                   Quitar
@@ -404,7 +404,7 @@ export default function Investigacion({
             {!cerrada && (
               <button
                 onClick={() => setTestigos((p) => p.filter((_, j) => j !== i))}
-                style={{ ...s.botonPlano, color: '#9B1C1C', marginTop: 6 }}
+                style={{ ...s.botonPlano, color: 'var(--mal)', marginTop: 6 }}
                 type="button"
               >
                 Quitar
@@ -549,8 +549,8 @@ export default function Investigacion({
                 <span style={s.enlaceNombre}>{e.nombre}</span>
                 <span style={{
                   ...s.enlaceEstado,
-                  background: e.enviado ? '#E6F4EA' : '#FFF7ED',
-                  color: e.enviado ? '#1E6B3A' : '#9A3412',
+                  background: e.enviado ? 'var(--bien-fondo)' : 'var(--aviso-fondo)',
+                  color: e.enviado ? 'var(--bien)' : 'var(--aviso)',
                 }}>
                   {e.enviado ? `Enviado a ${e.correo}` : 'No enviado'}
                 </span>
@@ -570,8 +570,8 @@ export default function Investigacion({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#E6F4EA' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#1E6B3A' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -607,8 +607,8 @@ export default function Investigacion({
                 ...s.botonLleno,
                 background: hecho === 'cierre' ? OK
                   : !puedeCerrar ? '#D8DCDF'
-                  : pendiente ? '#cbd5e1' : color,
-                color: !puedeCerrar && hecho !== 'cierre' ? '#8A929C' : '#fff',
+                  : pendiente ? 'var(--borde-fuerte)' : color,
+                color: !puedeCerrar && hecho !== 'cierre' ? 'var(--texto-tenue)' : '#fff',
                 cursor: puedeCerrar && !pendiente ? 'pointer' : 'not-allowed',
               }}
             >
@@ -657,7 +657,7 @@ function ListaCausas({
           {!bloqueado && causas.length > 1 && (
             <button
               onClick={() => onChange(causas.filter((_, j) => j !== i))}
-              style={{ ...s.botonPlano, color: '#9B1C1C', flex: '0 0 auto' }}
+              style={{ ...s.botonPlano, color: 'var(--mal)', flex: '0 0 auto' }}
               type="button"
             >
               ×
@@ -681,75 +681,75 @@ function ListaCausas({
 
 const s: Record<string, React.CSSProperties> = {
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '18px 20px', marginBottom: 14,
   },
-  h2: { fontSize: 15, fontWeight: 700, color: '#14263F', margin: '0 0 8px' },
-  nota: { fontSize: 12.5, color: '#5B6470', lineHeight: 1.6, margin: '0 0 12px' },
-  label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '10px 0 5px', color: '#14263F' },
+  h2: { fontSize: 15, fontWeight: 700, color: 'var(--texto)', margin: '0 0 8px' },
+  nota: { fontSize: 12.5, color: 'var(--texto-suave)', lineHeight: 1.6, margin: '0 0 12px' },
+  label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '10px 0 5px', color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '8px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '8px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
   fila: { display: 'flex', gap: 10, flexWrap: 'wrap' },
-  check: { display: 'flex', alignItems: 'center', fontSize: 13, cursor: 'pointer', color: '#14263F' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 13, cursor: 'pointer', color: 'var(--texto)' },
   casilla: { marginRight: 8, width: 15, height: 15 },
 
   miembro: {
-    border: '1px solid #F0F0EC', borderRadius: 9, padding: '10px 12px', marginBottom: 10,
+    border: '1px solid var(--superficie-3)', borderRadius: 8, padding: '10px 12px', marginBottom: 10,
   },
   filaFirma: { display: 'flex', alignItems: 'center', gap: 12, marginTop: 10, flexWrap: 'wrap' },
   estadoFirma: { fontSize: 12, fontWeight: 600 },
-  pista: { fontSize: 11.5, color: '#8A929C' },
+  pista: { fontSize: 11.5, color: 'var(--texto-tenue)' },
   enlaceCaja: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '14px 18px', marginBottom: 14,
   },
   enlaceTitulo: { fontSize: 13, fontWeight: 700, marginBottom: 6 },
-  enlaceFila: { borderTop: '1px solid #F0F0EC', paddingTop: 10, marginTop: 10 },
+  enlaceFila: { borderTop: '1px solid var(--superficie-3)', paddingTop: 10, marginTop: 10 },
   enlaceCab: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 },
   enlaceNombre: { fontSize: 13, fontWeight: 600 },
   enlaceEstado: { fontSize: 10.5, fontWeight: 700, padding: '2px 9px', borderRadius: 20 },
-  enlaceDetalle: { fontSize: 11.5, color: '#9A3412', lineHeight: 1.55, margin: '0 0 7px' },
+  enlaceDetalle: { fontSize: 11.5, color: 'var(--aviso)', lineHeight: 1.55, margin: '0 0 7px' },
 
-  causas: { marginTop: 16, paddingTop: 14, borderTop: '1px solid #F0F0EC' },
+  causas: { marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--superficie-3)' },
   causasDestacadas: {
-    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 9,
+    background: 'var(--fondo)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '12px 14px', marginTop: 16,
   },
-  causasTitulo: { fontSize: 13, fontWeight: 700, color: '#14263F', marginBottom: 4 },
+  causasTitulo: { fontSize: 13, fontWeight: 700, color: 'var(--texto)', marginBottom: 4 },
   filaCausa: { display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' },
 
   listaAcciones: { listStyle: 'none', padding: 0, margin: '0 0 14px' },
   itemAccion: {
-    fontSize: 13, color: '#14263F', padding: '8px 0',
-    borderBottom: '1px solid #F0F0EC', lineHeight: 1.5,
+    fontSize: 13, color: 'var(--texto)', padding: '8px 0',
+    borderBottom: '1px solid var(--superficie-3)', lineHeight: 1.5,
   },
   codigoAccion: { fontFamily: "'Consolas','Courier New',monospace", fontWeight: 600, marginRight: 6 },
-  metaAccion: { fontSize: 11.5, color: '#8A929C', marginTop: 2 },
+  metaAccion: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 2 },
 
   acciones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 14, flexWrap: 'wrap' },
   botonPlano: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '6px 10px',
   },
   botonSec: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderRadius: 8,
     padding: '8px 16px', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   botonLleno: {
-    color: '#fff', border: 'none', padding: '10px 22px', borderRadius: 9,
+    color: 'var(--sobre-marca)', border: 'none', padding: '10px 22px', borderRadius: 8,
     fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
   },
-  aviso: { padding: '11px 14px', borderRadius: 9, fontSize: 13, marginBottom: 14, lineHeight: 1.55 },
+  aviso: { padding: '11px 14px', borderRadius: 8, fontSize: 13, marginBottom: 14, lineHeight: 1.55 },
   listo: {
-    background: '#E6F4EA', color: '#1E6B3A', borderRadius: 8,
+    background: 'var(--bien-fondo)', color: 'var(--bien)', borderRadius: 8,
     padding: '10px 13px', fontSize: 12.5, fontWeight: 600,
   },
   faltas: {
     listStyle: 'none', margin: 0, padding: 0,
-    background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 8,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
   },
   falta: {
     fontSize: 12.5, color: '#7C2D12', lineHeight: 1.55,

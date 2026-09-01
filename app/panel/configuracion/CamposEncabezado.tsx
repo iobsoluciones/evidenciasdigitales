@@ -128,14 +128,14 @@ export default function CamposEncabezado({
 
       {/* ---------- Vista previa ---------- */}
       <div style={e.previa}>
-        <strong style={{ color: '#14263F', fontSize: 11 }}>
+        <strong style={{ color: 'var(--texto)', fontSize: 11 }}>
           Vista previa del encabezado:
         </strong>
         <div style={{ textAlign: 'center', marginTop: 10 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color }}>
             {titulo}
           </div>
-          <div style={{ fontSize: 9, color: '#8A929C', marginTop: 4 }}>
+          <div style={{ fontSize: 9, color: 'var(--texto-tenue)', marginTop: 4 }}>
             VERSIÓN: {version} • NOMENCLATURA: {nomenclatura || '—'}
             {visibles.map((c) => ` • ${c.etiqueta}: ${c.valor}`).join('')}
           </div>
@@ -145,8 +145,8 @@ export default function CamposEncabezado({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -154,7 +154,7 @@ export default function CamposEncabezado({
 
       {esAdmin && (
         <button onClick={guardar} disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}>
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}>
           {pendiente ? 'Guardando…' : 'Guardar encabezado'}
         </button>
       )}
@@ -169,22 +169,22 @@ export default function CamposEncabezado({
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, marginTop: 18, maxWidth: 640,
   },
   h2: { fontSize: 14.5, margin: '0 0 5px', fontWeight: 600 },
-  intro: { fontSize: 12, color: '#5B6470', margin: '0 0 16px', lineHeight: 1.5 },
+  intro: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 16px', lineHeight: 1.5 },
   fila: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 },
   input: {
-    padding: '9px 11px', border: '1px solid #DFDFD8', borderRadius: 4,
+    padding: '9px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
     fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
-  x: { background: 'none', border: 'none', color: '#B91C1C', fontSize: 18, cursor: 'pointer', padding: '0 4px' },
-  enlace: { background: 'none', border: 'none', color: '#5B6470', fontSize: 12, cursor: 'pointer', padding: '4px 0', textDecoration: 'underline' },
-  vacio: { fontSize: 12, color: '#8A929C', margin: '4px 0' },
-  tope: { fontSize: 11, color: '#8A6100', margin: '6px 0 0' },
-  previa: { marginTop: 18, padding: 14, background: '#F7F7F4', borderRadius: 6, fontSize: 12, color: '#5B6470' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 18, cursor: 'pointer', padding: '0 4px' },
+  enlace: { background: 'none', border: 'none', color: 'var(--texto-suave)', fontSize: 12, cursor: 'pointer', padding: '4px 0', textDecoration: 'underline' },
+  vacio: { fontSize: 12, color: 'var(--texto-tenue)', margin: '4px 0' },
+  tope: { fontSize: 11, color: 'var(--ambar)', margin: '6px 0 0' },
+  previa: { marginTop: 18, padding: 14, background: 'var(--fondo)', borderRadius: 6, fontSize: 12, color: 'var(--texto-suave)' },
   aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 6, fontSize: 13 },
-  btn: { color: '#fff', border: 'none', padding: '11px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer', marginTop: 16 },
-  legal: { fontSize: 11, color: '#8A929C', marginTop: 12, lineHeight: 1.5 },
+  btn: { color: 'var(--sobre-marca)', border: 'none', padding: '11px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer', marginTop: 16 },
+  legal: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 12, lineHeight: 1.5 },
 };

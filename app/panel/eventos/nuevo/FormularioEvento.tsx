@@ -80,7 +80,7 @@ export default function FormularioEvento({
               style={{
                 ...s.tipo,
                 ...(f.tipo === t.v
-                  ? { borderColor: color, background: '#fff', boxShadow: `0 0 0 1px ${color}` }
+                  ? { borderColor: color, background: 'var(--superficie)', boxShadow: `0 0 0 1px ${color}` }
                   : {}),
               }}
             >
@@ -205,7 +205,7 @@ export default function FormularioEvento({
         <button
           type="submit"
           disabled={pendiente}
-          style={{ ...s.boton, background: pendiente ? '#cbd5e1' : color }}
+          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Registrando…' : 'Registrar y continuar'}
         </button>
@@ -216,44 +216,44 @@ export default function FormularioEvento({
 
 const s: Record<string, React.CSSProperties> = {
   bloque: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 12,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 12,
     padding: '18px 20px', marginBottom: 14,
   },
-  h2: { fontSize: 15, fontWeight: 700, color: '#14263F', margin: '0 0 14px' },
+  h2: { fontSize: 15, fontWeight: 700, color: 'var(--texto)', margin: '0 0 14px' },
   tipos: {
     display: 'grid', gap: 8, marginBottom: 16,
     gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))',
   },
   tipo: {
-    textAlign: 'left', background: '#F7F7F4', border: '1px solid #E4E4DF',
-    borderRadius: 9, padding: '10px 12px', cursor: 'pointer',
+    textAlign: 'left', background: 'var(--fondo)', border: '1px solid var(--borde)',
+    borderRadius: 8, padding: '10px 12px', cursor: 'pointer',
     display: 'flex', flexDirection: 'column', gap: 3,
   },
   tipoT: { fontSize: 13, fontWeight: 700 },
-  tipoD: { fontSize: 11, color: '#5B6470', lineHeight: 1.45 },
-  label: { display: 'block', fontSize: 12.5, fontWeight: 600, margin: '12px 0 5px', color: '#14263F' },
+  tipoD: { fontSize: 11, color: 'var(--texto-suave)', lineHeight: 1.45 },
+  label: { display: 'block', fontSize: 12.5, fontWeight: 600, margin: '12px 0 5px', color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #E4E4DF',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde)',
     borderRadius: 8, fontSize: 13.5, boxSizing: 'border-box',
-    fontFamily: 'inherit', background: '#fff', color: '#14263F',
+    fontFamily: 'inherit', background: 'var(--superficie)', color: 'var(--texto)',
   },
-  ayuda: { fontSize: 11.5, color: '#5B6470', margin: '5px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '5px 0 0', lineHeight: 1.5 },
   fila: { display: 'flex', gap: 12, flexWrap: 'wrap' },
   checks: { display: 'flex', gap: 20, marginTop: 14, flexWrap: 'wrap' },
-  check: { display: 'flex', alignItems: 'center', fontSize: 13, cursor: 'pointer', color: '#14263F' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 13, cursor: 'pointer', color: 'var(--texto)' },
   casilla: { marginRight: 8, width: 15, height: 15 },
   aviso: {
-    marginTop: 12, background: '#FDF2F2', border: '1px solid #F5C6C6',
-    color: '#9B1C1C', borderRadius: 8, padding: '10px 13px',
+    marginTop: 12, background: 'var(--mal-fondo)', border: '1px solid #F5C6C6',
+    color: 'var(--mal)', borderRadius: 8, padding: '10px 13px',
     fontSize: 12.5, lineHeight: 1.6,
   },
   error: {
-    background: '#FDF2F2', color: '#9B1C1C', borderRadius: 8,
+    background: 'var(--mal-fondo)', color: 'var(--mal)', borderRadius: 8,
     padding: '10px 13px', fontSize: 13, marginBottom: 12,
   },
   acciones: { display: 'flex', justifyContent: 'flex-end' },
   boton: {
-    color: '#fff', border: 'none', padding: '11px 26px', borderRadius: 9,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 26px', borderRadius: 8,
     fontSize: 14, fontWeight: 600, cursor: 'pointer',
   },
 };

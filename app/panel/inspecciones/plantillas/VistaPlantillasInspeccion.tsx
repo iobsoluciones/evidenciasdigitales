@@ -135,8 +135,8 @@ export default function VistaPlantillasInspeccion({
           style={{
             ...e.filtro,
             background: tipo === '' ? color : '#fff',
-            color: tipo === '' ? '#fff' : '#5B6470',
-            borderColor: tipo === '' ? color : '#DFDFD8',
+            color: tipo === '' ? '#fff' : 'var(--texto-suave)',
+            borderColor: tipo === '' ? color : 'var(--borde-fuerte)',
           }}
         >
           Todas ({plantillas.length})
@@ -149,8 +149,8 @@ export default function VistaPlantillasInspeccion({
             style={{
               ...e.filtro,
               background: tipo === t.v ? color : '#fff',
-              color: tipo === t.v ? '#fff' : '#5B6470',
-              borderColor: tipo === t.v ? color : '#DFDFD8',
+              color: tipo === t.v ? '#fff' : 'var(--texto-suave)',
+              borderColor: tipo === t.v ? color : 'var(--borde-fuerte)',
             }}
           >
             {t.t} ({conteo(t.v)})
@@ -174,7 +174,7 @@ export default function VistaPlantillasInspeccion({
               style={{
                 ...e.botonVista,
                 background: vista === 'tarjetas' ? color : 'transparent',
-                color: vista === 'tarjetas' ? '#fff' : '#5B6470',
+                color: vista === 'tarjetas' ? '#fff' : 'var(--texto-suave)',
               }}
             >
               <span aria-hidden="true" style={{ fontSize: 13 }}>▦</span> Tarjetas
@@ -185,7 +185,7 @@ export default function VistaPlantillasInspeccion({
               style={{
                 ...e.botonVista,
                 background: vista === 'lista' ? color : 'transparent',
-                color: vista === 'lista' ? '#fff' : '#5B6470',
+                color: vista === 'lista' ? '#fff' : 'var(--texto-suave)',
               }}
             >
               <span aria-hidden="true" style={{ fontSize: 13 }}>☰</span> Lista
@@ -201,8 +201,8 @@ export default function VistaPlantillasInspeccion({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -221,7 +221,7 @@ export default function VistaPlantillasInspeccion({
           <button
             onClick={sembrar}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color, marginTop: 14, border: 'none', cursor: 'pointer' }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 14, border: 'none', cursor: 'pointer' }}
           >
             {pendiente ? 'Cargando…' : 'Cargar las 11 listas base'}
           </button>
@@ -267,7 +267,7 @@ export default function VistaPlantillasInspeccion({
                     </td>
                     <td style={e.tdTipo}>{TIPOS.find((t) => t.v === p.tipo)?.t ?? p.tipo}</td>
                     <td style={e.tdNum}>{p.items}</td>
-                    <td style={{ ...e.tdNum, color: p.criticos > 0 ? '#9B1C1C' : '#14263F', fontWeight: p.criticos > 0 ? 700 : 400 }}>
+                    <td style={{ ...e.tdNum, color: p.criticos > 0 ? 'var(--mal)' : '#14263F', fontWeight: p.criticos > 0 ? 700 : 400 }}>
                       {p.criticos}
                     </td>
                     <td style={e.tdNorma}>
@@ -395,7 +395,7 @@ function ThOrden({
       style={{
         ...e.thOrden,
         textAlign: izq ? 'left' : 'center',
-        color: activo ? '#14263F' : '#8A929C',
+        color: activo ? '#14263F' : 'var(--texto-tenue)',
       }}
     >
       {etiqueta}
@@ -410,7 +410,7 @@ function Fila({ k, v, destacado }: { k: string; v: string; destacado?: boolean }
   return (
     <div style={e.fila}>
       <dt style={e.clave}>{k}</dt>
-      <dd style={{ ...e.valor, color: destacado ? '#9B1C1C' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...e.valor, color: destacado ? 'var(--mal)' : '#14263F' }}>{v}</dd>
     </div>
   );
 }
@@ -424,16 +424,16 @@ const e: Record<string, React.CSSProperties> = {
 
   buscador: {
     padding: '7px 12px', borderRadius: 4, fontSize: 12.5,
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    fontFamily: 'inherit', color: '#14263F', minWidth: 240, flex: '1 1 240px',
-    maxWidth: 320, background: '#fff',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    fontFamily: 'inherit', color: 'var(--texto)', minWidth: 240, flex: '1 1 240px',
+    maxWidth: 320, background: 'var(--superficie)',
   },
 
   // Selector de vista (tarjetas / lista), igual que el inventario
   selectorVista: {
     display: 'inline-flex', gap: 2, marginLeft: 'auto',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    borderRadius: 5, padding: 2, background: '#fff',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 6, padding: 2, background: 'var(--superficie)',
   },
   botonVista: {
     display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -443,48 +443,48 @@ const e: Record<string, React.CSSProperties> = {
 
   // Vista lista
   tablaContenedor: {
-    overflowX: 'auto', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
-    borderRadius: 8, background: '#fff',
+    overflowX: 'auto', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
+    borderRadius: 8, background: 'var(--superficie)',
   },
   tabla: { width: '100%', borderCollapse: 'collapse', fontSize: 12.5 },
   thOrden: {
     padding: '10px 12px', fontSize: 10.5, textTransform: 'uppercase',
     letterSpacing: .3, fontWeight: 700, cursor: 'pointer',
-    whiteSpace: 'nowrap', borderBottom: '1px solid #E4E4DF', userSelect: 'none',
+    whiteSpace: 'nowrap', borderBottom: '1px solid var(--borde)', userSelect: 'none',
   },
   thNorma: {
     padding: '10px 12px', fontSize: 10.5, textTransform: 'uppercase', letterSpacing: .3,
-    fontWeight: 700, color: '#8A929C', textAlign: 'left',
-    borderBottom: '1px solid #E4E4DF', whiteSpace: 'nowrap',
+    fontWeight: 700, color: 'var(--texto-tenue)', textAlign: 'left',
+    borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
-  thAcciones: { borderBottom: '1px solid #E4E4DF', width: 150 },
-  filaTabla: { borderBottom: '1px solid #F4F4F0' },
+  thAcciones: { borderBottom: '1px solid var(--borde)', width: 150 },
+  filaTabla: { borderBottom: '1px solid var(--superficie-3)' },
   tdNombre: { padding: '9px 12px', verticalAlign: 'middle' },
-  enlaceNombre: { color: '#14263F', textDecoration: 'none', fontWeight: 600 },
+  enlaceNombre: { color: 'var(--texto)', textDecoration: 'none', fontWeight: 600 },
   baseChipMini: {
-    fontSize: 8.5, background: '#E0F2FE', color: '#0369A1',
+    fontSize: 8.5, background: 'var(--info-fondo)', color: 'var(--info)',
     padding: '2px 6px', borderRadius: 3, fontWeight: 600, marginLeft: 8,
   },
-  tdTipo: { padding: '9px 12px', color: '#5B6470' },
+  tdTipo: { padding: '9px 12px', color: 'var(--texto-suave)' },
   tdNum: { padding: '9px 12px', textAlign: 'center' },
-  tdNorma: { padding: '9px 12px', color: '#5B6470', display: 'flex', flexDirection: 'column' },
-  normaMini: { fontSize: 10, color: '#A3AAB3', marginTop: 1 },
+  tdNorma: { padding: '9px 12px', color: 'var(--texto-suave)', display: 'flex', flexDirection: 'column' },
+  normaMini: { fontSize: 10, color: 'var(--texto-tenue)', marginTop: 1 },
   tdAcciones: { padding: '9px 12px', whiteSpace: 'nowrap', textAlign: 'right' },
   accionMini: {
-    fontSize: 11.5, color: '#14263F', textDecoration: 'none', fontWeight: 600, marginRight: 12,
+    fontSize: 11.5, color: 'var(--texto)', textDecoration: 'none', fontWeight: 600, marginRight: 12,
   },
   accionMiniBtn: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 11.5, fontWeight: 600, cursor: 'pointer', padding: 0, fontFamily: 'inherit',
   },
   btn: {
-    color: '#fff', padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
+    color: 'var(--sobre-marca)', padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
 
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(290px,1fr))', gap: 16 },
   tarjeta: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column',
   },
   franja: { height: 3, flexShrink: 0 },
@@ -492,56 +492,56 @@ const e: Record<string, React.CSSProperties> = {
 
   cabeceraTarjeta: { display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' },
   tipoChip: {
-    fontSize: 9.5, background: '#F4F4F0', color: '#5B6470',
+    fontSize: 9.5, background: 'var(--superficie-3)', color: 'var(--texto-suave)',
     padding: '3px 8px', borderRadius: 3, textTransform: 'uppercase', letterSpacing: .4,
   },
   baseChip: {
-    fontSize: 9.5, background: '#E0F2FE', color: '#0369A1',
+    fontSize: 9.5, background: 'var(--info-fondo)', color: 'var(--info)',
     padding: '3px 8px', borderRadius: 3, fontWeight: 600,
   },
 
   nombre: { fontSize: 14, margin: '0 0 5px', fontWeight: 600, lineHeight: 1.35 },
-  descripcion: { fontSize: 11.5, color: '#5B6470', margin: '0 0 12px', lineHeight: 1.5 },
+  descripcion: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '0 0 12px', lineHeight: 1.5 },
 
   datos: { margin: 0 },
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 10,
-    padding: '4px 0', borderBottom: '1px solid #F4F4F0', fontSize: 11.5,
+    padding: '4px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 11.5,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valor: { margin: 0, fontWeight: 600, textAlign: 'right' },
 
   secciones: { display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 10 },
   seccion: {
-    fontSize: 9, background: '#FBFBF9', color: '#8A929C',
+    fontSize: 9, background: 'var(--superficie-2)', color: 'var(--texto-tenue)',
     padding: '2px 7px', borderRadius: 999,
   },
-  masSecciones: { fontSize: 9, color: '#A3AAB3', padding: '2px 4px' },
+  masSecciones: { fontSize: 9, color: 'var(--texto-tenue)', padding: '2px 4px' },
 
   acciones: { display: 'flex', gap: 6, marginTop: 14, flexWrap: 'wrap', flexShrink: 0 },
   btnAccion: {
-    color: '#fff', padding: '7px 14px', borderRadius: 4, fontSize: 11.5,
+    color: 'var(--sobre-marca)', padding: '7px 14px', borderRadius: 4, fontSize: 11.5,
     fontWeight: 600, textDecoration: 'none',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '7px 14px', borderRadius: 4, fontSize: 11.5,
     fontWeight: 600, cursor: 'pointer',
   },
   btnBorrar: {
-    background: 'none', border: 'none', color: '#9B1C1C',
+    background: 'none', border: 'none', color: 'var(--mal)',
     fontSize: 11, cursor: 'pointer', textDecoration: 'underline',
   },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
   explicacion: {
-    fontSize: 12.5, color: '#5B6470', margin: 0, lineHeight: 1.6,
+    fontSize: 12.5, color: 'var(--texto-suave)', margin: 0, lineHeight: 1.6,
     maxWidth: 460, marginLeft: 'auto', marginRight: 'auto',
   },
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 20, lineHeight: 1.65, maxWidth: 680 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 20, lineHeight: 1.65, maxWidth: 680 },
 };

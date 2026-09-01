@@ -46,7 +46,7 @@ export default async function PaginaNuevoEvento() {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  volver: { fontSize: 12.5, color: '#5B6470', textDecoration: 'none' },
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '10px 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: '0 0 20px', lineHeight: 1.6, maxWidth: 560 },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '10px 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 20px', lineHeight: 1.6, maxWidth: 560 },
 };

@@ -240,8 +240,8 @@ export default function FormularioEntrega({
             key={t}
             style={{
               ...e.paso,
-              borderBottomColor: paso === i + 1 ? color : '#E4E4DF',
-              color: paso === i + 1 ? color : paso > i + 1 ? '#15803D' : '#A3AAB3',
+              borderBottomColor: paso === i + 1 ? color : 'var(--borde)',
+              color: paso === i + 1 ? color : paso > i + 1 ? 'var(--bien)' : 'var(--texto-tenue)',
               fontWeight: paso === i + 1 ? 700 : 500,
             }}
           >
@@ -270,7 +270,7 @@ export default function FormularioEntrega({
                 onClick={() => setEmpleadoId(x.id)}
                 style={{
                   ...e.empleado,
-                  borderColor: empleadoId === x.id ? color : '#EFEFEA',
+                  borderColor: empleadoId === x.id ? color : 'var(--superficie-3)',
                   background: empleadoId === x.id ? '#F7FBFA' : '#fff',
                 }}
               >
@@ -302,7 +302,7 @@ export default function FormularioEntrega({
             disabled={!empleadoId || !entregadoPor.trim()}
             style={{
               ...e.btn,
-              background: !empleadoId || !entregadoPor.trim() ? '#C5C5BD' : color,
+              background: !empleadoId || !entregadoPor.trim() ? 'var(--borde-fuerte)' : color,
               marginTop: 18,
             }}
           >
@@ -348,7 +348,7 @@ export default function FormularioEntrega({
                     <div style={e.nombreArt}>{a.nombre}</div>
                     <div style={{
                       ...e.disponibles,
-                      color: agotado ? '#9B1C1C' : '#15803D',
+                      color: agotado ? 'var(--mal)' : 'var(--bien)',
                     }}>
                       {restante} disponible{restante === 1 ? '' : 's'}
                     </div>
@@ -473,7 +473,7 @@ export default function FormularioEntrega({
               disabled={lineas.length === 0 || errores.length > 0}
               style={{
                 ...e.btn,
-                background: lineas.length === 0 || errores.length > 0 ? '#C5C5BD' : color,
+                background: lineas.length === 0 || errores.length > 0 ? 'var(--borde-fuerte)' : color,
               }}
             >
               Revisar
@@ -511,7 +511,7 @@ export default function FormularioEntrega({
                     <tr key={l.clave}>
                       <td style={e.td}>{l.articulo.nombre}</td>
                       <td style={e.td}>{l.cantidad} {l.articulo.unidad.toLowerCase()}</td>
-                      <td style={{ ...e.td, color: '#5B6470', fontSize: 11.5 }}>
+                      <td style={{ ...e.td, color: 'var(--texto-suave)', fontSize: 11.5 }}>
                         {l.talla && `Talla ${l.talla}`}
                         {u && `Placa ${u.placa}`}
                         {l.estadoEntrega && ` · ${l.estadoEntrega}`}
@@ -543,8 +543,8 @@ export default function FormularioEntrega({
           {aviso && (
             <div style={{
               ...e.avisoCaja,
-              background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-              color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+              background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+              color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
             }}>
               {aviso.texto}
             </div>
@@ -555,7 +555,7 @@ export default function FormularioEntrega({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
             >
               {pendiente
                 ? 'Guardando…'
@@ -585,32 +585,32 @@ const e: Record<string, React.CSSProperties> = {
   },
 
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 5px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '8px 0 0', lineHeight: 1.55 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '8px 0 0', lineHeight: 1.55 },
 
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '14px 0 5px' },
-  labelMini: { display: 'block', fontSize: 10.5, color: '#8A929C', marginBottom: 3 },
+  labelMini: { display: 'block', fontSize: 10.5, color: 'var(--texto-tenue)', marginBottom: 3 },
   input: {
     width: '100%', padding: '9px 11px', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#DFDFD8', borderRadius: 4, fontSize: 13,
+    borderColor: 'var(--borde-fuerte)', borderRadius: 4, fontSize: 13,
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
   inputMini: {
-    padding: '6px 9px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    padding: '6px 9px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     borderRadius: 4, fontSize: 12, fontFamily: 'inherit',
-    boxSizing: 'border-box', width: '100%', background: '#fff',
+    boxSizing: 'border-box', width: '100%', background: 'var(--superficie)',
   },
 
   listaEmpleados: { display: 'grid', gap: 6, marginTop: 12, marginBottom: 4 },
   empleado: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '10px 12px', borderWidth: 1, borderStyle: 'solid', borderRadius: 5,
+    padding: '10px 12px', borderWidth: 1, borderStyle: 'solid', borderRadius: 6,
     cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit',
   },
-  metaEmpleado: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  metaEmpleado: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace' },
 
   gridArticulos: {
@@ -618,62 +618,62 @@ const e: Record<string, React.CSSProperties> = {
     gap: 10, marginTop: 14,
   },
   tarjetaArt: {
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#EFEFEA', borderRadius: 6,
-    padding: 8, background: '#fff', fontFamily: 'inherit', textAlign: 'center',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)', borderRadius: 6,
+    padding: 8, background: 'var(--superficie)', fontFamily: 'inherit', textAlign: 'center',
   },
   zonaFoto: {
-    height: 62, background: '#FBFBF9', borderRadius: 4, marginBottom: 6,
+    height: 62, background: 'var(--superficie-2)', borderRadius: 4, marginBottom: 6,
     display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
   },
   foto: { maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' },
-  sinFoto: { fontSize: 9.5, color: '#C5C5BD' },
+  sinFoto: { fontSize: 9.5, color: 'var(--borde-fuerte)' },
   nombreArt: { fontSize: 11, fontWeight: 600, lineHeight: 1.3, marginBottom: 4 },
   disponibles: { fontSize: 10, fontWeight: 600 },
 
   linea: {
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#EFEFEA',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 6, padding: 12, marginTop: 10,
   },
   lineaCabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
   camposLinea: { display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 8 },
-  x: { background: 'none', border: 'none', color: '#9B1C1C', fontSize: 17, cursor: 'pointer', padding: '0 4px' },
+  x: { background: 'none', border: 'none', color: 'var(--mal)', fontSize: 17, cursor: 'pointer', padding: '0 4px' },
 
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
-    padding: '6px 0', borderBottom: '1px solid #F4F4F0', fontSize: 12.5,
+    padding: '6px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 12.5,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valor: { margin: 0, fontWeight: 600, textAlign: 'right' },
 
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '8px', borderBottom: '1px solid #F4F4F0' },
+  td: { padding: '8px', borderBottom: '1px solid var(--superficie-3)' },
 
   errores: {
-    background: '#FDF2F2', color: '#9B1C1C', padding: '12px 15px',
+    background: 'var(--mal-fondo)', color: 'var(--mal)', padding: '12px 15px',
     borderRadius: 6, fontSize: 12.5, marginBottom: 16, lineHeight: 1.7,
   },
   avisoCaja: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
 
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
 };

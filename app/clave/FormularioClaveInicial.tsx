@@ -15,7 +15,6 @@ import { useRouter } from 'next/navigation';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 
 const MINIMO = 8;
-const MARCA = '#1e3a8a';
 
 export default function FormularioClaveInicial({
   correo,
@@ -107,7 +106,7 @@ export default function FormularioClaveInicial({
 
           <button type="submit" disabled={pendiente} style={{
             ...s.boton,
-            background: pendiente ? '#cbd5e1' : MARCA,
+            background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
             cursor: pendiente ? 'not-allowed' : 'pointer',
           }}>
             {pendiente ? 'Guardando…' : 'Guardar y entrar'}
@@ -121,34 +120,33 @@ export default function FormularioClaveInicial({
 const s: Record<string, React.CSSProperties> = {
   pantalla: {
     minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: 'linear-gradient(135deg,#f1f5f9,#e2e8f0)', padding: 20,
-    fontFamily: "'Segoe UI',Roboto,Arial,sans-serif",
+    background: 'var(--fondo)', padding: 20,
   },
   tarjeta: {
-    width: '100%', maxWidth: 420, background: '#fff', borderRadius: 18,
+    width: '100%', maxWidth: 420, background: 'var(--superficie)', borderRadius: 18,
     boxShadow: '0 10px 30px rgba(0,0,0,.08)', padding: '32px 30px',
   },
-  titulo: { fontSize: 21, color: MARCA, margin: '0 0 6px' },
-  sub: { fontSize: 13.5, color: '#6b7280', margin: '0 0 20px', lineHeight: 1.6 },
+  titulo: { fontSize: 21, color: 'var(--texto)', margin: '0 0 6px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 20px', lineHeight: 1.6 },
   usuario: {
     display: 'flex', flexDirection: 'column', gap: 2,
-    background: '#F7F7F4', border: '1px solid #E4E4DF', borderRadius: 10,
+    background: 'var(--fondo)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: '10px 13px', marginBottom: 20,
   },
-  usuarioEtiqueta: { fontSize: 10.5, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4 },
-  usuarioValor: { fontSize: 14, color: '#14263F', wordBreak: 'break-all' },
-  label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#1f2937' },
+  usuarioEtiqueta: { fontSize: 10.5, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .4 },
+  usuarioValor: { fontSize: 14, color: 'var(--texto)', wordBreak: 'break-all' },
+  label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: 'var(--texto)' },
   input: {
-    width: '100%', padding: '11px 12px', border: '1px solid #cbd5e1',
+    width: '100%', padding: '11px 12px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 8, fontSize: 14, boxSizing: 'border-box',
   },
-  ayuda: { fontSize: 11, color: '#6b7280', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' },
   error: {
-    marginTop: 16, padding: '11px 13px', background: '#fef2f2',
-    color: '#dc2626', borderRadius: 8, fontSize: 13, lineHeight: 1.55,
+    marginTop: 16, padding: '11px 13px', background: 'var(--mal-fondo)',
+    color: 'var(--mal)', borderRadius: 8, fontSize: 13, lineHeight: 1.55,
   },
   boton: {
-    width: '100%', marginTop: 22, padding: 13, color: '#fff', border: 'none',
-    borderRadius: 10, fontSize: 15, fontWeight: 600,
+    width: '100%', marginTop: 22, padding: 13, color: 'var(--sobre-marca)', border: 'none',
+    borderRadius: 8, fontSize: 15, fontWeight: 600,
   },
 };

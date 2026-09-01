@@ -61,17 +61,17 @@ export default async function PaginaEmpleados() {
 
 const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: '0 0 22px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 22px' },
   enlaceRetirados: {
     display: 'inline-flex', alignItems: 'center', gap: 8,
-    fontSize: 12.5, color: '#14263F', textDecoration: 'none',
-    border: '1px solid #DFDFD8', background: '#fff',
-    borderRadius: 5, padding: '7px 12px', marginBottom: 18,
+    fontSize: 12.5, color: 'var(--texto)', textDecoration: 'none',
+    border: '1px solid var(--borde-fuerte)', background: 'var(--superficie)',
+    borderRadius: 6, padding: '7px 12px', marginBottom: 18,
   },
   pastilla: {
-    background: '#F2F4F7', color: '#5B6470', borderRadius: 10,
+    background: '#F2F4F7', color: 'var(--texto-suave)', borderRadius: 8,
     padding: '1px 8px', fontSize: 11, fontWeight: 600,
   },
-  vacio: { background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

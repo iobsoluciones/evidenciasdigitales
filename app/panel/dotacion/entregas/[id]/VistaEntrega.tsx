@@ -126,8 +126,8 @@ export default function VistaEntrega({
 
         <span style={{
           ...s.chipEstado,
-          background: esBorrador ? '#FEF9C3' : '#DCFCE7',
-          color: esBorrador ? '#8A6100' : '#15803D',
+          background: esBorrador ? 'var(--ambar-fondo)' : 'var(--bien-fondo)',
+          color: esBorrador ? 'var(--ambar)' : 'var(--bien)',
         }}>
           {esBorrador ? 'Borrador · sin firmar' : 'Firmada'}
         </span>
@@ -136,8 +136,8 @@ export default function VistaEntrega({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -182,7 +182,7 @@ export default function VistaEntrega({
                     </div>
                   </td>
                   <td style={s.td}>{it.cantidad} {it.unidad.toLowerCase()}</td>
-                  <td style={{ ...s.td, fontSize: 11.5, color: '#5B6470' }}>
+                  <td style={{ ...s.td, fontSize: 11.5, color: 'var(--texto-suave)' }}>
                     {it.talla && `Talla ${it.talla}`}
                     {it.placa && <span style={s.mono}>{it.placa}</span>}
                     {it.serial && <div style={{ ...s.mono, fontSize: 10 }}>{it.serial}</div>}
@@ -196,10 +196,10 @@ export default function VistaEntrega({
                   <td style={s.td}>
                     {it.tipo === 'retornable' ? (
                       it.fecha_devolucion
-                        ? <span style={{ color: '#15803D', fontWeight: 600 }}>Devuelto</span>
-                        : <span style={{ color: '#0369A1', fontWeight: 600 }}>En uso</span>
+                        ? <span style={{ color: 'var(--bien)', fontWeight: 600 }}>Devuelto</span>
+                        : <span style={{ color: 'var(--info)', fontWeight: 600 }}>En uso</span>
                     ) : (
-                      <span style={{ color: '#8A929C' }}>
+                      <span style={{ color: 'var(--texto-tenue)' }}>
                         {it.estado_entrega?.toUpperCase() ?? 'Consumible'}
                       </span>
                     )}
@@ -286,7 +286,7 @@ export default function VistaEntrega({
                 <button
                   onClick={firmar}
                   disabled={ocupado}
-                  style={{ ...s.btn, background: ocupado ? '#C5C5BD' : color }}
+                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
                 >
                   {subiendo ? 'Guardando firmas…' : pendiente ? 'Aplicando…' : 'Confirmar entrega'}
                 </button>
@@ -347,80 +347,80 @@ const s: Record<string, React.CSSProperties> = {
     gap: 14, flexWrap: 'wrap', marginTop: 12, marginBottom: 18,
   },
   codigo: {
-    fontSize: 11, color: '#A3AAB3', letterSpacing: .5,
+    fontSize: 11, color: 'var(--texto-tenue)', letterSpacing: .5,
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   titulo: { fontSize: 22, margin: '3px 0', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11.5 },
   chipEstado: { fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 999 },
 
   card: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 12px', fontWeight: 600 },
-  nota: { fontSize: 11.5, color: '#8A929C', margin: '8px 0 0', lineHeight: 1.6 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '8px 0 0', lineHeight: 1.6 },
 
   fila: {
     display: 'flex', justifyContent: 'space-between', gap: 12,
-    padding: '7px 0', borderBottom: '1px solid #F4F4F0', fontSize: 12.5,
+    padding: '7px 0', borderBottom: '1px solid var(--superficie-3)', fontSize: 12.5,
   },
-  clave: { color: '#8A929C', margin: 0 },
+  clave: { color: 'var(--texto-tenue)', margin: 0 },
   valor: { margin: 0, fontWeight: 600, textAlign: 'right', maxWidth: '65%' },
 
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 8px', borderBottom: '1px solid #F4F4F0', verticalAlign: 'top' },
-  miniatura: { width: 34, height: 34, objectFit: 'contain', background: '#FBFBF9', borderRadius: 3 },
-  codigoItem: { fontSize: 10, color: '#A3AAB3', fontFamily: 'ui-monospace,monospace' },
+  td: { padding: '9px 8px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
+  miniatura: { width: 34, height: 34, objectFit: 'contain', background: 'var(--superficie-2)', borderRadius: 3 },
+  codigoItem: { fontSize: 10, color: 'var(--texto-tenue)', fontFamily: 'ui-monospace,monospace' },
 
   declaracion: {
-    fontSize: 12.5, lineHeight: 1.7, color: '#374151', margin: 0,
-    padding: 14, background: '#FAFAF8', borderRadius: 6, textAlign: 'justify',
+    fontSize: 12.5, lineHeight: 1.7, color: 'var(--texto-suave)', margin: 0,
+    padding: 14, background: 'var(--superficie-2)', borderRadius: 6, textAlign: 'justify',
   },
 
   dosFirmas: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 18 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6 },
-  pieFirma: { fontSize: 11, color: '#8A929C', textAlign: 'center', margin: '6px 0 0' },
+  pieFirma: { fontSize: 11, color: 'var(--texto-tenue)', textAlign: 'center', margin: '6px 0 0' },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
   btn: {
-    color: '#fff', border: 'none', padding: '11px 22px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '11px 22px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none',
   },
   btnSec: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnBorrar: {
-    background: '#fff', color: '#9B1C1C',
+    background: 'var(--superficie)', color: 'var(--mal)',
     borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   enlaceCaja: {
-    background: '#F0F9FF', borderWidth: 1, borderStyle: 'solid',
+    background: 'var(--info-fondo)', borderWidth: 1, borderStyle: 'solid',
     borderColor: '#BAE6FD', borderRadius: 6, padding: 14, marginTop: 14,
   },
-  notaEnlace: { fontSize: 11.5, color: '#0369A1', margin: '4px 0 8px', lineHeight: 1.55 },
+  notaEnlace: { fontSize: 11.5, color: 'var(--info)', margin: '4px 0 8px', lineHeight: 1.55 },
   campoEnlace: {
     width: '100%', padding: '8px 10px', fontSize: 11.5,
     borderWidth: 1, borderStyle: 'solid', borderColor: '#BAE6FD',
-    borderRadius: 4, boxSizing: 'border-box', background: '#fff',
+    borderRadius: 4, boxSizing: 'border-box', background: 'var(--superficie)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   btnDeshabilitado: {
-    background: '#F4F4F0', color: '#A3AAB3',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie-3)', color: 'var(--texto-tenue)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     cursor: 'not-allowed', display: 'inline-block',
   },
   btnSecEnlace: {
-    background: '#fff', color: '#14263F',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
     padding: '10px 20px', borderRadius: 4, fontSize: 13, fontWeight: 600,
     textDecoration: 'none', display: 'inline-block',
   },

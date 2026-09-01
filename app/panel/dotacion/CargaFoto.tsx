@@ -151,7 +151,7 @@ export default function CargaFoto({
       {aviso && (
         <p style={{
           ...e.aviso,
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </p>
@@ -167,24 +167,24 @@ export default function CargaFoto({
 const e: Record<string, React.CSSProperties> = {
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6 },
   marco: {
-    width: '100%', background: '#FBFBF9',
-    borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8', borderRadius: 6,
+    width: '100%', background: 'var(--superficie-2)',
+    borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)', borderRadius: 6,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     marginBottom: 10, overflow: 'hidden',
   },
   imagen: { maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' },
-  vacio: { fontSize: 12, color: '#A3AAB3' },
+  vacio: { fontSize: 12, color: 'var(--texto-tenue)' },
   acciones: { display: 'flex', gap: 8 },
   btn: {
-    background: '#14263F', color: '#fff', padding: '8px 16px', borderRadius: 4,
+    background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '8px 16px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, textAlign: 'center', flex: 1,
   },
   btnQuitar: {
-    background: '#fff', color: '#9B1C1C',
+    background: 'var(--superficie)', color: 'var(--mal)',
     borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },
   aviso: { fontSize: 11.5, margin: '8px 0 0' },
-  nota: { fontSize: 11, color: '#8A929C', margin: '6px 0 0', lineHeight: 1.5 },
+  nota: { fontSize: 11, color: 'var(--texto-tenue)', margin: '6px 0 0', lineHeight: 1.5 },
 };

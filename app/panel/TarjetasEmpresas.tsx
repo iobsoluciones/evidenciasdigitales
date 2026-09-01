@@ -87,8 +87,8 @@ export default function TarjetasEmpresas({
       {aviso && (
         <div style={{
           ...s.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#166534' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -106,7 +106,7 @@ export default function TarjetasEmpresas({
           <p style={{ fontSize: 15, margin: '0 0 6px', fontWeight: 600 }}>
             Aún no has agregado empresas
           </p>
-          <p style={{ fontSize: 13.5, color: '#5B6470', margin: '0 0 18px' }}>
+          <p style={{ fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 18px' }}>
             Registra la primera para empezar a programar sus capacitaciones.
           </p>
           <button onClick={() => setAbierto(true)} style={s.btn}>Agregar la primera</button>
@@ -115,8 +115,8 @@ export default function TarjetasEmpresas({
         <div style={s.grilla}>
           {empresas.map((e) => {
             const p = e.participacion === null ? null : Number(e.participacion);
-            const tono = p === null ? '#8A929C'
-                       : p >= 80 ? '#166534' : p >= 50 ? '#92400E' : '#9B1C1C';
+            const tono = p === null ? 'var(--texto-tenue)'
+                       : p >= 80 ? 'var(--bien)' : p >= 50 ? 'var(--aviso)' : 'var(--mal)';
             return (
               <article key={e.id} style={s.tarjeta}>
                 <div style={{ ...s.franja, background: e.color_primario }} />
@@ -171,7 +171,7 @@ export default function TarjetasEmpresas({
         <div style={s.velo} onClick={(ev) => { if (ev.target === ev.currentTarget) setAbierto(false); }}>
           <div style={s.modal}>
             <h2 style={{ fontSize: 17, margin: '0 0 4px' }}>Agregar empresa</h2>
-            <p style={{ fontSize: 12.5, color: '#5B6470', margin: '0 0 18px' }}>
+            <p style={{ fontSize: 12.5, color: 'var(--texto-suave)', margin: '0 0 18px' }}>
               Podrás configurar su logo y nomenclatura después.
             </p>
 
@@ -209,7 +209,7 @@ export default function TarjetasEmpresas({
             </div>
 
             {aviso?.tipo === 'error' && (
-              <div style={{ ...s.aviso, background: '#FDF2F2', color: '#9B1C1C' }}>{aviso.texto}</div>
+              <div style={{ ...s.aviso, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>{aviso.texto}</div>
             )}
 
             <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
@@ -260,11 +260,11 @@ const s: Record<string, React.CSSProperties> = {
     gap: 16, flexWrap: 'wrap', marginBottom: 20,
   },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
 
   grilla: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: 16 },
   tarjeta: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     overflow: 'hidden', display: 'flex', flexDirection: 'column',
   },
   franja: { height: 3 },
@@ -272,7 +272,7 @@ const s: Record<string, React.CSSProperties> = {
   tarjetaCabecera: { display: 'flex', gap: 11, alignItems: 'center', marginBottom: 14 },
   logo: { width: 38, height: 38, objectFit: 'contain', borderRadius: 4, flexShrink: 0 },
   logoVacio: {
-    width: 38, height: 38, borderRadius: 4, color: '#fff', flexShrink: 0,
+    width: 38, height: 38, borderRadius: 4, color: 'var(--sobre-marca)', flexShrink: 0,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 13, fontWeight: 700, letterSpacing: .5,
   },
@@ -280,9 +280,9 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 14.5, margin: 0, fontWeight: 600, whiteSpace: 'nowrap',
     overflow: 'hidden', textOverflow: 'ellipsis',
   },
-  meta: { fontSize: 11, color: '#8A929C', marginTop: 2 },
+  meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   activa: {
-    fontSize: 11, color: '#166534', background: '#F0FDF4',
+    fontSize: 11, color: 'var(--bien)', background: 'var(--bien-fondo)',
     border: '1px solid #BBF7D0', borderRadius: 4,
     padding: '5px 9px', marginBottom: 12,
   },
@@ -290,33 +290,33 @@ const s: Record<string, React.CSSProperties> = {
     display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8,
     margin: '0 0 12px', paddingTop: 12, borderTop: '1px solid #F0F0EB',
   },
-  datoClave: { fontSize: 9.5, textTransform: 'uppercase', letterSpacing: .5, color: '#8A929C', margin: 0 },
+  datoClave: { fontSize: 9.5, textTransform: 'uppercase', letterSpacing: .5, color: 'var(--texto-tenue)', margin: 0 },
   datoValor: { fontSize: 17, fontWeight: 700, margin: '2px 0 0' },
-  ultima: { fontSize: 11, color: '#8A929C', marginBottom: 14, flex: 1 },
+  ultima: { fontSize: 11, color: 'var(--texto-tenue)', marginBottom: 14, flex: 1 },
 
   btn: {
-    background: '#14263F', color: '#fff', border: 'none',
-    padding: '10px 18px', borderRadius: 5, fontSize: 13,
+    background: 'var(--marca)', color: 'var(--sobre-marca)', border: 'none',
+    padding: '10px 18px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   btnOff: { background: '#C9CED4', cursor: 'not-allowed' },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
-    padding: '10px 18px', borderRadius: 5, fontSize: 13,
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
+    padding: '10px 18px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   btnEntrar: {
-    width: '100%', background: '#F2F4F7', color: '#14263F',
-    border: '1px solid #DFDFD8', padding: '9px', borderRadius: 5,
+    width: '100%', background: '#F2F4F7', color: 'var(--texto)',
+    border: '1px solid var(--borde-fuerte)', padding: '9px', borderRadius: 6,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
 
   vacio: {
-    background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
     padding: '48px 24px', textAlign: 'center',
   },
   limite: {
-    background: '#FEFCE8', border: '1px solid #FDE68A', color: '#92400E',
+    background: 'var(--ambar-fondo)', border: '1px solid var(--ambar-fondo)', color: 'var(--aviso)',
     padding: '11px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16,
   },
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },
@@ -326,16 +326,16 @@ const s: Record<string, React.CSSProperties> = {
     display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
     padding: '40px 16px', overflowY: 'auto',
   },
-  modal: { background: '#fff', borderRadius: 10, padding: 24, width: '100%', maxWidth: 520 },
+  modal: { background: 'var(--superficie)', borderRadius: 8, padding: 24, width: '100%', maxWidth: 520 },
   dos: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
   input: {
-    width: '100%', padding: '9px 11px', border: '1px solid #DFDFD8',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 6, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   prefijo: {
-    background: '#F2F4F7', border: '1px solid #DFDFD8', borderRight: 'none',
-    borderRadius: '6px 0 0 6px', padding: '9px 10px', fontSize: 13, color: '#5B6470',
+    background: '#F2F4F7', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
+    borderRadius: '6px 0 0 6px', padding: '9px 10px', fontSize: 13, color: 'var(--texto-suave)',
   },
-  ayuda: { fontSize: 11, color: '#8A929C', margin: '4px 0 12px' },
+  ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 12px' },
 };

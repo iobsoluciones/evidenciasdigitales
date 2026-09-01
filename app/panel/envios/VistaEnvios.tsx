@@ -103,7 +103,7 @@ export default function VistaEnvios({
                     {e.referencia_id && e.tipo !== 'ejecutivo' ? (
                       <Link
                         href={`/panel/capacitaciones/${e.referencia_id}`}
-                        style={{ color: '#14263F', textDecoration: 'none' }}
+                        style={{ color: 'var(--texto)', textDecoration: 'none' }}
                       >
                         {e.asunto}
                       </Link>
@@ -116,9 +116,9 @@ export default function VistaEnvios({
                   </td>
                   <td style={s.td}>
                     {e.estado === 'enviado' ? (
-                      <span style={{ color: '#15803D', fontWeight: 600 }}>Enviado</span>
+                      <span style={{ color: 'var(--bien)', fontWeight: 600 }}>Enviado</span>
                     ) : (
-                      <span style={{ color: '#9B1C1C', fontWeight: 600 }} title={e.error ?? ''}>
+                      <span style={{ color: 'var(--mal)', fontWeight: 600 }} title={e.error ?? ''}>
                         Error
                       </span>
                     )}
@@ -141,35 +141,35 @@ export default function VistaEnvios({
 const s: Record<string, React.CSSProperties> = {
   controles: { display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 14 },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '7px 14px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, textDecoration: 'none',
   },
   select: {
-    padding: '7px 11px', border: '1px solid #DFDFD8', borderRadius: 4,
-    fontSize: 12.5, fontFamily: 'inherit', background: '#fff',
+    padding: '7px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
+    fontSize: 12.5, fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#5B6470', cursor: 'pointer' },
-  conteo: { fontSize: 12, color: '#8A929C', marginLeft: 'auto' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)', marginLeft: 'auto' },
 
-  contenedor: { background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8, overflowX: 'auto' },
+  contenedor: { background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8, overflowX: 'auto' },
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '9px 10px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
-  td: { padding: '9px 10px', borderBottom: '1px solid #F4F4F0' },
+  td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)' },
   mono: { fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace', fontSize: 11 },
   chip: {
-    fontSize: 10.5, background: '#F4F4F0', color: '#5B6470',
+    fontSize: 10.5, background: 'var(--superficie-3)', color: 'var(--texto-suave)',
     padding: '3px 8px', borderRadius: 3, whiteSpace: 'nowrap',
   },
   destinatarios: {
     maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap', color: '#5B6470', fontSize: 11.5,
+    whiteSpace: 'nowrap', color: 'var(--texto-suave)', fontSize: 11.5,
   },
   vacio: {
-    background: '#fff', border: '1px dashed #DFDFD8', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8,
     padding: '40px 24px', textAlign: 'center',
   },
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 14, lineHeight: 1.6 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.6 },
 };

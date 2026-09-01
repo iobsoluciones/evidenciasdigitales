@@ -52,8 +52,8 @@ export default async function PaginaPlantillas() {
 
 const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
-  sub: { fontSize: 13, color: '#5B6470', margin: 0, maxWidth: 520 },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0, maxWidth: 520 },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 22 },
-  btn: { background: '#14263F', color: '#fff', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
-  btnSec: { background: '#fff', color: '#14263F', border: '1px solid #DFDFD8', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btnSec: { background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

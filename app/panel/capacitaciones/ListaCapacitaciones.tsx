@@ -58,21 +58,21 @@ function estadoMostrado(
   ahora: number
 ): { texto: string; fondo: string; color: string } {
   if (c.estado === 'activa') {
-    return { texto: 'Activa', fondo: '#dcfce7', color: '#15803d' };
+    return { texto: 'Activa', fondo: 'var(--bien-fondo)', color: 'var(--bien)' };
   }
   if (c.estado === 'cerrada') {
-    return { texto: 'Cerrada', fondo: '#f1f5f9', color: '#6b7280' };
+    return { texto: 'Cerrada', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
   }
 
   // Inactiva: la fecha dice si ya paso o si esta por venir.
   const inicio = new Date(c.fecha_inicio).getTime();
   const fin = new Date(c.fecha_fin).getTime();
 
-  if (fin < ahora) return { texto: 'Cerrada', fondo: '#f1f5f9', color: '#6b7280' };
+  if (fin < ahora) return { texto: 'Cerrada', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
   if (inicio > ahora) return { texto: 'Programada', fondo: '#EFF6FF', color: '#1D4ED8' };
 
   // Hoy cae dentro del rango: sigue siendo su estado real.
-  return { texto: 'Inactiva', fondo: '#f1f5f9', color: '#6b7280' };
+  return { texto: 'Inactiva', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
 }
 
 export default function ListaCapacitaciones({
@@ -252,8 +252,8 @@ export default function ListaCapacitaciones({
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 22, color: '#1e3a8a', margin: 0 }}>Capacitaciones</h1>
-          <p style={{ color: '#6b7280', fontSize: 13, margin: '4px 0 0' }}>
+          <h1 style={{ fontSize: 22, color: 'var(--texto)', margin: 0 }}>Capacitaciones</h1>
+          <p style={{ color: 'var(--texto-suave)', fontSize: 13, margin: '4px 0 0' }}>
             Solo una puede estar activa a la vez.
           </p>
         </div>
@@ -269,8 +269,8 @@ export default function ListaCapacitaciones({
       {aviso && (
         <div style={{
           ...est.aviso,
-          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -310,7 +310,7 @@ export default function ListaCapacitaciones({
           </button>
         </div>
 
-        <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 12px' }}>
+        <p style={{ fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 12px' }}>
           Mostrando {filtradas.length} de {capacitaciones.length}
         </p>
 
@@ -336,7 +336,7 @@ export default function ListaCapacitaciones({
                     style={esProxima ? est.filaProxima : undefined}
                   >
                     <td style={est.td}>
-                      <Link href={`/panel/capacitaciones/${c.id}`} style={{ color: '#3b82f6', fontWeight: 600 }}>
+                      <Link href={`/panel/capacitaciones/${c.id}`} style={{ color: 'var(--marca)', fontWeight: 600 }}>
                         {c.codigo}
                       </Link>
                     </td>
@@ -367,8 +367,8 @@ export default function ListaCapacitaciones({
                     </td>
                     <td style={est.td}>
                       {c.instructor_firmo
-                        ? <span style={{ color: '#15803d', fontWeight: 600 }}>Firmado</span>
-                        : <span style={{ color: '#9ca3af' }}>Pendiente</span>}
+                        ? <span style={{ color: 'var(--bien)', fontWeight: 600 }}>Firmado</span>
+                        : <span style={{ color: 'var(--texto-tenue)' }}>Pendiente</span>}
                     </td>
                     <td style={est.td}>
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -421,7 +421,7 @@ export default function ListaCapacitaciones({
         </div>
 
         {filtradas.length === 0 && (
-          <p style={{ textAlign: 'center', color: '#6b7280', padding: '30px 0', fontSize: 13 }}>
+          <p style={{ textAlign: 'center', color: 'var(--texto-suave)', padding: '30px 0', fontSize: 13 }}>
             {capacitaciones.length === 0
               ? 'Aún no hay capacitaciones. Crea la primera.'
               : 'Ninguna capacitación coincide con los filtros.'}
@@ -433,7 +433,7 @@ export default function ListaCapacitaciones({
       {abierto && (
         <div style={est.overlay} onClick={(e) => { if (e.target === e.currentTarget) setAbierto(false); }}>
           <div style={est.modal}>
-            <h2 style={{ fontSize: 17, color: '#1e3a8a', marginTop: 0 }}>
+            <h2 style={{ fontSize: 17, color: 'var(--texto)', marginTop: 0 }}>
               {editandoId ? 'Editar capacitación' : 'Nueva capacitación'}
             </h2>
 
@@ -491,7 +491,7 @@ export default function ListaCapacitaciones({
                     )}
                     <div style={est.previaFila}>
                       <span style={est.previaClave}>Evaluación</span>
-                      <span style={{ color: plantillaElegida.evaluacion_nombre ? '#15803d' : '#8A929C' }}>
+                      <span style={{ color: plantillaElegida.evaluacion_nombre ? 'var(--bien)' : 'var(--texto-tenue)' }}>
                         {plantillaElegida.evaluacion_nombre ?? 'No incluida'}
                       </span>
                     </div>
@@ -513,13 +513,13 @@ export default function ListaCapacitaciones({
                   </div>
                 </div>
 
-                <p style={{ fontSize: 11.5, color: '#6b7280', margin: '8px 0 0' }}>
+                <p style={{ fontSize: 11.5, color: 'var(--texto-suave)', margin: '8px 0 0' }}>
                   Se copian tema, descripción, instructor y ajustes. Solo cambian
                   las fechas y la empresa, que será la activa.
                 </p>
 
                 {aviso?.tipo === 'error' && (
-                  <div style={{ ...est.aviso, background: '#fef2f2', color: '#b91c1c' }}>{aviso.texto}</div>
+                  <div style={{ ...est.aviso, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>{aviso.texto}</div>
                 )}
 
                 <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
@@ -576,7 +576,7 @@ export default function ListaCapacitaciones({
             <label style={est.label}>Participantes esperados</label>
             <input type="number" min="1" value={form.esperados} placeholder="Opcional"
               onChange={(e) => setForm({ ...form, esperados: e.target.value })} style={est.input} />
-            <p style={{ fontSize: 11, color: '#6b7280', margin: '4px 0 0' }}>
+            <p style={{ fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' }}>
               Si se deja vacío, la participación se calcula como 100%.
             </p>
 
@@ -591,7 +591,7 @@ export default function ListaCapacitaciones({
               Esta capacitación será evaluada
             </label>
             {form.esEvaluada && (
-              <p style={{ fontSize: 11, color: '#a16207', background: '#fefce8',
+              <p style={{ fontSize: 11, color: '#a16207', background: 'var(--ambar-fondo)',
                           padding: '8px 10px', borderRadius: 6, margin: '4px 0 0' }}>
                 Tras guardar, abre la capacitación y usa «Editar evaluación»
                 para formular las preguntas.
@@ -608,7 +608,7 @@ export default function ListaCapacitaciones({
               />
               Validar contra la base de empleados
             </label>
-            <p style={{ fontSize: 11, color: '#8A929C', margin: '2px 0 0' }}>
+            <p style={{ fontSize: 11, color: 'var(--texto-tenue)', margin: '2px 0 0' }}>
               {form.validarEmpleados
                 ? 'Solo podrán registrarse personas cargadas en Configuración → Empleados.'
                 : 'Se aceptan registros libres: cualquier identificación es válida.'}
@@ -624,10 +624,10 @@ export default function ListaCapacitaciones({
               />
               Anexar mi firma como responsable técnico
             </label>
-            <p style={{ fontSize: 11, color: '#8A929C', margin: '2px 0 0' }}>
+            <p style={{ fontSize: 11, color: 'var(--texto-tenue)', margin: '2px 0 0' }}>
               {!tieneFirmaPropia
                 ? <>Aún no tienes firma registrada.{' '}
-                    <Link href="/panel/perfil" style={{ color: '#14263F', fontWeight: 600 }}>
+                    <Link href="/panel/perfil" style={{ color: 'var(--texto)', fontWeight: 600 }}>
                       Regístrala en Mi perfil
                     </Link>{' '}para poder anexarla.</>
                 : form.incluirFirmaProfesional
@@ -641,7 +641,7 @@ export default function ListaCapacitaciones({
               style={{ ...est.input, resize: 'vertical' }} />
 
             {aviso?.tipo === 'error' && (
-              <div style={{ ...est.aviso, background: '#fef2f2', color: '#b91c1c' }}>{aviso.texto}</div>
+              <div style={{ ...est.aviso, background: 'var(--mal-fondo)', color: 'var(--mal)' }}>{aviso.texto}</div>
             )}
 
             <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
@@ -686,7 +686,7 @@ export default function ListaCapacitaciones({
                       <button
                         onClick={borrar}
                         disabled={pendiente}
-                        style={{ ...est.btnBorrar, background: '#9B1C1C', color: '#fff', borderColor: '#9B1C1C' }}
+                        style={{ ...est.btnBorrar, background: 'var(--mal)', color: 'var(--sobre-marca)', borderColor: 'var(--mal)' }}
                       >
                         {pendiente ? 'Eliminando…' : 'Sí, eliminar'}
                       </button>
@@ -719,59 +719,59 @@ export default function ListaCapacitaciones({
 }
 
 const est: Record<string, React.CSSProperties> = {
-  tarjeta: { background: '#fff', borderRadius: 14, padding: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
-  filtros: { display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid #e5e7eb' },
+  tarjeta: { background: 'var(--superficie)', borderRadius: 14, padding: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  filtros: { display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid var(--borde)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, margin: '10px 0 4px' },
-  input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
-  th: { background: '#f8fafc', color: '#6b7280', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid #e5e7eb' },
-  td: { padding: '10px 8px', borderBottom: '1px solid #e5e7eb', verticalAlign: 'middle' },
+  input: { width: '100%', padding: '9px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  th: { background: 'var(--superficie-3)', color: 'var(--texto-suave)', fontSize: 11, textTransform: 'uppercase', padding: '9px 8px', textAlign: 'left', borderBottom: '1px solid var(--borde)' },
+  td: { padding: '10px 8px', borderBottom: '1px solid var(--borde)', verticalAlign: 'middle' },
   filaProxima: {
-    background: '#FEFCE8',
+    background: 'var(--ambar-fondo)',
     boxShadow: 'inset 3px 0 0 #E8C766',
   },
   pillProxima: {
-    marginLeft: 8, padding: '2px 8px', borderRadius: 10,
+    marginLeft: 8, padding: '2px 8px', borderRadius: 8,
     background: '#E8C766', color: '#4A3A00',
     fontSize: 10.5, fontWeight: 700, letterSpacing: .3,
     textTransform: 'uppercase', whiteSpace: 'nowrap',
   },
   pill: { padding: '3px 9px', borderRadius: 999, fontSize: 11, fontWeight: 600, display: 'inline-block' },
-  btnPrimario: { background: '#1e3a8a', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnExcel: { background: '#15803d', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
-  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnPrimario: { background: 'var(--marca)', color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnExcel: { background: 'var(--bien)', color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
+  btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   zonaBorrado: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     gap: 12, flexWrap: 'wrap', marginTop: 20, paddingTop: 16,
     borderTop: '1px solid #F1F1EC',
   },
   notaBorrado: {
-    fontSize: 11.5, color: '#8A929C', margin: '3px 0 0',
+    fontSize: 11.5, color: 'var(--texto-tenue)', margin: '3px 0 0',
     lineHeight: 1.5, maxWidth: 380,
   },
   btnBorrar: {
-    background: '#fff', color: '#9B1C1C',
+    background: 'var(--superficie)', color: 'var(--mal)',
     borderWidth: 1, borderStyle: 'solid', borderColor: '#E4C7C7',
     padding: '8px 14px', borderRadius: 6, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
     whiteSpace: 'nowrap', display: 'inline-block',
   },
-  btnMini: { background: '#eff6ff', borderWidth: 1, borderStyle: 'solid', borderColor: '#dbeafe', color: '#1e3a8a', padding: '5px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' },
-  btnVerde: { background: '#f0fdf4', borderColor: '#dcfce7', color: '#15803d' },
+  btnMini: { background: 'var(--superficie-3)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)', color: 'var(--texto)', padding: '5px 10px', borderRadius: 6, fontSize: 11.5, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' },
+  btnVerde: { background: 'var(--bien-fondo)', borderColor: 'var(--bien-fondo)', color: 'var(--bien)' },
   aviso: { padding: '10px 14px', borderRadius: 8, fontSize: 13, marginBottom: 16 },
-  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid #e5e7eb', marginBottom: 6 },
+  pestanas: { display: 'flex', gap: 4, borderBottom: '1px solid var(--borde)', marginBottom: 6 },
   pestana: {
     background: 'none', border: 'none', padding: '8px 14px', fontSize: 12.5,
-    cursor: 'pointer', fontFamily: 'inherit', color: '#8A929C',
+    cursor: 'pointer', fontFamily: 'inherit', color: 'var(--texto-tenue)',
     borderBottomWidth: 2, borderBottomStyle: 'solid', borderBottomColor: 'transparent',
     marginBottom: -1,
   },
-  pestanaActiva: { color: '#1e3a8a', fontWeight: 700, borderBottomColor: '#1e3a8a' },
+  pestanaActiva: { color: 'var(--texto)', fontWeight: 700, borderBottomColor: 'var(--marca)' },
   previa: {
-    background: '#f8fafc', borderRadius: 6, padding: 12, margin: '10px 0 4px', fontSize: 12,
+    background: 'var(--superficie-3)', borderRadius: 6, padding: 12, margin: '10px 0 4px', fontSize: 12,
   },
   previaFila: { display: 'flex', justifyContent: 'space-between', gap: 10, padding: '3px 0' },
-  previaClave: { color: '#8A929C' },
-  casilla: { display: 'flex', alignItems: 'center', fontSize: 13, fontWeight: 400, color: '#374151', cursor: 'pointer', padding: '6px 0' },
+  previaClave: { color: 'var(--texto-tenue)' },
+  casilla: { display: 'flex', alignItems: 'center', fontSize: 13, fontWeight: 400, color: 'var(--texto-suave)', cursor: 'pointer', padding: '6px 0' },
   overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,.45)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '40px 16px', overflowY: 'auto', zIndex: 100 },
-  modal: { background: '#fff', borderRadius: 14, padding: 24, width: '100%', maxWidth: 520 },
+  modal: { background: 'var(--superficie)', borderRadius: 14, padding: 24, width: '100%', maxWidth: 520 },
 };

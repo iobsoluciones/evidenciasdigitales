@@ -24,11 +24,11 @@ const SIMBOLO: Record<EstadoDotacion, string> = {
 };
 
 const TONO: Record<EstadoDotacion, { fondo: string; texto: string }> = {
-  vigente: { fondo: '#DCFCE7', texto: '#15803D' },
-  por_vencer: { fondo: '#FEF9C3', texto: '#8A6100' },
-  vencido: { fondo: '#FEE2E2', texto: '#9B1C1C' },
-  sin_vencimiento: { fondo: '#F0F9FF', texto: '#0369A1' },
-  nunca: { fondo: 'transparent', texto: '#C5C5BD' },
+  vigente: { fondo: 'var(--bien-fondo)', texto: 'var(--bien)' },
+  por_vencer: { fondo: 'var(--ambar-fondo)', texto: 'var(--ambar)' },
+  vencido: { fondo: 'var(--mal-fondo)', texto: 'var(--mal)' },
+  sin_vencimiento: { fondo: 'var(--info-fondo)', texto: 'var(--info)' },
+  nunca: { fondo: 'transparent', texto: 'var(--borde-fuerte)' },
 };
 
 const ETIQUETA: Record<EstadoDotacion, string> = {
@@ -112,8 +112,8 @@ export default function VistaMatrizDotacion({
 
         <span style={s.conteo}>
           {filas.length} de {matriz.empleados.length}
-          {vencidos > 0 && <strong style={{ color: '#9B1C1C' }}> · {vencidos} vencidos</strong>}
-          {porVencer > 0 && <strong style={{ color: '#8A6100' }}> · {porVencer} por vencer</strong>}
+          {vencidos > 0 && <strong style={{ color: 'var(--mal)' }}> · {vencidos} vencidos</strong>}
+          {porVencer > 0 && <strong style={{ color: 'var(--ambar)' }}> · {porVencer} por vencer</strong>}
         </span>
       </div>
 
@@ -126,7 +126,7 @@ export default function VistaMatrizDotacion({
               color: TONO[k].texto,
               borderWidth: k === 'nunca' ? 1 : 0,
               borderStyle: 'solid',
-              borderColor: '#EFEFEA',
+              borderColor: 'var(--borde)',
             }}>
               {SIMBOLO[k]}
             </span>
@@ -198,7 +198,7 @@ export default function VistaMatrizDotacion({
                       {e.equipos.length}
                     </span>
                   ) : (
-                    <span style={{ color: '#C5C5BD' }}>—</span>
+                    <span style={{ color: 'var(--borde-fuerte)' }}>—</span>
                   )}
                 </td>
               </tr>
@@ -212,7 +212,7 @@ export default function VistaMatrizDotacion({
                 <td key={a.id} style={{ ...s.celda, ...s.pie }}>
                   {a.entregados}
                   {a.vencidos > 0 && (
-                    <span style={{ color: '#9B1C1C' }}>/{a.vencidos}</span>
+                    <span style={{ color: 'var(--mal)' }}>/{a.vencidos}</span>
                   )}
                 </td>
               ))}
@@ -235,93 +235,93 @@ export default function VistaMatrizDotacion({
 const s: Record<string, React.CSSProperties> = {
   controles: { display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 },
   select: {
-    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', background: '#fff',
+    padding: '8px 11px', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    borderRadius: 4, fontSize: 12.5, fontFamily: 'inherit', background: 'var(--superficie)',
   },
-  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#5B6470', cursor: 'pointer' },
-  conteo: { fontSize: 12, color: '#8A929C', marginLeft: 'auto' },
+  check: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto-suave)', cursor: 'pointer' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)', marginLeft: 'auto' },
 
   leyenda: { display: 'flex', gap: 16, marginBottom: 14, flexWrap: 'wrap' },
-  leyendaItem: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: '#5B6470' },
+  leyendaItem: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: 'var(--texto-suave)' },
   marca: {
     width: 20, height: 20, borderRadius: 3, display: 'inline-flex',
     alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700,
   },
 
   contenedor: {
-    overflowX: 'auto', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
-    borderRadius: 8, background: '#fff',
+    overflowX: 'auto', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
+    borderRadius: 8, background: 'var(--superficie)',
   },
   tabla: { borderCollapse: 'separate', borderSpacing: 0, fontSize: 12 },
 
   thFijo: {
-    position: 'sticky', left: 0, zIndex: 3, background: '#F7F7F4',
+    position: 'sticky', left: 0, zIndex: 3, background: 'var(--fondo)',
     minWidth: 180, textAlign: 'left', padding: '8px 10px', verticalAlign: 'bottom',
-    borderBottom: '1px solid #E4E4DF', borderRight: '1px solid #E4E4DF',
+    borderBottom: '1px solid var(--borde)', borderRight: '1px solid var(--borde)',
   },
-  esquina: { fontSize: 11, color: '#8A929C', textTransform: 'uppercase' },
+  esquina: { fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase' },
   thArea: {
-    position: 'sticky', left: 180, zIndex: 3, background: '#F7F7F4',
+    position: 'sticky', left: 180, zIndex: 3, background: 'var(--fondo)',
     minWidth: 110, textAlign: 'left', padding: '8px 10px', verticalAlign: 'bottom',
-    fontSize: 11, color: '#8A929C', textTransform: 'uppercase',
-    borderBottom: '1px solid #E4E4DF', borderRight: '1px solid #E4E4DF',
+    fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase',
+    borderBottom: '1px solid var(--borde)', borderRight: '1px solid var(--borde)',
   },
   thArt: {
-    background: '#F7F7F4', padding: '8px 4px', minWidth: 46, maxWidth: 46,
-    verticalAlign: 'bottom', borderBottom: '1px solid #E4E4DF',
-    borderRight: '1px solid #F4F4F0',
+    background: 'var(--fondo)', padding: '8px 4px', minWidth: 46, maxWidth: 46,
+    verticalAlign: 'bottom', borderBottom: '1px solid var(--borde)',
+    borderRight: '1px solid var(--superficie-3)',
   },
   rotado: {
     writingMode: 'vertical-rl', transform: 'rotate(180deg)',
     height: 140, fontSize: 10.5, fontWeight: 500,
     whiteSpace: 'nowrap', margin: '0 auto',
   },
-  enlaceArt: { color: '#14263F', textDecoration: 'none' },
+  enlaceArt: { color: 'var(--texto)', textDecoration: 'none' },
   vida: {
-    fontSize: 8.5, color: '#A3AAB3', marginTop: 4, textAlign: 'center',
+    fontSize: 8.5, color: 'var(--texto-tenue)', marginTop: 4, textAlign: 'center',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   thTotal: {
-    background: '#F7F7F4', padding: '8px 10px', verticalAlign: 'bottom',
-    fontSize: 11, color: '#8A929C', textTransform: 'uppercase',
-    borderBottom: '1px solid #E4E4DF', borderLeft: '1px solid #E4E4DF',
+    background: 'var(--fondo)', padding: '8px 10px', verticalAlign: 'bottom',
+    fontSize: 11, color: 'var(--texto-tenue)', textTransform: 'uppercase',
+    borderBottom: '1px solid var(--borde)', borderLeft: '1px solid var(--borde)',
   },
 
   tdFijo: {
-    position: 'sticky', left: 0, zIndex: 2, background: '#fff',
-    padding: '7px 10px', borderBottom: '1px solid #F4F4F0',
-    borderRight: '1px solid #E4E4DF', minWidth: 180,
+    position: 'sticky', left: 0, zIndex: 2, background: 'var(--superficie)',
+    padding: '7px 10px', borderBottom: '1px solid var(--superficie-3)',
+    borderRight: '1px solid var(--borde)', minWidth: 180,
   },
-  enlaceEmp: { color: '#14263F', textDecoration: 'none', fontWeight: 500 },
+  enlaceEmp: { color: 'var(--texto)', textDecoration: 'none', fontWeight: 500 },
   cedula: {
-    fontSize: 10, color: '#A3AAB3',
+    fontSize: 10, color: 'var(--texto-tenue)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },
   tdArea: {
-    position: 'sticky', left: 180, zIndex: 2, background: '#fff',
-    padding: '7px 10px', fontSize: 11, color: '#5B6470',
-    borderBottom: '1px solid #F4F4F0', borderRight: '1px solid #E4E4DF',
+    position: 'sticky', left: 180, zIndex: 2, background: 'var(--superficie)',
+    padding: '7px 10px', fontSize: 11, color: 'var(--texto-suave)',
+    borderBottom: '1px solid var(--superficie-3)', borderRight: '1px solid var(--borde)',
     minWidth: 110,
   },
   celda: {
     textAlign: 'center', padding: '7px 3px', fontSize: 13, fontWeight: 700,
-    borderBottom: '1px solid #F4F4F0', borderRight: '1px solid #F4F4F0',
+    borderBottom: '1px solid var(--superficie-3)', borderRight: '1px solid var(--superficie-3)',
   },
   dias: { fontSize: 7.5, fontWeight: 400, marginTop: 1 },
   tdTotal: {
     textAlign: 'center', padding: '7px 10px', fontWeight: 600,
-    borderBottom: '1px solid #F4F4F0', borderLeft: '1px solid #E4E4DF',
-    background: '#FBFBF9',
+    borderBottom: '1px solid var(--superficie-3)', borderLeft: '1px solid var(--borde)',
+    background: 'var(--superficie-2)',
   },
-  pie: { background: '#F7F7F4', fontWeight: 600, fontSize: 11, borderTop: '1px solid #E4E4DF' },
+  pie: { background: 'var(--fondo)', fontWeight: 600, fontSize: 11, borderTop: '1px solid var(--borde)' },
 
-  nota: { fontSize: 11.5, color: '#8A929C', marginTop: 14, lineHeight: 1.65, maxWidth: 720 },
+  nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 14, lineHeight: 1.65, maxWidth: 720 },
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
   btn: {
-    color: '#fff', padding: '10px 18px', borderRadius: 4,
+    color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, textDecoration: 'none', display: 'inline-block',
   },
 };

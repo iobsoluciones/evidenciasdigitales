@@ -40,14 +40,14 @@ export default function VistaIndicadores({
         <Kpi
           v={pctCumplimiento !== null ? `${pctCumplimiento}%` : '—'}
           l="Cumplimiento"
-          color={pctCumplimiento === null ? undefined : pctCumplimiento >= 80 ? '#15803D' : pctCumplimiento >= 50 ? '#8A6100' : '#9B1C1C'}
+          color={pctCumplimiento === null ? undefined : pctCumplimiento >= 80 ? 'var(--bien)' : pctCumplimiento >= 50 ? 'var(--ambar)' : 'var(--mal)'}
         />
         <Kpi
           v={r.puntaje_promedio !== null ? `${r.puntaje_promedio}%` : '—'}
           l="Puntaje medio"
         />
-        <Kpi v={String(ac.vencidas)} l="Acciones vencidas" color={ac.vencidas > 0 ? '#9B1C1C' : undefined} />
-        <Kpi v={String(ac.abiertas)} l="Acciones abiertas" color={ac.abiertas > 0 ? '#0369A1' : undefined} />
+        <Kpi v={String(ac.vencidas)} l="Acciones vencidas" color={ac.vencidas > 0 ? 'var(--mal)' : undefined} />
+        <Kpi v={String(ac.abiertas)} l="Acciones abiertas" color={ac.abiertas > 0 ? 'var(--info)' : undefined} />
       </div>
 
       {r.total === 0 ? (
@@ -55,7 +55,7 @@ export default function VistaIndicadores({
           <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 600 }}>
             Sin inspecciones en el periodo
           </p>
-          <p style={{ margin: 0, fontSize: 12.5, color: '#5B6470' }}>
+          <p style={{ margin: 0, fontSize: 12.5, color: 'var(--texto-suave)' }}>
             Los indicadores aparecen cuando cierres tu primera inspección.
           </p>
         </div>
@@ -76,8 +76,8 @@ export default function VistaIndicadores({
                   <div key={i} style={e.recurrente}>
                     <div style={{
                       ...e.vecesBadge,
-                      background: h.veces >= 3 ? '#FEE2E2' : '#FEF9C3',
-                      color: h.veces >= 3 ? '#9B1C1C' : '#8A6100',
+                      background: h.veces >= 3 ? 'var(--mal-fondo)' : 'var(--ambar-fondo)',
+                      color: h.veces >= 3 ? 'var(--mal)' : 'var(--ambar)',
                     }}>
                       {h.veces}×
                     </div>
@@ -109,7 +109,7 @@ export default function VistaIndicadores({
             {/* ---------- Objetos con más hallazgos ---------- */}
             <Panel titulo="Dónde se concentran los hallazgos">
               <BarrasHorizontales
-                color="#9B1C1C"
+                color="var(--mal)"
                 vacio="Sin hallazgos en el periodo."
                 datos={datos.objetos.map((o) => ({
                   etiqueta: o.objeto,
@@ -134,13 +134,13 @@ export default function VistaIndicadores({
           {/* ---------- Estado del plan de acción ---------- */}
           <Panel titulo="Plan de acción">
             <div style={e.accionesResumen}>
-              <ItemAccion n={ac.abiertas} etiqueta="Abiertas" tono="#0369A1" />
-              <ItemAccion n={ac.vencidas} etiqueta="Vencidas" tono="#9B1C1C" />
-              <ItemAccion n={ac.cerradas} etiqueta="Cerradas" tono="#15803D" />
+              <ItemAccion n={ac.abiertas} etiqueta="Abiertas" tono="var(--info)" />
+              <ItemAccion n={ac.vencidas} etiqueta="Vencidas" tono="var(--mal)" />
+              <ItemAccion n={ac.cerradas} etiqueta="Cerradas" tono="var(--bien)" />
               <ItemAccion
                 n={ac.dias_cierre_promedio ?? 0}
                 etiqueta="Días promedio de cierre"
-                tono="#5B6470"
+                tono="var(--texto-suave)"
                 sufijo={ac.dias_cierre_promedio !== null ? 'd' : ''}
               />
             </div>
@@ -179,21 +179,21 @@ function ItemAccion({ n, etiqueta, tono, sufijo }: {
 const e: Record<string, React.CSSProperties> = {
   kpis: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 12, marginBottom: 18 },
   kpi: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#E4E4DF',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 8, padding: 14, textAlign: 'center',
   },
-  kpiL: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
+  kpiL: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3, marginTop: 2 },
 
   vacio: {
-    background: '#fff', borderWidth: 1, borderStyle: 'dashed', borderColor: '#DFDFD8',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'var(--borde-fuerte)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
-  sinDatos: { fontSize: 12.5, color: '#15803D', margin: 0, padding: '6px 0' },
+  sinDatos: { fontSize: 12.5, color: 'var(--bien)', margin: 0, padding: '6px 0' },
 
   recurrentes: { display: 'grid', gap: 8 },
   recurrente: {
     display: 'flex', gap: 12, alignItems: 'center',
-    padding: '10px 12px', background: '#FBFBF9', borderRadius: 6,
+    padding: '10px 12px', background: 'var(--superficie-2)', borderRadius: 6,
   },
   vecesBadge: {
     minWidth: 40, height: 36, borderRadius: 6, display: 'flex',
@@ -201,13 +201,13 @@ const e: Record<string, React.CSSProperties> = {
     fontSize: 14, fontWeight: 700, flexShrink: 0,
   },
   critico: {
-    fontSize: 9, color: '#9B1C1C', marginLeft: 8,
+    fontSize: 9, color: 'var(--mal)', marginLeft: 8,
     textTransform: 'uppercase', letterSpacing: .4, fontWeight: 700,
   },
-  ultima: { fontSize: 10.5, color: '#8A929C', marginTop: 2 },
+  ultima: { fontSize: 10.5, color: 'var(--texto-tenue)', marginTop: 2 },
 
   dos: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 0, columnGap: 20 },
-  notaPanel: { fontSize: 11, color: '#8A929C', margin: '12px 0 0' },
+  notaPanel: { fontSize: 11, color: 'var(--texto-tenue)', margin: '12px 0 0' },
 
   accionesResumen: {
     display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))',
@@ -215,8 +215,8 @@ const e: Record<string, React.CSSProperties> = {
   },
   itemAccion: {
     display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center',
-    padding: '12px 8px', background: '#FBFBF9', borderRadius: 6, textAlign: 'center',
+    padding: '12px 8px', background: 'var(--superficie-2)', borderRadius: 6, textAlign: 'center',
   },
-  itemAccionL: { fontSize: 10.5, color: '#8A929C', textTransform: 'uppercase', letterSpacing: .3 },
+  itemAccionL: { fontSize: 10.5, color: 'var(--texto-tenue)', textTransform: 'uppercase', letterSpacing: .3 },
   enlace: { fontSize: 12.5, fontWeight: 600, textDecoration: 'none' },
 };

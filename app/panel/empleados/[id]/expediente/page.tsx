@@ -21,7 +21,7 @@ export default async function PaginaExpediente({
 
   return (
     <>
-      <Link href="/panel/empleados" style={{ fontSize: 13, color: '#5B6470', textDecoration: 'none' }}>
+      <Link href="/panel/empleados" style={{ fontSize: 13, color: 'var(--texto-suave)', textDecoration: 'none' }}>
         ← Empleados
       </Link>
 

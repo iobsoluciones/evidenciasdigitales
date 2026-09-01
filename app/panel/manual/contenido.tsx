@@ -33,12 +33,12 @@ export type FichaManual = {
  * del menú lateral para que el manual y el producto hablen igual.
  */
 export const FASES: { v: Fase; t: string; d: string; color: string }[] = [
-  { v: 'inicio', t: 'Para empezar', d: 'La cuenta, las empresas, el personal y la regla que rige todo el producto.', color: '#14263F' },
+  { v: 'inicio', t: 'Para empezar', d: 'La cuenta, las empresas, el personal y la regla que rige todo el producto.', color: 'var(--texto)' },
   { v: 'planear', t: 'Planear', d: 'Lo que hay que tener escrito antes de ejecutar nada.', color: '#2A6F97' },
   { v: 'hacer', t: 'Hacer', d: 'La operación del día a día, que es donde se producen las firmas.', color: '#1B5E4A' },
-  { v: 'verificar', t: 'Verificar', d: 'Mirar lo que se hizo y ponerle nota.', color: '#B45309' },
+  { v: 'verificar', t: 'Verificar', d: 'Mirar lo que se hizo y ponerle nota.', color: 'var(--aviso)' },
   { v: 'actuar', t: 'Actuar', d: 'Lo que se corrige y lo que se rinde.', color: '#7A3E9D' },
-  { v: 'cierre', t: 'Transversales', d: 'Lo que se entrega y lo que se configura una sola vez.', color: '#5B6470' },
+  { v: 'cierre', t: 'Transversales', d: 'Lo que se entrega y lo que se configura una sola vez.', color: 'var(--texto-suave)' },
 ];
 
 export const MANUALES: FichaManual[] = [
@@ -46,7 +46,7 @@ export const MANUALES: FichaManual[] = [
     id: 'ingreso',
     titulo: 'Ingreso y primeros pasos',
     resumen: 'Crear la cuenta, entrar, entender la barra de arriba y el menú por PHVA.',
-    color: '#14263F',
+    color: 'var(--texto)',
     fase: 'inicio',
     cubre: ['Registro', 'Ingreso', 'Selector de empresa', 'Menú'],
   },
@@ -70,7 +70,7 @@ export const MANUALES: FichaManual[] = [
     id: 'pendientes',
     titulo: 'Panel principal y pendientes',
     resumen: 'La bandeja que dice qué hacer hoy y el semáforo de cumplimiento de cada empresa.',
-    color: '#9B1C1C',
+    color: 'var(--mal)',
     fase: 'inicio',
     cubre: ['Panel principal', 'Pendientes', 'Semáforo'],
   },
@@ -161,7 +161,7 @@ export const MANUALES: FichaManual[] = [
     id: 'inspecciones',
     titulo: 'Inspecciones y auditorías',
     resumen: 'Listas de verificación, ejecución en planta desde el celular y veredicto.',
-    color: '#B45309',
+    color: 'var(--aviso)',
     fase: 'verificar',
     cubre: ['Inspecciones', 'Listas de verificación', 'Programadas'],
   },
@@ -169,7 +169,7 @@ export const MANUALES: FichaManual[] = [
     id: 'autoevaluacion',
     titulo: 'Autoevaluación e indicadores legales',
     resumen: 'La nota de los estándares mínimos y los seis indicadores del artículo 30.',
-    color: '#B45309',
+    color: 'var(--aviso)',
     fase: 'verificar',
     cubre: ['Autoevaluación', 'Conjuntos de estándares', 'Indicadores del art. 30'],
   },
@@ -203,7 +203,7 @@ export const MANUALES: FichaManual[] = [
     id: 'reportes',
     titulo: 'Reportes, calendario e indicadores',
     resumen: 'Lo que se entrega a la ARL o al cliente: PDF, Excel y tableros.',
-    color: '#5B6470',
+    color: 'var(--texto-suave)',
     fase: 'cierre',
     cubre: ['Reportes', 'Calendario', 'Indicadores', 'Matrices'],
   },
@@ -211,7 +211,7 @@ export const MANUALES: FichaManual[] = [
     id: 'configuracion',
     titulo: 'Configuración y perfil',
     resumen: 'Encabezado de los documentos, tu firma, tu hoja de vida y tu contraseña.',
-    color: '#5B6470',
+    color: 'var(--texto-suave)',
     fase: 'cierre',
     cubre: ['Configuración', 'Perfil', 'Plantillas'],
   },
@@ -322,7 +322,7 @@ function ManualIngreso() {
             <Fila gap={8}>
               <Tarjeta titulo="Empresas" dato="3" />
               <Tarjeta titulo="Empleados" dato="128" />
-              <Tarjeta titulo="Pendientes" dato="7" color="#9B1C1C" />
+              <Tarjeta titulo="Pendientes" dato="7" color="var(--mal)" />
             </Fila>
           </Ventana>
         </Figura>
@@ -389,7 +389,7 @@ function ManualEmpresas() {
             </Fila>
             <Fila gap={9}>
               <Tarjeta titulo="ALIMENTOS DEL NORTE" dato="48" pie="empleados · próxima: 12 sep" marca={1} />
-              <Tarjeta titulo="AUTOSNACK SAS" dato="31" pie="empleados · próxima: 3 oct" color="#B45309" />
+              <Tarjeta titulo="AUTOSNACK SAS" dato="31" pie="empleados · próxima: 3 oct" color="var(--aviso)" />
             </Fila>
             <Fila gap={6}>
               <Boton fantasma marca={2}>Trabajar aquí</Boton>
@@ -617,9 +617,9 @@ function ManualCapacitaciones() {
             <Campo etiqueta="Número de documento" valor="1.020.334" />
             <Linea ancho={70} />
             <div style={{
-              border: '1px dashed #E4E4DF', borderRadius: 8, height: 46,
+              border: '1px dashed var(--borde)', borderRadius: 8, height: 46,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 11, color: '#5B6470',
+              fontSize: 11, color: 'var(--texto-suave)',
             }}>
               Área de firma
             </div>
@@ -693,7 +693,7 @@ function ManualDotacion() {
             pregunta="¿El elemento se devuelve?"
             si="Retornable (equipos): se controla unidad por unidad, con serial o placa. Se asigna y se devuelve."
             no="Consumible (EPP): se controla por cantidad. Vence y se repone."
-            colorSi="#B45309"
+            colorSi="var(--aviso)"
             colorNo="#0F766E"
           />
         </Figura>
@@ -709,7 +709,7 @@ function ManualDotacion() {
           ]}
         >
           <Flujo
-            color="#B45309"
+            color="var(--aviso)"
             pasos={[
               { titulo: 'Borrador', detalle: 'Empleado y elementos' },
               { titulo: 'Firma', detalle: 'En pantalla o remota' },
@@ -745,9 +745,9 @@ function ManualDotacion() {
           <Ventana titulo="panel / dotacion / alertas">
             <Titulo>Alertas</Titulo>
             <Fila gap={8}>
-              <Tarjeta titulo="Por vencer" dato="7" color="#B45309" marca={1} />
-              <Tarjeta titulo="Bajo mínimo" dato="3" color="#9B1C1C" marca={2} />
-              <Tarjeta titulo="De retirados" dato="2" color="#5B6470" marca={3} />
+              <Tarjeta titulo="Por vencer" dato="7" color="var(--aviso)" marca={1} />
+              <Tarjeta titulo="Bajo mínimo" dato="3" color="var(--mal)" marca={2} />
+              <Tarjeta titulo="De retirados" dato="2" color="var(--texto-suave)" marca={3} />
             </Fila>
             <Tabla
               columnas={['Elemento', 'Empleado', 'Vence', 'Estado']}
@@ -843,8 +843,8 @@ function ManualInspecciones() {
             <Titulo>Criterio 4 de 12</Titulo>
             <P>¿El extintor tiene la señalización visible a 1,5 m?</P>
             <Fila gap={6} margen={4}>
-              <Boton fantasma color="#1E6B3A" marca={1}>Cumple</Boton>
-              <Boton fantasma color="#9B1C1C" marca={2}>No cumple</Boton>
+              <Boton fantasma color="var(--bien)" marca={1}>Cumple</Boton>
+              <Boton fantasma color="var(--mal)" marca={2}>No cumple</Boton>
               <Boton fantasma>No aplica</Boton>
             </Fila>
           </Ventana>
@@ -857,8 +857,8 @@ function ManualInspecciones() {
             pregunta="¿Hay algún criterio CRÍTICO incumplido?"
             si="La inspección NO CUMPLE, aunque el puntaje sea del 95%."
             no="El veredicto lo define el puntaje obtenido."
-            colorSi="#9B1C1C"
-            colorNo="#1E6B3A"
+            colorSi="var(--mal)"
+            colorNo="var(--bien)"
           />
         </Figura>
         <Regla titulo="Lo marcado “no aplica” sale del cálculo">
@@ -906,7 +906,7 @@ function ManualAcciones() {
           ]}
         >
           <Flujo
-            color="#9B1C1C"
+            color="var(--mal)"
             pasos={[
               { titulo: 'Hallazgo', detalle: 'Criterio incumplido' },
               { titulo: 'Acción', detalle: 'Responsable y fecha' },
@@ -1040,11 +1040,11 @@ function ManualConfiguracion() {
               <Campo etiqueta="Mostrar NIT" valor="Sí" />
               <Campo etiqueta="Mostrar dirección" valor="No" />
             </Fila>
-            <div style={{ border: '1px solid #E4E4DF', borderRadius: 8, padding: 10 }}>
+            <div style={{ border: '1px solid var(--borde)', borderRadius: 8, padding: 10 }}>
               <Fila gap={8}>
                 <div style={{
-                  width: 34, height: 26, border: '1px dashed #E4E4DF',
-                  borderRadius: 4, fontSize: 8, color: '#5B6470',
+                  width: 34, height: 26, border: '1px dashed var(--borde)',
+                  borderRadius: 4, fontSize: 8, color: 'var(--texto-suave)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>logo</div>
                 <div style={{ flex: 1 }}>
@@ -1120,7 +1120,7 @@ function ManualPendientes() {
           <Ventana titulo="panel">
             <Titulo marca={1}>Panel principal</Titulo>
             <Fila gap={8}>
-              <Tarjeta titulo="ALIMENTOS DEL NORTE" dato="78%" pie="cumplimiento" color="#B45309" />
+              <Tarjeta titulo="ALIMENTOS DEL NORTE" dato="78%" pie="cumplimiento" color="var(--aviso)" />
               <Tarjeta titulo="AUTOSNACK SAS" dato="94%" pie="cumplimiento" color="#1B5E4A" />
             </Fila>
             <Titulo marca={2}>Pendientes</Titulo>
@@ -1272,7 +1272,7 @@ function ManualPeligros() {
               <Campo etiqueta="Consecuencia" valor="60" />
             </Fila>
             <Fila gap={8}>
-              <Tarjeta titulo="Nivel de riesgo" dato="I" pie="No aceptable" color="#9B1C1C" marca={3} />
+              <Tarjeta titulo="Nivel de riesgo" dato="I" pie="No aceptable" color="var(--mal)" marca={3} />
               <Tarjeta titulo="Controles" dato="3" pie="Arnés · Trabajo en alturas · Inspección" marca={4} />
             </Fila>
           </Ventana>
@@ -1455,7 +1455,7 @@ function ManualComites() {
             <Titulo marca={1}>COPASST — periodo 2026-2028</Titulo>
             <Fila gap={8}>
               <Tarjeta titulo="Empleador" dato="2 / 2" pie="principales · suplentes" marca={2} />
-              <Tarjeta titulo="Trabajadores" dato="1 / 2" pie="falta 1 suplente" color="#B45309" />
+              <Tarjeta titulo="Trabajadores" dato="1 / 2" pie="falta 1 suplente" color="var(--aviso)" />
             </Fila>
             <Fila gap={6}>
               <Estado texto="No conforme: falta 1 suplente de los trabajadores" tono="mal" />
@@ -1810,7 +1810,7 @@ function ManualAutoevaluacion() {
           <Ventana titulo="panel / autoevaluacion">
             <Titulo>Autoevaluación 2026</Titulo>
             <Fila gap={8}>
-              <Tarjeta titulo="Puntaje" dato="78,5" pie="Moderadamente aceptable" color="#B45309" marca={3} />
+              <Tarjeta titulo="Puntaje" dato="78,5" pie="Moderadamente aceptable" color="var(--aviso)" marca={3} />
               <Tarjeta titulo="Estándares" dato="60" pie="52 respondidos" />
             </Fila>
             <Fila justificar="flex-end" gap={6}>
@@ -2024,11 +2024,11 @@ export function ContenidoManual({ id }: { id: string }) {
 const c: Record<string, React.CSSProperties> = {
   seccion: { marginTop: 34 },
   h2: {
-    fontSize: 17, fontWeight: 700, color: '#14263F', margin: '0 0 10px',
-    paddingBottom: 8, borderBottom: '1px solid #E4E4DF',
+    fontSize: 17, fontWeight: 700, color: 'var(--texto)', margin: '0 0 10px',
+    paddingBottom: 8, borderBottom: '1px solid var(--borde)',
   },
   // marginTop en vez de bottom: los márgenes adyacentes colapsan, así
   // que un párrafo tras una figura o una regla queda igual de separado
   // que tras un título, sin acumular espacios.
-  p: { fontSize: 14, color: '#374151', lineHeight: 1.7, margin: '16px 0 0' },
+  p: { fontSize: 14, color: 'var(--texto-suave)', lineHeight: 1.7, margin: '16px 0 0' },
 };

@@ -94,8 +94,8 @@ export default function DisenoEncabezado({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -111,7 +111,7 @@ export default function DisenoEncabezado({
               disabled={bloqueado}
               style={{
                 ...e.plantilla,
-                borderColor: activa ? color : '#DFDFD8',
+                borderColor: activa ? color : 'var(--borde-fuerte)',
                 background: activa ? '#F8FAFC' : '#fff',
                 cursor: bloqueado ? 'not-allowed' : 'pointer',
                 opacity: bloqueado && !activa ? 0.55 : 1,
@@ -167,7 +167,7 @@ export default function DisenoEncabezado({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? '#C5C5BD' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
         >
           {pendiente ? 'Guardando…' : 'Guardar diseño'}
         </button>
@@ -198,7 +198,7 @@ function Casilla({
 
 /** Esquema en miniatura de cada plantilla. */
 function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c: Config }) {
-  const barra = (ancho: string, alto = 4, tono = '#DFDFD8') => (
+  const barra = (ancho: string, alto = 4, tono = 'var(--borde-fuerte)') => (
     <div style={{ width: ancho, height: alto, background: tono, borderRadius: 1 }} />
   );
 
@@ -263,7 +263,7 @@ const v: Record<string, React.CSSProperties> = {
 
 const e: Record<string, React.CSSProperties> = {
   card: {
-    background: '#fff', border: '1px solid #E4E4DF',
+    background: 'var(--superficie)', border: '1px solid var(--borde)',
     borderRadius: 8, padding: 20, marginBottom: 18,
   },
   cabecera: {
@@ -271,16 +271,16 @@ const e: Record<string, React.CSSProperties> = {
     alignItems: 'flex-start', gap: 12, flexWrap: 'wrap', marginBottom: 14,
   },
   h2: { fontSize: 15, margin: '0 0 3px', fontWeight: 600 },
-  sub: { fontSize: 12.5, color: '#5B6470', margin: 0 },
+  sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: 0 },
   candado: {
-    fontSize: 11, background: '#F4F4F0', color: '#8A929C',
-    padding: '4px 10px', borderRadius: 10, fontWeight: 600, whiteSpace: 'nowrap',
+    fontSize: 11, background: 'var(--superficie-3)', color: 'var(--texto-tenue)',
+    padding: '4px 10px', borderRadius: 8, fontWeight: 600, whiteSpace: 'nowrap',
   },
   nota: {
-    fontSize: 12, color: '#8A6100', background: '#FEFCE8',
-    padding: '10px 12px', borderRadius: 5, margin: '0 0 14px', lineHeight: 1.5,
+    fontSize: 12, color: 'var(--ambar)', background: 'var(--ambar-fondo)',
+    padding: '10px 12px', borderRadius: 6, margin: '0 0 14px', lineHeight: 1.5,
   },
-  aviso: { padding: '10px 12px', borderRadius: 5, fontSize: 12.5, margin: '0 0 14px' },
+  aviso: { padding: '10px 12px', borderRadius: 6, fontSize: 12.5, margin: '0 0 14px' },
   plantillas: {
     display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(190px,1fr))',
     gap: 12, marginBottom: 18,
@@ -291,23 +291,23 @@ const e: Record<string, React.CSSProperties> = {
     padding: 12, textAlign: 'left', fontFamily: 'inherit',
   },
   plantillaNombre: { fontSize: 13, fontWeight: 700, marginBottom: 3 },
-  plantillaDesc: { fontSize: 11, color: '#5B6470', lineHeight: 1.45 },
+  plantillaDesc: { fontSize: 11, color: 'var(--texto-suave)', lineHeight: 1.45 },
   opciones: {
     display: 'flex', gap: 24, flexWrap: 'wrap',
     paddingTop: 16, borderTop: '1px solid #F1F1EC',
   },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5 },
   input: {
-    padding: '8px 10px', border: '1px solid #DFDFD8', borderRadius: 4,
+    padding: '8px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
     fontSize: 13, fontFamily: 'inherit', minWidth: 150,
   },
   casillas: { display: 'flex', flexDirection: 'column', gap: 8 },
-  casilla: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: '#14263F' },
+  casilla: { display: 'flex', alignItems: 'center', fontSize: 12.5, color: 'var(--texto)' },
   congelado: {
-    fontSize: 11.5, color: '#8A929C', margin: '16px 0 0', lineHeight: 1.55,
+    fontSize: 11.5, color: 'var(--texto-tenue)', margin: '16px 0 0', lineHeight: 1.55,
   },
   btn: {
-    color: '#fff', border: 'none', padding: '9px 16px', borderRadius: 4,
+    color: 'var(--sobre-marca)', border: 'none', padding: '9px 16px', borderRadius: 4,
     fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
     marginTop: 14,
   },

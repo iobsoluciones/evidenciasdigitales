@@ -63,8 +63,8 @@ export default async function PaginaRendicionDetalle({
 }
 
 const s: Record<string, React.CSSProperties> = {
-  migas: { fontSize: 12.5, color: '#8A929C', margin: '0 0 6px' },
-  a: { color: '#14263F', fontWeight: 600 },
-  titulo: { fontSize: 23, fontWeight: 700, color: '#14263F', margin: '0 0 4px' },
-  sub: { fontSize: 13.5, color: '#5B6470', margin: '0 0 18px', lineHeight: 1.6 },
+  migas: { fontSize: 12.5, color: 'var(--texto-tenue)', margin: '0 0 6px' },
+  a: { color: 'var(--texto)', fontWeight: 600 },
+  titulo: { fontSize: 23, fontWeight: 700, color: 'var(--texto)', margin: '0 0 4px' },
+  sub: { fontSize: 13.5, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.6 },
 };

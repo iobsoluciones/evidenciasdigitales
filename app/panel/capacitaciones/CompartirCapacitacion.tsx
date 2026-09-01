@@ -94,7 +94,7 @@ export default function CompartirCapacitacion({
               <button
                 onClick={() => generarEnlaceFirma(false)}
                 disabled={pendiente}
-                style={{ ...est.btn, background: color, color: '#fff' }}
+                style={{ ...est.btn, background: color, color: 'var(--sobre-marca)' }}
               >
                 {pendiente ? 'Generando…' : 'Generar enlace de firma'}
               </button>
@@ -105,7 +105,7 @@ export default function CompartirCapacitacion({
               <div style={est.fila}>
                 <button
                   onClick={() => copiar(urlFirma, 'Enlace de firma copiado.')}
-                  style={{ ...est.btn, background: color, color: '#fff' }}
+                  style={{ ...est.btn, background: color, color: 'var(--sobre-marca)' }}
                 >
                   Copiar
                 </button>
@@ -138,7 +138,7 @@ export default function CompartirCapacitacion({
                 <button
                   onClick={enviarPorCorreo}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: '#fff', marginTop: 8, width: '100%' }}
+                  style={{ ...est.btn, background: color, color: 'var(--sobre-marca)', marginTop: 8, width: '100%' }}
                 >
                   {pendiente ? 'Enviando…' : 'Enviar enlace por correo'}
                 </button>
@@ -151,8 +151,8 @@ export default function CompartirCapacitacion({
       {aviso && (
         <div style={{
           ...est.aviso,
-          background: aviso.tipo === 'ok' ? '#f0fdf4' : '#fef2f2',
-          color: aviso.tipo === 'ok' ? '#15803d' : '#b91c1c',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -162,18 +162,18 @@ export default function CompartirCapacitacion({
 }
 
 const est: Record<string, React.CSSProperties> = {
-  tarjeta: { background: '#fff', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
+  tarjeta: { background: 'var(--superficie)', borderRadius: 14, padding: 20, marginBottom: 20, boxShadow: '0 6px 18px rgba(0,0,0,.05)' },
   h2: { fontSize: 15, margin: '0 0 14px' },
-  h3: { fontSize: 12, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4, margin: '0 0 10px' },
+  h3: { fontSize: 12, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .4, margin: '0 0 10px' },
   columnas: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 26 },
-  cajaQR: { border: '1px dashed #cbd5e1', borderRadius: 10, padding: 12, background: '#f8fafc', display: 'flex', justifyContent: 'center', minHeight: 80 },
-  nota: { fontSize: 11.5, color: '#6b7280', margin: '8px 0' },
-  url: { fontSize: 11, color: '#374151', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, padding: 10, wordBreak: 'break-all', margin: '8px 0' },
+  cajaQR: { border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: 12, background: 'var(--superficie-3)', display: 'flex', justifyContent: 'center', minHeight: 80 },
+  nota: { fontSize: 11.5, color: 'var(--texto-suave)', margin: '8px 0' },
+  url: { fontSize: 11, color: 'var(--texto-suave)', background: 'var(--superficie-3)', border: '1px solid var(--borde)', borderRadius: 8, padding: 10, wordBreak: 'break-all', margin: '8px 0' },
   fila: { display: 'flex', gap: 8, flexWrap: 'wrap' },
   btn: { border: 'none', padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
-  btnSec: { background: '#f1f5f9', color: '#1f2937', border: '1px solid #cbd5e1', padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
-  bloqueCorreo: { marginTop: 16, paddingTop: 14, borderTop: '1px solid #e5e7eb' },
+  btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '8px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
+  bloqueCorreo: { marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--borde)' },
   label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6 },
-  input: { width: '100%', padding: '9px 10px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
+  input: { width: '100%', padding: '9px 10px', border: '1px solid var(--borde-fuerte)', borderRadius: 8, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit' },
   aviso: { marginTop: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13 },
 };

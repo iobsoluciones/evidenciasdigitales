@@ -15,7 +15,6 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { registrarDirecto } from '@/lib/acciones-registro';
 
-const MARCA = '#1e3a8a';
 
 export default function PaginaRegistroDirecto() {
   const [pendiente, startTransition] = useTransition();
@@ -106,7 +105,7 @@ export default function PaginaRegistroDirecto() {
             style={{
               ...s.boton,
               display: 'block', textAlign: 'center', textDecoration: 'none',
-              background: guardada ? MARCA : '#cbd5e1',
+              background: guardada ? 'var(--marca)' : 'var(--borde-fuerte)',
               pointerEvents: guardada ? 'auto' : 'none',
             }}
           >
@@ -169,7 +168,7 @@ export default function PaginaRegistroDirecto() {
 
           <button type="submit" disabled={pendiente} style={{
             ...s.boton,
-            background: pendiente ? '#cbd5e1' : MARCA,
+            background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
             cursor: pendiente ? 'not-allowed' : 'pointer',
           }}>
             {pendiente ? 'Creando…' : 'Crear cuenta y generar contraseña'}
@@ -177,7 +176,7 @@ export default function PaginaRegistroDirecto() {
         </form>
 
         <p style={s.pie}>
-          ¿Ya tienes cuenta? <Link href="/login" style={{ color: '#3b82f6' }}>Inicia sesión</Link>
+          ¿Ya tienes cuenta? <Link href="/login" style={{ color: 'var(--marca)' }}>Inicia sesión</Link>
         </p>
 
         <p style={s.legal}>
@@ -213,70 +212,69 @@ function Campo({
 const s: Record<string, React.CSSProperties> = {
   pantalla: {
     minHeight: '100vh', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-    background: 'linear-gradient(135deg,#f1f5f9,#e2e8f0)', padding: '40px 20px',
-    fontFamily: "'Segoe UI',Roboto,Arial,sans-serif",
+    background: 'var(--fondo)', padding: '40px 20px',
   },
   tarjeta: {
-    width: '100%', maxWidth: 440, background: '#fff', borderRadius: 18,
+    width: '100%', maxWidth: 440, background: 'var(--superficie)', borderRadius: 18,
     boxShadow: '0 10px 30px rgba(0,0,0,.08)', padding: '28px 30px 32px',
   },
-  volver: { fontSize: 12.5, color: '#6b7280', textDecoration: 'none' },
-  titulo: { fontSize: 22, color: MARCA, margin: '14px 0 2px' },
-  sub: { fontSize: 13, color: '#6b7280', margin: '0 0 18px', lineHeight: 1.55 },
+  volver: { fontSize: 12.5, color: 'var(--texto-suave)', textDecoration: 'none' },
+  titulo: { fontSize: 22, color: 'var(--texto)', margin: '14px 0 2px' },
+  sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.55 },
   aviso: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', color: '#9A3412',
-    borderRadius: 10, padding: '11px 13px', fontSize: 12.5, lineHeight: 1.55,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: 'var(--aviso)',
+    borderRadius: 8, padding: '11px 13px', fontSize: 12.5, lineHeight: 1.55,
     marginBottom: 20,
   },
   label: { display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 },
   input: {
-    width: '100%', padding: '11px 12px', border: '1px solid #cbd5e1',
+    width: '100%', padding: '11px 12px', border: '1px solid var(--borde-fuerte)',
     borderRadius: 8, fontSize: 14, boxSizing: 'border-box',
   },
   slugFila: { display: 'flex', alignItems: 'stretch' },
   slugPrefijo: {
-    background: '#f1f5f9', border: '1px solid #cbd5e1', borderRight: 'none',
-    borderRadius: '8px 0 0 8px', padding: '11px 10px', fontSize: 14, color: '#6b7280',
+    background: 'var(--superficie-3)', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
+    borderRadius: '8px 0 0 8px', padding: '11px 10px', fontSize: 14, color: 'var(--texto-suave)',
   },
-  ayuda: { fontSize: 11, color: '#6b7280', margin: '4px 0 0' },
+  ayuda: { fontSize: 11, color: 'var(--texto-suave)', margin: '4px 0 0' },
   error: {
     marginTop: 16, padding: '11px 14px', borderRadius: 8, fontSize: 13,
-    background: '#fef2f2', color: '#dc2626',
+    background: 'var(--mal-fondo)', color: 'var(--mal)',
   },
   boton: {
-    width: '100%', marginTop: 20, padding: 14, color: '#fff', border: 'none',
-    borderRadius: 10, fontSize: 15, fontWeight: 600,
+    width: '100%', marginTop: 20, padding: 14, color: 'var(--sobre-marca)', border: 'none',
+    borderRadius: 8, fontSize: 15, fontWeight: 600,
   },
   botonSec: {
-    width: '100%', marginTop: 14, padding: 11, background: '#fff', color: MARCA,
-    border: `1px solid ${MARCA}`, borderRadius: 10, fontSize: 13.5,
+    width: '100%', marginTop: 14, padding: 11, background: 'var(--superficie)', color: 'var(--texto)',
+    border: '1px solid var(--marca)', borderRadius: 8, fontSize: 13.5,
     fontWeight: 600, cursor: 'pointer',
   },
-  pie: { fontSize: 13, textAlign: 'center', marginTop: 18, color: '#6b7280' },
-  legal: { fontSize: 10.5, color: '#9ca3af', textAlign: 'center', marginTop: 14, lineHeight: 1.5 },
+  pie: { fontSize: 13, textAlign: 'center', marginTop: 18, color: 'var(--texto-suave)' },
+  legal: { fontSize: 10.5, color: 'var(--texto-tenue)', textAlign: 'center', marginTop: 14, lineHeight: 1.5 },
 
   exito: {
-    width: 44, height: 44, borderRadius: '50%', background: '#DCFCE7', color: '#15803D',
+    width: 44, height: 44, borderRadius: '50%', background: 'var(--bien-fondo)', color: 'var(--bien)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 24, fontWeight: 700,
   },
   credencial: {
-    border: '1px solid #E4E4DF', borderRadius: 12, background: '#F7F7F4',
+    border: '1px solid var(--borde)', borderRadius: 12, background: 'var(--fondo)',
     padding: '4px 14px', marginTop: 4,
   },
   credLinea: {
     display: 'flex', flexDirection: 'column', gap: 3,
-    padding: '11px 0', borderBottom: '1px solid #E4E4DF',
+    padding: '11px 0', borderBottom: '1px solid var(--borde)',
   },
-  credEtiqueta: { fontSize: 11, color: '#6b7280', textTransform: 'uppercase', letterSpacing: .4 },
-  credValor: { fontSize: 14.5, color: '#14263F', wordBreak: 'break-all' },
+  credEtiqueta: { fontSize: 11, color: 'var(--texto-suave)', textTransform: 'uppercase', letterSpacing: .4 },
+  credValor: { fontSize: 14.5, color: 'var(--texto)', wordBreak: 'break-all' },
   clave: {
     fontFamily: "'Consolas','Courier New',monospace", fontSize: 19,
     fontWeight: 700, letterSpacing: 1.2,
   },
   confirmar: {
-    display: 'flex', alignItems: 'center', fontSize: 13, color: '#374151',
+    display: 'flex', alignItems: 'center', fontSize: 13, color: 'var(--texto-suave)',
     margin: '18px 0 0', cursor: 'pointer',
   },
-  nota: { fontSize: 11.5, color: '#6b7280', textAlign: 'center', marginTop: 12 },
+  nota: { fontSize: 11.5, color: 'var(--texto-suave)', textAlign: 'center', marginTop: 12 },
 };

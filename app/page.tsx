@@ -15,7 +15,7 @@
  * ese módulo aplica. Una página comercial que promete de más se
  * desmonta en la primera demostración.
  *
- * Paleta: tinta #14263F, papel #F7F7F4, grafito #5B6470,
+ * Paleta: tinta #14263F, papel var(--fondo), grafito var(--texto-suave),
  * sello #6D3B8E (el violeta de los sellos de radicado, usado una
  * sola vez en toda la página).
  */
@@ -32,10 +32,10 @@ type Plan = {
 };
 
 const TINTA = '#14263F';
-const PAPEL = '#F7F7F4';
-const GRAFITO = '#5B6470';
+const PAPEL = 'var(--fondo)';
+const GRAFITO = 'var(--texto-suave)';
 const SELLO = '#6D3B8E';
-const LINEA = '#DFDFD8';
+const LINEA = 'var(--borde-fuerte)';
 
 export default async function PaginaInicio() {
   const supabase = await crearClienteServidor();
@@ -49,7 +49,7 @@ export default async function PaginaInicio() {
   const planes = (data ?? []) as Plan[];
 
   return (
-    <main style={s.pagina}>
+    <main className="comercial" style={s.pagina}>
       {/* ================= CABECERA ================= */}
       <header style={s.cabecera}>
         <div style={s.marca}>
@@ -199,7 +199,7 @@ export default async function PaginaInicio() {
           />
           <Fase
             titulo="Verificar"
-            color="#B45309"
+            color="var(--aviso)"
             items={[
               ['Inspecciones', 'Un criterio por pantalla, pensado para el celular'],
               ['Autoevaluación 0312', 'Puntaje, criterio de valoración e informe'],
@@ -405,7 +405,6 @@ function Fila({ k, v }: { k: string; v: string }) {
 const s: Record<string, React.CSSProperties> = {
   pagina: {
     background: PAPEL, color: TINTA, minHeight: '100vh',
-    fontFamily: "'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif",
     lineHeight: 1.55,
   },
 
@@ -477,7 +476,7 @@ const s: Record<string, React.CSSProperties> = {
     background: TINTA, padding: '5px 6px', fontWeight: 600,
   },
   docTd: {
-    fontSize: 7.5, padding: '7px 6px', borderBottom: `1px solid #EFEFEA`, color: TINTA,
+    fontSize: 7.5, padding: '7px 6px', borderBottom: `1px solid var(--superficie-3)`, color: TINTA,
   },
   docPie: {
     fontSize: 6.2, color: '#A8AEB6', textAlign: 'center', marginTop: 12,
@@ -577,5 +576,5 @@ const s: Record<string, React.CSSProperties> = {
     display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 28,
   },
   pieTexto: { fontSize: 12.5, color: GRAFITO, margin: '10px 0 0' },
-  pieLegal: { fontSize: 11.5, color: '#8A929C', margin: 0, lineHeight: 1.7 },
+  pieLegal: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: 0, lineHeight: 1.7 },
 };

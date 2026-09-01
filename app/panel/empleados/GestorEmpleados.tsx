@@ -301,8 +301,8 @@ export default function GestorEmpleados({
       {aviso && (
         <div style={{
           ...e.aviso,
-          background: aviso.tipo === 'ok' ? '#F0FDF4' : '#FDF2F2',
-          color: aviso.tipo === 'ok' ? '#15803D' : '#9B1C1C',
+          background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+          color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
         }}>
           {aviso.texto}
         </div>
@@ -327,7 +327,7 @@ export default function GestorEmpleados({
               onChange={(ev) => setF({ ...f, identificacion: ev.target.value.replace(/[^0-9]/g, '') })}
               placeholder="Identificación *"
               inputMode="numeric"
-              style={{ ...e.input, background: editandoId ? '#F4F4F0' : '#fff' }}
+              style={{ ...e.input, background: editandoId ? 'var(--superficie-3)' : '#fff' }}
             />
             <input
               value={f.nombres}
@@ -354,7 +354,7 @@ export default function GestorEmpleados({
               style={{ ...e.input, textTransform: 'uppercase' }}
             />
             <button onClick={guardar} disabled={ocupado}
-              style={{ ...e.btn, background: ocupado ? '#C5C5BD' : color, border: 'none' }}>
+              style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : color, border: 'none' }}>
               {editandoId ? 'Guardar' : 'Agregar'}
             </button>
           </div>
@@ -418,8 +418,8 @@ export default function GestorEmpleados({
                   <td style={{ ...e.td, textAlign: 'center' }}>{em.asistencias}</td>
                   <td style={{
                     ...e.td, textAlign: 'center', fontWeight: 600,
-                    color: em.promedio === null ? '#A3AAB3'
-                         : em.promedio >= 70 ? '#15803D' : '#9B1C1C',
+                    color: em.promedio === null ? 'var(--texto-tenue)'
+                         : em.promedio >= 70 ? 'var(--bien)' : 'var(--mal)',
                   }}>
                     {em.promedio !== null ? `${em.promedio}%` : '—'}
                   </td>
@@ -428,7 +428,7 @@ export default function GestorEmpleados({
                     {esAdmin && (
                       <>
                         <button onClick={() => editar(em)} style={e.btnMini}>Editar</button>
-                        <button onClick={() => retirar(em.id)} style={{ ...e.btnMini, color: '#9B1C1C' }}>
+                        <button onClick={() => retirar(em.id)} style={{ ...e.btnMini, color: 'var(--mal)' }}>
                           Retirar
                         </button>
                       </>
@@ -468,7 +468,7 @@ export default function GestorEmpleados({
 
 const e: Record<string, React.CSSProperties> = {
   egreso: {
-    background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 10,
+    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
     padding: '14px 16px', margin: '14px 0',
   },
   egresoTitulo: { fontSize: 14, fontWeight: 700, color: '#7C2D12', marginBottom: 6 },
@@ -484,70 +484,70 @@ const e: Record<string, React.CSSProperties> = {
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   egresoConfirmar: {
-    background: '#9A3412', color: '#fff', border: 'none',
+    background: 'var(--aviso)', color: 'var(--sobre-marca)', border: 'none',
     padding: '8px 18px', borderRadius: 8, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },
   card: {
-    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    background: 'var(--superficie)', border: '1px solid var(--borde)', borderRadius: 8,
     padding: 22, marginBottom: 16,
   },
   h2: { fontSize: 14.5, margin: '0 0 5px', fontWeight: 600 },
-  intro: { fontSize: 12, color: '#5B6470', margin: '0 0 16px', lineHeight: 1.5 },
+  intro: { fontSize: 12, color: 'var(--texto-suave)', margin: '0 0 16px', lineHeight: 1.5 },
 
-  bloqueCarga: { background: '#FBFBF9', border: '1px solid #EFEFEA', borderRadius: 6, padding: 14, marginBottom: 16 },
+  bloqueCarga: { background: 'var(--superficie-2)', border: '1px solid var(--borde)', borderRadius: 6, padding: 14, marginBottom: 16 },
   filaCarga: { display: 'flex', gap: 10, flexWrap: 'wrap' },
-  ayuda: { fontSize: 11.5, color: '#8A929C', margin: '10px 0 0', lineHeight: 1.5 },
+  ayuda: { fontSize: 11.5, color: 'var(--texto-tenue)', margin: '10px 0 0', lineHeight: 1.5 },
 
   formulario: { marginBottom: 16 },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 8 },
   input: {
-    padding: '9px 11px', border: '1px solid #DFDFD8', borderRadius: 4,
+    padding: '9px 11px', border: '1px solid var(--borde-fuerte)', borderRadius: 4,
     fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit', width: '100%',
   },
   btn: {
-    color: '#fff', padding: '9px 18px', borderRadius: 4, fontSize: 13,
+    color: 'var(--sobre-marca)', padding: '9px 18px', borderRadius: 4, fontSize: 13,
     fontWeight: 600, display: 'inline-block', textAlign: 'center',
   },
   btnSec: {
-    background: '#fff', color: '#14263F', border: '1px solid #DFDFD8',
+    background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '9px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnVer: {
-    background: '#14263F', color: '#fff', padding: '4px 12px', borderRadius: 3,
+    background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '4px 12px', borderRadius: 3,
     fontSize: 11.5, fontWeight: 600, textDecoration: 'none', marginRight: 8,
   },
   btnMini: {
-    background: 'none', border: 'none', color: '#5B6470',
+    background: 'none', border: 'none', color: 'var(--texto-suave)',
     fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline', marginRight: 8,
   },
-  enlace: { background: 'none', border: 'none', color: '#5B6470', fontSize: 12, cursor: 'pointer', padding: '8px 0 0' },
+  enlace: { background: 'none', border: 'none', color: 'var(--texto-suave)', fontSize: 12, cursor: 'pointer', padding: '8px 0 0' },
 
   cabeceraLista: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     gap: 12, marginBottom: 10, flexWrap: 'wrap',
   },
-  conteo: { fontSize: 12, color: '#8A929C' },
+  conteo: { fontSize: 12, color: 'var(--texto-tenue)' },
 
   th: {
-    background: '#F7F7F4', color: '#8A929C', fontSize: 10.5, textTransform: 'uppercase',
-    padding: '8px', textAlign: 'left', borderBottom: '1px solid #E4E4DF',
+    background: 'var(--fondo)', color: 'var(--texto-tenue)', fontSize: 10.5, textTransform: 'uppercase',
+    padding: '8px', textAlign: 'left', borderBottom: '1px solid var(--borde)',
   },
   paginacion: {
     display: 'flex', justifyContent: 'center', alignItems: 'center',
-    gap: 14, marginTop: 12, paddingTop: 12, borderTop: '1px solid #F4F4F0',
+    gap: 14, marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--superficie-3)',
   },
   btnPag: {
-    background: '#fff', borderWidth: 1, borderStyle: 'solid', borderColor: '#DFDFD8',
-    color: '#14263F', padding: '6px 14px', borderRadius: 4,
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde-fuerte)',
+    color: 'var(--texto)', padding: '6px 14px', borderRadius: 4,
     fontSize: 12, fontWeight: 600, cursor: 'pointer',
   },
-  td: { padding: '8px', borderBottom: '1px solid #F4F4F0' },
-  vacio: { fontSize: 12.5, color: '#8A929C', textAlign: 'center', padding: '24px 0', margin: 0 },
+  td: { padding: '8px', borderBottom: '1px solid var(--superficie-3)' },
+  vacio: { fontSize: 12.5, color: 'var(--texto-tenue)', textAlign: 'center', padding: '24px 0', margin: 0 },
 
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 14 },
   errores: {
-    background: '#FEFCE8', color: '#8A6100', padding: '12px 14px',
+    background: 'var(--ambar-fondo)', color: 'var(--ambar)', padding: '12px 14px',
     borderRadius: 6, marginBottom: 14, maxHeight: 160, overflowY: 'auto',
   },
 };
