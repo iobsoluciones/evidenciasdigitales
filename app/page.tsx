@@ -7,6 +7,14 @@
  * que separa secciones, porque es exactamente lo que el producto
  * produce. Estructura que informa, no que decora.
  *
+ * QUÉ CUENTA: hasta agosto de 2026 esta página vendía un registro de
+ * asistencia a capacitaciones, que es lo que la aplicación era. Hoy es
+ * el SG-SST completo, así que lo primero que tiene que hacer la página
+ * es decir eso sin rodeos: qué es, qué cubre y qué se lleva el cliente.
+ * Cada módulo que se nombra existe; cada norma que se cita es la que
+ * ese módulo aplica. Una página comercial que promete de más se
+ * desmonta en la primera demostración.
+ *
  * Paleta: tinta #14263F, papel #F7F7F4, grafito #5B6470,
  * sello #6D3B8E (el violeta de los sellos de radicado, usado una
  * sola vez en toda la página).
@@ -45,8 +53,8 @@ export default async function PaginaInicio() {
       {/* ================= CABECERA ================= */}
       <header style={s.cabecera}>
         <div style={s.marca}>
-          <span style={s.marcaTexto}>Registro</span>
-          <span style={s.marcaMono}>SST</span>
+          <span style={s.marcaTexto}>Rúbrica</span>
+          <span style={s.marcaMono}>SG-SST</span>
         </div>
         <nav style={s.nav}>
           <Link href="/login" style={s.enlaceNav}>Ingresar</Link>
@@ -57,16 +65,21 @@ export default async function PaginaInicio() {
       {/* ================= TESIS ================= */}
       <section style={s.hero}>
         <div style={s.heroTexto}>
-          <p style={s.eyebrow}>Para consultores HSEQ · Varias empresas, un solo sistema</p>
+          <p style={s.eyebrow}>Para consultores de SST · Varias empresas, un solo sistema</p>
           <h1 style={s.titular}>
-            Ocho empresas a cargo,<br />
-            <span style={{ color: SELLO }}>una sola</span> carpeta digital.
+            El SG-SST de tus clientes,<br />
+            <span style={{ color: SELLO }}>con la firma puesta.</span>
           </h1>
           <p style={s.entrada}>
-            Cada cliente con su membrete, su nomenclatura y sus indicadores.
-            Los asistentes escanean un código y firman en el celular; el acta
-            queda armada al instante. Cuando llega la auditoría, el documento
-            ya existe.
+            Rúbrica administra el Sistema de Gestión de SST de todas las
+            empresas que llevas: peligros, capacitaciones, dotación,
+            inspecciones, accidentes, emergencias, permisos de alto riesgo y
+            la autoevaluación de la Resolución 0312.
+          </p>
+          <p style={s.entrada}>
+            <b>Cada cosa termina en un documento firmado.</b> Con el membrete
+            de cada empresa, su código de control documental, y la firma
+            pedida por enlace a quien tenga que darla — esté donde esté.
           </p>
           <div style={s.acciones}>
             <Link href="/registro" style={s.botonPrincipal}>Empezar con 14 días de prueba</Link>
@@ -121,81 +134,114 @@ export default async function PaginaInicio() {
 
       {/* ================= DIVISOR: bloque de control ================= */}
       <BloqueControl items={[
-        ['ALCANCE', 'MULTIEMPRESA'],
-        ['SOPORTE', 'PDF CON FIRMAS'],
-        ['VIGENCIA', 'PERMANENTE'],
+        ['ALCANCE', 'TODO EL SG-SST'],
+        ['SOPORTE', 'PDF FIRMADO'],
+        ['FIRMA', 'EN SITIO O POR ENLACE'],
+        ['NORMA', 'DEC. 1072 · RES. 0312'],
       ]} />
 
-      {/* ================= LO QUE PASA HOY ================= */}
+      {/* ================= QUÉ ES ================= */}
       <section style={s.seccion}>
-        <h2 style={s.h2}>Lo que pasa hoy</h2>
+        <h2 style={s.h2}>En una frase</h2>
+        <p style={s.frase}>
+          Un consultor lleva ocho empresas. Rúbrica le da, para cada una, el
+          sistema de gestión completo y la carpeta de evidencias que pide una
+          visita del Ministerio o de la ARL.
+        </p>
         <div style={s.dos}>
           <div>
             <p style={s.parrafo}>
-              Ocho empresas a cargo son ocho carpetas de Excel, ocho formatos
-              distintos y ocho conversaciones al mes explicando dónde quedó el
-              acta de la capacitación de marzo.
-            </p>
-            <p style={s.parrafo}>
-              El instructor firma tres días después, o no firma. Cuando la ARL
-              pide los soportes, aparecen actas incompletas, ilegibles o
-              sencillamente perdidas.
+              <b>Sin Rúbrica</b> son ocho carpetas de Excel, ocho formatos
+              distintos y la misma conversación cada mes: dónde quedó el acta de
+              marzo, quién firmó la entrega de dotación, si el examen de
+              ingreso de ese trabajador está vigente.
             </p>
           </div>
           <div>
             <p style={s.parrafo}>
-              Y hay una pregunta que nadie puede responder con hojas de papel:
-              en qué áreas participa menos la gente, qué temas no quedaron
-              claros, quién lleva dos años sin asistir a nada.
-            </p>
-            <p style={s.parrafo}>
-              Esa información existe. Está en las hojas, dispersa y en un
-              formato que no permite sumarla.
+              <b>Con Rúbrica</b> cada empresa tiene su expediente vivo, y la
+              primera pantalla te dice qué le falta a cada una, ordenado por
+              gravedad. Los documentos existen antes de que alguien los pida.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ================= EL FLUJO ================= */}
+      {/* ================= QUÉ CUBRE ================= */}
       <section style={{ ...s.seccion, borderTop: `1px solid ${LINEA}` }}>
-        <h2 style={s.h2}>El flujo completo</h2>
+        <h2 style={s.h2}>Qué cubre</h2>
         <p style={s.subtitulo}>
-          Cuatro pasos en orden. Cada uno depende del anterior.
+          Organizado por el ciclo PHVA, que es como lo recorre un auditor. Cada
+          módulo termina en un documento o en un indicador obligatorio.
         </p>
 
-        <ol style={s.pasos}>
-          {[
-            ['Se programa', 'Tema, instructor, horario y cuántas personas se esperan. El código del acta se genera solo, correlativo por año.'],
-            ['Se comparte', 'Un código impreso en la sala o proyectado. Quien llega lo escanea con su celular; no instala nada.'],
-            ['Se firma', 'Nombre, cargo, área y firma con el dedo. Si hay evaluación, la responde antes de enviar.'],
-            ['Queda archivada', 'El acta en PDF con las firmas incrustadas, y el informe de resultados si hubo evaluación.'],
-          ].map(([t, d], i) => (
-            <li key={t} style={s.paso}>
-              <span style={s.pasoNum}>{String(i + 1).padStart(2, '0')}</span>
-              <div>
-                <h3 style={s.pasoTitulo}>{t}</h3>
-                <p style={s.pasoTexto}>{d}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div style={s.fases}>
+          <Fase
+            titulo="Planear"
+            color="#2A6F97"
+            items={[
+              ['Matriz de peligros', 'GTC 45, con el riesgo calculado en la base'],
+              ['Plan anual de trabajo', 'Cronograma de 12 meses, firmado por el empleador'],
+              ['Matriz legal', 'Catálogo de normas editable e importable'],
+              ['COPASST, convivencia y brigada', 'Con el validador de la composición que exige la norma'],
+            ]}
+          />
+          <Fase
+            titulo="Hacer"
+            color="#1B5E4A"
+            items={[
+              ['Capacitaciones', 'Asistencia por QR, evaluación y acta firmada'],
+              ['Dotación y EPP', 'Entrega, devolución, kardex y vencimientos'],
+              ['Salud de los trabajadores', 'Exámenes, ausentismo y horas-hombre'],
+              ['Emergencias', 'Análisis de amenazas y acta de simulacro'],
+              ['Alto riesgo y contratistas', 'Permisos de alturas y espacios confinados'],
+            ]}
+          />
+          <Fase
+            titulo="Verificar"
+            color="#B45309"
+            items={[
+              ['Inspecciones', 'Un criterio por pantalla, pensado para el celular'],
+              ['Autoevaluación 0312', 'Puntaje, criterio de valoración e informe'],
+              ['Indicadores del art. 30', 'Los seis de la norma, con su fórmula al lado'],
+            ]}
+          />
+          <Fase
+            titulo="Actuar"
+            color="#7A3E9D"
+            items={[
+              ['Investigación de accidentes', 'Res. 1401, con el plazo de 15 días a la vista'],
+              ['Plan de acción', 'Las acciones salen de los hallazgos, no se escriben aparte'],
+              ['Rendición de cuentas', 'Cada responsable escribe lo suyo y firma'],
+            ]}
+          />
+        </div>
       </section>
 
-      {/* ================= LO QUE SE PUEDE MEDIR ================= */}
+      {/* ================= POR QUÉ ES DISTINTO ================= */}
       <section style={{ ...s.seccion, borderTop: `1px solid ${LINEA}` }}>
-        <h2 style={s.h2}>Lo que se puede medir después</h2>
-        <div style={s.tres}>
+        <h2 style={s.h2}>Por qué no es un archivador con formularios</h2>
+        <p style={s.subtitulo}>
+          Cuatro cosas que un Excel no puede hacer, y que son las que ahorran
+          el trabajo de verdad.
+        </p>
+
+        <div style={s.dos}>
           <Medida
-            titulo="Participación real"
-            texto="Cuántos asistieron sobre cuántos se esperaban, por capacitación y acumulado. Ponderado, no promediado: una sesión de 50 personas no pesa igual que una de 2."
+            titulo="Nadie persigue a nadie para firmar"
+            texto="El gerente que aprueba el plan anual, el jefe de área que acompañó la inspección, el evaluador del simulacro, el trabajador en otra sede: cada uno recibe un enlace y firma desde su celular. Una firma virtual que obliga a juntar a la gente no ahorró nada frente al papel."
           />
           <Medida
-            titulo="Dónde falla el aprendizaje"
-            texto="Si la capacitación se evalúa, cada pregunta lleva un subtema. El informe ordena los subtemas de peor a mejor: lo primero de la lista es lo que hay que reforzar."
+            titulo="Te dice qué falta, sin que preguntes"
+            texto="La primera pantalla reúne los pendientes de la empresa ordenados por gravedad: el accidente sin investigar antes que la inspección de la semana entrante. Y llega un resumen al correo los días hábiles, solo cuando hay algo urgente."
           />
           <Medida
-            titulo="Quién no está llegando"
-            texto="Distribución por área y por ciudad, y el listado de personas ordenado por número de capacitaciones asistidas."
+            titulo="Cruza lo que en papel nadie cruza"
+            texto="Al autorizar un permiso de trabajo en alturas, comprueba que cada ejecutante tenga examen médico vigente. Al retirar un empleado, exige el examen de egreso y lo saca de sus comités. En papel esas comprobaciones dependen de que alguien se acuerde."
+          />
+          <Medida
+            titulo="Los catálogos son tuyos"
+            texto="Los estándares mínimos y la matriz legal llegan cargados, pero se editan y se importan desde Excel. Cuando el Ministerio publica una resolución nueva no tienes que esperar a que nosotros la agreguemos."
           />
         </div>
       </section>
@@ -205,14 +251,15 @@ export default async function PaginaInicio() {
         ['PLANES', 'TRES NIVELES'],
         ['PRUEBA', '14 DÍAS'],
         ['PERMANENCIA', 'SIN CLÁUSULA'],
+        ['SOPORTE', 'BOGOTÁ, COLOMBIA'],
       ]} />
 
       {/* ================= PLANES ================= */}
       <section style={s.seccion} id="planes">
         <h2 style={s.h2}>Planes</h2>
         <p style={s.subtitulo}>
-          Todos incluyen capacitaciones ilimitadas, actas en PDF, evaluaciones
-          y reporte ejecutivo. Lo que cambia es cuántas empresas administras.
+          Todos incluyen los módulos completos, los documentos en PDF y las
+          firmas por enlace. Lo que cambia es cuántas empresas administras.
         </p>
 
         <div style={s.planes}>
@@ -239,7 +286,8 @@ export default async function PaginaInicio() {
                   k="Empresas a cargo"
                   v={p.max_empresas ? String(p.max_empresas) : 'Sin límite'}
                 />
-                <Fila k="Capacitaciones" v="Sin límite" />
+                <Fila k="Módulos del SG-SST" v="Todos" />
+                <Fila k="Capacitaciones y documentos" v="Sin límite" />
                 <Fila
                   k="Usuarios"
                   v={p.max_usuarios ? String(p.max_usuarios) : 'Sin límite'}
@@ -249,6 +297,7 @@ export default async function PaginaInicio() {
                   v={p.max_preguntas_evaluacion ? String(p.max_preguntas_evaluacion) : 'Sin límite'}
                 />
                 <Fila k="Membrete propio por empresa" v="Sí" />
+                <Fila k="Firma por enlace" v="Sí" />
                 <Fila k="Reporte ejecutivo" v="Sí" />
               </dl>
 
@@ -263,8 +312,8 @@ export default async function PaginaInicio() {
         <div style={s.pieFila}>
           <div>
             <div style={s.marca}>
-              <span style={{ ...s.marcaTexto, fontSize: 15 }}>Registro</span>
-              <span style={s.marcaMono}>SST</span>
+              <span style={{ ...s.marcaTexto, fontSize: 15 }}>Rúbrica</span>
+              <span style={s.marcaMono}>SG-SST</span>
             </div>
             <p style={s.pieTexto}>
               Un producto de IOB Soluciones · Bogotá, Colombia
@@ -311,6 +360,27 @@ function Rubrica() {
         opacity=".75"
       />
     </svg>
+  );
+}
+
+/** Una fase del PHVA con sus módulos. El color es el mismo del menú. */
+function Fase({
+  titulo, color, items,
+}: {
+  titulo: string; color: string; items: Array<[string, string]>;
+}) {
+  return (
+    <div style={{ ...s.fase, borderTopColor: color }}>
+      <h3 style={{ ...s.faseTitulo, color }}>{titulo}</h3>
+      <ul style={s.faseLista}>
+        {items.map(([n, d]) => (
+          <li key={n} style={s.faseItem}>
+            <span style={s.faseNombre}>{n}</span>
+            <span style={s.faseDetalle}>{d}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -449,6 +519,28 @@ const s: Record<string, React.CSSProperties> = {
   },
   pasoTitulo: { fontSize: 16, margin: '0 0 5px', fontWeight: 600 },
   pasoTexto: { fontSize: 14, color: GRAFITO, margin: 0, maxWidth: 620 },
+
+  frase: {
+    fontSize: 19, lineHeight: 1.6, color: TINTA, margin: '0 0 30px',
+    maxWidth: 720, fontWeight: 500,
+  },
+
+  fases: {
+    display: 'grid', gap: 24,
+    gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))',
+  },
+  fase: { borderTopWidth: 3, borderTopStyle: 'solid', paddingTop: 14 },
+  faseTitulo: {
+    fontSize: 11, fontWeight: 800, letterSpacing: 1.2,
+    textTransform: 'uppercase', margin: '0 0 14px',
+  },
+  faseLista: { listStyle: 'none', padding: 0, margin: 0 },
+  faseItem: {
+    display: 'flex', flexDirection: 'column', gap: 2,
+    padding: '9px 0', borderTop: `1px solid ${LINEA}`,
+  },
+  faseNombre: { fontSize: 13.5, fontWeight: 600 },
+  faseDetalle: { fontSize: 12, color: GRAFITO, lineHeight: 1.5 },
 
   medidaTitulo: { fontSize: 15.5, margin: '0 0 8px', fontWeight: 600 },
   medidaTexto: { fontSize: 13.5, color: GRAFITO, margin: 0 },
