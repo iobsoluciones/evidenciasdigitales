@@ -415,6 +415,18 @@ Tres libros descargables (`/api/excel/*`) además del kardex:
    **Se retira** borrando `lib/acciones-registro.ts`, `app/registro/directo/` y el enlace en
    `/registro`; el método por correo no se toca.
 
+### Navegación
+El menú lateral va agrupado por **PHVA** (Planear, Hacer, Verificar, Actuar). El beneficio
+no es estético: **hace evidente lo que falta**, y es el mismo lenguaje con el que un auditor
+recorre el SG-SST.
+
+Los cinco accesos transversales —Panel principal, Empleados, Calendario, Reportes y
+Plantillas— viven en la **barra superior**, no en el lateral: allí se comían la mitad del
+alto y obligaban a subir y bajar para llegar a los módulos. `AccesosRapidos` los dibuja con
+**SVG en línea** porque los cuadrados geométricos anteriores (▦ ▤ ▥ ▧ ◫) eran
+indistinguibles entre sí. Bajo 1180 px queda solo el icono; bajo 900 px la barra
+desaparece y los accesos vuelven al lateral, que en móvil es el único menú que hay.
+
 ### Manual de uso (`/panel/manual`)
 Nueve submanuales, uno por módulo, con figuras dibujadas (no capturas: una captura envejece con
 el primer cambio de estilo). `Figuras.tsx` da las piezas — `Ventana`, `Flujo`, `Decision`,
@@ -516,6 +528,8 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
 | `text[] \|\| 'literal'` → "malformed array literal" | Concatenar un literal a un `text[]` necesita `::text`. Con `format()` no falla porque devuelve text, y por eso el error aparece solo en algunas líneas |
 | `format()` con un `%` literal → "unrecognized format() type specifier" | Se escribe con `\|\|` o se duplica el signo |
 | Las funciones con `mi_org_id()` devolvían vacío al probarlas por SQL | En una sesión SQL no hay JWT. Se simula con `set_config('request.jwt.claims', …, true)` antes de probar |
+| Una regla CSS correcta que no hacía nada | El elemento traía `display:flex` **en línea**, y un estilo en línea le gana a la hoja: el `@media` se escribía sin error y se ignoraba. Se comprueba con `getComputedStyle`, no leyendo el código |
+| «Expected '</', got 'ident'» al añadir un comentario a un `<style>` | Un **backtick** dentro del comentario cerró la plantilla de texto de JSX. `tsc` no lo vio porque el archivo se editó después de correrlo; lo cazó el navegador |
 | `→` (U+2192) invisible en los PDF | Las fuentes estándar de react-pdf usan **WinAnsi**: el carácter no existe, no se dibuja y **no da error**. Solo se ve renderizando de verdad. `•` y `·` sí existen |
 | «CARLOS RAMÍREZ TOR-RES» en el organigrama | react-pdf **parte palabras con guion** cuando no caben. Se desactiva con `Font.registerHyphenationCallback((p) => [p])` en `EncabezadoDoc`, por donde pasan todos los documentos |
 | Vercel devolvió `504 MIDDLEWARE_INVOCATION_TIMEOUT` con Supabase sano | El middleware llamaba a `getUser()` —un viaje de red— **en toda petición**, incluidas las anónimas y las públicas, sin reloj. Un solo retardo de Supabase tumbaba el sitio entero. Ahora **sin cookie de sesión no se pregunta** (una petición anónima no tiene nada que validar) y la validación corre contra un límite de 5 s: si vence, el middleware **decide** —a `/login` en ruta protegida, de largo en pública— en vez de colgarse hasta que Vercel la mate |

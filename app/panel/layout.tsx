@@ -13,6 +13,7 @@ import MenuLateral from './MenuLateral';
 import SelectorEmpresa from './SelectorEmpresa';
 import BotonSalir from './BotonSalir';
 import BotonMenu from './BotonMenu';
+import AccesosRapidos from './AccesosRapidos';
 
 export default async function LayoutPanel({
   children,
@@ -61,6 +62,10 @@ export default async function LayoutPanel({
         <header style={est.barra}>
           <BotonMenu color={marca} />
           <SelectorEmpresa empresas={empresas} activa={activa} />
+          {/* Los cinco accesos transversales viven aquí, no en el menú:
+              arriba se comían la mitad del alto del lateral y obligaban a
+              subir y bajar para llegar a los módulos. */}
+          <AccesosRapidos color={marca} />
           {/* marginLeft:auto y no space-between: sin empresas el selector
               no pinta nada, y entonces Manual y Salir se iban al borde
               izquierdo. Así quedan a la derecha siempre. */}

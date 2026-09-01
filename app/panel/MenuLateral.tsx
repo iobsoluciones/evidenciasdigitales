@@ -186,81 +186,34 @@ export default function MenuLateral({
           </div>
         </div>
 
-        {/* ---------- Cartera ---------- */}
-        <div style={{ padding: '14px 12px 6px' }}>
-          <Link
-            href="/panel"
-            onClick={() => setMovil(false)}
-            style={{
-              ...e.cartera,
-              background: enCartera ? color : '#fff',
-              color: enCartera ? '#fff' : '#14263F',
-              borderColor: enCartera ? color : '#DFDFD8',
-            }}
-          >
-            <span style={e.iconoCartera} aria-hidden="true">▦</span>
-            Panel principal
-          </Link>
-
-          <Link
-            href="/panel/empleados"
-            onClick={() => setMovil(false)}
-            style={{
-              ...e.cartera,
-              marginTop: 6,
-              background: enEmpleados ? color : '#fff',
-              color: enEmpleados ? '#fff' : '#14263F',
-              borderColor: enEmpleados ? color : '#DFDFD8',
-            }}
-          >
-            <span style={e.iconoCartera} aria-hidden="true">◫</span>
-            Empleados
-          </Link>
-
-          <Link
-            href="/panel/calendario"
-            onClick={() => setMovil(false)}
-            style={{
-              ...e.cartera,
-              marginTop: 6,
-              background: enCalendario ? color : '#fff',
-              color: enCalendario ? '#fff' : '#14263F',
-              borderColor: enCalendario ? color : '#DFDFD8',
-            }}
-          >
-            <span style={e.iconoCartera} aria-hidden="true">▤</span>
-            Calendario
-          </Link>
-
-          <Link
-            href="/panel/reportes"
-            onClick={() => setMovil(false)}
-            style={{
-              ...e.cartera,
-              marginTop: 6,
-              background: enReportes ? color : '#fff',
-              color: enReportes ? '#fff' : '#14263F',
-              borderColor: enReportes ? color : '#DFDFD8',
-            }}
-          >
-            <span style={e.iconoCartera} aria-hidden="true">▥</span>
-            Reportes
-          </Link>
-
-          <Link
-            href="/panel/plantillas"
-            onClick={() => setMovil(false)}
-            style={{
-              ...e.cartera,
-              marginTop: 6,
-              background: enPlantillas ? color : '#fff',
-              color: enPlantillas ? '#fff' : '#14263F',
-              borderColor: enPlantillas ? color : '#DFDFD8',
-            }}
-          >
-            <span style={e.iconoCartera} aria-hidden="true">▧</span>
-            Plantillas de capacitación
-          </Link>
+        {/* ---------- Accesos transversales ----------
+            En pantalla ancha viven en la barra superior, que es donde
+            estorban menos. Aquí quedan SOLO para el móvil, donde la barra
+            no tiene sitio y el lateral es el único menú que hay. */}
+        <div className="accesos-lateral" style={{ padding: '14px 12px 6px' }}>
+          {[
+            { href: '/panel', texto: 'Panel principal', activo: enCartera, icono: '\u2302' },
+            { href: '/panel/empleados', texto: 'Empleados', activo: enEmpleados, icono: '\u263a' },
+            { href: '/panel/calendario', texto: 'Calendario', activo: enCalendario, icono: '\u25a6' },
+            { href: '/panel/reportes', texto: 'Reportes', activo: enReportes, icono: '\u2261' },
+            { href: '/panel/plantillas', texto: 'Plantillas de capacitación', activo: enPlantillas, icono: '\u25a4' },
+          ].map((x, i) => (
+            <Link
+              key={x.href}
+              href={x.href}
+              onClick={() => setMovil(false)}
+              style={{
+                ...e.cartera,
+                marginTop: i === 0 ? 0 : 6,
+                background: x.activo ? color : '#fff',
+                color: x.activo ? '#fff' : '#14263F',
+                borderColor: x.activo ? color : '#DFDFD8',
+              }}
+            >
+              <span style={e.iconoCartera} aria-hidden="true">{x.icono}</span>
+              {x.texto}
+            </Link>
+          ))}
         </div>
 
         {/* ---------- Módulos, agrupados por PHVA ---------- */}
@@ -358,6 +311,7 @@ export default function MenuLateral({
 
       <style>{`
         .solo-movil { display: none; }
+        .accesos-lateral { display: none; }
         @media (max-width: 900px) {
           .solo-movil { display: flex; }
           .lateral {
@@ -365,6 +319,7 @@ export default function MenuLateral({
             transform: translateX(-100%); transition: transform .22s ease;
           }
           .lateral.abierto { transform: translateX(0); }
+          .accesos-lateral { display: block; }
         }
       `}</style>
     </>
