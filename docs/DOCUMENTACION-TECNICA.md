@@ -22,8 +22,9 @@ acta de entrega de dotación, acta de devolución, informe de inspección.
 
 - **Autor:** Iván Ocón Barrios — IOB Soluciones (Bogotá, Colombia).
 - **Repositorio:** `iobsoluciones/rubrica`.
-- **Producción:** `evidenciasdigitales.vercel.app` — el proyecto de Vercel todavía
-  conserva el nombre viejo; renombrarlo cambia ese dominio (ver §11).
+- **Producción:** `rubrica-sst.vercel.app`. El dominio anterior
+  (`evidenciasdigitales.vercel.app`) sigue asignado al proyecto y **redirige con
+  307**, así que los enlaces ya repartidos no se rompen.
 - **Idioma:** español en código, comentarios e interfaz.
 
 ---
@@ -567,7 +568,7 @@ caracteres a mano, que es como se han perdido versiones antes.
 | **Resend en modo de pruebas** | `RESEND_FROM = onboarding@resend.dev`, el remitente sandbox: la API acepta el envío pero **solo entrega al correo dueño de la cuenta** (`iobsoluciones@gmail.com`); cualquier otro destinatario se rechaza con 403. Es el mismo bloqueo que motivó el registro sin correo. Se sale verificando un dominio propio en Resend y poniendo `RESEND_FROM` con ese dominio |
 | Notificaciones | Recordatorios de inspecciones programadas y aviso a responsables de acciones: **sin implementar**. Requiere decidir si se agrega `correo` a `empleados` |
 | Clave de servicio en Preview | No está en ese alcance; el registro directo no funciona en despliegues de vista previa |
-| Nombre del proyecto en Vercel | Sigue siendo `evidenciasdigitales`, así que la producción responde en `evidenciasdigitales.vercel.app`. Renombrarlo **cambia el dominio** y deja muertos los QR impresos y los enlaces de firma ya enviados. Carpeta, repositorio y paquete ya se llaman `rubrica` |
+| Dominio propio | La producción vive en un subdominio `*.vercel.app`, que no es exclusivo: `rubrica.vercel.app` ya lo tiene otro producto que también se llama *Rubrica*. Mientras no se registre un dominio propio, el nombre de la marca no está asegurado en la web |
 
 ---
 
