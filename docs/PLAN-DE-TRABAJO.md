@@ -46,31 +46,63 @@ Decisiones y limpieza que condicionan todo lo demás. Ninguna toma más de una s
 | 3 | ¿La app guarda solo el concepto de aptitud médica, nunca el diagnóstico? | Define el modelo de datos de exámenes médicos y la exposición frente a la reserva de la historia clínica |
 | 4 | ¿Se cobra por empresa o por plan con límite de empresas? | Define si `planes` gana columnas ahora o después |
 
-### 0.2 Limpieza previa
+### 0.2 Limpieza previa — **hecha** (31-ago-2026)
 
-- [ ] Verificar y eliminar la tabla **`perfiles`** (sin referencias en el código).
-- [ ] Resolver las **funciones duplicadas** listadas en la documentación técnica.
-- [ ] Quitar el `grant … to anon` de `detalle_entrega` y `firmar_entrega`.
-- [ ] Añadir `SUPABASE_SERVICE_ROLE_KEY` al alcance *Preview* en Vercel, o dejar
-      constancia de que se decidió no hacerlo.
+Se verificó antes de borrar: se compararon las **197 RPC que llama el código** contra las
+de la base, y se buscó cada función candidata dentro del cuerpo de las demás. Ninguna de
+las eliminadas se usaba.
 
-### 0.3 Reorganización de navegación
+- [x] Tabla **`perfiles`** eliminada (0 filas, sin claves foráneas, sin vistas), junto con
+      `mi_perfil()`, que era la versión vieja de la ficha profesional. La app usa
+      `perfil_profesional`.
+- [x] Cinco **funciones duplicadas** eliminadas: `datos_calendario`,
+      `guardar_convocatoria`, `entrega_por_token`, `articulos_entregables` y
+      `registrar_asistencia`. En cada par se conservó la que usa el código.
+- [x] `detalle_entrega` y `firmar_entrega` ya no son ejecutables por `anon`.
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` en el alcance *Preview* de Vercel — sigue pendiente de
+      Iván.
 
-Se hace **antes** de agregar módulos, no después: añadir nueve módulos a un menú
-que ya tiene duplicados produce un producto que nadie usa.
+> **Lo que apareció al verificar, y que no era «orden»:** dos de las funciones muertas
+> —`entrega_por_token` y `registrar_asistencia`— eran **`SECURITY DEFINER` y ejecutables
+> por `anon`**. Código muerto que salta RLS y al que llega cualquiera sin sesión. Aplazar
+> esta limpieza no costaba prolijidad: costaba superficie de ataque.
+>
+> Segundo hallazgo: `revoke … from anon` **no hace nada** si el permiso viene de `PUBLIC`,
+> que es como Postgres crea toda función. El primer intento se ejecutó sin error y dejó
+> todo igual; solo `revoke … from public` lo cerró. Está anotado en el §18b del CLAUDE.md.
 
-- [ ] Unificar las dos pantallas de **Indicadores** en una con pestañas.
-- [ ] Unificar las dos pantallas de **Matriz** en una con pestañas.
-- [ ] Unificar los dos bancos de plantillas (capacitación e inspección).
-- [ ] Subir **Empleados** al primer nivel del menú: es transversal.
-- [ ] Reagrupar el menú por **PHVA**:
+### 0.3 Reorganización de navegación — **hecha** (31-ago-2026)
 
-| Fase | Agrupa |
-|---|---|
-| PLANEAR | Matriz de peligros · Plan anual · Matriz legal · Objetivos |
-| HACER | Capacitaciones · Dotación · Exámenes médicos · Emergencias · Permisos |
-| VERIFICAR | Inspecciones · Indicadores · Autoevaluación |
-| ACTUAR | Plan de acción · Investigación de accidentes · Plan de mejoramiento |
+Se hizo **después** de agregar los módulos, no antes, que era lo planeado. Se pagó el
+precio previsto: durante siete fases el menú creció con nombres repetidos y sin un orden
+que dijera para qué sirve cada cosa.
+
+- [x] Menú reagrupado por **PHVA**, con las cuatro fases como encabezados.
+- [x] **Empleados** subió al primer nivel: es transversal (capacitaciones, dotación,
+      exámenes, permisos y comités lo usan).
+- [x] Nombres desambiguados. Había **tres «Indicadores»** y **cuatro «Matriz»** en el
+      menú, y ninguno decía de qué: ahora son «Indicadores de capacitación», «de
+      inspección» y «del art. 30»; «Matriz de capacitaciones», «de dotación», «de
+      peligros» y «legal». También «Plantillas de capacitación» frente a «Listas de
+      verificación».
+- [ ] **No se unificaron** las pantallas de indicadores ni las de matriz en una sola con
+      pestañas. Se prefirió desambiguar los nombres —que resuelve el problema real, que
+      era no saber cuál era cuál— antes que un refactor de cinco pantallas ya probadas.
+      Queda como deuda consciente, no como olvido.
+
+El agrupamiento quedó así:
+
+| Fase | Módulo | Agrupa |
+|---|---|---|
+| PLANEAR | Planeación del sistema | Matriz de peligros · Plan anual · Matriz legal · Comités y brigada |
+| HACER | Capacitaciones | Listado · Matriz · Indicadores |
+| HACER | Dotación | Inventario · Entregas · Devoluciones · Matriz · Alertas |
+| HACER | Salud de los trabajadores | Exámenes médicos · Ausentismo · Horas-hombre |
+| HACER | Emergencias | Análisis de amenazas · Simulacros |
+| HACER | Alto riesgo y contratistas | Permisos de trabajo · Contratistas |
+| VERIFICAR | Inspecciones | Inspecciones · Programación · Listas de verificación · Indicadores |
+| VERIFICAR | Evaluación del sistema | Autoevaluación 0312 · Conjuntos de estándares · Indicadores del art. 30 |
+| ACTUAR | Mejora | Accidentes e incidentes · Plan de acción · Rendición de cuentas |
 
 > El beneficio no es estético: **hace evidente lo que falta**. Un menú donde
 > «Planear» tiene un solo ítem le dice al consultor y al cliente dónde está débil

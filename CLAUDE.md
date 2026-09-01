@@ -434,6 +434,12 @@ así**; ese tercer punto es el que evita las preguntas de soporte.
 17. **Un Excel de matriz lleva siempre una hoja plana** junto a la rejilla. La rejilla es un dibujo; la tabla larga es lo que el usuario puede filtrar, cruzar y llevar a dinámica. El kardex, por lo mismo, es **una sola tabla cronológica** con `!autofilter` y `!freeze`: nada de filas separadoras ni títulos intercalados.
 18. **`next.config` tiene `typescript.ignoreBuildErrors: true`** — `npm run build` **no valida tipos**. Hay que correr `npx tsc --noEmit` aparte. Varios errores visibles en producción (`"undefined%"` en un KPI, la licencia SST que no salía bajo la firma) estaban ahí y el build los ocultaba.
 
+18b. **Revocar un permiso de `anon` no basta: hay que quitarlo de `PUBLIC`.** Postgres
+    concede `EXECUTE` a `PUBLIC` en cada función nueva, y `anon` hereda de ahí. Un
+    `revoke … from anon` se ejecuta sin error y no cambia nada — comprobado con
+    `has_function_privilege`. Lo que cierra de verdad es
+    `revoke … from public` + `grant … to authenticated`.
+
 19. **Los invariantes de emisión van en triggers, no repetidos en cada función.** La nomenclatura
     se estampa al emitir desde un trigger por tabla: cualquier camino nuevo que emita el documento
     queda cubierto sin acordarse de copiar la línea. Es lo contrario del error del §6 con la firma
@@ -679,10 +685,12 @@ Enfoque recomendado (**C**): `usuarios` gana `rol='cliente'` + `empresa_id`, y `
 **Pendiente de confirmar con Iván:** si se acepta el enfoque C (tocar `mi_org_id()`) y qué ve exactamente un cliente — el mínimo defendible sería sus capacitaciones con asistentes, sus inspecciones con veredicto y su plan de acción.
 
 ### Deuda técnica (detalle en docs/DOCUMENTACION-TECNICA.md §11)
-- Tabla **`perfiles`** sin una sola referencia en el código: resto de un renombrado.
-- **Funciones duplicadas**: `calendario`/`datos_calendario`, `convocar_empleados`/`guardar_convocatoria`, `entrega_publica`/`entrega_por_token`, entre otras.
-- `detalle_entrega` y `firmar_entrega` tienen `grant` a `anon` sin ser `SECURITY DEFINER`: el grant no sirve y es superficie de más.
-- Navegación duplicada: dos «Indicadores», dos «Matriz», dos bancos de plantillas.
+Lo de la Fase 0 quedó **saldado el 31-ago-2026**: se eliminaron la tabla `perfiles` y
+`mi_perfil()`, las cinco funciones duplicadas y los permisos de más. La navegación se
+reagrupó por PHVA. Queda:
+- Las tres pantallas de indicadores y las cuatro de matriz siguen **separadas**; se
+  desambiguaron los nombres en el menú, pero no se unificaron en una con pestañas.
+- Los dos bancos de plantillas (capacitación e inspección) siguen separados.
 
 ### Proyecto
 - **Renombrar la carpeta** `asistencia` → `rubrica` (`Rename-Item asistencia rubrica`; no afecta código). Actualizar nombre de marca en la UI.

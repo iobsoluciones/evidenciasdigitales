@@ -1,11 +1,20 @@
 'use client';
 
 /**
- * MENÚ LATERAL
+ * MENÚ LATERAL — agrupado por PHVA
  * ---------------------------------------------------------------
  * Encabezado: el profesional. Debajo, un acceso permanente al panel
  * principal —cartera de empresas, semáforo y bandeja de pendientes— y
  * luego los módulos, que operan siempre sobre la empresa activa.
+ *
+ * Los módulos van bajo las cuatro fases del ciclo: PLANEAR, HACER,
+ * VERIFICAR, ACTUAR. El beneficio no es estético: **hace evidente lo que
+ * falta**. Un consultor que abre PLANEAR y lo ve vacío sabe dónde está
+ * débil el sistema sin que nadie se lo explique, y es el mismo lenguaje
+ * con el que un auditor recorre el SG-SST.
+ *
+ * Los nombres repetidos se desambiguaron: había tres «Indicadores» y
+ * tres «Matriz» en el menú, y ninguno decía de qué.
  */
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -13,74 +22,80 @@ import { usePathname } from 'next/navigation';
 import { EVENTO_MENU } from './BotonMenu';
 
 type Enlace = { href: string; texto: string };
-type Modulo = { id: string; titulo: string; enlaces: Enlace[]; pronto?: boolean };
+type Fase = 'planear' | 'hacer' | 'verificar' | 'actuar';
+type Modulo = {
+  id: string; titulo: string; fase: Fase;
+  enlaces: Enlace[]; pronto?: boolean;
+};
+
+const FASES: { v: Fase; t: string }[] = [
+  { v: 'planear', t: 'Planear' },
+  { v: 'hacer', t: 'Hacer' },
+  { v: 'verificar', t: 'Verificar' },
+  { v: 'actuar', t: 'Actuar' },
+];
 
 const MODULOS: Modulo[] = [
   {
-    id: 'capacitaciones',
-    titulo: 'Capacitaciones',
+    // Lo que sostiene todo lo demas: sin peligros identificados no se
+    // puede justificar por que ese EPP y no otro.
+    id: 'planeacion',
+    titulo: 'Planeación del sistema',
+    fase: 'planear',
     enlaces: [
-      { href: '/panel/indicadores', texto: 'Indicadores' },
-      { href: '/panel/capacitaciones', texto: 'Listado' },
-      { href: '/panel/empleados', texto: 'Empleados' },
-      { href: '/panel/matriz', texto: 'Matriz' },
+      { href: '/panel/peligros', texto: 'Matriz de peligros' },
+      { href: '/panel/plan-anual', texto: 'Plan anual de trabajo' },
+      { href: '/panel/matriz-legal', texto: 'Matriz legal' },
+      { href: '/panel/comites', texto: 'Comités y brigada' },
     ],
   },
   {
-    // EPP y equipos comparten módulo: el acta de entrega es la misma.
-    // Las entregas y devoluciones llegan en fases posteriores.
+    id: 'capacitaciones',
+    titulo: 'Capacitaciones',
+    fase: 'hacer',
+    enlaces: [
+      { href: '/panel/capacitaciones', texto: 'Listado' },
+      { href: '/panel/matriz', texto: 'Matriz de capacitaciones' },
+      { href: '/panel/indicadores', texto: 'Indicadores de capacitación' },
+    ],
+  },
+  {
+    // EPP y equipos comparten modulo: el acta de entrega es la misma.
     id: 'dotacion',
     titulo: 'Dotación',
+    fase: 'hacer',
     enlaces: [
       { href: '/panel/dotacion', texto: 'Inventario' },
       { href: '/panel/dotacion/entregas', texto: 'Entregas' },
       { href: '/panel/dotacion/devoluciones', texto: 'Devoluciones' },
-      { href: '/panel/dotacion/matriz', texto: 'Matriz' },
+      { href: '/panel/dotacion/matriz', texto: 'Matriz de dotación' },
       { href: '/panel/dotacion/alertas', texto: 'Alertas' },
     ],
   },
   {
-    // La matriz de peligros es el PLANEAR del ciclo: de ella deberian
-    // derivarse los controles de los demas modulos.
-    id: 'peligros',
-    titulo: 'Planeación',
+    id: 'salud',
+    titulo: 'Salud de los trabajadores',
+    fase: 'hacer',
     enlaces: [
-      { href: '/panel/peligros', texto: 'Matriz de peligros' },
-      { href: '/panel/plan-anual', texto: 'Plan anual de trabajo' },
-      { href: '/panel/autoevaluacion', texto: 'Autoevaluación 0312' },
-      { href: '/panel/estandares', texto: 'Conjuntos de estándares' },
-      { href: '/panel/matriz-legal', texto: 'Matriz legal' },
-      { href: '/panel/rendicion', texto: 'Rendición de cuentas' },
-      { href: '/panel/comites', texto: 'Comités' },
-    ],
-  },
-  {
-    // Accidentes e incidentes: Res. 1401/2007. Va junto a inspecciones
-    // porque ambos terminan en el mismo plan de accion.
-    id: 'eventos',
-    titulo: 'Salud y accidentalidad',
-    enlaces: [
-      { href: '/panel/eventos', texto: 'Accidentes e incidentes' },
       { href: '/panel/examenes', texto: 'Exámenes médicos' },
       { href: '/panel/ausentismo', texto: 'Ausentismo' },
       { href: '/panel/horas', texto: 'Horas-hombre' },
     ],
   },
   {
-    // Emergencias: el analisis dice que puede pasar y el simulacro
-    // prueba que se sabe responder. Los dos sustentan el estandar 5.1.1.
     id: 'emergencias',
     titulo: 'Emergencias',
+    fase: 'hacer',
     enlaces: [
       { href: '/panel/emergencias', texto: 'Análisis de amenazas' },
       { href: '/panel/emergencias/simulacros', texto: 'Simulacros' },
     ],
   },
   {
-    // Tareas de alto riesgo: alturas, espacios confinados, caliente.
-    // Es el caso de uso mas movil del SG-SST: se diligencia de pie.
-    id: 'permisos',
-    titulo: 'Alto riesgo',
+    // El caso de uso mas movil del SG-SST: se diligencia de pie.
+    id: 'alto-riesgo',
+    titulo: 'Alto riesgo y contratistas',
+    fase: 'hacer',
     enlaces: [
       { href: '/panel/permisos', texto: 'Permisos de trabajo' },
       { href: '/panel/contratistas', texto: 'Contratistas' },
@@ -89,11 +104,35 @@ const MODULOS: Modulo[] = [
   {
     id: 'inspecciones',
     titulo: 'Inspecciones',
+    fase: 'verificar',
     enlaces: [
       { href: '/panel/inspecciones', texto: 'Inspecciones' },
+      { href: '/panel/inspecciones/programadas', texto: 'Programación' },
       { href: '/panel/inspecciones/plantillas', texto: 'Listas de verificación' },
+      { href: '/panel/inspecciones/indicadores', texto: 'Indicadores de inspección' },
+    ],
+  },
+  {
+    // Verificar el sistema completo, no un area: es lo que mira el
+    // Ministerio en una visita.
+    id: 'evaluacion',
+    titulo: 'Evaluación del sistema',
+    fase: 'verificar',
+    enlaces: [
+      { href: '/panel/autoevaluacion', texto: 'Autoevaluación 0312' },
+      { href: '/panel/estandares', texto: 'Conjuntos de estándares' },
+      { href: '/panel/indicadores/legales', texto: 'Indicadores del art. 30' },
+    ],
+  },
+  {
+    // De aqui salen las acciones: un hallazgo sin accion no cerro nada.
+    id: 'mejora',
+    titulo: 'Mejora',
+    fase: 'actuar',
+    enlaces: [
+      { href: '/panel/eventos', texto: 'Accidentes e incidentes' },
       { href: '/panel/acciones', texto: 'Plan de acción' },
-      { href: '/panel/inspecciones/indicadores', texto: 'Indicadores' },
+      { href: '/panel/rendicion', texto: 'Rendición de cuentas' },
     ],
   },
 ];
@@ -128,6 +167,7 @@ export default function MenuLateral({
   }, []);
 
   const enCartera = ruta === '/panel' || ruta.startsWith('/panel/empresas');
+  const enEmpleados = ruta.startsWith('/panel/empleados');
   const enCalendario = ruta.startsWith('/panel/calendario');
   const enReportes = ruta.startsWith('/panel/reportes') || ruta.startsWith('/panel/envios');
   const enPlantillas = ruta.startsWith('/panel/plantillas');
@@ -160,6 +200,21 @@ export default function MenuLateral({
           >
             <span style={e.iconoCartera} aria-hidden="true">▦</span>
             Panel principal
+          </Link>
+
+          <Link
+            href="/panel/empleados"
+            onClick={() => setMovil(false)}
+            style={{
+              ...e.cartera,
+              marginTop: 6,
+              background: enEmpleados ? color : '#fff',
+              color: enEmpleados ? '#fff' : '#14263F',
+              borderColor: enEmpleados ? color : '#DFDFD8',
+            }}
+          >
+            <span style={e.iconoCartera} aria-hidden="true">◫</span>
+            Empleados
           </Link>
 
           <Link
@@ -204,13 +259,16 @@ export default function MenuLateral({
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">▧</span>
-            Plantillas
+            Plantillas de capacitación
           </Link>
         </div>
 
-        {/* ---------- Módulos ---------- */}
+        {/* ---------- Módulos, agrupados por PHVA ---------- */}
         <div style={e.modulos}>
-          {MODULOS.map((m) => {
+          {FASES.map((f) => (
+            <div key={f.v}>
+              <div style={e.fase}>{f.t}</div>
+              {MODULOS.filter((m) => m.fase === f.v).map((m) => {
             const desplegado = abierto === m.id;
             return (
               <div key={m.id} style={{ marginBottom: 2 }}>
@@ -257,7 +315,9 @@ export default function MenuLateral({
                 )}
               </div>
             );
-          })}
+              })}
+            </div>
+          ))}
         </div>
 
         {/* Configuración al pie: se consulta poco y no compite con
@@ -333,6 +393,11 @@ const e: Record<string, React.CSSProperties> = {
   iconoCartera: { fontSize: 12, lineHeight: 1 },
 
   modulos: { padding: '8px 12px 14px', flex: 1 },
+  fase: {
+    fontSize: 9.5, fontWeight: 700, letterSpacing: .9,
+    textTransform: 'uppercase', color: '#A2AAB4',
+    padding: '12px 8px 4px',
+  },
   pie: { padding: 12, borderTop: '1px solid #E4E4DF' },
   botonModulo: {
     width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
