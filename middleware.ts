@@ -35,7 +35,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  */
 const RUTAS_PUBLICAS = [
   '/', '/login', '/registro', '/recuperar',
-  '/r', '/f', '/d', '/i', '/s', '/p', '/c',
+  '/r', '/f', '/d', '/i', '/s', '/p', '/c', '/a',
   '/api/cron',
 ];
 

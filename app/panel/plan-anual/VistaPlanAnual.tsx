@@ -18,6 +18,7 @@ import LienzoFirma, { type LienzoFirmaRef } from '@/app/LienzoFirma';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 import {
   crearPlan, guardarPlan, guardarActividad, eliminarActividad, aprobarPlan,
+  enviarEnlacePlan, obtenerEnlacePlan, enviarPlanAnual,
   type Plan, type Actividad, type Avance, type PlanResumen, type EstadoActividad,
 } from '@/lib/acciones-plan-anual';
 
@@ -61,6 +62,10 @@ export default function VistaPlanAnual({
   const supabase = crearClienteNavegador();
   const firmaRef = useRef<LienzoFirmaRef>(null);
   const [pendiente, startTransition] = useTransition();
+  const [firmaRemota, setFirmaRemota] = useState<{ correo: string } | null>(null);
+  const [enlace, setEnlace] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
+  const [correo, setCorreo] = useState({ para: '', mensaje: '' });
   const [aviso, setAviso] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null);
   const [hecho, setHecho] = useState<string | null>(null);
 
@@ -159,6 +164,116 @@ export default function VistaPlanAnual({
 
   return (
     <>
+      {/* ---------- Documento: PDF, correo y firma remota ---------- */}
+      <div style={s.barraDoc}>
+        <a href={`/api/pdf-plan-anual/${plan.id}`} target="_blank" rel="noopener"
+          style={{ ...s.botonDoc, textDecoration: 'none' }}>
+          Descargar PDF
+        </a>
+        <button type="button" style={s.botonDoc} onClick={() => setEnviando(true)}>
+          Enviar por correo
+        </button>
+        {!aprobado && (
+          <button type="button" style={s.botonDoc} disabled={pendiente}
+            onClick={() => setFirmaRemota({ correo: '' })}>
+            Mandar a firmar al empleador
+          </button>
+        )}
+      </div>
+
+      {firmaRemota && (
+        <section style={s.bloque}>
+          <div style={s.h3}>Mandar el plan a firmar</div>
+          <p style={s.notaDoc}>
+            El empleador abre el enlace, lee el objetivo, los recursos y el
+            cronograma completo, y firma desde donde esté. Su firma es la que
+            convierte esto en el plan de la empresa.
+          </p>
+          <Campo etiqueta="Correo del empleador">
+            <input value={firmaRemota.correo} type="email" style={s.input}
+              placeholder="gerencia@empresa.com"
+              onChange={(e) => setFirmaRemota({ correo: e.target.value })} />
+          </Campo>
+          <div style={s.acciones}>
+            <button type="button" style={s.botonPlanoDoc}
+              onClick={() => setFirmaRemota(null)}>
+              Cancelar
+            </button>
+            <button type="button" style={{ ...s.botonSec, borderColor: color, color }}
+              disabled={pendiente}
+              onClick={() => {
+                const c = firmaRemota.correo;
+                setFirmaRemota(null);
+                startTransition(async () => {
+                  const r = await enviarEnlacePlan(plan.id, c);
+                  if (r.enlace) setEnlace(r.enlace);
+                  setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+                  router.refresh();
+                });
+              }}>
+              Enviar enlace
+            </button>
+            <button type="button" style={s.botonSec} disabled={pendiente}
+              onClick={() => {
+                setFirmaRemota(null);
+                startTransition(async () => {
+                  const r = await obtenerEnlacePlan(plan.id);
+                  if (r.enlace) {
+                    setEnlace(r.enlace);
+                    setAviso({ tipo: 'ok', texto: 'Enlace generado. Cópialo de abajo.' });
+                  } else {
+                    setAviso({ tipo: 'error', texto: r.mensaje });
+                  }
+                });
+              }}>
+              Solo ver el enlace
+            </button>
+          </div>
+        </section>
+      )}
+
+      {enlace && (
+        <div style={s.enlaceCaja}>
+          <div style={s.enlaceTitulo}>Enlace de aprobación del empleador</div>
+          <code style={s.enlaceUrl}>{enlace}</code>
+          <p style={s.notaDoc}>
+            Cópialo si el correo no llega: sirve por WhatsApp igual de bien.
+          </p>
+        </div>
+      )}
+
+      {enviando && (
+        <section style={s.bloque}>
+          <div style={s.h3}>Enviar el plan</div>
+          <Campo etiqueta="Destinatarios">
+            <input value={correo.para} style={s.input}
+              onChange={(e) => setCorreo({ ...correo, para: e.target.value })} />
+          </Campo>
+          <Campo etiqueta="Mensaje">
+            <textarea rows={2} value={correo.mensaje}
+              style={{ ...s.input, resize: 'vertical' }}
+              onChange={(e) => setCorreo({ ...correo, mensaje: e.target.value })} />
+          </Campo>
+          <div style={s.acciones}>
+            <button type="button" style={s.botonPlanoDoc} onClick={() => setEnviando(false)}>
+              Cancelar
+            </button>
+            <button type="button" style={{ ...s.botonSec, borderColor: color, color }}
+              disabled={pendiente}
+              onClick={() => {
+                const datos = correo;
+                setEnviando(false);
+                startTransition(async () => {
+                  const r = await enviarPlanAnual(plan.id, datos.para, datos.mensaje);
+                  setAviso({ tipo: r.ok ? 'ok' : 'error', texto: r.mensaje });
+                });
+              }}>
+              Enviar
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* ---------- Encabezado ---------- */}
       <div style={s.cabecera}>
         <div>
@@ -583,6 +698,26 @@ const s: Record<string, React.CSSProperties> = {
   botonPlano: {
     background: 'none', border: 'none', color: '#5B6470',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
+  },
+  barraDoc: { display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 },
+  botonDoc: {
+    background: '#fff', border: '1px solid #E4E4DF', borderRadius: 8,
+    padding: '9px 16px', fontSize: 13, fontWeight: 600,
+    color: '#14263F', cursor: 'pointer',
+  },
+  botonPlanoDoc: {
+    background: 'none', border: 'none', color: '#5B6470',
+    fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
+  },
+  notaDoc: { fontSize: 11.5, color: '#8A929C', margin: '4px 0 10px', lineHeight: 1.55 },
+  enlaceCaja: {
+    background: '#F7F7F4', border: '1px solid #E4E4DF',
+    borderRadius: 9, padding: '11px 13px', marginBottom: 14,
+  },
+  enlaceTitulo: { fontSize: 12, fontWeight: 700, color: '#14263F', marginBottom: 5 },
+  enlaceUrl: {
+    display: 'block', fontFamily: "'Consolas','Courier New',monospace",
+    fontSize: 11.5, color: '#374151', wordBreak: 'break-all', lineHeight: 1.5,
   },
   botonSec: {
     borderWidth: 1, borderStyle: 'solid', borderRadius: 8,

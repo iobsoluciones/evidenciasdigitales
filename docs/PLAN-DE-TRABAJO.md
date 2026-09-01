@@ -667,8 +667,9 @@ Estado y trabajo que abre, en orden:
 
 1. **Inspecciones** — firma del inspector y del acompañante solo en sitio. Falta el
    enlace por correo. Es el más usado de los tres.
-2. **Plan anual** — la firma del empleador es lo que lo convierte en plan, y hoy solo
-   se captura en pantalla. Falta enlace, **falta el PDF** y falta el envío.
+2. ~~**Plan anual**~~ — **hecho (31-ago-2026).** PDF apaisado con el cronograma marcado
+   con letra (P/E), aprobación remota en `/a/[token]` con el plan completo a la vista, y
+   envío por correo.
 3. **Acta de conformación de comité** — no captura firmas todavía. Con firmas de todos
    los integrantes por enlace, cierra el estándar 1.1.6 con evidencia real.
 4. **Autoevaluación** — no lleva firma capturada; el PDF deja el espacio para la del

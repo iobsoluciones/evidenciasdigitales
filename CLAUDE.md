@@ -383,6 +383,17 @@ autentica con **`CRON_SECRET`**.
 > dueño de la cuenta. Avisar a jefes de área o a responsables de acciones exige verificar
 > un dominio propio, y además decidir si `empleados` gana una columna `correo`.
 
+### Plan anual: PDF y aprobación remota (regla §5.21)
+El plan anual **es el primer documento que pide un auditor** y hasta ahora no se podía
+imprimir. Ahora sale en PDF apaisado, porque el cronograma —doce meses por actividad— *es*
+el documento: una lista de actividades sin los meses es un listado de buenas intenciones.
+Cada mes se marca con **letra**, no con color: `P` programado, `E` ejecutado.
+
+Y lo que convierte el plan en plan es **la firma del empleador**, que casi nunca está
+sentado al lado del consultor: `/a/[token]` le muestra objetivo, alcance, recursos y el
+cronograma completo, y firma desde donde esté. Enseñarle solo el recuadro de firma sería
+pedirle que firme en blanco un compromiso de recursos y fechas.
+
 ### Reportes Excel
 Tres libros descargables (`/api/excel/*`) además del kardex:
 - **Inspecciones**: 3 hojas — inspecciones con veredicto, hallazgos (solo los incumplimientos, uno por fila) y plan de acción.
@@ -664,7 +675,7 @@ El detalle vive en **[docs/PLAN-DE-TRABAJO.md](docs/PLAN-DE-TRABAJO.md)**. Resum
 | Devolución | sí | — | sí | sí |
 | Investigación de evento | sí | sí (`/i/[token]`) | sí | sí |
 | **Inspección** | sí | **falta** | sí | sí |
-| **Plan anual** (firma del empleador) | sí | **falta** | **falta** | **falta** |
+| Plan anual (firma del empleador) | sí | sí (`/a/[token]`) | sí | sí |
 | **Acta de conformación de comité** | **falta** | **falta** | organigrama sí | sí |
 | Acta de simulacro | sí | sí (`/s/[token]`) | sí | sí |
 | Permiso de alto riesgo | sí | sí (`/p/[token]`) | sí | sí |
