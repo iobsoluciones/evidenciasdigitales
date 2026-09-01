@@ -14,6 +14,7 @@ import SelectorEmpresa from './SelectorEmpresa';
 import BotonSalir from './BotonSalir';
 import BotonMenu from './BotonMenu';
 import AccesosRapidos from './AccesosRapidos';
+import { contrasteSobre, conAlfa } from '@/lib/color';
 
 export default async function LayoutPanel({
   children,
@@ -40,7 +41,13 @@ export default async function LayoutPanel({
 
   // El color de marca es el de la empresa activa: recuerda en cuál se
   // está trabajando sin tener que leer.
+  //
+  // La BARRA SUPERIOR ENTERA se pinta con él. Es la señal más barata que
+  // existe contra el error caro: cargarle un accidente o una entrega a
+  // la empresa equivocada. El nombre ya estaba en el selector, pero un
+  // nombre hay que leerlo; un cambio de color se ve sin querer.
   const marca = activa?.color_primario ?? '#14263F';
+  const contraste = contrasteSobre(marca);
 
   return (
     <div style={{
@@ -59,19 +66,33 @@ export default async function LayoutPanel({
       />
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <header style={est.barra}>
+        <header style={{
+          ...est.barra,
+          background: marca,
+          color: contraste,
+          borderBottomColor: conAlfa(contraste, 0.18),
+        }}>
           <BotonMenu color={marca} />
           <SelectorEmpresa empresas={empresas} activa={activa} />
           {/* Los cinco accesos transversales viven aquí, no en el menú:
               arriba se comían la mitad del alto del lateral y obligaban a
               subir y bajar para llegar a los módulos. */}
-          <AccesosRapidos color={marca} />
+          <AccesosRapidos color={marca} contraste={contraste} />
           {/* marginLeft:auto y no space-between: sin empresas el selector
               no pinta nada, y entonces Manual y Salir se iban al borde
               izquierdo. Así quedan a la derecha siempre. */}
           <div style={est.acciones}>
-            <Link href="/panel/manual" style={est.manual}>Manual</Link>
-            <BotonSalir />
+            <Link
+              href="/panel/manual"
+              style={{
+                ...est.manual,
+                color: contraste,
+                borderColor: conAlfa(contraste, 0.45),
+              }}
+            >
+              Manual
+            </Link>
+            <BotonSalir contraste={contraste} />
           </div>
         </header>
 
@@ -92,8 +113,9 @@ export default async function LayoutPanel({
 const est: Record<string, React.CSSProperties> = {
   barra: {
     display: 'flex', alignItems: 'center',
-    gap: 12, padding: '11px 26px', borderBottom: '1px solid #E4E4DF',
-    background: '#fff', flexWrap: 'wrap',
+    gap: 12, padding: '11px 26px',
+    borderBottomWidth: 1, borderBottomStyle: 'solid',
+    flexWrap: 'wrap', transition: 'background .18s ease',
   },
   acciones: { display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' },
   alerta: {
@@ -102,7 +124,7 @@ const est: Record<string, React.CSSProperties> = {
   },
   contenido: { padding: '26px', maxWidth: 1180, overflowX: 'auto' },
   manual: {
-    border: '1px solid #E4E4DF', color: '#5B6470', background: '#fff',
+    borderWidth: 1, borderStyle: 'solid', background: 'transparent',
     padding: '7px 18px', borderRadius: 8, fontSize: 12, fontWeight: 600,
     textDecoration: 'none', whiteSpace: 'nowrap',
   },

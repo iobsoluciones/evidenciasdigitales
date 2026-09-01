@@ -16,6 +16,11 @@
  * Bajo 1180 px el texto se oculta y quedan solo los iconos: cinco
  * etiquetas más el selector de empresa no caben, y partir la barra en
  * dos filas devolvería el problema que se vino a resolver.
+ *
+ * La barra va pintada con el color de la empresa, así que estos botones
+ * se dibujan por CONTRASTE: el activo se rellena con el color del texto
+ * y escribe en el de la empresa —al revés que el resto—, que es la forma
+ * de que se distinga sobre cualquier fondo, claro u oscuro.
  */
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -100,8 +105,16 @@ const ACCESOS: Acceso[] = [
   },
 ];
 
-export default function AccesosRapidos({ color }: { color: string }) {
+export default function AccesosRapidos({
+  color,
+  contraste,
+}: {
+  color: string;
+  contraste: string;
+}) {
   const ruta = usePathname();
+  const sobreOscuro = contraste === '#ffffff';
+  const borde = sobreOscuro ? 'rgba(255,255,255,.38)' : 'rgba(20,38,63,.22)';
 
   return (
     <nav className="accesos-barra" style={e.barra} aria-label="Accesos rápidos">
@@ -116,9 +129,9 @@ export default function AccesosRapidos({ color }: { color: string }) {
             className="acceso-rapido"
             style={{
               ...e.acceso,
-              background: activo ? color : '#fff',
-              color: activo ? '#fff' : '#3C4650',
-              borderColor: activo ? color : '#E4E4DF',
+              background: activo ? contraste : 'transparent',
+              color: activo ? color : contraste,
+              borderColor: activo ? contraste : borde,
             }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"
@@ -131,7 +144,7 @@ export default function AccesosRapidos({ color }: { color: string }) {
       })}
 
       <style>{`
-        .acceso-rapido:hover { border-color: var(--marca) !important; }
+        .acceso-rapido:hover { border-color: currentColor !important; }
         @media (max-width: 1180px) {
           .acceso-texto { display: none; }
           .acceso-rapido { padding-left: 9px !important; padding-right: 9px !important; }

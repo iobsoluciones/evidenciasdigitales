@@ -420,6 +420,18 @@ El menú lateral va agrupado por **PHVA** (Planear, Hacer, Verificar, Actuar). E
 no es estético: **hace evidente lo que falta**, y es el mismo lenguaje con el que un auditor
 recorre el SG-SST.
 
+**La barra superior se pinta con el color de la empresa activa.** Es la señal más barata
+contra el error más caro: cargarle un accidente o una entrega a la empresa equivocada. El
+nombre ya estaba en el selector, pero un nombre hay que leerlo y un cambio de color se ve
+sin querer. El color lo elige el consultor, así que el texto se decide con la **luminancia
+relativa** (`lib/color.ts`): sobre un azul oscuro va blanco, sobre un amarillo va oscuro.
+La misma función oscurece el color cuando se usa como **texto sobre blanco** en el menú,
+donde un amarillo claro sería invisible.
+
+Cada fase del PHVA tiene **color e icono propios**, y sus módulos cuelgan de una línea de
+ese color. Son los cuatro del ciclo y **no** el de la empresa: dos señales distintas no
+pueden compartir el mismo canal.
+
 Los cinco accesos transversales —Panel principal, Empleados, Calendario, Reportes y
 Plantillas— viven en la **barra superior**, no en el lateral: allí se comían la mitad del
 alto y obligaban a subir y bajar para llegar a los módulos. `AccesosRapidos` los dibuja con

@@ -8,7 +8,7 @@
 import { useRouter } from 'next/navigation';
 import { crearClienteNavegador } from '@/lib/supabase/cliente';
 
-export default function BotonSalir() {
+export default function BotonSalir({ contraste }: { contraste: string }) {
   const router = useRouter();
   const supabase = crearClienteNavegador();
 
@@ -22,9 +22,13 @@ export default function BotonSalir() {
     <button
       onClick={salir}
       style={{
-        background: 'rgba(255,255,255,.15)', border: '1px solid rgba(218, 12, 12, 0.3)',
-        color: '#0e0101', padding: '7px 20px', borderRadius: 8,
+        // La barra lleva el color de la empresa, que puede ser claro u
+        // oscuro: el texto se toma del contraste calculado, no fijo.
+        background: 'transparent',
+        border: `1px solid ${contraste === '#ffffff' ? 'rgba(255,255,255,.45)' : 'rgba(20,38,63,.28)'}`,
+        color: contraste, padding: '7px 20px', borderRadius: 8,
         fontSize: 12, fontWeight: 600, cursor: 'pointer',
+        fontFamily: 'inherit',
       }}
     >
       Salir

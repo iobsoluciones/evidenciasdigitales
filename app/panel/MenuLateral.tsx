@@ -13,6 +13,13 @@
  * débil el sistema sin que nadie se lo explique, y es el mismo lenguaje
  * con el que un auditor recorre el SG-SST.
  *
+ * Cada fase tiene su color y su icono, y los módulos cuelgan de una
+ * línea de ese color. No es decoración: en un menú de nueve módulos, el
+ * color es lo que permite saber en qué parte del ciclo se está sin leer
+ * el encabezado. Los colores son los cuatro del PHVA y NO el de la
+ * empresa —ese vive en la barra superior— para que no se confundan dos
+ * señales distintas.
+ *
  * Los nombres repetidos se desambiguaron: había tres «Indicadores» y
  * tres «Matriz» en el menú, y ninguno decía de qué.
  */
@@ -20,6 +27,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { EVENTO_MENU } from './BotonMenu';
+import { paraTexto } from '@/lib/color';
 
 type Enlace = { href: string; texto: string };
 type Fase = 'planear' | 'hacer' | 'verificar' | 'actuar';
@@ -28,11 +36,57 @@ type Modulo = {
   enlaces: Enlace[]; pronto?: boolean;
 };
 
-const FASES: { v: Fase; t: string }[] = [
-  { v: 'planear', t: 'Planear' },
-  { v: 'hacer', t: 'Hacer' },
-  { v: 'verificar', t: 'Verificar' },
-  { v: 'actuar', t: 'Actuar' },
+const trazoFase = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.6,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+
+const FASES: {
+  v: Fase; t: string; color: string; fondo: string; icono: React.ReactNode;
+}[] = [
+  {
+    v: 'planear', t: 'Planear', color: '#2A6F97', fondo: '#E8F1F7',
+    // Documento con líneas: lo que se escribe antes de hacer nada.
+    icono: (
+      <>
+        <path d="M4.2 2.6h6l3.6 3.6v9.2H4.2z" {...trazoFase} />
+        <path d="M10.2 2.6v3.6h3.6M6.6 9h4.8M6.6 11.6h3" {...trazoFase} />
+      </>
+    ),
+  },
+  {
+    v: 'hacer', t: 'Hacer', color: '#1B5E4A', fondo: '#E6F1EC',
+    // Engranaje: la operación.
+    icono: (
+      <>
+        <circle cx="9" cy="9" r="2.5" {...trazoFase} />
+        <path d="M9 2.4v2M9 13.6v2M2.4 9h2M13.6 9h2M4.4 4.4l1.4 1.4M12.2 12.2l1.4 1.4M13.6 4.4l-1.4 1.4M5.8 12.2l-1.4 1.4" {...trazoFase} />
+      </>
+    ),
+  },
+  {
+    v: 'verificar', t: 'Verificar', color: '#B45309', fondo: '#FDF1E0',
+    // Lupa: mirar lo que se hizo.
+    icono: (
+      <>
+        <circle cx="8" cy="8" r="4.4" {...trazoFase} />
+        <path d="M11.4 11.4 15 15M6.2 8l1.4 1.5 2.4-2.6" {...trazoFase} />
+      </>
+    ),
+  },
+  {
+    v: 'actuar', t: 'Actuar', color: '#7A3E9D', fondo: '#F2EAF7',
+    // Flecha que vuelve: la mejora continua cierra el ciclo.
+    icono: (
+      <>
+        <path d="M14.6 9a5.6 5.6 0 1 1-1.7-4" {...trazoFase} />
+        <path d="M13.2 1.8v3.4h-3.4" {...trazoFase} />
+      </>
+    ),
+  },
 ];
 
 const MODULOS: Modulo[] = [
@@ -150,6 +204,11 @@ export default function MenuLateral({
 }) {
   const ruta = usePathname();
 
+  // El color de la empresa se usa aquí como TEXTO sobre blanco. Con un
+  // amarillo claro sería ilegible, así que se oscurece lo justo. El
+  // color de fondo de los botones sí usa el original.
+  const colorTexto = paraTexto(color);
+
   const moduloActivo =
     MODULOS.find((m) => m.enlaces.some((x) => ruta === x.href || ruta.startsWith(x.href + '/')))?.id
     ?? 'capacitaciones';
@@ -219,8 +278,16 @@ export default function MenuLateral({
         {/* ---------- Módulos, agrupados por PHVA ---------- */}
         <div style={e.modulos}>
           {FASES.map((f) => (
-            <div key={f.v}>
-              <div style={e.fase}>{f.t}</div>
+            <div key={f.v} style={{ marginBottom: 4 }}>
+              <div style={{ ...e.fase, color: f.color }}>
+                <span style={{ ...e.faseIcono, background: f.fondo }}>
+                  <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true">
+                    {f.icono}
+                  </svg>
+                </span>
+                {f.t}
+              </div>
+              <div style={{ ...e.faseCuerpo, borderLeftColor: f.fondo }}>
               {MODULOS.filter((m) => m.fase === f.v).map((m) => {
             const desplegado = abierto === m.id;
             return (
@@ -229,7 +296,7 @@ export default function MenuLateral({
                   onClick={() => setAbierto(desplegado ? null : m.id)}
                   style={{
                     ...e.botonModulo,
-                    color: desplegado ? color : '#3C4650',
+                    color: desplegado ? colorTexto : '#3C4650',
                     fontWeight: desplegado ? 700 : 600,
                   }}
                   aria-expanded={desplegado}
@@ -269,6 +336,7 @@ export default function MenuLateral({
               </div>
             );
               })}
+              </div>
             </div>
           ))}
         </div>
@@ -349,9 +417,18 @@ const e: Record<string, React.CSSProperties> = {
 
   modulos: { padding: '8px 12px 14px', flex: 1 },
   fase: {
-    fontSize: 9.5, fontWeight: 700, letterSpacing: .9,
-    textTransform: 'uppercase', color: '#A2AAB4',
-    padding: '12px 8px 4px',
+    display: 'flex', alignItems: 'center', gap: 7,
+    fontSize: 10, fontWeight: 800, letterSpacing: 1,
+    textTransform: 'uppercase', padding: '12px 8px 6px',
+  },
+  faseIcono: {
+    width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
+  /* La línea de color ata los módulos a su fase sin repetir el rótulo. */
+  faseCuerpo: {
+    borderLeftWidth: 2, borderLeftStyle: 'solid',
+    marginLeft: 17, paddingLeft: 8,
   },
   pie: { padding: 12, borderTop: '1px solid #E4E4DF' },
   botonModulo: {
