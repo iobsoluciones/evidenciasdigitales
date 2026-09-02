@@ -297,10 +297,10 @@ export default function EditorEvaluacion({
         <div style={{
           ...e.puntaje,
           background: excede ? 'var(--mal-fondo)' : sumaPuntos === 100 ? 'var(--bien-fondo)' : 'var(--superficie-2)',
-          borderColor: excede ? '#F5C6C6' : sumaPuntos === 100 ? '#BBF7D0' : 'var(--superficie-3)',
+          borderColor: excede ? 'var(--mal)' : sumaPuntos === 100 ? 'var(--bien)' : 'var(--superficie-3)',
         }}>
           <div>
-            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : '#14263F' }}>
+            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : 'var(--texto)' }}>
               {sumaPuntos} de 100 puntos asignados
             </strong>
             <p style={{ ...e.nota, margin: '2px 0 0' }}>
@@ -377,8 +377,8 @@ export default function EditorEvaluacion({
                 style={{
                   ...e.input,
                   textTransform: 'uppercase',
-                  background: o.es_correcta ? 'var(--bien-fondo)' : '#fff',
-                  borderColor: o.es_correcta ? '#86efac' : 'var(--borde-fuerte)',
+                  background: o.es_correcta ? 'var(--bien-fondo)' : 'var(--superficie)',
+                  borderColor: o.es_correcta ? 'var(--bien)' : 'var(--borde-fuerte)',
                 }}
               />
               {p.opciones.length > 2 && (

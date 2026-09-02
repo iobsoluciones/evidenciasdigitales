@@ -61,18 +61,18 @@ function estadoMostrado(
     return { texto: 'Activa', fondo: 'var(--bien-fondo)', color: 'var(--bien)' };
   }
   if (c.estado === 'cerrada') {
-    return { texto: 'Cerrada', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
+    return { texto: 'Cerrada', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' };
   }
 
   // Inactiva: la fecha dice si ya paso o si esta por venir.
   const inicio = new Date(c.fecha_inicio).getTime();
   const fin = new Date(c.fecha_fin).getTime();
 
-  if (fin < ahora) return { texto: 'Cerrada', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
-  if (inicio > ahora) return { texto: 'Programada', fondo: '#EFF6FF', color: '#1D4ED8' };
+  if (fin < ahora) return { texto: 'Cerrada', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' };
+  if (inicio > ahora) return { texto: 'Programada', fondo: 'var(--info-fondo)', color: 'var(--info)' };
 
   // Hoy cae dentro del rango: sigue siendo su estado real.
-  return { texto: 'Inactiva', fondo: '#f1f5f9', color: 'var(--texto-suave)' };
+  return { texto: 'Inactiva', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' };
 }
 
 export default function ListaCapacitaciones({
@@ -686,7 +686,7 @@ export default function ListaCapacitaciones({
                       <button
                         onClick={borrar}
                         disabled={pendiente}
-                        style={{ ...est.btnBorrar, background: 'var(--mal)', color: 'var(--sobre-marca)', borderColor: 'var(--mal)' }}
+                        style={{ ...est.btnBorrar, background: 'var(--mal)', color: 'var(--superficie)', borderColor: 'var(--mal)' }}
                       >
                         {pendiente ? 'Eliminando…' : 'Sí, eliminar'}
                       </button>
@@ -727,17 +727,17 @@ const est: Record<string, React.CSSProperties> = {
   td: { padding: '10px 8px', borderBottom: '1px solid var(--borde)', verticalAlign: 'middle' },
   filaProxima: {
     background: 'var(--ambar-fondo)',
-    boxShadow: 'inset 3px 0 0 #E8C766',
+    boxShadow: 'inset 3px 0 0 var(--ambar)',
   },
   pillProxima: {
     marginLeft: 8, padding: '2px 8px', borderRadius: 8,
-    background: '#E8C766', color: '#4A3A00',
+    background: 'var(--ambar)', color: '#4A3A00',
     fontSize: 10.5, fontWeight: 700, letterSpacing: .3,
     textTransform: 'uppercase', whiteSpace: 'nowrap',
   },
   pill: { padding: '3px 9px', borderRadius: 999, fontSize: 11, fontWeight: 600, display: 'inline-block' },
-  btnPrimario: { background: 'var(--marca)', color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
-  btnExcel: { background: 'var(--bien)', color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
+  btnPrimario: { background: 'var(--marca)', color: 'var(--superficie)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnExcel: { background: 'var(--bien)', color: 'var(--superficie)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
   btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   zonaBorrado: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -750,7 +750,7 @@ const est: Record<string, React.CSSProperties> = {
   },
   btnBorrar: {
     background: 'var(--superficie)', color: 'var(--mal)',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#E4C7C7',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--mal)',
     padding: '8px 14px', borderRadius: 6, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
     whiteSpace: 'nowrap', display: 'inline-block',

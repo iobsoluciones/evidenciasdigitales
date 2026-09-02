@@ -192,8 +192,8 @@ const s: Record<string, React.CSSProperties> = {
     border: '1px solid var(--borde)', borderRadius: 20, padding: '2px 9px',
   },
   nota: {
-    fontSize: 12, color: '#7C2D12', background: 'var(--aviso-fondo)',
-    border: '1px solid #FED7AA', borderRadius: 8, padding: '10px 12px',
+    fontSize: 12, color: 'var(--aviso)', background: 'var(--aviso-fondo)',
+    border: '1px solid var(--aviso)', borderRadius: 8, padding: '10px 12px',
     margin: '14px 0 0', lineHeight: 1.55,
   },
   acciones: { display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 14 },

@@ -413,10 +413,10 @@ function Contador({ n, etiqueta, tono, activo, onClick }: {
   return (
     <button onClick={onClick} style={{
       ...e.contador,
-      borderColor: activo ? (tono ?? '#14263F') : 'var(--borde)',
-      background: activo ? 'var(--superficie-2)' : '#fff',
+      borderColor: activo ? (tono ?? 'var(--texto)') : 'var(--borde)',
+      background: activo ? 'var(--superficie-2)' : 'var(--superficie)',
     }}>
-      <span style={{ ...e.contadorN, color: tono ?? '#14263F' }}>{n}</span>
+      <span style={{ ...e.contadorN, color: tono ?? 'var(--texto)' }}>{n}</span>
       <span style={e.contadorL}>{etiqueta}</span>
     </button>
   );

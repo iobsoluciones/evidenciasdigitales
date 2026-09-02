@@ -56,5 +56,5 @@ const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
   sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
   vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btn: { background: 'var(--marca)', color: 'var(--superficie)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

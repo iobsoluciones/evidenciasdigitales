@@ -46,7 +46,7 @@ export default async function PaginaIndicadores() {
         <p style={{ margin:'0 0 14px', fontSize:14 }}>
           Agrega una empresa para ver sus indicadores.
         </p>
-        <Link href="/panel/empresas/nueva" style={{ background: 'var(--marca)', color: 'var(--sobre-marca)',
+        <Link href="/panel/empresas/nueva" style={{ background: 'var(--marca)', color: 'var(--superficie)',
               padding:'10px 18px', borderRadius:4, fontSize:13, fontWeight:600,
               textDecoration:'none' }}>Agregar empresa</Link>
       </div>
@@ -88,7 +88,7 @@ export default async function PaginaIndicadores() {
             denominador de los indicadores del art. 30 de la Res. 0312. */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <Link href="/panel/indicadores/legales" style={{
-          border: '1px solid #14263F', background: 'var(--marca)', color: 'var(--sobre-marca)',
+          border: '1px solid #14263F', background: 'var(--marca)', color: 'var(--superficie)',
           padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
           textDecoration: 'none', whiteSpace: 'nowrap',
         }}>
@@ -211,7 +211,7 @@ function TarjetaParticipacion({
   const tono = p >= 80
     ? { fondo: 'var(--bien-fondo)', borde: 'var(--bien-fondo)', texto: 'var(--bien)' }
     : p >= 50
-    ? { fondo: 'var(--ambar-fondo)', borde: '#fef08a', texto: '#a16207' }
+    ? { fondo: 'var(--ambar-fondo)', borde: 'var(--ambar)', texto: 'var(--ambar)' }
     : { fondo: 'var(--mal-fondo)', borde: 'var(--mal-fondo)', texto: 'var(--mal)' };
 
   const sinMeta = datos?.sinMeta ?? 0;

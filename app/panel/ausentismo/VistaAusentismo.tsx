@@ -85,7 +85,7 @@ export default function VistaAusentismo({
           ...s.aviso,
           background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
           color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-          border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+          border: `1px solid ${aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
         }}>{aviso.texto}</div>
       )}
 
@@ -278,7 +278,7 @@ export default function VistaAusentismo({
                     <td style={s.td}>
                       <span style={{
                         ...s.chip,
-                        background: a.causa_medica ? '#EEF2F7' : 'var(--superficie-3)',
+                        background: a.causa_medica ? 'var(--superficie-3)' : 'var(--superficie-3)',
                         color: a.causa_medica ? 'var(--texto-suave)' : 'var(--texto-tenue)',
                       }}>
                         {def?.t ?? a.origen}

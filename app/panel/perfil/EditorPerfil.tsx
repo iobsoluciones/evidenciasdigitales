@@ -511,7 +511,7 @@ function Campo({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={e.kpi}>
-      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? '#14263F' }}>{v}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={e.kpiL}>{l}</div>
     </div>
   );
@@ -566,12 +566,12 @@ const e: Record<string, React.CSSProperties> = {
   },
   firmaGuardada: {
     background: 'var(--bien-fondo)', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#BBF7D0', borderRadius: 6, padding: '12px 14px',
+    borderColor: 'var(--bien)', borderRadius: 6, padding: '12px 14px',
     marginBottom: 10, textAlign: 'center',
   },
   btnQuitar: {
     background: 'var(--superficie)', color: 'var(--mal)', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#F5C6C6', padding: '10px 16px', borderRadius: 4,
+    borderColor: 'var(--mal)', padding: '10px 16px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
   },
   aviso: { padding: '10px 14px', borderRadius: 6, fontSize: 13, marginBottom: 16 },

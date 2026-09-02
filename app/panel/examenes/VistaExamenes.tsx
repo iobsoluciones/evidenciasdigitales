@@ -375,7 +375,7 @@ const s: Record<string, React.CSSProperties> = {
   tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   restricciones: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '11px 14px', fontSize: 12.5,
     lineHeight: 1.6, marginBottom: 14,
   },
@@ -420,7 +420,7 @@ const s: Record<string, React.CSSProperties> = {
     borderBottom: '1px solid var(--borde)', whiteSpace: 'nowrap',
   },
   td: { padding: '10px 12px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
-  filaSin: { background: '#FFFBFA' },
+  filaSin: { background: 'var(--superficie-2)' },
   meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   restr: { fontSize: 11, color: 'var(--aviso)', marginTop: 4, lineHeight: 1.45, maxWidth: 220 },
   chip: {

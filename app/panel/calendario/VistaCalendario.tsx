@@ -296,7 +296,7 @@ export default function VistaCalendario({
             style={{
               ...s.botonModo,
               background: porSemana ? 'transparent' : color,
-              color: porSemana ? 'var(--texto-suave)' : '#fff',
+              color: porSemana ? 'var(--texto-suave)' : 'var(--sobre-marca)',
             }}
           >
             Mes
@@ -306,7 +306,7 @@ export default function VistaCalendario({
             style={{
               ...s.botonModo,
               background: porSemana ? color : 'transparent',
-              color: porSemana ? '#fff' : 'var(--texto-suave)',
+              color: porSemana ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
             Semana
@@ -595,8 +595,8 @@ function Semana({
               onClick={() => onDia(d.iso)}
               style={{
                 ...w.columna,
-                background: d.esHoy ? '#FEF9E7' : d.finDeSemana ? 'var(--superficie-2)' : '#fff',
-                borderColor: d.esHoy ? '#E8C766' : 'var(--superficie-3)',
+                background: d.esHoy ? 'var(--ambar-fondo)' : d.finDeSemana ? 'var(--superficie-2)' : 'var(--superficie)',
+                borderColor: d.esHoy ? 'var(--ambar)' : 'var(--superficie-3)',
               }}
               title="Clic para anotar"
             >
@@ -616,8 +616,8 @@ function Semana({
                     onClick={(e) => { e.stopPropagation(); onEvento(ev); }}
                     style={{
                       ...w.evento,
-                      background: ev.origen === 'capacitacion' ? ev.color : '#fff',
-                      color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
+                      background: ev.origen === 'capacitacion' ? ev.color : 'var(--superficie)',
+                      color: ev.origen === 'capacitacion' ? 'var(--sobre-marca)' : ev.color,
                       borderWidth: 1, borderColor: ev.color,
                       borderStyle: ev.origen === 'programacion' ? 'dashed' : 'solid',
                     }}
@@ -693,8 +693,8 @@ function Mes({
               onClick={() => onDia(iso)}
               style={{
                 ...m.celda,
-                background: esHoy(d) ? '#FEF9E7' : finDeSemana ? 'var(--superficie-2)' : '#fff',
-                borderColor: esHoy(d) ? '#E8C766' : 'var(--superficie-3)',
+                background: esHoy(d) ? 'var(--ambar-fondo)' : finDeSemana ? 'var(--superficie-2)' : 'var(--superficie)',
+                borderColor: esHoy(d) ? 'var(--ambar)' : 'var(--superficie-3)',
               }}
               title="Clic para anotar"
             >
@@ -706,8 +706,8 @@ function Mes({
                   onClick={(e) => { e.stopPropagation(); onEvento(ev); }}
                   style={{
                     ...m.evento,
-                    background: ev.origen === 'capacitacion' ? ev.color : '#fff',
-                    color: ev.origen === 'capacitacion' ? '#fff' : ev.color,
+                    background: ev.origen === 'capacitacion' ? ev.color : 'var(--superficie)',
+                    color: ev.origen === 'capacitacion' ? 'var(--sobre-marca)' : ev.color,
                     borderWidth: 1, borderColor: ev.color,
                     // Punteado para lo programado: es un compromiso,
                     // no un documento todavia.
@@ -753,8 +753,8 @@ const s: Record<string, React.CSSProperties> = {
   },
   convertir: {
     display: 'block', width: '100%', marginTop: 14,
-    background: '#F4F7FB', color: 'var(--texto)',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#D3DEEC',
+    background: 'var(--superficie-3)', color: 'var(--texto)',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--borde)',
     borderRadius: 4, padding: '9px 12px', fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
@@ -767,7 +767,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   btn: { color: 'var(--sobre-marca)', border: 'none', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnSec: { background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
-  btnBorrar: { background: 'var(--superficie)', color: 'var(--mal)', border: '1px solid #F5C6C6', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
+  btnBorrar: { background: 'var(--superficie)', color: 'var(--mal)', border: '1px solid var(--mal)', padding: '10px 16px', borderRadius: 4, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' },
 
   navegacion: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 },
   flecha: { background: 'var(--superficie)', border: '1px solid var(--borde-fuerte)', width: 30, height: 30, borderRadius: 4, fontSize: 17, cursor: 'pointer', color: 'var(--texto)', lineHeight: 1 },

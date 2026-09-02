@@ -121,7 +121,7 @@ export default function EditorContratista({
           ...s.aviso,
           background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
           color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-          border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+          border: `1px solid ${aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
         }}>{aviso.texto}</div>
       )}
 
@@ -513,7 +513,7 @@ const s: Record<string, React.CSSProperties> = {
     boxShadow: '0 6px 20px rgba(20,38,63,.16)',
   },
   alerta: {
-    background: 'var(--mal-fondo)', border: '1px solid #F3C7C7', borderRadius: 8,
+    background: 'var(--mal-fondo)', border: '1px solid var(--mal)', borderRadius: 8,
     padding: '12px 15px', fontSize: 13, color: 'var(--mal)',
     lineHeight: 1.6, marginBottom: 14,
   },

@@ -398,17 +398,17 @@ const s: Record<string, React.CSSProperties> = {
   },
   btnBorrar: {
     background: 'var(--superficie)', color: 'var(--mal)',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--mal)',
     padding: '11px 22px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   enlaceCaja: {
     background: 'var(--info-fondo)', borderWidth: 1, borderStyle: 'solid',
-    borderColor: '#BAE6FD', borderRadius: 6, padding: 14, marginTop: 14,
+    borderColor: 'var(--info)', borderRadius: 6, padding: 14, marginTop: 14,
   },
   notaEnlace: { fontSize: 11.5, color: 'var(--info)', margin: '4px 0 8px', lineHeight: 1.55 },
   campoEnlace: {
     width: '100%', padding: '8px 10px', fontSize: 11.5,
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#BAE6FD',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--info)',
     borderRadius: 4, boxSizing: 'border-box', background: 'var(--superficie)',
     fontFamily: 'ui-monospace,SFMono-Regular,Menlo,monospace',
   },

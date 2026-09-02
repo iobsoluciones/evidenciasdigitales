@@ -606,9 +606,9 @@ export default function Investigacion({
               style={{
                 ...s.botonLleno,
                 background: hecho === 'cierre' ? OK
-                  : !puedeCerrar ? '#D8DCDF'
+                  : !puedeCerrar ? 'var(--borde-fuerte)'
                   : pendiente ? 'var(--borde-fuerte)' : color,
-                color: !puedeCerrar && hecho !== 'cierre' ? 'var(--texto-tenue)' : '#fff',
+                color: !puedeCerrar && hecho !== 'cierre' ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                 cursor: puedeCerrar && !pendiente ? 'pointer' : 'not-allowed',
               }}
             >
@@ -749,10 +749,10 @@ const s: Record<string, React.CSSProperties> = {
   },
   faltas: {
     listStyle: 'none', margin: 0, padding: 0,
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', borderRadius: 8,
   },
   falta: {
-    fontSize: 12.5, color: '#7C2D12', lineHeight: 1.55,
+    fontSize: 12.5, color: 'var(--aviso)', lineHeight: 1.55,
     padding: '9px 14px', borderBottom: '1px solid #FBDCBC',
   },
 };

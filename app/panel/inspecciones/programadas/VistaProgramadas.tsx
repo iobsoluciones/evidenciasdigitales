@@ -33,7 +33,7 @@ const PERIODICIDADES = [
 const ESTADOS: Record<EstadoProgramacion, { t: string; c: string; f: string }> = {
   vencida: { t: 'Vencida', c: 'var(--mal)', f: 'var(--mal-fondo)' },
   proxima: { t: 'Esta semana', c: 'var(--ambar)', f: 'var(--ambar-fondo)' },
-  pendiente: { t: 'Programada', c: '#1D4ED8', f: '#EFF6FF' },
+  pendiente: { t: 'Programada', c: 'var(--info)', f: 'var(--info-fondo)' },
   cumplida: { t: 'Realizada', c: 'var(--bien)', f: 'var(--bien-fondo)' },
   cancelada: { t: 'Cancelada', c: 'var(--texto-tenue)', f: 'var(--superficie-3)' },
 };
@@ -239,7 +239,7 @@ export default function VistaProgramadas({
               <article key={p.id} style={{
                 ...e.fila,
                 borderLeftColor: p.estado_real === 'vencida' ? 'var(--mal)'
-                               : p.estado_real === 'proxima' ? '#E8C766' : 'var(--borde)',
+                               : p.estado_real === 'proxima' ? 'var(--ambar)' : 'var(--borde)',
               }}>
                 <div style={{ flex: 1, minWidth: 200 }}>
                   <div style={e.nombre}>{p.nombre}</div>

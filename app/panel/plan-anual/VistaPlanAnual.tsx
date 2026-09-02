@@ -340,7 +340,7 @@ export default function VistaPlanAnual({
                 ...s.botonSec,
                 borderColor: hecho === 'cab' ? 'var(--bien)' : color,
                 color: hecho === 'cab' ? 'var(--bien)' : color,
-                background: hecho === 'cab' ? 'var(--bien-fondo)' : '#fff',
+                background: hecho === 'cab' ? 'var(--bien-fondo)' : 'var(--superficie)',
               }}>
               {hecho === 'cab' ? '✓ Guardado' : 'Guardar'}
             </button>
@@ -404,7 +404,7 @@ export default function VistaPlanAnual({
                     style={{
                       ...s.mes,
                       ...(act.meses.includes(i + 1)
-                        ? { background: color, color: 'var(--sobre-marca)', borderColor: color } : {}),
+                        ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
                     }}>{m}</button>
                 ))}
               </div>
@@ -418,7 +418,7 @@ export default function VistaPlanAnual({
                     style={{
                       ...s.mes,
                       ...(act.ejecutados.includes(i + 1)
-                        ? { background: 'var(--bien)', color: 'var(--sobre-marca)', borderColor: 'var(--bien)' } : {}),
+                        ? { background: 'var(--bien)', color: 'var(--superficie)', borderColor: 'var(--bien)' } : {}),
                     }}>{m}</button>
                 ))}
               </div>
@@ -531,8 +531,8 @@ export default function VistaPlanAnual({
                 title={actividades.length === 0 ? 'Agrega al menos una actividad' : undefined}
                 style={{
                   ...s.botonLleno,
-                  background: actividades.length === 0 ? '#D8DCDF' : color,
-                  color: actividades.length === 0 ? 'var(--texto-tenue)' : '#fff',
+                  background: actividades.length === 0 ? 'var(--borde-fuerte)' : color,
+                  color: actividades.length === 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                   cursor: actividades.length === 0 ? 'not-allowed' : 'pointer',
                 }}>
                 Aprobar y firmar
@@ -680,7 +680,7 @@ const s: Record<string, React.CSSProperties> = {
   td: { padding: '9px 10px', borderBottom: '1px solid var(--superficie-3)', verticalAlign: 'top' },
   tdMes: { padding: '9px 2px', borderBottom: '1px solid var(--superficie-3)', textAlign: 'center' },
   celdaMes: {
-    display: 'inline-block', width: 14, height: 14, borderRadius: 3, background: '#C8CDD2',
+    display: 'inline-block', width: 14, height: 14, borderRadius: 3, background: 'var(--borde-fuerte)',
   },
   meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   atrasada: { fontSize: 10.5, fontWeight: 700, color: 'var(--mal)', marginTop: 3 },

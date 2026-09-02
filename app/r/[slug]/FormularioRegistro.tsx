@@ -393,7 +393,7 @@ export default function FormularioRegistro({
           autoFocus
           style={{
             ...s.input,
-            borderColor: avisoId ? (avisoId.ok ? '#86EFAC' : '#F5C6C6') : 'var(--borde-fuerte)',
+            borderColor: avisoId ? (avisoId.ok ? 'var(--bien)' : 'var(--mal)') : 'var(--borde-fuerte)',
           }}
         />
         <p style={s.ayuda}>
@@ -487,8 +487,8 @@ function Pregunta({
         return (
           <label key={o.id} style={{
             ...s.opcion,
-            background: marcada ? '#EFF6FF' : '#fff',
-            borderColor: marcada ? color : '#e2e8f0',
+            background: marcada ? 'var(--info-fondo)' : 'var(--superficie)',
+            borderColor: marcada ? color : 'var(--borde)',
           }}>
             <input
               type={p.tipo === 'unica' ? 'radio' : 'checkbox'}
@@ -521,8 +521,8 @@ function Campo({
         style={{
           ...s.input,
           textTransform: mayus ? 'uppercase' : 'none',
-          background: bloqueado ? 'var(--superficie-3)' : '#fff',
-          color: bloqueado ? 'var(--texto-suave)' : '#1f2937',
+          background: bloqueado ? 'var(--superficie-3)' : 'var(--superficie)',
+          color: bloqueado ? 'var(--texto-suave)' : 'var(--texto)',
           cursor: bloqueado ? 'not-allowed' : 'text',
         }}
       />

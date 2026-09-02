@@ -127,7 +127,7 @@ export default function TablaOrganizaciones({
                     <span style={{
                       fontWeight: 600,
                       color: o.max_empresas !== null && o.empresas >= o.max_empresas
-                        ? 'var(--mal)' : '#14263F',
+                        ? 'var(--mal)' : 'var(--texto)',
                     }}>
                       {o.empresas}
                     </span>

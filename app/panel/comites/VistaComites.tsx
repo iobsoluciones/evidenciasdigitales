@@ -245,7 +245,7 @@ export default function VistaComites({
           <section style={{
             ...s.control,
             background: v.conforme ? 'var(--bien-fondo)' : 'var(--aviso-fondo)',
-            borderColor: v.conforme ? 'var(--bien)' : '#FED7AA',
+            borderColor: v.conforme ? 'var(--bien)' : 'var(--aviso)',
           }}>
             <div style={s.controlCab}>
               <div>

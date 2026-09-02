@@ -104,7 +104,7 @@ export default function VistaEventos({
               onClick={() => setFiltro(v)}
               style={{
                 ...s.filtro,
-                ...(filtro === v ? { background: color, color: 'var(--sobre-marca)', borderColor: color } : {}),
+                ...(filtro === v ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
               }}
             >
               {t}
@@ -197,7 +197,7 @@ const s: Record<string, React.CSSProperties> = {
   tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   alerta: {
-    background: 'var(--mal-fondo)', border: '1px solid #F5C6C6', color: 'var(--mal)',
+    background: 'var(--mal-fondo)', border: '1px solid var(--mal)', color: 'var(--mal)',
     borderRadius: 8, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
     marginBottom: 16,
   },

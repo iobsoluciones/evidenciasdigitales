@@ -278,7 +278,7 @@ export default function VistaDevoluciones({
                               style={{
                                 ...e.botonEstado,
                                 borderColor: f.estado === x.v ? x.color : 'var(--borde-fuerte)',
-                                background: f.estado === x.v ? x.color + '14' : '#fff',
+                                background: f.estado === x.v ? x.color + '14' : 'var(--superficie)',
                                 color: f.estado === x.v ? x.color : 'var(--texto-suave)',
                                 fontWeight: f.estado === x.v ? 700 : 500,
                               }}

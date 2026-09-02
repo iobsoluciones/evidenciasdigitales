@@ -167,7 +167,7 @@ export default function EditorPermiso({
           ...s.aviso,
           background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
           color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-          border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+          border: `1px solid ${aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
         }}>{aviso.texto}</div>
       )}
 
@@ -176,8 +176,8 @@ export default function EditorPermiso({
         ...s.estado,
         background: permiso.vencido ? 'var(--mal-fondo)'
           : permiso.estado === 'autorizado' ? 'var(--bien-fondo)' : 'var(--fondo)',
-        borderColor: permiso.vencido ? '#F3C7C7'
-          : permiso.estado === 'autorizado' ? '#BFE3CB' : 'var(--borde)',
+        borderColor: permiso.vencido ? 'var(--mal)'
+          : permiso.estado === 'autorizado' ? 'var(--bien)' : 'var(--borde)',
       }}>
         <strong style={{
           color: permiso.vencido ? 'var(--mal)'
@@ -230,7 +230,7 @@ export default function EditorPermiso({
 
       {/* ---------- Diálogos ---------- */}
       {justificando && (
-        <section style={{ ...s.bloque, borderColor: '#F3C7C7' }}>
+        <section style={{ ...s.bloque, borderColor: 'var(--mal)' }}>
           <div style={s.h3}>Constancia por falta de aptitud médica</div>
           <p style={s.nota}>
             {sinAptitud.map((q) => q.nombre).join(', ')} no tiene aptitud médica

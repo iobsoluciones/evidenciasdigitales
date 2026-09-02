@@ -288,10 +288,10 @@ function Opcion({
       style={{
         ...e.opcion,
         borderColor: activa ? color : 'var(--borde-fuerte)',
-        background: activa ? '#F7FBFA' : '#fff',
+        background: activa ? 'var(--superficie-3)' : 'var(--superficie)',
       }}
     >
-      <strong style={{ fontSize: 13.5, color: activa ? color : '#14263F' }}>
+      <strong style={{ fontSize: 13.5, color: activa ? color : 'var(--texto)' }}>
         {titulo}
       </strong>
       <p style={e.opcionTexto}>{texto}</p>

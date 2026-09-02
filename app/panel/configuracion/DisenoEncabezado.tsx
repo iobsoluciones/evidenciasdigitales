@@ -112,13 +112,13 @@ export default function DisenoEncabezado({
               style={{
                 ...e.plantilla,
                 borderColor: activa ? color : 'var(--borde-fuerte)',
-                background: activa ? '#F8FAFC' : '#fff',
+                background: activa ? 'var(--superficie-3)' : 'var(--superficie)',
                 cursor: bloqueado ? 'not-allowed' : 'pointer',
                 opacity: bloqueado && !activa ? 0.55 : 1,
               }}
             >
               <Vista tipo={p.v} color={color} c={c} />
-              <span style={{ ...e.plantillaNombre, color: activa ? color : '#14263F' }}>
+              <span style={{ ...e.plantillaNombre, color: activa ? color : 'var(--texto)' }}>
                 {p.t}
               </span>
               <span style={e.plantillaDesc}>{p.d}</span>

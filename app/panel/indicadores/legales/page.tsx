@@ -57,7 +57,7 @@ export default async function PaginaIndicadoresLegales({
               href={`/panel/indicadores/legales?anio=${a}`}
               style={{
                 ...s.anio,
-                ...(a === anio ? { background: color, color: 'var(--sobre-marca)', borderColor: color } : {}),
+                ...(a === anio ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
               }}
             >
               {a}
@@ -146,10 +146,10 @@ const s: Record<string, React.CSSProperties> = {
   datoV: { fontSize: 15, color: 'var(--texto)', fontWeight: 700, fontVariantNumeric: 'tabular-nums' },
 
   faltaBase: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '11px 14px', fontSize: 13, lineHeight: 1.6, marginBottom: 16,
   },
-  enlaceAviso: { color: '#7C2D12', fontWeight: 600 },
+  enlaceAviso: { color: 'var(--aviso)', fontWeight: 600 },
 
   rejilla: {
     display: 'grid', gap: 12,

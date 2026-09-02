@@ -67,8 +67,8 @@ export default async function PaginaAusentismo({
           <a key={a} href={`/panel/ausentismo?anio=${a}`}
             style={{
               ...s.anio,
-              background: a === anio ? empresa.color_primario : '#fff',
-              color: a === anio ? '#fff' : 'var(--texto-suave)',
+              background: a === anio ? empresa.color_primario : 'var(--superficie)',
+              color: a === anio ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               borderColor: a === anio ? empresa.color_primario : 'var(--borde)',
             }}>
             {a}

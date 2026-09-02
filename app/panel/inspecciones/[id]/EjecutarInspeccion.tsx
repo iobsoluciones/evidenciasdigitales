@@ -270,8 +270,8 @@ export default function EjecutarInspeccion({
                 style={{
                   ...s.botonOpcion,
                   borderColor: actual.resultado === o.v ? o.color : 'var(--borde-fuerte)',
-                  background: actual.resultado === o.v ? o.color : '#fff',
-                  color: actual.resultado === o.v ? '#fff' : o.color,
+                  background: actual.resultado === o.v ? o.color : 'var(--superficie)',
+                  color: actual.resultado === o.v ? 'var(--sobre-marca)' : o.color,
                 }}
               >
                 {o.t}
@@ -412,7 +412,7 @@ export default function EjecutarInspeccion({
                       r.resultado === 'cumple' ? 'var(--bien-fondo)'
                       : r.resultado === 'no_cumple' ? 'var(--mal-fondo)'
                       : r.resultado === 'no_aplica' ? 'var(--superficie-2)'
-                      : '#fff',
+                      : 'var(--sobre-marca)',
                   }}
                 >
                   <span style={s.ordenItem}>{r.orden}</span>
@@ -590,7 +590,7 @@ export default function EjecutarInspeccion({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={s.kpi}>
-      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? '#14263F' }}>{v}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={s.kpiL}>{l}</div>
     </div>
   );
@@ -742,7 +742,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   btnBorrar: {
     background: 'var(--superficie)', color: 'var(--mal)',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--mal)',
     padding: '11px 20px', borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSecEnlace: {

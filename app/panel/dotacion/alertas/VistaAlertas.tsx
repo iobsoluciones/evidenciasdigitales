@@ -48,8 +48,8 @@ export default function VistaAlertas({
             href={`/panel/dotacion/alertas?dias=${d}`}
             style={{
               ...e.botonPeriodo,
-              background: dias === d ? color : '#fff',
-              color: dias === d ? '#fff' : 'var(--texto-suave)',
+              background: dias === d ? color : 'var(--superficie)',
+              color: dias === d ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               borderColor: dias === d ? color : 'var(--borde-fuerte)',
             }}
           >
@@ -300,7 +300,7 @@ function Contador({
       style={{
         ...e.contador,
         borderColor: activo ? color : 'var(--borde)',
-        background: activo ? color + '10' : '#fff',
+        background: activo ? color + '10' : 'var(--superficie)',
         cursor: n === 0 ? 'default' : 'pointer',
         opacity: n === 0 ? 0.55 : 1,
       }}
@@ -367,7 +367,7 @@ const e: Record<string, React.CSSProperties> = {
   },
 
   sinAlertas: {
-    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: '#BBF7D0',
+    background: 'var(--superficie)', borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--bien)',
     borderRadius: 8, padding: '40px 24px', textAlign: 'center',
   },
 };

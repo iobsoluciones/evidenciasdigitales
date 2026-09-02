@@ -176,12 +176,12 @@ const e: Record<string, React.CSSProperties> = {
   vacio: { fontSize: 12, color: 'var(--texto-tenue)' },
   acciones: { display: 'flex', gap: 8 },
   btn: {
-    background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '8px 16px', borderRadius: 4,
+    background: 'var(--marca)', color: 'var(--superficie)', padding: '8px 16px', borderRadius: 4,
     fontSize: 12.5, fontWeight: 600, textAlign: 'center', flex: 1,
   },
   btnQuitar: {
     background: 'var(--superficie)', color: 'var(--mal)',
-    borderWidth: 1, borderStyle: 'solid', borderColor: '#F5C6C6',
+    borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--mal)',
     padding: '8px 16px', borderRadius: 4, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },

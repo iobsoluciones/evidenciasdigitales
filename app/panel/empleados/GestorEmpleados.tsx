@@ -327,7 +327,7 @@ export default function GestorEmpleados({
               onChange={(ev) => setF({ ...f, identificacion: ev.target.value.replace(/[^0-9]/g, '') })}
               placeholder="Identificación *"
               inputMode="numeric"
-              style={{ ...e.input, background: editandoId ? 'var(--superficie-3)' : '#fff' }}
+              style={{ ...e.input, background: editandoId ? 'var(--superficie-3)' : 'var(--superficie)' }}
             />
             <input
               value={f.nombres}
@@ -468,23 +468,23 @@ export default function GestorEmpleados({
 
 const e: Record<string, React.CSSProperties> = {
   egreso: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', borderRadius: 8,
     padding: '14px 16px', margin: '14px 0',
   },
-  egresoTitulo: { fontSize: 14, fontWeight: 700, color: '#7C2D12', marginBottom: 6 },
-  egresoTexto: { fontSize: 12.5, color: '#7C2D12', lineHeight: 1.6, margin: '0 0 10px' },
+  egresoTitulo: { fontSize: 14, fontWeight: 700, color: 'var(--aviso)', marginBottom: 6 },
+  egresoTexto: { fontSize: 12.5, color: 'var(--aviso)', lineHeight: 1.6, margin: '0 0 10px' },
   egresoCampo: {
-    width: '100%', padding: '9px 11px', border: '1px solid #FED7AA',
+    width: '100%', padding: '9px 11px', border: '1px solid var(--aviso)',
     borderRadius: 8, fontSize: 13, boxSizing: 'border-box',
     fontFamily: 'inherit', resize: 'vertical',
   },
   egresoBotones: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 10 },
   egresoCancelar: {
-    background: 'none', border: 'none', color: '#7C2D12',
+    background: 'none', border: 'none', color: 'var(--aviso)',
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '8px 12px',
   },
   egresoConfirmar: {
-    background: 'var(--aviso)', color: 'var(--sobre-marca)', border: 'none',
+    background: 'var(--aviso)', color: 'var(--superficie)', border: 'none',
     padding: '8px 18px', borderRadius: 8, fontSize: 12.5,
     fontWeight: 600, cursor: 'pointer',
   },
@@ -514,7 +514,7 @@ const e: Record<string, React.CSSProperties> = {
     padding: '9px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnVer: {
-    background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '4px 12px', borderRadius: 3,
+    background: 'var(--marca)', color: 'var(--superficie)', padding: '4px 12px', borderRadius: 3,
     fontSize: 11.5, fontWeight: 600, textDecoration: 'none', marginRight: 8,
   },
   btnMini: {

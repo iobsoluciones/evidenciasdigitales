@@ -71,7 +71,7 @@ export default function VistaExpediente({
       <section style={{
         ...s.veredicto,
         background: alDia ? 'var(--bien-fondo)' : 'var(--ambar-fondo)',
-        borderColor: alDia ? '#BBF7D0' : 'var(--ambar-fondo)',
+        borderColor: alDia ? 'var(--bien)' : 'var(--ambar-fondo)',
       }}>
         <div style={{ fontSize: 24 }}>{alDia ? '✓' : '!'}</div>
         <div style={{ flex: 1, minWidth: 220 }}>
@@ -279,7 +279,7 @@ export default function VistaExpediente({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={s.kpi}>
-      <div style={{ fontSize: 21, fontWeight: 700, color: color ?? '#14263F' }}>{v}</div>
+      <div style={{ fontSize: 21, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={s.kpiL}>{l}</div>
     </div>
   );
@@ -289,7 +289,7 @@ function Fila({ k, v, alerta }: { k: string; v: string; alerta?: boolean }) {
   return (
     <div style={s.fila}>
       <dt style={s.clave}>{k}</dt>
-      <dd style={{ ...s.valorFila, color: alerta ? 'var(--mal)' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...s.valorFila, color: alerta ? 'var(--mal)' : 'var(--texto)' }}>{v}</dd>
     </div>
   );
 }

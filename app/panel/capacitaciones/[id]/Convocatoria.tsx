@@ -276,7 +276,7 @@ export default function Convocatoria({
                         key={em.id}
                         style={{
                           ...e.persona,
-                          background: elegidos.has(em.id) ? 'var(--info-fondo)' : '#fff',
+                          background: elegidos.has(em.id) ? 'var(--info-fondo)' : 'var(--superficie)',
                           borderColor: elegidos.has(em.id) ? color : 'var(--superficie-3)',
                         }}
                       >

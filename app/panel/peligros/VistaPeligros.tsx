@@ -51,9 +51,9 @@ const CLASES: { v: Clasificacion; t: string }[] = [
 
 /** Código de color de la norma: I rojo, II naranja, III amarillo, IV verde. */
 const NIVELES: Record<string, { fondo: string; color: string }> = {
-  I: { fondo: '#FDE7E5', color: 'var(--mal)' },
-  II: { fondo: '#FCEEDF', color: 'var(--aviso)' },
-  III: { fondo: '#F9F3DC', color: 'var(--ambar)' },
+  I: { fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
+  II: { fondo: 'var(--aviso-fondo)', color: 'var(--aviso)' },
+  III: { fondo: 'var(--ambar-fondo)', color: 'var(--ambar)' },
   IV: { fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
 };
 
@@ -504,7 +504,7 @@ function Selector({
           <button key={o.v} onClick={() => onChange(o.v)} type="button" title={o.d}
             style={{
               ...s.opcion,
-              ...(valor === o.v ? { borderColor: '#14263F', background: 'var(--marca)', color: 'var(--sobre-marca)', fontWeight: 700 } : {}),
+              ...(valor === o.v ? { borderColor: 'var(--marca)', background: 'var(--marca)', color: 'var(--superficie)', fontWeight: 700 } : {}),
             }}>
             {o.v} · {o.t}
           </button>
@@ -527,7 +527,7 @@ const s: Record<string, React.CSSProperties> = {
   tarjetaT: { fontSize: 11.5, color: 'var(--texto-suave)', lineHeight: 1.4 },
 
   avisoControles: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '11px 14px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 14,
   },
   controles: { display: 'flex', gap: 10, marginBottom: 14, flexWrap: 'wrap' },

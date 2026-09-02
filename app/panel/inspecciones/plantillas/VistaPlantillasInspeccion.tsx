@@ -134,8 +134,8 @@ export default function VistaPlantillasInspeccion({
           onClick={() => setTipo('')}
           style={{
             ...e.filtro,
-            background: tipo === '' ? color : '#fff',
-            color: tipo === '' ? '#fff' : 'var(--texto-suave)',
+            background: tipo === '' ? color : 'var(--superficie)',
+            color: tipo === '' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             borderColor: tipo === '' ? color : 'var(--borde-fuerte)',
           }}
         >
@@ -148,8 +148,8 @@ export default function VistaPlantillasInspeccion({
             title={t.nota}
             style={{
               ...e.filtro,
-              background: tipo === t.v ? color : '#fff',
-              color: tipo === t.v ? '#fff' : 'var(--texto-suave)',
+              background: tipo === t.v ? color : 'var(--superficie)',
+              color: tipo === t.v ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               borderColor: tipo === t.v ? color : 'var(--borde-fuerte)',
             }}
           >
@@ -174,7 +174,7 @@ export default function VistaPlantillasInspeccion({
               style={{
                 ...e.botonVista,
                 background: vista === 'tarjetas' ? color : 'transparent',
-                color: vista === 'tarjetas' ? '#fff' : 'var(--texto-suave)',
+                color: vista === 'tarjetas' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               }}
             >
               <span aria-hidden="true" style={{ fontSize: 13 }}>▦</span> Tarjetas
@@ -185,7 +185,7 @@ export default function VistaPlantillasInspeccion({
               style={{
                 ...e.botonVista,
                 background: vista === 'lista' ? color : 'transparent',
-                color: vista === 'lista' ? '#fff' : 'var(--texto-suave)',
+                color: vista === 'lista' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               }}
             >
               <span aria-hidden="true" style={{ fontSize: 13 }}>☰</span> Lista
@@ -267,7 +267,7 @@ export default function VistaPlantillasInspeccion({
                     </td>
                     <td style={e.tdTipo}>{TIPOS.find((t) => t.v === p.tipo)?.t ?? p.tipo}</td>
                     <td style={e.tdNum}>{p.items}</td>
-                    <td style={{ ...e.tdNum, color: p.criticos > 0 ? 'var(--mal)' : '#14263F', fontWeight: p.criticos > 0 ? 700 : 400 }}>
+                    <td style={{ ...e.tdNum, color: p.criticos > 0 ? 'var(--mal)' : 'var(--texto)', fontWeight: p.criticos > 0 ? 700 : 400 }}>
                       {p.criticos}
                     </td>
                     <td style={e.tdNorma}>
@@ -395,7 +395,7 @@ function ThOrden({
       style={{
         ...e.thOrden,
         textAlign: izq ? 'left' : 'center',
-        color: activo ? '#14263F' : 'var(--texto-tenue)',
+        color: activo ? 'var(--texto)' : 'var(--texto-tenue)',
       }}
     >
       {etiqueta}
@@ -410,7 +410,7 @@ function Fila({ k, v, destacado }: { k: string; v: string; destacado?: boolean }
   return (
     <div style={e.fila}>
       <dt style={e.clave}>{k}</dt>
-      <dd style={{ ...e.valor, color: destacado ? 'var(--mal)' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...e.valor, color: destacado ? 'var(--mal)' : 'var(--texto)' }}>{v}</dd>
     </div>
   );
 }

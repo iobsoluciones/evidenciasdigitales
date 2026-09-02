@@ -168,7 +168,7 @@ const s: Record<string, React.CSSProperties> = {
   marca: {
     width: '44%', maxWidth: 520, flexShrink: 0,
     display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-    background: 'var(--marca-panel)', color: '#fff', padding: '46px 44px',
+    background: 'var(--marca-panel)', color: 'var(--superficie)', padding: '46px 44px',
   },
   marcaCuerpo: { marginTop: 'auto', marginBottom: 'auto' },
   marcaNombre: { fontSize: 30, fontWeight: 700, letterSpacing: -0.4 },
@@ -178,7 +178,7 @@ const s: Record<string, React.CSSProperties> = {
     padding: '2px 7px', marginLeft: 10, verticalAlign: 4,
   },
   marcaFrase: { fontSize: 19, lineHeight: 1.5, margin: '18px 0 0', opacity: .9, maxWidth: 340 },
-  firma: { width: 250, height: 64, marginTop: 30, color: '#fff' },
+  firma: { width: 250, height: 64, marginTop: 30, color: 'var(--sobre-marca)' },
   marcaPie: { fontSize: 11.5, opacity: .6, margin: 0, letterSpacing: .3 },
 
   panel: {
@@ -200,7 +200,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   boton: {
     marginTop: 4, padding: '12px 16px',
-    background: 'var(--marca)', color: '#fff',
+    background: 'var(--marca)', color: 'var(--superficie)',
     border: 'none', borderRadius: 8, fontSize: 14.5, fontWeight: 600,
     transition: 'background .15s ease',
   },

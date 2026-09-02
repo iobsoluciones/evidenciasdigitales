@@ -84,7 +84,7 @@ export default function FormularioEvento({
                   : {}),
               }}
             >
-              <span style={{ ...s.tipoT, color: f.tipo === t.v ? color : '#14263F' }}>{t.t}</span>
+              <span style={{ ...s.tipoT, color: f.tipo === t.v ? color : 'var(--texto)' }}>{t.t}</span>
               <span style={s.tipoD}>{t.d}</span>
             </button>
           ))}
@@ -243,7 +243,7 @@ const s: Record<string, React.CSSProperties> = {
   check: { display: 'flex', alignItems: 'center', fontSize: 13, cursor: 'pointer', color: 'var(--texto)' },
   casilla: { marginRight: 8, width: 15, height: 15 },
   aviso: {
-    marginTop: 12, background: 'var(--mal-fondo)', border: '1px solid #F5C6C6',
+    marginTop: 12, background: 'var(--mal-fondo)', border: '1px solid var(--mal)',
     color: 'var(--mal)', borderRadius: 8, padding: '10px 13px',
     fontSize: 12.5, lineHeight: 1.6,
   },

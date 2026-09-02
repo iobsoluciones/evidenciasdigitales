@@ -231,7 +231,7 @@ function Dato({ k, v, color }: { k: string; v: string; color?: string }) {
   return (
     <div>
       <dt style={s.datoClave}>{k}</dt>
-      <dd style={{ ...s.datoValor, color: color ?? '#14263F' }}>{v}</dd>
+      <dd style={{ ...s.datoValor, color: color ?? 'var(--texto)' }}>{v}</dd>
     </div>
   );
 }
@@ -283,7 +283,7 @@ const s: Record<string, React.CSSProperties> = {
   meta: { fontSize: 11, color: 'var(--texto-tenue)', marginTop: 2 },
   activa: {
     fontSize: 11, color: 'var(--bien)', background: 'var(--bien-fondo)',
-    border: '1px solid #BBF7D0', borderRadius: 4,
+    border: '1px solid var(--bien)', borderRadius: 4,
     padding: '5px 9px', marginBottom: 12,
   },
   datos: {
@@ -295,18 +295,18 @@ const s: Record<string, React.CSSProperties> = {
   ultima: { fontSize: 11, color: 'var(--texto-tenue)', marginBottom: 14, flex: 1 },
 
   btn: {
-    background: 'var(--marca)', color: 'var(--sobre-marca)', border: 'none',
+    background: 'var(--marca)', color: 'var(--superficie)', border: 'none',
     padding: '10px 18px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
-  btnOff: { background: '#C9CED4', cursor: 'not-allowed' },
+  btnOff: { background: 'var(--borde-fuerte)', cursor: 'not-allowed' },
   btnSec: {
     background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)',
     padding: '10px 18px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
   btnEntrar: {
-    width: '100%', background: '#F2F4F7', color: 'var(--texto)',
+    width: '100%', background: 'var(--superficie-3)', color: 'var(--texto)',
     border: '1px solid var(--borde-fuerte)', padding: '9px', borderRadius: 6,
     fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },
@@ -334,7 +334,7 @@ const s: Record<string, React.CSSProperties> = {
     borderRadius: 6, fontSize: 13, boxSizing: 'border-box', fontFamily: 'inherit',
   },
   prefijo: {
-    background: '#F2F4F7', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
+    background: 'var(--superficie-3)', border: '1px solid var(--borde-fuerte)', borderRight: 'none',
     borderRadius: '6px 0 0 6px', padding: '9px 10px', fontSize: 13, color: 'var(--texto-suave)',
   },
   ayuda: { fontSize: 11, color: 'var(--texto-tenue)', margin: '4px 0 12px' },

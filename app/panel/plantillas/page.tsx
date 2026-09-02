@@ -54,6 +54,6 @@ const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
   sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0, maxWidth: 520 },
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 22 },
-  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btn: { background: 'var(--marca)', color: 'var(--superficie)', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
   btnSec: { background: 'var(--superficie)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '10px 16px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

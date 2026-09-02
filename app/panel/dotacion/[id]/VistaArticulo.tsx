@@ -557,7 +557,7 @@ const e: Record<string, React.CSSProperties> = {
   chipEstado: { fontSize: 9.5, padding: '3px 8px', borderRadius: 999, fontWeight: 600, whiteSpace: 'nowrap' },
   inspecciones: {
     marginTop: 10, paddingTop: 9,
-    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#F1F1EC',
+    borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: 'var(--borde)',
   },
   inspeccionesTitulo: {
     fontSize: 10, letterSpacing: .5, textTransform: 'uppercase',

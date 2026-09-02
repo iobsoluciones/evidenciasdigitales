@@ -244,8 +244,8 @@ export default function VistaAutoevaluacion({
               title={(p?.sin_evaluar ?? 0) > 0 ? 'Faltan estándares por evaluar' : undefined}
               style={{
                 ...s.botonLleno,
-                background: (p?.sin_evaluar ?? 0) > 0 ? '#D8DCDF' : color,
-                color: (p?.sin_evaluar ?? 0) > 0 ? 'var(--texto-tenue)' : '#fff',
+                background: (p?.sin_evaluar ?? 0) > 0 ? 'var(--borde-fuerte)' : color,
+                color: (p?.sin_evaluar ?? 0) > 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                 cursor: (p?.sin_evaluar ?? 0) > 0 ? 'not-allowed' : 'pointer',
               }}>
               Cerrar autoevaluación
@@ -382,7 +382,7 @@ function Aviso({ a }: { a: { tipo: 'ok' | 'error'; texto: string } }) {
       ...s.aviso,
       background: a.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
       color: a.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-      border: `1px solid ${a.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+      border: `1px solid ${a.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
     }}>{a.texto}</div>
   );
 }

@@ -155,7 +155,7 @@ export default async function PaginaFichaEmpleado({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={s.kpi}>
-      <div style={{ fontSize: 21, fontWeight: 700, color: color ?? '#14263F' }}>{v}</div>
+      <div style={{ fontSize: 21, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={s.kpiL}>{l}</div>
     </div>
   );

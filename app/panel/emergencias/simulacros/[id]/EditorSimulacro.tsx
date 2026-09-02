@@ -175,7 +175,7 @@ export default function EditorSimulacro({
           ...s.aviso,
           background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
           color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-          border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+          border: `1px solid ${aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
         }}>{aviso.texto}</div>
       )}
 
@@ -200,8 +200,8 @@ export default function EditorSimulacro({
             title={faltanFirmas > 0 ? 'Faltan firmas del equipo evaluador' : undefined}
             style={{
               ...s.botonLleno,
-              background: faltanFirmas > 0 || evaluadores.length === 0 ? '#D8DCDF' : color,
-              color: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--texto-tenue)' : '#fff',
+              background: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--borde-fuerte)' : color,
+              color: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
               cursor: faltanFirmas > 0 || evaluadores.length === 0 ? 'not-allowed' : 'pointer',
             }}
             onClick={() => correr(() => cerrarSimulacro(simulacro.id))}>

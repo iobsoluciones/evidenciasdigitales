@@ -125,7 +125,7 @@ export default function VistaRetirados({
                             <button
                               onClick={() => reincorporar(em.id)}
                               disabled={pendiente}
-                              style={{ ...e.btnMini, background: color, color: 'var(--sobre-marca)', borderColor: color }}
+                              style={{ ...e.btnMini, background: color, color: 'var(--superficie)', borderColor: color }}
                             >
                               {pendiente ? 'Un momento…' : 'Confirmar'}
                             </button>

@@ -67,7 +67,7 @@ export default async function PaginaHoras({
               style={{
                 ...s.anio,
                 ...(a === anio
-                  ? { background: color, color: 'var(--sobre-marca)', borderColor: color }
+                  ? { background: color, color: 'var(--superficie)', borderColor: color }
                   : {}),
               }}
             >
@@ -116,7 +116,7 @@ const s: Record<string, React.CSSProperties> = {
     textDecoration: 'none',
   },
   nota: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '11px 14px', fontSize: 13, lineHeight: 1.6,
     marginBottom: 18,
   },

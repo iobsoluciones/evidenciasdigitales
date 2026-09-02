@@ -151,7 +151,7 @@ export default function AprobarPlan({
                     <span key={n} style={{
                       ...s.mes,
                       background: activo ? color : 'var(--superficie-3)',
-                      color: activo ? '#fff' : '#A2AAB4',
+                      color: activo ? 'var(--sobre-marca)' : '#A2AAB4',
                       fontWeight: activo ? 700 : 400,
                     }}>
                       {m}

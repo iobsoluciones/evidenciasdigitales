@@ -44,7 +44,7 @@ export default function AccionesReporte({
             sin bloquear la interfaz mientras se genera el archivo. */}
         <a
           href={`/api/pdf/${capacitacionId}`}
-          style={{ ...est.btn, background: color, color: 'var(--sobre-marca)', textDecoration: 'none' }}
+          style={{ ...est.btn, background: color, color: 'var(--superficie)', textDecoration: 'none' }}
         >
           Descargar PDF
         </a>
@@ -52,7 +52,7 @@ export default function AccionesReporte({
         {/* Excel: enlace directo, el navegador gestiona la descarga */}
         <a
           href={`/api/excel/${capacitacionId}`}
-          style={{ ...est.btn, background: 'var(--bien)', color: 'var(--sobre-marca)', textDecoration: 'none' }}
+          style={{ ...est.btn, background: 'var(--bien)', color: 'var(--superficie)', textDecoration: 'none' }}
         >
           Descargar Excel
         </a>

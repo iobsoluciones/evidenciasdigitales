@@ -271,7 +271,7 @@ export default function FormularioEntrega({
                 style={{
                   ...e.empleado,
                   borderColor: empleadoId === x.id ? color : 'var(--superficie-3)',
-                  background: empleadoId === x.id ? '#F7FBFA' : '#fff',
+                  background: empleadoId === x.id ? 'var(--superficie-3)' : 'var(--superficie)',
                 }}
               >
                 <div>

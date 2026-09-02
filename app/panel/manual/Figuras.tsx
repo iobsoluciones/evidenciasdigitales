@@ -10,7 +10,7 @@
  * Son componentes de presentación puros: sin estado, sin 'use client'.
  */
 
-const AZUL = '#14263F';
+const AZUL = 'var(--marca)';
 const GRIS = 'var(--texto-suave)';
 const BORDE = 'var(--borde)';
 const FONDO = 'var(--fondo)';
@@ -69,7 +69,7 @@ export function Titulo({ children, marca }: { children: React.ReactNode; marca?:
 
 /** Barra gris: representa un texto cualquiera. */
 export function Linea({ ancho = 100, alto = 8 }: { ancho?: number; alto?: number }) {
-  return <div style={{ width: `${ancho}%`, height: alto, borderRadius: 4, background: '#E9E9E4' }} />;
+  return <div style={{ width: `${ancho}%`, height: alto, borderRadius: 4, background: 'var(--superficie-3)' }} />;
 }
 
 export function Fila({
@@ -103,8 +103,8 @@ export function Boton({
     <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
       <span style={{
         ...f.boton,
-        background: fantasma ? '#fff' : color,
-        color: fantasma ? color : '#fff',
+        background: fantasma ? 'var(--superficie)' : color,
+        color: fantasma ? color : 'var(--sobre-marca)',
         border: `1px solid ${fantasma ? BORDE : color}`,
       }}>
         {children}
@@ -260,7 +260,7 @@ export function Jerarquia({
 }) {
   return (
     <div style={f.jerarquia}>
-      <div style={{ ...f.nodo, background: AZUL, color: 'var(--sobre-marca)', borderColor: AZUL }}>{raiz}</div>
+      <div style={{ ...f.nodo, background: AZUL, color: 'var(--superficie)', borderColor: AZUL }}>{raiz}</div>
       <div style={{ ...f.flecha, color: GRIS, transform: 'rotate(90deg)', margin: '2px 0' }}>→</div>
       <div style={f.nodoFila}>
         {/* key por posición: dos ramas pueden llamarse igual. */}
@@ -448,12 +448,12 @@ const f: Record<string, React.CSSProperties> = {
 
   ojo: {
     display: 'flex', gap: 11, alignItems: 'flex-start',
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', borderRadius: 8,
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', borderRadius: 8,
     padding: '12px 15px', margin: '18px 0 0', fontSize: 13,
-    color: '#7C2D12', lineHeight: 1.6,
+    color: 'var(--aviso)', lineHeight: 1.6,
   },
   ojoIcono: {
-    width: 19, height: 19, borderRadius: '50%', background: '#C2410C', color: 'var(--sobre-marca)',
+    width: 19, height: 19, borderRadius: '50%', background: '#C2410C', color: 'var(--superficie)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1,
   },

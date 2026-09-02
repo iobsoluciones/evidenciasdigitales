@@ -144,7 +144,7 @@ export default function VistaInventario({
             style={{
               ...e.botonVista,
               background: vista === 'tarjetas' ? color : 'transparent',
-              color: vista === 'tarjetas' ? '#fff' : 'var(--texto-suave)',
+              color: vista === 'tarjetas' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
             <span aria-hidden="true" style={{ fontSize: 13 }}>▦</span> Tarjetas
@@ -155,7 +155,7 @@ export default function VistaInventario({
             style={{
               ...e.botonVista,
               background: vista === 'lista' ? color : 'transparent',
-              color: vista === 'lista' ? '#fff' : 'var(--texto-suave)',
+              color: vista === 'lista' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
             <span aria-hidden="true" style={{ fontSize: 13 }}>☰</span> Lista
@@ -291,7 +291,7 @@ function Encabezado({
       style={{
         ...e.th,
         cursor: 'pointer',
-        color: activo ? '#14263F' : 'var(--texto-tenue)',
+        color: activo ? 'var(--texto)' : 'var(--texto-tenue)',
         textAlign: alineado ?? 'left',
       }}
       title={`Ordenar por ${texto.toLowerCase()}`}

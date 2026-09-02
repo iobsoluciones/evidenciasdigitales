@@ -46,7 +46,7 @@ export default function SelectorEmpresa({
         style={e.boton}
         aria-expanded={abierto}
       >
-        <span style={{ ...e.punto, background: activa?.color_primario ?? '#94A3B8' }} />
+        <span style={{ ...e.punto, background: activa?.color_primario ?? 'var(--borde-fuerte)' }} />
         <span style={e.nombre}>{activa?.nombre ?? 'Sin empresa'}</span>
         <span style={{ ...e.flecha, transform: abierto ? 'rotate(180deg)' : 'none' }}>⌄</span>
       </button>
@@ -64,7 +64,7 @@ export default function SelectorEmpresa({
                 onClick={() => cambiar(em.id)}
                 style={{
                   ...e.opcion,
-                  background: em.id === activa?.id ? '#F2F4F7' : 'transparent',
+                  background: em.id === activa?.id ? 'var(--superficie-3)' : 'transparent',
                   fontWeight: em.id === activa?.id ? 600 : 400,
                 }}
               >

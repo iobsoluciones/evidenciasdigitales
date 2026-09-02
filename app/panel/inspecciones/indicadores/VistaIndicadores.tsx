@@ -157,7 +157,7 @@ export default function VistaIndicadores({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={e.kpi}>
-      <div style={{ fontSize: 22, fontWeight: 700, color: color ?? '#14263F' }}>{v}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={e.kpiL}>{l}</div>
     </div>
   );

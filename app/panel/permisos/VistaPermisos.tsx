@@ -26,7 +26,7 @@ const TIPOS: { v: TipoPermiso; t: string; norma: string }[] = [
 const ESTADOS: Record<string, { t: string; fondo: string; color: string }> = {
   borrador: { t: 'Borrador', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
   autorizado: { t: 'Autorizado', fondo: 'var(--bien-fondo)', color: 'var(--bien)' },
-  cerrado: { t: 'Cerrado', fondo: '#EEF2F7', color: 'var(--texto-suave)' },
+  cerrado: { t: 'Cerrado', fondo: 'var(--superficie-3)', color: 'var(--texto-suave)' },
   cancelado: { t: 'Cancelado', fondo: 'var(--mal-fondo)', color: 'var(--mal)' },
 };
 
@@ -74,7 +74,7 @@ export default function VistaPermisos({
           ...s.aviso,
           background: aviso.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
           color: aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)',
-          border: `1px solid ${aviso.tipo === 'ok' ? '#BFE3CB' : '#F3C7C7'}`,
+          border: `1px solid ${aviso.tipo === 'ok' ? 'var(--bien)' : 'var(--mal)'}`,
         }}>{aviso.texto}</div>
       )}
 

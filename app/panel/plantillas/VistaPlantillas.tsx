@@ -179,7 +179,7 @@ function Dato({ k, v, destacado }: { k: string; v: string; destacado?: boolean }
   return (
     <div style={e.fila}>
       <dt style={e.clave}>{k}</dt>
-      <dd style={{ ...e.valor, color: destacado ? 'var(--bien)' : '#14263F' }}>{v}</dd>
+      <dd style={{ ...e.valor, color: destacado ? 'var(--bien)' : 'var(--texto)' }}>{v}</dd>
     </div>
   );
 }

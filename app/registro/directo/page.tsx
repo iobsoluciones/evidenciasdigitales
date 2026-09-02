@@ -222,7 +222,7 @@ const s: Record<string, React.CSSProperties> = {
   titulo: { fontSize: 22, color: 'var(--texto)', margin: '14px 0 2px' },
   sub: { fontSize: 13, color: 'var(--texto-suave)', margin: '0 0 18px', lineHeight: 1.55 },
   aviso: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: 'var(--aviso)',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '11px 13px', fontSize: 12.5, lineHeight: 1.55,
     marginBottom: 20,
   },

@@ -171,7 +171,7 @@ export default function BloqueEvaluacion({
 function Kpi({ v, l, color }: { v: string; l: string; color?: string }) {
   return (
     <div style={e.kpi}>
-      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? '#1f2937' }}>{v}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: color ?? 'var(--texto)' }}>{v}</div>
       <div style={e.kpiL}>{l}</div>
     </div>
   );

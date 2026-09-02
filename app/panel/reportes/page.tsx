@@ -140,7 +140,7 @@ function Tarjeta({
               key={a.href}
               href={a.href}
               style={a.principal
-                ? { ...s.btnAccion, background: color, color: 'var(--sobre-marca)' }
+                ? { ...s.btnAccion, background: color, color: 'var(--superficie)' }
                 : s.btnSec}
             >
               {a.texto}
@@ -181,5 +181,5 @@ const s: Record<string, React.CSSProperties> = {
   },
   nota: { fontSize: 11.5, color: 'var(--texto-tenue)', marginTop: 20, lineHeight: 1.6 },
   vacio: { background: 'var(--superficie)', border: '1px dashed var(--borde-fuerte)', borderRadius: 8, padding: '40px 24px', textAlign: 'center' },
-  btn: { background: 'var(--marca)', color: 'var(--sobre-marca)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btn: { background: 'var(--marca)', color: 'var(--superficie)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
 };

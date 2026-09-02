@@ -331,7 +331,7 @@ export default function MenuLateral({
                             style={{
                               ...e.item,
                               ...(activo
-                                ? { color, fontWeight: 600, borderLeftColor: color, background: '#fff' }
+                                ? { color, fontWeight: 600, borderLeftColor: color, background: 'var(--superficie)' }
                                 : {}),
                             }}
                           >
@@ -359,7 +359,7 @@ export default function MenuLateral({
             style={{
               ...e.cartera,
               marginBottom: 6,
-              background: enPerfil ? color : '#fff',
+              background: enPerfil ? color : 'var(--superficie)',
               color: enPerfil ? 'var(--sobre-marca)' : 'var(--texto)',
               borderColor: enPerfil ? color : 'var(--borde-fuerte)',
             }}
@@ -373,7 +373,7 @@ export default function MenuLateral({
             onClick={() => setMovil(false)}
             style={{
               ...e.cartera,
-              background: enConfig ? color : '#fff',
+              background: enConfig ? color : 'var(--superficie)',
               color: enConfig ? 'var(--sobre-marca)' : 'var(--texto)',
               borderColor: enConfig ? color : 'var(--borde-fuerte)',
             }}

@@ -78,8 +78,8 @@ export default async function PaginaSuperadmin() {
 
 function Kpi({ v, e, alerta }: { v: string; e: string; alerta?: boolean }) {
   return (
-    <div style={{ ...s.kpi, ...(alerta ? { background: 'var(--mal-fondo)', border: '1px solid #F5C6C6' } : {}) }}>
-      <div style={{ fontSize: 21, fontWeight: 700, color: alerta ? 'var(--mal)' : '#14263F' }}>{v}</div>
+    <div style={{ ...s.kpi, ...(alerta ? { background: 'var(--mal-fondo)', border: '1px solid var(--mal)' } : {}) }}>
+      <div style={{ fontSize: 21, fontWeight: 700, color: alerta ? 'var(--mal)' : 'var(--texto)' }}>{v}</div>
       <div style={s.kpiE}>{e}</div>
     </div>
   );

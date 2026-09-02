@@ -117,10 +117,10 @@ export default function EditorPreguntasPlantilla({
         <div style={{
           ...e.puntaje,
           background: excede ? 'var(--mal-fondo)' : suma === 100 ? 'var(--bien-fondo)' : 'var(--superficie-2)',
-          borderColor: excede ? '#F5C6C6' : suma === 100 ? '#BBF7D0' : 'var(--superficie-3)',
+          borderColor: excede ? 'var(--mal)' : suma === 100 ? 'var(--bien)' : 'var(--superficie-3)',
         }}>
           <div>
-            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : '#14263F' }}>
+            <strong style={{ fontSize: 13, color: excede ? 'var(--mal)' : 'var(--texto)' }}>
               {suma} de 100 puntos
             </strong>
             <p style={{ ...e.nota, margin: '2px 0 0' }}>

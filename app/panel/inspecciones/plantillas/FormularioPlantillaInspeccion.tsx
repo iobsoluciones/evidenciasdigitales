@@ -64,10 +64,10 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
             style={{
               ...e.opcion,
               borderColor: f.tipo === t.v ? color : 'var(--borde-fuerte)',
-              background: f.tipo === t.v ? '#F7FBFA' : '#fff',
+              background: f.tipo === t.v ? 'var(--superficie-3)' : 'var(--superficie)',
             }}
           >
-            <strong style={{ fontSize: 13, color: f.tipo === t.v ? color : '#14263F' }}>
+            <strong style={{ fontSize: 13, color: f.tipo === t.v ? color : 'var(--texto)' }}>
               {t.t}
             </strong>
             <p style={e.notaOpcion}>{t.nota}</p>

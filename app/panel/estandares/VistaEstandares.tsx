@@ -449,7 +449,7 @@ export default function VistaEstandares({
 const s: Record<string, React.CSSProperties> = {
   aviso: { padding: '10px 13px', borderRadius: 8, fontSize: 13, marginBottom: 14 },
   errores: {
-    background: 'var(--mal-fondo)', border: '1px solid #F5C6C6', borderRadius: 8,
+    background: 'var(--mal-fondo)', border: '1px solid var(--mal)', borderRadius: 8,
     padding: '12px 15px', marginBottom: 14,
   },
   erroresTitulo: { fontSize: 13, fontWeight: 700, color: 'var(--mal)', marginBottom: 7 },
@@ -497,7 +497,7 @@ const s: Record<string, React.CSSProperties> = {
   sub: { fontSize: 12.5, color: 'var(--texto-suave)', margin: '3px 0 0' },
   nota: { fontSize: 13, color: 'var(--texto-suave)', lineHeight: 1.65, margin: 0, maxWidth: 620 },
   avisoPeso: {
-    background: 'var(--aviso-fondo)', border: '1px solid #FED7AA', color: '#7C2D12',
+    background: 'var(--aviso-fondo)', border: '1px solid var(--aviso)', color: 'var(--aviso)',
     borderRadius: 8, padding: '10px 13px', fontSize: 12.5, lineHeight: 1.6, marginBottom: 12,
   },
   avisoSistema: {
