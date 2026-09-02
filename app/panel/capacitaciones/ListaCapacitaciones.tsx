@@ -736,7 +736,7 @@ const est: Record<string, React.CSSProperties> = {
     textTransform: 'uppercase', whiteSpace: 'nowrap',
   },
   pill: { padding: '3px 9px', borderRadius: 999, fontSize: 11, fontWeight: 600, display: 'inline-block' },
-  btnPrimario: { background: 'var(--marca)', color: 'var(--superficie)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
+  btnPrimario: { background: 'var(--marca)', color: 'var(--sobre-empresa)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   btnExcel: { background: 'var(--bien)', color: 'var(--superficie)', border: 'none', padding: '10px 18px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
   btnSec: { background: 'var(--superficie-3)', color: 'var(--texto)', border: '1px solid var(--borde-fuerte)', padding: '9px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' },
   zonaBorrado: {

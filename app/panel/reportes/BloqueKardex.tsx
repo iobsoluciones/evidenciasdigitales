@@ -102,7 +102,7 @@ export default function BloqueKardex({
           </div>
 
           <div style={e.acciones}>
-            <a href={enlace} style={{ ...e.btn, background: color }}>
+            <a href={enlace} style={{ ...e.btn, background: 'var(--marca)' }}>
               Descargar Excel
             </a>
 

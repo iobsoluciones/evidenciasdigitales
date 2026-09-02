@@ -164,7 +164,7 @@ export default function VistaEstandares({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => duplicarConjunto(
                   duplicando.id, duplicando.nombre, duplicando.norma, duplicando.descripcion));
@@ -181,7 +181,7 @@ export default function VistaEstandares({
         {conjuntos.map((x) => (
           <article key={x.id} style={{
             ...s.tarjeta,
-            borderColor: c?.id === x.id ? color : 'var(--borde)',
+            borderColor: c?.id === x.id ? 'var(--marca)' : 'var(--borde)',
             boxShadow: c?.id === x.id ? `0 0 0 1px ${color}` : undefined,
           }}>
             <div style={s.tarjetaCab}>
@@ -223,7 +223,7 @@ export default function VistaEstandares({
       <div style={s.barra}>
         {!creando ? (
           <button onClick={() => setCreando(true)} type="button"
-            style={{ ...s.botonSec, borderColor: color, color }}>
+            style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}>
             Crear conjunto vacío
           </button>
         ) : (
@@ -238,7 +238,7 @@ export default function VistaEstandares({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => crearConjunto(nuevo.nombre, nuevo.norma, nuevo.descripcion));
                 setCreando(false);
@@ -268,7 +268,7 @@ export default function VistaEstandares({
                       Cancelar
                     </button>
                     <button type="button" disabled={pendiente}
-                      style={{ ...s.botonSec, borderColor: color, color }}
+                      style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
                       onClick={() => {
                         correr(() => actualizarConjunto(c.id, cab.nombre, cab.norma, cab.descripcion));
                         setEditandoCab(false);
@@ -308,7 +308,7 @@ export default function VistaEstandares({
                 <button type="button" onClick={descargarPlantilla} style={s.botonMini}>
                   Descargar plantilla
                 </button>
-                <button type="button" disabled={pendiente} style={{ ...s.botonSec, borderColor: color, color }}
+                <button type="button" disabled={pendiente} style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
                   onClick={() => archivoRef.current?.click()}>
                   Importar desde Excel
                 </button>
@@ -371,7 +371,7 @@ export default function VistaEstandares({
                       Cancelar
                     </button>
                     <button type="button" disabled={pendiente}
-                      style={{ ...s.botonSec, borderColor: color, color }}
+                      style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
                       onClick={() => {
                         correr(() => guardarItem(c.id, {
                           id: fila.id,

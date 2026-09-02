@@ -226,7 +226,7 @@ export default function EjecutarInspeccion({
 
       {!cerrada && (
         <div style={s.barra}>
-          <div style={{ ...s.progreso, width: `${progreso}%`, background: color }} />
+          <div style={{ ...s.progreso, width: `${progreso}%`, background: 'var(--marca)' }} />
           <span style={s.textoProgreso}>
             {respondidos} de {respuestas.length}
           </span>
@@ -247,7 +247,7 @@ export default function EjecutarInspeccion({
       {!vistaResumen && actual && (
         <section style={s.card}>
           {actual.seccion && (
-            <div style={{ ...s.seccion, color }}>{actual.seccion}</div>
+            <div style={{ ...s.seccion, color: 'var(--marca-empresa)' }}>{actual.seccion}</div>
           )}
 
           <div style={s.numeroCriterio}>
@@ -313,7 +313,7 @@ export default function EjecutarInspeccion({
                 <button
                   onClick={guardarHallazgo}
                   disabled={ocupado}
-                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
+                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : 'var(--marca)' }}
                 >
                   Guardar y continuar
                 </button>
@@ -455,7 +455,7 @@ export default function EjecutarInspeccion({
                       disabled={resumen.respondidos < resumen.total}
                       style={{
                         ...s.btn,
-                        background: resumen.respondidos < resumen.total ? 'var(--borde-fuerte)' : color,
+                        background: resumen.respondidos < resumen.total ? 'var(--borde-fuerte)' : 'var(--marca)',
                         cursor: resumen.respondidos < resumen.total ? 'not-allowed' : 'pointer',
                       }}
                       title={resumen.respondidos < resumen.total
@@ -498,7 +498,7 @@ export default function EjecutarInspeccion({
                     <button
                       onClick={cerrar}
                       disabled={ocupado}
-                      style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
+                      style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : 'var(--marca)' }}
                     >
                       {pendiente ? 'Calificando…' : 'Confirmar cierre'}
                     </button>
@@ -519,7 +519,7 @@ export default function EjecutarInspeccion({
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 14 }}>
                 <a
                   href={`/api/pdf-inspeccion/${insp.id}`}
-                  style={{ ...s.btn, background: color, display: 'inline-block' }}
+                  style={{ ...s.btn, background: 'var(--marca)', display: 'inline-block' }}
                 >
                   Descargar PDF
                 </a>

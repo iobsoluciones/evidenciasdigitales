@@ -77,7 +77,7 @@ export default function VistaSimulacros({
 
       <div style={s.barra}>
         {!nuevo ? (
-          <button type="button" style={{ ...s.botonLleno, background: color }}
+          <button type="button" style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => setNuevo({
               fecha: new Date().toISOString().slice(0, 10),
               tipo: 'evacuacion',
@@ -120,7 +120,7 @@ export default function VistaSimulacros({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }} onClick={crear}>
+                style={{ ...s.botonLleno, background: 'var(--marca)' }} onClick={crear}>
                 {pendiente ? 'Creando…' : 'Crear'}
               </button>
             </div>

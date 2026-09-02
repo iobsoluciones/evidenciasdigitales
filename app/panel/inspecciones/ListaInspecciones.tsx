@@ -55,7 +55,7 @@ export default function ListaInspecciones({
           cargado, empieza por las once listas base.
         </p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16, flexWrap: 'wrap' }}>
-          <Link href="/panel/inspecciones/nueva" style={{ ...e.btn, background: color }}>
+          <Link href="/panel/inspecciones/nueva" style={{ ...e.btn, background: 'var(--marca)' }}>
             Nueva inspección
           </Link>
           <Link href="/panel/inspecciones/plantillas" style={e.btnSec}>

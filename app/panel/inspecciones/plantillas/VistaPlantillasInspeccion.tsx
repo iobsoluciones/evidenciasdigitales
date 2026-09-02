@@ -134,9 +134,9 @@ export default function VistaPlantillasInspeccion({
           onClick={() => setTipo('')}
           style={{
             ...e.filtro,
-            background: tipo === '' ? color : 'var(--superficie)',
+            background: tipo === '' ? 'var(--marca)' : 'var(--superficie)',
             color: tipo === '' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
-            borderColor: tipo === '' ? color : 'var(--borde-fuerte)',
+            borderColor: tipo === '' ? 'var(--marca)' : 'var(--borde-fuerte)',
           }}
         >
           Todas ({plantillas.length})
@@ -148,9 +148,9 @@ export default function VistaPlantillasInspeccion({
             title={t.nota}
             style={{
               ...e.filtro,
-              background: tipo === t.v ? color : 'var(--superficie)',
+              background: tipo === t.v ? 'var(--marca)' : 'var(--superficie)',
               color: tipo === t.v ? 'var(--sobre-marca)' : 'var(--texto-suave)',
-              borderColor: tipo === t.v ? color : 'var(--borde-fuerte)',
+              borderColor: tipo === t.v ? 'var(--marca)' : 'var(--borde-fuerte)',
             }}
           >
             {t.t} ({conteo(t.v)})
@@ -173,7 +173,7 @@ export default function VistaPlantillasInspeccion({
               title="Ver como tarjetas"
               style={{
                 ...e.botonVista,
-                background: vista === 'tarjetas' ? color : 'transparent',
+                background: vista === 'tarjetas' ? 'var(--marca)' : 'transparent',
                 color: vista === 'tarjetas' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               }}
             >
@@ -184,7 +184,7 @@ export default function VistaPlantillasInspeccion({
               title="Ver como lista"
               style={{
                 ...e.botonVista,
-                background: vista === 'lista' ? color : 'transparent',
+                background: vista === 'lista' ? 'var(--marca)' : 'transparent',
                 color: vista === 'lista' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
               }}
             >
@@ -193,7 +193,7 @@ export default function VistaPlantillasInspeccion({
           </div>
         )}
 
-        <Link href="/panel/inspecciones/plantillas/nueva" style={{ ...e.btn, background: color }}>
+        <Link href="/panel/inspecciones/plantillas/nueva" style={{ ...e.btn, background: 'var(--marca)' }}>
           + Nueva lista
         </Link>
       </div>
@@ -221,7 +221,7 @@ export default function VistaPlantillasInspeccion({
           <button
             onClick={sembrar}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 14, border: 'none', cursor: 'pointer' }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 14, border: 'none', cursor: 'pointer' }}
           >
             {pendiente ? 'Cargando…' : 'Cargar las 11 listas base'}
           </button>
@@ -236,7 +236,7 @@ export default function VistaPlantillasInspeccion({
           </p>
           <button
             onClick={() => { setBusqueda(''); setTipo(''); }}
-            style={{ ...e.btn, background: color, marginTop: 14, border: 'none', cursor: 'pointer' }}
+            style={{ ...e.btn, background: 'var(--marca)', marginTop: 14, border: 'none', cursor: 'pointer' }}
           >
             Quitar filtros
           </button>
@@ -295,7 +295,7 @@ export default function VistaPlantillasInspeccion({
           <div style={e.grid}>
             {lista.map((p) => (
               <article key={p.id} style={e.tarjeta}>
-                <div style={{ ...e.franja, background: p.es_base ? '#0EA5E9' : color }} />
+                <div style={{ ...e.franja, background: p.es_base ? '#0EA5E9' : 'var(--marca)' }} />
 
                 <div style={e.cuerpo}>
                   <div style={e.cabeceraTarjeta}>
@@ -339,7 +339,7 @@ export default function VistaPlantillasInspeccion({
                   <div style={e.acciones}>
                     <Link
                       href={`/panel/inspecciones/plantillas/${p.id}`}
-                      style={{ ...e.btnAccion, background: color }}
+                      style={{ ...e.btnAccion, background: 'var(--marca)' }}
                     >
                       Editar
                     </Link>

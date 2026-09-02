@@ -73,9 +73,9 @@ export default function VistaEventos({
     <>
       <div style={s.tarjetas}>
         <Tarjeta n={eventos.length} t="Eventos registrados" c={color} />
-        <Tarjeta n={pendientes} t="Sin cerrar" c={pendientes ? 'var(--aviso)' : color} />
-        <Tarjeta n={vencidos} t="Fuera del plazo de 15 días" c={vencidos ? 'var(--mal)' : color} />
-        <Tarjeta n={sinReportarArl} t="Accidentes sin reportar a la ARL" c={sinReportarArl ? 'var(--mal)' : color} />
+        <Tarjeta n={pendientes} t="Sin cerrar" c={pendientes ? 'var(--aviso)' : 'var(--marca-empresa)'} />
+        <Tarjeta n={vencidos} t="Fuera del plazo de 15 días" c={vencidos ? 'var(--mal)' : 'var(--marca-empresa)'} />
+        <Tarjeta n={sinReportarArl} t="Accidentes sin reportar a la ARL" c={sinReportarArl ? 'var(--mal)' : 'var(--marca-empresa)'} />
       </div>
 
       {sinReportarArl > 0 && (
@@ -104,7 +104,7 @@ export default function VistaEventos({
               onClick={() => setFiltro(v)}
               style={{
                 ...s.filtro,
-                ...(filtro === v ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
+                ...(filtro === v ? { background: 'var(--marca)', color: 'var(--sobre-empresa)', borderColor: 'var(--marca)' } : {}),
               }}
             >
               {t}

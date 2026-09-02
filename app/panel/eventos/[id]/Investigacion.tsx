@@ -160,7 +160,7 @@ export default function Investigacion({
       return { ...s.botonSec, borderColor: OK, color: OK, background: OK_SUAVE };
     }
     if (pendiente) return { ...s.botonSec, borderColor: 'var(--borde)', color: 'var(--texto-tenue)' };
-    return { ...s.botonSec, borderColor: color, color };
+    return { ...s.botonSec, borderColor: 'var(--marca)', color };
   }
 
   const texto = (clave: string, normal: string, curso: string) =>
@@ -579,7 +579,7 @@ export default function Investigacion({
 
       {/* ================= CIERRE ================= */}
       {!cerrada && (
-        <section style={{ ...s.bloque, borderColor: color }}>
+        <section style={{ ...s.bloque, borderColor: 'var(--marca)' }}>
           <h2 style={s.h2}>Cerrar la investigación</h2>
           <p style={s.nota}>
             Al cerrar, el control documental queda congelado y el informe deja de
@@ -607,7 +607,7 @@ export default function Investigacion({
                 ...s.botonLleno,
                 background: hecho === 'cierre' ? OK
                   : !puedeCerrar ? 'var(--borde-fuerte)'
-                  : pendiente ? 'var(--borde-fuerte)' : color,
+                  : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
                 color: !puedeCerrar && hecho !== 'cierre' ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                 cursor: puedeCerrar && !pendiente ? 'pointer' : 'not-allowed',
               }}

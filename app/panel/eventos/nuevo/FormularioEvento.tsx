@@ -80,7 +80,7 @@ export default function FormularioEvento({
               style={{
                 ...s.tipo,
                 ...(f.tipo === t.v
-                  ? { borderColor: color, background: 'var(--superficie)', boxShadow: `0 0 0 1px ${color}` }
+                  ? { borderColor: 'var(--marca)', background: 'var(--superficie)', boxShadow: `0 0 0 1px ${color}` }
                   : {}),
               }}
             >
@@ -205,7 +205,7 @@ export default function FormularioEvento({
         <button
           type="submit"
           disabled={pendiente}
-          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...s.boton, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {pendiente ? 'Registrando…' : 'Registrar y continuar'}
         </button>

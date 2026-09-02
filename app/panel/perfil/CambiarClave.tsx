@@ -107,7 +107,7 @@ export default function CambiarClave({
       {!abierto ? (
         <button
           onClick={() => { setAviso(null); setAbierto(true); }}
-          style={{ ...e.btn, background: color }}
+          style={{ ...e.btn, background: 'var(--marca)' }}
         >
           Cambiar contraseña
         </button>
@@ -145,7 +145,7 @@ export default function CambiarClave({
             <button
               onClick={cambiar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
             >
               {pendiente ? 'Guardando…' : 'Guardar contraseña'}
             </button>

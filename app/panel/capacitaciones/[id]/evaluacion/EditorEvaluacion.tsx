@@ -215,7 +215,7 @@ export default function EditorEvaluacion({
                 disabled={pendiente || !plantillaId}
                 style={{
                   ...e.btn,
-                  background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : color,
+                  background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : 'var(--marca)',
                   cursor: pendiente || !plantillaId ? 'not-allowed' : 'pointer',
                 }}
               >
@@ -242,7 +242,7 @@ export default function EditorEvaluacion({
                 <button
                   onClick={guardarEnBanco}
                   disabled={pendiente}
-                  style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+                  style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
                 >
                   Guardar
                 </button>
@@ -408,7 +408,7 @@ export default function EditorEvaluacion({
         <button onClick={guardar} disabled={pendiente || excede}
           style={{
             ...e.btn,
-            background: pendiente || excede ? 'var(--borde-fuerte)' : color,
+            background: pendiente || excede ? 'var(--borde-fuerte)' : 'var(--marca)',
             cursor: pendiente || excede ? 'not-allowed' : 'pointer',
           }}
           title={excede ? 'La suma de puntajes supera 100' : ''}>

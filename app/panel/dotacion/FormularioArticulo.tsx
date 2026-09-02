@@ -259,7 +259,7 @@ export default function FormularioArticulo({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {pendiente ? 'Guardando…' : edicion ? 'Guardar cambios' : 'Crear artículo'}
         </button>
@@ -287,7 +287,7 @@ function Opcion({
       onClick={onClick}
       style={{
         ...e.opcion,
-        borderColor: activa ? color : 'var(--borde-fuerte)',
+        borderColor: activa ? 'var(--marca)' : 'var(--borde-fuerte)',
         background: activa ? 'var(--superficie-3)' : 'var(--superficie)',
       }}
     >

@@ -57,7 +57,7 @@ export default async function PaginaIndicadoresLegales({
               href={`/panel/indicadores/legales?anio=${a}`}
               style={{
                 ...s.anio,
-                ...(a === anio ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
+                ...(a === anio ? { background: 'var(--marca)', color: 'var(--sobre-empresa)', borderColor: 'var(--marca)' } : {}),
               }}
             >
               {a}
@@ -93,7 +93,7 @@ export default async function PaginaIndicadoresLegales({
             <h2 style={s.nombre}>{i.nombre}</h2>
 
             {i.valor !== null ? (
-              <div style={{ ...s.valor, color }}>
+              <div style={{ ...s.valor, color: 'var(--marca-empresa)' }}>
                 {i.valor.toLocaleString('es-CO')}
                 <span style={s.unidad}>{i.unidad}</span>
               </div>

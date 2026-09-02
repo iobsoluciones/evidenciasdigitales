@@ -94,7 +94,7 @@ export default function CompartirCapacitacion({
               <button
                 onClick={() => generarEnlaceFirma(false)}
                 disabled={pendiente}
-                style={{ ...est.btn, background: color, color: 'var(--superficie)' }}
+                style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)' }}
               >
                 {pendiente ? 'Generando…' : 'Generar enlace de firma'}
               </button>
@@ -105,7 +105,7 @@ export default function CompartirCapacitacion({
               <div style={est.fila}>
                 <button
                   onClick={() => copiar(urlFirma, 'Enlace de firma copiado.')}
-                  style={{ ...est.btn, background: color, color: 'var(--superficie)' }}
+                  style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)' }}
                 >
                   Copiar
                 </button>
@@ -138,7 +138,7 @@ export default function CompartirCapacitacion({
                 <button
                   onClick={enviarPorCorreo}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: 'var(--superficie)', marginTop: 8, width: '100%' }}
+                  style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)', marginTop: 8, width: '100%' }}
                 >
                   {pendiente ? 'Enviando…' : 'Enviar enlace por correo'}
                 </button>

@@ -15,7 +15,7 @@ import BotonSalir from './BotonSalir';
 import BotonTema from './BotonTema';
 import BotonMenu from './BotonMenu';
 import AccesosRapidos from './AccesosRapidos';
-import { contrasteSobre, conAlfa } from '@/lib/color';
+import { contrasteSobre, conAlfa, paraTexto, aclarar, paraFondoOscuro } from '@/lib/color';
 
 export default async function LayoutPanel({
   children,
@@ -50,9 +50,24 @@ export default async function LayoutPanel({
   const marca = activa?.color_primario ?? '#14263F';
   const contraste = contrasteSobre(marca);
 
+  // El color del cliente se calcula en sus DOS versiones y decide el CSS
+  // segun el tema. El servidor no sabe cual tiene guardado el navegador,
+  // y hasta ahora se entregaba el color crudo: un azul marino sobre el
+  // fondo oscuro de la aplicacion son dos oscuros juntos, y el boton
+  // desaparecia. Al vivir aqui, TODA la zona con sesion lo hereda.
+  const marcaOscura = paraFondoOscuro(marca);
+
   return (
-    <div style={{
-      ['--marca' as string]: marca,
+    <div className="panel" style={{
+      ['--empresa-claro' as string]: marca,
+      ['--empresa-oscuro' as string]: marcaOscura,
+      ['--sobre-empresa-claro' as string]: contrasteSobre(marca),
+      ['--sobre-empresa-oscuro' as string]: contrasteSobre(marcaOscura),
+      // El mismo color, pero como TEXTO sobre la superficie de la
+      // aplicacion: ahi hay que oscurecerlo en claro y aclararlo en
+      // oscuro, que es lo contrario de lo que necesita un fondo.
+      ['--marca-empresa-claro' as string]: paraTexto(marca),
+      ['--marca-empresa-oscuro' as string]: aclarar(marca),
       display: 'flex',
       minHeight: '100vh',
       background: 'var(--fondo)',

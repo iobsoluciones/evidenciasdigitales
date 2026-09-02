@@ -103,7 +103,7 @@ export function Boton({
     <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
       <span style={{
         ...f.boton,
-        background: fantasma ? 'var(--superficie)' : color,
+        background: fantasma ? 'var(--superficie)' : 'var(--marca)',
         color: fantasma ? color : 'var(--sobre-marca)',
         border: `1px solid ${fantasma ? BORDE : color}`,
       }}>
@@ -137,7 +137,7 @@ export function Tarjeta({
         {titulo}
         {marca !== undefined && <Marca n={marca} pegado />}
       </div>
-      {dato && <div style={{ ...f.tarjetaDato, color }}>{dato}</div>}
+      {dato && <div style={{ ...f.tarjetaDato, color: 'var(--marca-empresa)' }}>{dato}</div>}
       {pie && <div style={f.tarjetaPie}>{pie}</div>}
     </div>
   );
@@ -213,12 +213,12 @@ export function Flujo({
     <div style={f.flujo}>
       {pasos.map((p, i) => (
         <div key={i} style={f.flujoGrupo}>
-          <div style={{ ...f.flujoCaja, borderColor: color }}>
-            <div style={{ ...f.flujoNumero, background: color }}>{i + 1}</div>
+          <div style={{ ...f.flujoCaja, borderColor: 'var(--marca)' }}>
+            <div style={{ ...f.flujoNumero, background: 'var(--marca)' }}>{i + 1}</div>
             <div style={f.flujoTitulo}>{p.titulo}</div>
             {p.detalle && <div style={f.flujoDetalle}>{p.detalle}</div>}
           </div>
-          {i < pasos.length - 1 && <span style={{ ...f.flecha, color }}>→</span>}
+          {i < pasos.length - 1 && <span style={{ ...f.flecha, color: 'var(--marca-empresa)' }}>→</span>}
         </div>
       ))}
     </div>

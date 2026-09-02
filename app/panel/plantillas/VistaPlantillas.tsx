@@ -68,7 +68,7 @@ export default function VistaPlantillas({
           <div style={e.grid}>
             {capacitaciones.map((p) => (
               <article key={p.id} style={e.tarjeta}>
-                <div style={{ ...e.franja, background: color }} />
+                <div style={{ ...e.franja, background: 'var(--marca)' }} />
                 <div style={e.cuerpo}>
                   <h3 style={e.nombre}>{p.nombre}</h3>
                   <p style={e.tema}>{p.tema}</p>

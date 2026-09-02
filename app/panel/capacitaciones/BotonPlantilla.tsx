@@ -63,7 +63,7 @@ export default function BotonPlantilla({
           <button
             onClick={guardar}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
           >
             {pendiente ? 'Guardando…' : 'Guardar en el banco'}
           </button>

@@ -253,7 +253,7 @@ export default function VistaEntrega({
             <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
               <button
                 onClick={() => setFirmando(true)}
-                style={{ ...s.btn, background: color }}
+                style={{ ...s.btn, background: 'var(--marca)' }}
               >
                 Firmar ahora
               </button>
@@ -286,7 +286,7 @@ export default function VistaEntrega({
                 <button
                   onClick={firmar}
                   disabled={ocupado}
-                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
+                  style={{ ...s.btn, background: ocupado ? 'var(--borde-fuerte)' : 'var(--marca)' }}
                 >
                   {subiendo ? 'Guardando firmas…' : pendiente ? 'Aplicando…' : 'Confirmar entrega'}
                 </button>
@@ -307,7 +307,7 @@ export default function VistaEntrega({
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap', alignItems: 'center' }}>
             <a
               href={`/api/pdf-entrega/${e.id}`}
-              style={{ ...s.btn, background: color, display: 'inline-block' }}
+              style={{ ...s.btn, background: 'var(--marca)', display: 'inline-block' }}
             >
               Descargar PDF
             </a>

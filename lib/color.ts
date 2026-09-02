@@ -101,6 +101,37 @@ export function aclarar(color: string): string {
   return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
+/**
+ * El color de la empresa listo para usarse como SUPERFICIE en tema
+ * oscuro: un botón, una pestaña activa, una franja.
+ *
+ * Es el problema que se ve en cuanto se cambia de empresa: un azul
+ * marino o un verde botella sobre el fondo oscuro de la aplicación son
+ * dos oscuros juntos, y el botón desaparece. No basta con aclararlo
+ * mucho, porque encima va texto blanco: hay que dejarlo en la franja
+ * donde se separa del fondo Y el texto sigue leyéndose.
+ *
+ * La franja es luminancia 0,125–0,18. Por debajo el botón se funde con
+ * la superficie; por encima, el blanco de la etiqueta baja de 4,5:1.
+ * Un color ya claro —el amarillo de un restaurante— se deja como está,
+ * y `contrasteSobre` le pondrá texto oscuro.
+ */
+export function paraFondoOscuro(color: string): string {
+  const rgb = aRgb(color);
+  if (!rgb) return color;
+
+  let [r, g, b] = rgb;
+  let intentos = 0;
+  while (luminancia([r, g, b]) < 0.125 && intentos < 16) {
+    r = Math.min(255, Math.round(r * 1.16) + 5);
+    g = Math.min(255, Math.round(g * 1.16) + 5);
+    b = Math.min(255, Math.round(b * 1.16) + 5);
+    intentos += 1;
+  }
+
+  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+
 /** `#1B5E4A` + 0.18 → `rgba(27,94,74,0.18)`. Para velos y bordes. */
 export function conAlfa(color: string, alfa: number): string {
   const rgb = aRgb(color);

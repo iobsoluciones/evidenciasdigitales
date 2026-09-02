@@ -46,7 +46,7 @@ export default async function PaginaIndicadores() {
         <p style={{ margin:'0 0 14px', fontSize:14 }}>
           Agrega una empresa para ver sus indicadores.
         </p>
-        <Link href="/panel/empresas/nueva" style={{ background: 'var(--marca)', color: 'var(--superficie)',
+        <Link href="/panel/empresas/nueva" style={{ background: 'var(--marca)', color: 'var(--sobre-empresa)',
               padding:'10px 18px', borderRadius:4, fontSize:13, fontWeight:600,
               textDecoration:'none' }}>Agregar empresa</Link>
       </div>
@@ -88,7 +88,7 @@ export default async function PaginaIndicadores() {
             denominador de los indicadores del art. 30 de la Res. 0312. */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <Link href="/panel/indicadores/legales" style={{
-          border: '1px solid #14263F', background: 'var(--marca)', color: 'var(--superficie)',
+          border: '1px solid #14263F', background: 'var(--marca)', color: 'var(--sobre-empresa)',
           padding: '8px 16px', borderRadius: 8, fontSize: 12.5, fontWeight: 600,
           textDecoration: 'none', whiteSpace: 'nowrap',
         }}>
@@ -127,7 +127,7 @@ export default async function PaginaIndicadores() {
               {activa.codigo} · {activa.instructor}
             </div>
           </div>
-          <Link href={`/panel/capacitaciones/${activa.id}`} style={{ ...est.enlace, background: color }}>
+          <Link href={`/panel/capacitaciones/${activa.id}`} style={{ ...est.enlace, background: 'var(--marca)' }}>
             Ver detalle
           </Link>
         </section>

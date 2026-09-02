@@ -295,7 +295,7 @@ const s: Record<string, React.CSSProperties> = {
   ultima: { fontSize: 11, color: 'var(--texto-tenue)', marginBottom: 14, flex: 1 },
 
   btn: {
-    background: 'var(--marca)', color: 'var(--superficie)', border: 'none',
+    background: 'var(--marca)', color: 'var(--sobre-empresa)', border: 'none',
     padding: '10px 18px', borderRadius: 6, fontSize: 13,
     fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
   },

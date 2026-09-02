@@ -109,13 +109,13 @@ export default function VistaInventario({
       <div style={e.pestanas}>
         <button
           onClick={() => { setPestana('consumible'); setCategoria(''); }}
-          style={{ ...e.pestana, ...(pestana === 'consumible' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(pestana === 'consumible' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Elementos de protección ({consumibles})
         </button>
         <button
           onClick={() => { setPestana('retornable'); setCategoria(''); }}
-          style={{ ...e.pestana, ...(pestana === 'retornable' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(pestana === 'retornable' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Equipos ({retornables})
         </button>
@@ -143,7 +143,7 @@ export default function VistaInventario({
             title="Ver como tarjetas"
             style={{
               ...e.botonVista,
-              background: vista === 'tarjetas' ? color : 'transparent',
+              background: vista === 'tarjetas' ? 'var(--marca)' : 'transparent',
               color: vista === 'tarjetas' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
@@ -154,7 +154,7 @@ export default function VistaInventario({
             title="Ver como lista"
             style={{
               ...e.botonVista,
-              background: vista === 'lista' ? color : 'transparent',
+              background: vista === 'lista' ? 'var(--marca)' : 'transparent',
               color: vista === 'lista' ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
@@ -168,7 +168,7 @@ export default function VistaInventario({
 
         <Link
           href={`/panel/dotacion/nuevo?tipo=${pestana}`}
-          style={{ ...e.btn, background: color }}
+          style={{ ...e.btn, background: 'var(--marca)' }}
         >
           + Nuevo {pestana === 'consumible' ? 'elemento' : 'equipo'}
         </Link>
@@ -191,7 +191,7 @@ export default function VistaInventario({
               : 'Ningún artículo coincide con el filtro.'}
           </p>
           {delTipo.length === 0 && (
-            <Link href={`/panel/dotacion/nuevo?tipo=${pestana}`} style={{ ...e.btn, background: color }}>
+            <Link href={`/panel/dotacion/nuevo?tipo=${pestana}`} style={{ ...e.btn, background: 'var(--marca)' }}>
               Registrar el primero
             </Link>
           )}

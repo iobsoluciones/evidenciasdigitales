@@ -138,7 +138,7 @@ export default function EditorRendicion({
         </button>
         {!cerrada && (
           <button type="button" disabled={pendiente}
-            style={{ ...s.botonLleno, background: color }}
+            style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => correr(() => cerrarRendicion(rendicion.id))}>
             Cerrar acta
           </button>
@@ -160,7 +160,7 @@ export default function EditorRendicion({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarActaRendicion(rendicion.id, correo.para, correo.mensaje));
                 setEnviando(false);
@@ -207,7 +207,7 @@ export default function EditorRendicion({
             <button type="button" onClick={guardar} disabled={pendiente}
               style={{
                 ...s.botonLleno,
-                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
+                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -359,7 +359,7 @@ export default function EditorRendicion({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => guardarResponsable(rendicion.id, formR));
                   setFormR(null);

@@ -44,7 +44,7 @@ export default function AccionesReporte({
             sin bloquear la interfaz mientras se genera el archivo. */}
         <a
           href={`/api/pdf/${capacitacionId}`}
-          style={{ ...est.btn, background: color, color: 'var(--superficie)', textDecoration: 'none' }}
+          style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)', textDecoration: 'none' }}
         >
           Descargar PDF
         </a>
@@ -92,7 +92,7 @@ export default function AccionesReporte({
             disabled={pendiente}
             style={{
               ...est.btn,
-              background: pendiente ? 'var(--borde-fuerte)' : color,
+              background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               color: 'var(--sobre-marca)',
               marginTop: 12,
               width: '100%',

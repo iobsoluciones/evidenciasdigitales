@@ -156,7 +156,7 @@ export default function VistaAutoevaluacion({
           </p>
           <button onClick={() => correr(() => crearAutoevaluacion(anio, conjunto))}
             disabled={pendiente} type="button"
-            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}>
+            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 12 }}>
             {pendiente ? 'Creando…' : `Crear la autoevaluación de ${anio}`}
           </button>
         </div>
@@ -195,7 +195,7 @@ export default function VistaAutoevaluacion({
             .map((c) => (
               <div key={c.ciclo} style={s.ciclo}>
                 <span style={s.cicloNombre}>{CICLOS[c.ciclo] ?? c.ciclo}</span>
-                <span style={{ ...s.cicloPct, color }}>{c.porcentaje}%</span>
+                <span style={{ ...s.cicloPct, color: 'var(--marca-empresa)' }}>{c.porcentaje}%</span>
                 <span style={s.cicloPeso}>{c.obtenido} / {c.posible} pts</span>
               </div>
             ))}
@@ -233,7 +233,7 @@ export default function VistaAutoevaluacion({
                 placeholder="Responsable del plan" style={{ ...s.input, width: 190 }} />
               <button onClick={() => correr(() => generarPlanMejoramiento(a.id, responsable))}
                 disabled={pendiente} type="button"
-                style={{ ...s.botonSec, borderColor: color, color }}>
+                style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}>
                 Generar plan de mejoramiento
               </button>
             </>
@@ -244,7 +244,7 @@ export default function VistaAutoevaluacion({
               title={(p?.sin_evaluar ?? 0) > 0 ? 'Faltan estándares por evaluar' : undefined}
               style={{
                 ...s.botonLleno,
-                background: (p?.sin_evaluar ?? 0) > 0 ? 'var(--borde-fuerte)' : color,
+                background: (p?.sin_evaluar ?? 0) > 0 ? 'var(--borde-fuerte)' : 'var(--marca)',
                 color: (p?.sin_evaluar ?? 0) > 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                 cursor: (p?.sin_evaluar ?? 0) > 0 ? 'not-allowed' : 'pointer',
               }}>
@@ -270,7 +270,7 @@ export default function VistaAutoevaluacion({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarAutoevaluacion(a.id, correo.para, correo.mensaje));
                 setEnviando(false);
@@ -291,7 +291,7 @@ export default function VistaAutoevaluacion({
           <section key={ciclo} style={s.bloque}>
             <button type="button" onClick={() => alternar(ciclo)} style={s.cabecera}
               aria-expanded={abierto}>
-              <span style={{ ...s.chevron, color }}>{abierto ? '\u25be' : '\u25b8'}</span>
+              <span style={{ ...s.chevron, color: 'var(--marca-empresa)' }}>{abierto ? '\u25be' : '\u25b8'}</span>
               <span style={s.h3Boton}>{CICLOS[ciclo]}</span>
               <span style={{
                 ...s.avance,
@@ -326,7 +326,7 @@ export default function VistaAutoevaluacion({
                         Cancelar
                       </button>
                       <button onClick={guardarJustificacion} disabled={pendiente} type="button"
-                        style={{ ...s.botonSec, borderColor: color, color }}>
+                        style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}>
                         Guardar
                       </button>
                     </div>

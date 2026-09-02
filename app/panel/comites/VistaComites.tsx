@@ -163,7 +163,7 @@ export default function VistaComites({
         {comites.map((x) => (
           <a key={x.id} href={`/panel/comites?id=${x.id}`} style={{
             ...s.tarjeta,
-            borderColor: c?.id === x.id ? color : 'var(--borde)',
+            borderColor: c?.id === x.id ? 'var(--marca)' : 'var(--borde)',
             boxShadow: c?.id === x.id ? `0 0 0 1px ${color}` : undefined,
           }}>
             <div style={s.tarjetaCab}>
@@ -188,7 +188,7 @@ export default function VistaComites({
       {/* ---------- Conformar ---------- */}
       <div style={s.barra}>
         {!nuevo ? (
-          <button type="button" style={{ ...s.botonSec, borderColor: color, color }}
+          <button type="button" style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
             onClick={() => setNuevo({
               tipo: 'copasst',
               inicio: new Date().toISOString().slice(0, 10),
@@ -226,7 +226,7 @@ export default function VistaComites({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => crearComite(nuevo.tipo, nuevo.inicio, nuevo.conformacion));
                   setNuevo(null);
@@ -324,7 +324,7 @@ export default function VistaComites({
                     Editar datos del acta
                   </button>
                   <button type="button" disabled={pendiente}
-                    style={{ ...s.botonLleno, background: color, padding: '8px 16px' }}
+                    style={{ ...s.botonLleno, background: 'var(--marca)', padding: '8px 16px' }}
                     onClick={() => correr(() => cerrarActa(c.id))}>
                     Cerrar acta
                   </button>
@@ -354,7 +354,7 @@ export default function VistaComites({
                     Cancelar
                   </button>
                   <button type="button" disabled={pendiente}
-                    style={{ ...s.botonLleno, background: color }}
+                    style={{ ...s.botonLleno, background: 'var(--marca)' }}
                     onClick={() => {
                       correr(() => guardarActa(c.id, acta));
                       setActa(null);
@@ -388,7 +388,7 @@ export default function VistaComites({
                     Cancelar
                   </button>
                   <button type="button" disabled={pendiente}
-                    style={{ ...s.botonLleno, background: color }}
+                    style={{ ...s.botonLleno, background: 'var(--marca)' }}
                     onClick={() => {
                       correr(() => enviarActaComite(c.id, correoActa.para, correoActa.mensaje));
                       setEnviandoActa(false);
@@ -422,7 +422,7 @@ export default function VistaComites({
                     Cancelar
                   </button>
                   <button type="button" disabled={pendiente}
-                    style={{ ...s.botonLleno, background: color }}
+                    style={{ ...s.botonLleno, background: 'var(--marca)' }}
                     onClick={() => {
                       correr(() => enviarOrganigrama(c.id, correo.para, correo.mensaje));
                       setEnviando(false);
@@ -529,7 +529,7 @@ export default function VistaComites({
                   Cancelar
                 </button>
                 <button type="button" disabled={pendiente}
-                  style={{ ...s.botonLleno, background: color }}
+                  style={{ ...s.botonLleno, background: 'var(--marca)' }}
                   onClick={() => {
                     correr(() => guardarMiembro(c.id, form));
                     setForm(null);
@@ -551,7 +551,7 @@ export default function VistaComites({
                   <section key={frente || 'sin'} style={s.columna}>
                     <div style={{
                       ...s.columnaTitulo,
-                      background: frente ? color : 'var(--texto-tenue)',
+                      background: frente ? 'var(--marca)' : 'var(--texto-tenue)',
                     }}>
                       {frente
                         ? FRENTES.find((f) => f.v === frente)!.t
@@ -584,7 +584,7 @@ export default function VistaComites({
               })
               : (['empleador', 'trabajadores'] as Parte[]).map((parte) => (
               <section key={parte} style={s.columna}>
-                <div style={{ ...s.columnaTitulo, background: color }}>
+                <div style={{ ...s.columnaTitulo, background: 'var(--marca)' }}>
                   {parte === 'empleador'
                     ? 'Representantes del empleador'
                     : 'Representantes de los trabajadores'}
@@ -601,13 +601,13 @@ export default function VistaComites({
                           {m.foto_url
                             /* eslint-disable-next-line @next/next/no-img-element */
                             ? <img src={m.foto_url} alt="" style={s.foto} />
-                            : <div style={{ ...s.fotoVacia, borderColor: color, color }}>
+                            : <div style={{ ...s.fotoVacia, borderColor: 'var(--marca)', color }}>
                                 {m.nombre.charAt(0)}
                               </div>}
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={s.nombre}>{m.nombre}</div>
                             {m.cargo_empresa && <div style={s.cargo}>{m.cargo_empresa}</div>}
-                            <div style={{ ...s.rol, color }}>{rotulo(m.rol)}</div>
+                            <div style={{ ...s.rol, color: 'var(--marca-empresa)' }}>{rotulo(m.rol)}</div>
                           </div>
                           <div style={s.accionesMiembro}>
                             <button type="button" style={s.botonMini}
@@ -708,13 +708,13 @@ function Tarjeta({
       {m.foto_url
         /* eslint-disable-next-line @next/next/no-img-element */
         ? <img src={m.foto_url} alt="" style={s.foto} />
-        : <div style={{ ...s.fotoVacia, borderColor: color, color }}>
+        : <div style={{ ...s.fotoVacia, borderColor: 'var(--marca)', color }}>
             {m.nombre.charAt(0)}
           </div>}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={s.nombre}>{m.nombre}</div>
         {m.cargo_empresa && <div style={s.cargo}>{m.cargo_empresa}</div>}
-        <div style={{ ...s.rol, color }}>{rotulo(m.rol)}</div>
+        <div style={{ ...s.rol, color: 'var(--marca-empresa)' }}>{rotulo(m.rol)}</div>
       </div>
       <div style={s.accionesMiembro}>
         <button type="button" style={s.botonMini} onClick={onFoto}>Foto</button>

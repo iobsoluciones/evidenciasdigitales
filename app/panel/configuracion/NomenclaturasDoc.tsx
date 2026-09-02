@@ -81,7 +81,7 @@ export default function NomenclaturasDoc({
           </p>
         </div>
         {esAdmin && !editando && (
-          <button onClick={() => setEditando(true)} style={{ ...s.boton, borderColor: color, color }}>
+          <button onClick={() => setEditando(true)} style={{ ...s.boton, borderColor: 'var(--marca)', color }}>
             Editar
           </button>
         )}
@@ -132,7 +132,7 @@ export default function NomenclaturasDoc({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}
+              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
             >
               {pendiente ? 'Guardando…' : 'Guardar'}
             </button>

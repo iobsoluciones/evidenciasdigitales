@@ -150,7 +150,7 @@ export default function VistaPlanAnual({
           <button
             onClick={() => correr('crear', () => crearPlan(anio))}
             disabled={pendiente}
-            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}
+            style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
             type="button"
           >
             {pendiente ? 'Creando…' : `Crear el plan de ${anio}`}
@@ -199,7 +199,7 @@ export default function VistaPlanAnual({
               onClick={() => setFirmaRemota(null)}>
               Cancelar
             </button>
-            <button type="button" style={{ ...s.botonSec, borderColor: color, color }}
+            <button type="button" style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
               disabled={pendiente}
               onClick={() => {
                 const c = firmaRemota.correo;
@@ -258,7 +258,7 @@ export default function VistaPlanAnual({
             <button type="button" style={s.botonPlanoDoc} onClick={() => setEnviando(false)}>
               Cancelar
             </button>
-            <button type="button" style={{ ...s.botonSec, borderColor: color, color }}
+            <button type="button" style={{ ...s.botonSec, borderColor: 'var(--marca)', color }}
               disabled={pendiente}
               onClick={() => {
                 const datos = correo;
@@ -293,7 +293,7 @@ export default function VistaPlanAnual({
 
         {avance && (
           <div style={s.avance}>
-            <div style={{ ...s.avanceCifra, color }}>{avance.porcentaje}%</div>
+            <div style={{ ...s.avanceCifra, color: 'var(--marca-empresa)' }}>{avance.porcentaje}%</div>
             <div style={s.avanceDetalle}>
               {avance.cumplidas} de {avance.actividades - avance.no_aplica} actividades
               <div style={s.avanceMeses}>
@@ -338,8 +338,8 @@ export default function VistaPlanAnual({
               disabled={pendiente} type="button"
               style={{
                 ...s.botonSec,
-                borderColor: hecho === 'cab' ? 'var(--bien)' : color,
-                color: hecho === 'cab' ? 'var(--bien)' : color,
+                borderColor: hecho === 'cab' ? 'var(--bien)' : 'var(--marca)',
+                color: hecho === 'cab' ? 'var(--bien)' : 'var(--marca-empresa)',
                 background: hecho === 'cab' ? 'var(--bien-fondo)' : 'var(--superficie)',
               }}>
               {hecho === 'cab' ? '✓ Guardado' : 'Guardar'}
@@ -404,7 +404,7 @@ export default function VistaPlanAnual({
                     style={{
                       ...s.mes,
                       ...(act.meses.includes(i + 1)
-                        ? { background: color, color: 'var(--superficie)', borderColor: color } : {}),
+                        ? { background: 'var(--marca)', color: 'var(--sobre-empresa)', borderColor: 'var(--marca)' } : {}),
                     }}>{m}</button>
                 ))}
               </div>
@@ -437,7 +437,7 @@ export default function VistaPlanAnual({
                 correr('act', () => guardarActividad(plan.id, act));
                 setAct(null);
               }} disabled={pendiente} type="button"
-                style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
+                style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}>
                 Guardar actividad
               </button>
             </div>
@@ -477,7 +477,7 @@ export default function VistaPlanAnual({
                           <td key={i} style={s.tdMes}>
                             <span style={{
                               ...s.celdaMes,
-                              background: ejec ? 'var(--bien)' : prog ? color : 'transparent',
+                              background: ejec ? 'var(--bien)' : prog ? 'var(--marca)' : 'transparent',
                               opacity: ejec || prog ? 1 : 0.15,
                             }} />
                           </td>
@@ -516,7 +516,7 @@ export default function VistaPlanAnual({
 
       {/* ---------- Aprobación ---------- */}
       {!aprobado && (
-        <section style={{ ...s.bloque, borderColor: color }}>
+        <section style={{ ...s.bloque, borderColor: 'var(--marca)' }}>
           <h3 style={s.h3}>Aprobación del empleador</h3>
           <p style={s.nota}>
             La firma del empleador es lo que convierte este borrador en el plan de
@@ -531,7 +531,7 @@ export default function VistaPlanAnual({
                 title={actividades.length === 0 ? 'Agrega al menos una actividad' : undefined}
                 style={{
                   ...s.botonLleno,
-                  background: actividades.length === 0 ? 'var(--borde-fuerte)' : color,
+                  background: actividades.length === 0 ? 'var(--borde-fuerte)' : 'var(--marca)',
                   color: actividades.length === 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
                   cursor: actividades.length === 0 ? 'not-allowed' : 'pointer',
                 }}>
@@ -559,7 +559,7 @@ export default function VistaPlanAnual({
                   Cancelar
                 </button>
                 <button onClick={firmarYAprobar} disabled={pendiente} type="button"
-                  style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
+                  style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}>
                   {pendiente ? 'Aprobando…' : 'Firmar y aprobar'}
                 </button>
               </div>

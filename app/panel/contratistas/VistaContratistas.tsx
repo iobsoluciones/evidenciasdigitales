@@ -80,7 +80,7 @@ export default function VistaContratistas({
       {activos.length > 0 && (
         <div style={s.resumen}>
           <div style={{ ...s.tarjeta, border: '1px solid var(--borde)', background: 'var(--superficie)' }}>
-            <span style={{ ...s.tarjetaN, color }}>{activos.length}</span>
+            <span style={{ ...s.tarjetaN, color: 'var(--marca-empresa)' }}>{activos.length}</span>
             <span style={s.tarjetaT}>Contratistas activos</span>
           </div>
           <div style={{
@@ -109,7 +109,7 @@ export default function VistaContratistas({
 
       <div style={s.barra}>
         {!nuevo ? (
-          <button type="button" style={{ ...s.botonLleno, background: color }}
+          <button type="button" style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => setNuevo({ ...VACIO })}>
             Registrar un contratista
           </button>
@@ -164,7 +164,7 @@ export default function VistaContratistas({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }} onClick={crear}>
+                style={{ ...s.botonLleno, background: 'var(--marca)' }} onClick={crear}>
                 {pendiente ? 'Creando…' : 'Crear'}
               </button>
             </div>

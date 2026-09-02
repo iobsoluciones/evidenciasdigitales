@@ -70,6 +70,6 @@ const vacio: React.CSSProperties = {
   padding: '40px 24px', textAlign: 'center',
 };
 const boton: React.CSSProperties = {
-  background: 'var(--marca)', color: 'var(--superficie)', padding: '10px 18px',
+  background: 'var(--marca)', color: 'var(--sobre-empresa)', padding: '10px 18px',
   borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none',
 };

@@ -55,7 +55,7 @@ export default function BloqueEvaluacion({
           {habilitada ? (
             <Link
               href={`/panel/capacitaciones/${capacitacionId}/evaluacion`}
-              style={{ ...e.btn, background: color }}
+              style={{ ...e.btn, background: 'var(--marca)' }}
             >
               {esEvaluada ? 'Editar evaluación' : 'Crear evaluación'}
             </Link>

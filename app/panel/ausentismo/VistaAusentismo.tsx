@@ -91,7 +91,7 @@ export default function VistaAusentismo({
 
       <div style={s.resumen}>
         <div style={{ ...s.tarjeta, background: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-          <span style={{ ...s.tarjetaN, color }}>{resumen.dias_medicos}</span>
+          <span style={{ ...s.tarjetaN, color: 'var(--marca-empresa)' }}>{resumen.dias_medicos}</span>
           <span style={s.tarjetaT}>Días por causa médica</span>
           <span style={s.tarjetaPie}>los que entran al indicador</span>
         </div>
@@ -106,7 +106,7 @@ export default function VistaAusentismo({
           <span style={s.tarjetaPie}>{resumen.eventos} ausencia(s) registradas</span>
         </div>
         <div style={{ ...s.tarjeta, background: 'var(--fondo)' }}>
-          <span style={{ ...s.tarjetaN, color }}>{tasa ? `${tasa}%` : '—'}</span>
+          <span style={{ ...s.tarjetaN, color: 'var(--marca-empresa)' }}>{tasa ? `${tasa}%` : '—'}</span>
           <span style={s.tarjetaT}>Ausentismo por causa médica</span>
           <span style={s.tarjetaPie}>
             {tasa
@@ -123,7 +123,7 @@ export default function VistaAusentismo({
             return (
               <div key={o.origen} style={s.origen}>
                 <span style={s.origenNombre}>{def?.t ?? o.origen}</span>
-                <span style={{ ...s.origenDias, color }}>{o.dias} días</span>
+                <span style={{ ...s.origenDias, color: 'var(--marca-empresa)' }}>{o.dias} días</span>
                 <span style={s.origenMeta}>
                   {o.eventos} evento(s) · {def?.medica ? 'causa médica' : 'no cuenta al indicador'}
                 </span>
@@ -134,7 +134,7 @@ export default function VistaAusentismo({
       )}
 
       <div style={s.barra}>
-        <button type="button" style={{ ...s.botonLleno, background: color }}
+        <button type="button" style={{ ...s.botonLleno, background: 'var(--marca)' }}
           onClick={() => setForm({ ...VACIO })}>
           Registrar una ausencia
         </button>
@@ -180,7 +180,7 @@ export default function VistaAusentismo({
                 onChange={(e) => setForm({ ...form, fin: e.target.value })} />
             </Campo>
             <Campo etiqueta="Días" ancho={90}>
-              <div style={{ ...s.calculado, color }}>
+              <div style={{ ...s.calculado, color: 'var(--marca-empresa)' }}>
                 {form.inicio && form.fin
                   ? Math.max(
                       0,
@@ -234,7 +234,7 @@ export default function VistaAusentismo({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => guardarAusencia(form));
                 setForm(null);

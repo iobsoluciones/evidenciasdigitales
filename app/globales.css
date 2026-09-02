@@ -222,8 +222,19 @@ button:disabled, [aria-disabled='true'] {
  * oscurecerlo y sobre fondo oscuro aclararlo. El componente calcula las
  * dos versiones —no sabe qué tema tiene el navegador— y aquí se elige.
  */
-.lateral { --marca-empresa: var(--marca-empresa-claro); }
-:root[data-tema='oscuro'] .lateral { --marca-empresa: var(--marca-empresa-oscuro); }
+.panel {
+  /* Dentro del panel, `--marca` ES el color del cliente: asi cada
+     empresa tiñe sus botones sin que ningun componente tenga que saber
+     de temas. La version oscura ya viene separada del fondo. */
+  --marca: var(--empresa-claro);
+  --sobre-empresa: var(--sobre-empresa-claro);
+  --marca-empresa: var(--marca-empresa-claro);
+}
+:root[data-tema='oscuro'] .panel {
+  --marca: var(--empresa-oscuro);
+  --sobre-empresa: var(--sobre-empresa-oscuro);
+  --marca-empresa: var(--marca-empresa-oscuro);
+}
 
 /* ================================================================ *
  *  Página comercial

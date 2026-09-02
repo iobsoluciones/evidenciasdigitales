@@ -63,7 +63,7 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
             onClick={() => setF({ ...f, tipo: t.v })}
             style={{
               ...e.opcion,
-              borderColor: f.tipo === t.v ? color : 'var(--borde-fuerte)',
+              borderColor: f.tipo === t.v ? 'var(--marca)' : 'var(--borde-fuerte)',
               background: f.tipo === t.v ? 'var(--superficie-3)' : 'var(--superficie)',
             }}
           >
@@ -128,7 +128,7 @@ export default function FormularioPlantillaInspeccion({ color }: { color: string
         <button
           onClick={crear}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {pendiente ? 'Creando…' : 'Crear y agregar criterios'}
         </button>

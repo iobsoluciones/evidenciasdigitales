@@ -74,7 +74,7 @@ export default function VistaMatriz({
             : 'Aún no hay capacitaciones en el periodo.'}
         </p>
         {matriz.empleados.length === 0 && (
-          <Link href="/panel/empleados" style={{ ...s.btn, marginTop: 14, background: color }}>
+          <Link href="/panel/empleados" style={{ ...s.btn, marginTop: 14, background: 'var(--marca)' }}>
             Ir a Empleados
           </Link>
         )}

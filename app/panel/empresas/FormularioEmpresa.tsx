@@ -321,7 +321,7 @@ const s: Record<string, React.CSSProperties> = {
   },
   aviso: { padding: '11px 15px', borderRadius: 6, fontSize: 13, marginBottom: 16, maxWidth: 640 },
   btn: {
-    background: 'var(--marca)', color: 'var(--superficie)', border: 'none', padding: '11px 22px',
+    background: 'var(--marca)', color: 'var(--sobre-empresa)', border: 'none', padding: '11px 22px',
     borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnSec: {

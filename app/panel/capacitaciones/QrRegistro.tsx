@@ -87,7 +87,7 @@ export default function QrRegistro({
             <p style={e.url}>{url || '—'}</p>
 
             <div style={e.acciones}>
-              <button onClick={descargarQR} style={{ ...e.btnPrincipal, background: color }}>
+              <button onClick={descargarQR} style={{ ...e.btnPrincipal, background: 'var(--marca)' }}>
                 Descargar QR
               </button>
               <button onClick={copiar} style={e.btn}>Copiar enlace</button>

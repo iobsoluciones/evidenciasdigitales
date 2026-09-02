@@ -67,7 +67,7 @@ export default async function PaginaHoras({
               style={{
                 ...s.anio,
                 ...(a === anio
-                  ? { background: color, color: 'var(--superficie)', borderColor: color }
+                  ? { background: 'var(--marca)', color: 'var(--sobre-empresa)', borderColor: 'var(--marca)' }
                   : {}),
               }}
             >

@@ -190,7 +190,7 @@ export default function VistaMatrizLegal({
       <div style={s.barra}>
         {items.length === 0 && (
           <button type="button" disabled={pendiente}
-            style={{ ...s.botonLleno, background: color }}
+            style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => correr(sembrarMatriz)}>
             Cargar la normativa base
           </button>
@@ -241,7 +241,7 @@ export default function VistaMatrizLegal({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarMatrizLegal(correo.para, correo.mensaje));
                 setEnviando(false);
@@ -349,7 +349,7 @@ export default function VistaMatrizLegal({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => guardarNorma(formNorma));
                 setFormNorma(null);
@@ -512,7 +512,7 @@ export default function VistaMatrizLegal({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => guardarItemMatriz(editando));
                 setEditando(null);
@@ -536,8 +536,8 @@ function Tarjeta({
       ...s.tarjeta, background: fondo,
       border: borde ? '1px solid var(--borde)' : 'none',
     }}>
-      <span style={{ ...s.tarjetaN, color }}>{n}</span>
-      <span style={{ ...s.tarjetaT, color }}>{t}</span>
+      <span style={{ ...s.tarjetaN, color: 'var(--marca-empresa)' }}>{n}</span>
+      <span style={{ ...s.tarjetaT, color: 'var(--marca-empresa)' }}>{t}</span>
     </div>
   );
 }

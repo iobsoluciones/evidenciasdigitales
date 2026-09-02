@@ -239,7 +239,7 @@ export default function GestorEmpleados({
             <button onClick={descargarPlantilla} style={e.btnSec}>
               Descargar plantilla Excel
             </button>
-            <label style={{ ...e.btn, background: color, cursor: ocupado ? 'not-allowed' : 'pointer' }}>
+            <label style={{ ...e.btn, background: 'var(--marca)', cursor: ocupado ? 'not-allowed' : 'pointer' }}>
               {leyendo ? 'Leyendo…' : 'Cargar archivo'}
               <input
                 ref={archivoRef}
@@ -354,7 +354,7 @@ export default function GestorEmpleados({
               style={{ ...e.input, textTransform: 'uppercase' }}
             />
             <button onClick={guardar} disabled={ocupado}
-              style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : color, border: 'none' }}>
+              style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : 'var(--marca)', border: 'none' }}>
               {editandoId ? 'Guardar' : 'Agregar'}
             </button>
           </div>
@@ -514,7 +514,7 @@ const e: Record<string, React.CSSProperties> = {
     padding: '9px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'pointer',
   },
   btnVer: {
-    background: 'var(--marca)', color: 'var(--superficie)', padding: '4px 12px', borderRadius: 3,
+    background: 'var(--marca)', color: 'var(--sobre-empresa)', padding: '4px 12px', borderRadius: 3,
     fontSize: 11.5, fontWeight: 600, textDecoration: 'none', marginRight: 8,
   },
   btnMini: {

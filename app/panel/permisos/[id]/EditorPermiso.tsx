@@ -209,13 +209,13 @@ export default function EditorPermiso({
         </button>
         {borrador && (
           <button type="button" disabled={pendiente}
-            style={{ ...s.botonLleno, background: color }}
+            style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => autorizar()}>
             Autorizar permiso
           </button>
         )}
         {permiso.estado === 'autorizado' && (
-          <button type="button" style={{ ...s.botonLleno, background: color }}
+          <button type="button" style={{ ...s.botonLleno, background: 'var(--marca)' }}
             onClick={() => setCerrando({ texto: '' })}>
             Cerrar permiso
           </button>
@@ -247,7 +247,7 @@ export default function EditorPermiso({
               Cancelar
             </button>
             <button type="button" disabled={pendiente || !justificando.texto.trim()}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => autorizar(justificando.texto)}>
               Autorizar con constancia
             </button>
@@ -269,7 +269,7 @@ export default function EditorPermiso({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => cerrarPermiso(permiso.id, cerrando.texto));
                 setCerrando(null);
@@ -318,7 +318,7 @@ export default function EditorPermiso({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarPermiso(permiso.id, correo.para, correo.mensaje));
                 setEnviando(false);
@@ -396,7 +396,7 @@ export default function EditorPermiso({
             <button type="button" onClick={guardar} disabled={pendiente}
               style={{
                 ...s.botonLleno,
-                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
+                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -602,7 +602,7 @@ export default function EditorPermiso({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => guardarParticipante(permiso.id, formP));
                   setFormP(null);

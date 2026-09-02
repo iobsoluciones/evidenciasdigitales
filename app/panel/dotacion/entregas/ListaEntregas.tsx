@@ -46,7 +46,7 @@ export default function ListaEntregas({
         <p style={{ margin: '0 0 14px', fontSize: 13.5 }}>
           Aún no hay entregas registradas.
         </p>
-        <Link href="/panel/dotacion/entregas/nueva" style={{ ...e.btn, background: color }}>
+        <Link href="/panel/dotacion/entregas/nueva" style={{ ...e.btn, background: 'var(--marca)' }}>
           Registrar la primera
         </Link>
       </div>

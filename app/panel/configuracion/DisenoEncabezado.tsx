@@ -111,7 +111,7 @@ export default function DisenoEncabezado({
               disabled={bloqueado}
               style={{
                 ...e.plantilla,
-                borderColor: activa ? color : 'var(--borde-fuerte)',
+                borderColor: activa ? 'var(--marca)' : 'var(--borde-fuerte)',
                 background: activa ? 'var(--superficie-3)' : 'var(--superficie)',
                 cursor: bloqueado ? 'not-allowed' : 'pointer',
                 opacity: bloqueado && !activa ? 0.55 : 1,
@@ -167,7 +167,7 @@ export default function DisenoEncabezado({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {pendiente ? 'Guardando…' : 'Guardar diseño'}
         </button>
@@ -204,11 +204,11 @@ function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c
 
   if (tipo === 'tabla') {
     return (
-      <div style={{ ...v.marco, flexDirection: 'row', borderColor: color, padding: 0 }}>
-        <div style={{ ...v.celda, width: '24%', borderRightWidth: 1, borderRightStyle: 'solid', borderRightColor: color }}>
-          <div style={{ ...v.logo, background: color }} />
+      <div style={{ ...v.marco, flexDirection: 'row', borderColor: 'var(--marca)', padding: 0 }}>
+        <div style={{ ...v.celda, width: '24%', borderRightWidth: 1, borderRightStyle: 'solid', borderRightColor: 'var(--marca)' }}>
+          <div style={{ ...v.logo, background: 'var(--marca)' }} />
         </div>
-        <div style={{ ...v.celda, width: '50%', borderRightWidth: 1, borderRightStyle: 'solid', borderRightColor: color, gap: 3 }}>
+        <div style={{ ...v.celda, width: '50%', borderRightWidth: 1, borderRightStyle: 'solid', borderRightColor: 'var(--marca)', gap: 3 }}>
           {barra('80%', 5, color)}
           {barra('55%')}
         </div>
@@ -222,7 +222,7 @@ function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c
 
   if (tipo === 'lateral') {
     const izq = c.logo_posicion !== 'derecha';
-    const logo = <div key="l" style={{ ...v.logo, background: color, margin: 0 }} />;
+    const logo = <div key="l" style={{ ...v.logo, background: 'var(--marca)', margin: 0 }} />;
     const texto = (
       <div key="t" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3, alignItems: izq ? 'flex-end' : 'flex-start' }}>
         {barra('70%', 5, color)}
@@ -231,7 +231,7 @@ function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c
       </div>
     );
     return (
-      <div style={{ ...v.marco, flexDirection: 'row', alignItems: 'center', gap: 8, borderColor: 'transparent', borderBottomColor: color }}>
+      <div style={{ ...v.marco, flexDirection: 'row', alignItems: 'center', gap: 8, borderColor: 'transparent', borderBottomColor: 'var(--marca)' }}>
         {izq ? [logo, texto] : [texto, logo]}
       </div>
     );
@@ -242,8 +242,8 @@ function Vista({ tipo, color, c }: { tipo: Config['plantilla']; color: string; c
     : c.logo_posicion === 'derecha' ? 'flex-end' : 'center';
 
   return (
-    <div style={{ ...v.marco, alignItems: alinear, gap: 4, borderColor: 'transparent', borderBottomColor: color }}>
-      <div style={{ ...v.logo, background: color, margin: 0 }} />
+    <div style={{ ...v.marco, alignItems: alinear, gap: 4, borderColor: 'transparent', borderBottomColor: 'var(--marca)' }}>
+      <div style={{ ...v.logo, background: 'var(--marca)', margin: 0 }} />
       {barra('70%', 5, color)}
       {barra('85%', 2.5)}
     </div>

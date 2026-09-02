@@ -155,7 +155,7 @@ export default function CargaUnidades({
             <button onClick={descargarPlantilla} style={e.btnSec}>
               Descargar plantilla
             </button>
-            <label style={{ ...e.btn, background: color, cursor: ocupado ? 'not-allowed' : 'pointer' }}>
+            <label style={{ ...e.btn, background: 'var(--marca)', cursor: ocupado ? 'not-allowed' : 'pointer' }}>
               {leyendo ? 'Leyendo…' : pendiente ? 'Guardando…' : 'Cargar archivo'}
               <input
                 ref={entrada}

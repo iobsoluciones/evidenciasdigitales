@@ -272,7 +272,7 @@ export default function VistaCalendario({
               : 'Selecciona una empresa para crear capacitaciones'}
             style={{
               ...s.btn,
-              background: empresaActiva ? color : 'var(--borde-fuerte)',
+              background: empresaActiva ? 'var(--marca)' : 'var(--borde-fuerte)',
               cursor: empresaActiva ? 'pointer' : 'not-allowed',
             }}
           >
@@ -295,7 +295,7 @@ export default function VistaCalendario({
             onClick={() => cambiarModo(false)}
             style={{
               ...s.botonModo,
-              background: porSemana ? 'transparent' : color,
+              background: porSemana ? 'transparent' : 'var(--marca)',
               color: porSemana ? 'var(--texto-suave)' : 'var(--sobre-marca)',
             }}
           >
@@ -305,7 +305,7 @@ export default function VistaCalendario({
             onClick={() => cambiarModo(true)}
             style={{
               ...s.botonModo,
-              background: porSemana ? color : 'transparent',
+              background: porSemana ? 'var(--marca)' : 'transparent',
               color: porSemana ? 'var(--sobre-marca)' : 'var(--texto-suave)',
             }}
           >
@@ -345,13 +345,13 @@ export default function VistaCalendario({
       {/* ---------- Leyenda ---------- */}
       <div style={s.leyenda}>
         <span style={s.leyendaItem}>
-          <span style={{ ...s.punto, background: color }} /> Capacitación creada
+          <span style={{ ...s.punto, background: 'var(--marca)' }} /> Capacitación creada
         </span>
         <span style={s.leyendaItem}>
-          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'solid', borderColor: color }} /> Anotación de agenda
+          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'solid', borderColor: 'var(--marca)' }} /> Anotación de agenda
         </span>
         <span style={s.leyendaItem}>
-          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'dashed', borderColor: color }} /> Inspección programada
+          <span style={{ ...s.punto, background: 'var(--superficie)', borderWidth: 1.5, borderStyle: 'dashed', borderColor: 'var(--marca)' }} /> Inspección programada
         </span>
         <span style={s.leyendaNota}>
           Clic en un día para anotar; en una anotación para editarla; en una
@@ -457,7 +457,7 @@ export default function VistaCalendario({
 
             <div style={s.modalAcciones}>
               <button onClick={guardarCapacitacion} disabled={pendiente}
-                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : color, flex: 1 }}>
+                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', flex: 1 }}>
                 {pendiente ? 'Creando…' : 'Crear capacitación'}
               </button>
               <button onClick={() => setCapAbierta(false)} style={s.btnSec}>Cancelar</button>
@@ -541,7 +541,7 @@ export default function VistaCalendario({
 
             <div style={s.modalAcciones}>
               <button onClick={guardar} disabled={pendiente}
-                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : color, flex: 1 }}>
+                style={{ ...s.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', flex: 1 }}>
                 {pendiente ? 'Guardando…' : 'Guardar'}
               </button>
               {editando && (

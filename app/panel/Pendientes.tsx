@@ -108,7 +108,7 @@ export default function Pendientes({
     .filter((g) => g.suyos.length > 0);
 
   return (
-    <section style={{ ...s.caja, borderLeft: `4px solid ${resumen.criticos > 0 ? 'var(--mal)' : color}` }}>
+    <section style={{ ...s.caja, borderLeft: `4px solid ${resumen.criticos > 0 ? 'var(--mal)' : 'var(--marca-empresa)'}` }}>
       <div style={s.cabecera}>
         <div>
           <h2 style={s.titulo}>Qué hay que hacer en {empresa}</h2>

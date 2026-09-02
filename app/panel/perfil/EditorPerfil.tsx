@@ -175,7 +175,7 @@ export default function EditorPerfil({
     <>
       {/* ---------- Trayectoria verificable ---------- */}
       {trayectoria && (
-      <section style={{ ...e.card, borderLeftWidth: 3, borderLeftColor: color }}>
+      <section style={{ ...e.card, borderLeftWidth: 3, borderLeftColor: 'var(--marca)' }}>
         <h2 style={e.h2}>Trayectoria en el sistema</h2>
         <p style={e.nota}>
           Estas cifras se calculan con tus registros y se incluyen en la hoja
@@ -201,7 +201,7 @@ export default function EditorPerfil({
             <h2 style={e.h2}>Hoja de vida</h2>
             <p style={e.nota}>Se genera en PDF con los datos de abajo.</p>
           </div>
-          <a href="/api/pdf-perfil" style={{ ...e.btn, background: color }}>
+          <a href="/api/pdf-perfil" style={{ ...e.btn, background: 'var(--marca)' }}>
             Descargar PDF
           </a>
           <button onClick={() => setEnviando(!enviando)} style={e.btnSec}>
@@ -229,7 +229,7 @@ export default function EditorPerfil({
             <button
               onClick={enviar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12, border: 'none', cursor: 'pointer' }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 12, border: 'none', cursor: 'pointer' }}
             >
               {pendiente ? 'Enviando…' : 'Enviar hoja de vida'}
             </button>
@@ -301,7 +301,7 @@ export default function EditorPerfil({
               ? <img src={foto} alt="Perfil" style={e.foto} />
               : <span style={{ fontSize: 12, color: 'var(--texto-tenue)' }}>Sin fotografía</span>}
           </div>
-          <label style={{ ...e.btn, background: color, display: 'block', textAlign: 'center', cursor: 'pointer' }}>
+          <label style={{ ...e.btn, background: 'var(--marca)', display: 'block', textAlign: 'center', cursor: 'pointer' }}>
             {subiendo ? 'Subiendo…' : 'Cambiar fotografía'}
             <input
               ref={fotoRef}
@@ -348,7 +348,7 @@ export default function EditorPerfil({
                 <button
                   onClick={subirFirma}
                   disabled={subiendo || pendiente}
-                  style={{ ...e.btn, background: subiendo ? 'var(--borde-fuerte)' : color, border: 'none', cursor: 'pointer' }}
+                  style={{ ...e.btn, background: subiendo ? 'var(--borde-fuerte)' : 'var(--marca)', border: 'none', cursor: 'pointer' }}
                 >
                   {subiendo ? 'Guardando…' : 'Guardar firma'}
                 </button>
@@ -407,7 +407,7 @@ export default function EditorPerfil({
       <button
         onClick={guardar}
         disabled={pendiente}
-        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, border: 'none', cursor: 'pointer', padding: '12px 26px' }}
+        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', border: 'none', cursor: 'pointer', padding: '12px 26px' }}
       >
         {pendiente ? 'Guardando…' : 'Guardar perfil'}
       </button>
@@ -481,7 +481,7 @@ function Lista<T extends Record<string, string>>({
         </div>
       ))}
 
-      <button onClick={agregar} style={{ ...e.enlace, color }}>
+      <button onClick={agregar} style={{ ...e.enlace, color: 'var(--marca-empresa)' }}>
         + Agregar
       </button>
     </section>

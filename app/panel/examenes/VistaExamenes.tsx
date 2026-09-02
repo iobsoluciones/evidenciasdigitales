@@ -117,10 +117,10 @@ export default function VistaExamenes({
   return (
     <>
       <div style={s.tarjetas}>
-        <Tarjeta n={sinExamen} t="Sin ningún examen" c={sinExamen ? 'var(--mal)' : color} />
-        <Tarjeta n={vencidos} t="Vencidos" c={vencidos ? 'var(--mal)' : color} />
-        <Tarjeta n={porVencer} t="Vencen en 60 días" c={porVencer ? 'var(--aviso)' : color} />
-        <Tarjeta n={restringidos} t="Con restricciones médicas" c={restringidos ? 'var(--aviso)' : color} />
+        <Tarjeta n={sinExamen} t="Sin ningún examen" c={sinExamen ? 'var(--mal)' : 'var(--marca-empresa)'} />
+        <Tarjeta n={vencidos} t="Vencidos" c={vencidos ? 'var(--mal)' : 'var(--marca-empresa)'} />
+        <Tarjeta n={porVencer} t="Vencen en 60 días" c={porVencer ? 'var(--aviso)' : 'var(--marca-empresa)'} />
+        <Tarjeta n={restringidos} t="Con restricciones médicas" c={restringidos ? 'var(--aviso)' : 'var(--marca-empresa)'} />
       </div>
 
       {restringidos > 0 && (
@@ -255,7 +255,7 @@ export default function VistaExamenes({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}
+              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
               type="button"
             >
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar examen'}

@@ -148,7 +148,7 @@ export default function VistaAmenazas({
       {/* ---------- Acciones ---------- */}
       <div style={s.barra}>
         <button type="button" disabled={pendiente}
-          style={{ ...s.botonLleno, background: color }}
+          style={{ ...s.botonLleno, background: 'var(--marca)' }}
           onClick={() => setForm({ ...VACIO })}>
           Agregar amenaza
         </button>
@@ -183,7 +183,7 @@ export default function VistaAmenazas({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarAnalisisAmenazas(correo.para, correo.mensaje));
                 setEnviando(false);
@@ -235,7 +235,7 @@ export default function VistaAmenazas({
                 style={{
                   ...s.opcion,
                   ...(form.calificacion === c.v
-                    ? { borderColor: color, background: `${color}12`, fontWeight: 700 }
+                    ? { borderColor: 'var(--marca)', background: `${color}12`, fontWeight: 700 }
                     : {}),
                 }}>
                 <span style={s.opcionT}>{c.t}</span>
@@ -299,7 +299,7 @@ export default function VistaAmenazas({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => guardarAmenaza(form));
                 setForm(null);

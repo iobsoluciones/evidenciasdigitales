@@ -91,7 +91,7 @@ const s: Record<string, React.CSSProperties> = {
   cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 22 },
   titulo: { fontSize: 22, margin: '0 0 3px', letterSpacing: -0.4 },
   sub: { fontSize: 13, color: 'var(--texto-suave)', margin: 0 },
-  btn: { background: 'var(--marca)', color: 'var(--superficie)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
+  btn: { background: 'var(--marca)', color: 'var(--sobre-empresa)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none' },
   btnBloqueado: { background: 'var(--superficie-3)', color: 'var(--texto-tenue)', padding: '10px 18px', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: 'not-allowed' },
   aviso: { background: 'var(--ambar-fondo)', color: 'var(--ambar)', padding: '11px 15px', borderRadius: 6, fontSize: 13, marginBottom: 20 },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 16 },

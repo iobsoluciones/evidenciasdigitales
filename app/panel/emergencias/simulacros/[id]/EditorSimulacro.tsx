@@ -200,7 +200,7 @@ export default function EditorSimulacro({
             title={faltanFirmas > 0 ? 'Faltan firmas del equipo evaluador' : undefined}
             style={{
               ...s.botonLleno,
-              background: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--borde-fuerte)' : color,
+              background: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--borde-fuerte)' : 'var(--marca)',
               color: faltanFirmas > 0 || evaluadores.length === 0 ? 'var(--texto-tenue)' : 'var(--sobre-marca)',
               cursor: faltanFirmas > 0 || evaluadores.length === 0 ? 'not-allowed' : 'pointer',
             }}
@@ -226,7 +226,7 @@ export default function EditorSimulacro({
               Cancelar
             </button>
             <button type="button" disabled={pendiente}
-              style={{ ...s.botonLleno, background: color }}
+              style={{ ...s.botonLleno, background: 'var(--marca)' }}
               onClick={() => {
                 correr(() => enviarActaSimulacro(simulacro.id, correo.para, correo.mensaje));
                 setEnviando(false);
@@ -302,7 +302,7 @@ export default function EditorSimulacro({
             </div>
           </Campo>
           <Campo etiqueta="Cobertura" ancho={120}>
-            <div style={{ ...s.calculado, color }}>
+            <div style={{ ...s.calculado, color: 'var(--marca-empresa)' }}>
               {cobertura === null ? '—' : `${cobertura}%`}
             </div>
           </Campo>
@@ -329,7 +329,7 @@ export default function EditorSimulacro({
             <button type="button" onClick={guardar} disabled={pendiente}
               style={{
                 ...s.botonLleno,
-                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
+                background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
             </button>
@@ -460,7 +460,7 @@ export default function EditorSimulacro({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => guardarEvaluador(simulacro.id, formEval));
                   setFormEval(null);

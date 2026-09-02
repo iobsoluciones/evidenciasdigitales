@@ -63,7 +63,7 @@ export default function AccionesCronograma({
 
         <a
           href={`/api/pdf-cronograma/${destino}?desde=${desde}&hasta=${hasta}`}
-          style={{ ...e.btn, background: color }}
+          style={{ ...e.btn, background: 'var(--marca)' }}
         >
           Descargar PDF
         </a>
@@ -94,7 +94,7 @@ export default function AccionesCronograma({
             onClick={enviar}
             disabled={pendiente}
             style={{
-              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color,
+              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               marginTop: 12, width: '100%', border: 'none', cursor: 'pointer',
             }}
           >

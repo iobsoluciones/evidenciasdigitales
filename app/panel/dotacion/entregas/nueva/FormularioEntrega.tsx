@@ -208,7 +208,7 @@ export default function FormularioEntrega({
         <p style={{ margin: '0 0 14px', fontSize: 14 }}>
           No hay empleados cargados en esta empresa.
         </p>
-        <Link href="/panel/empleados" style={{ ...e.btn, background: color }}>
+        <Link href="/panel/empleados" style={{ ...e.btn, background: 'var(--marca)' }}>
           Ir a Empleados
         </Link>
       </div>
@@ -221,7 +221,7 @@ export default function FormularioEntrega({
         <p style={{ margin: '0 0 14px', fontSize: 14 }}>
           No hay artículos con existencia ni unidades disponibles.
         </p>
-        <Link href="/panel/dotacion" style={{ ...e.btn, background: color }}>
+        <Link href="/panel/dotacion" style={{ ...e.btn, background: 'var(--marca)' }}>
           Ir al inventario
         </Link>
       </div>
@@ -270,7 +270,7 @@ export default function FormularioEntrega({
                 onClick={() => setEmpleadoId(x.id)}
                 style={{
                   ...e.empleado,
-                  borderColor: empleadoId === x.id ? color : 'var(--superficie-3)',
+                  borderColor: empleadoId === x.id ? 'var(--marca)' : 'var(--superficie-3)',
                   background: empleadoId === x.id ? 'var(--superficie-3)' : 'var(--superficie)',
                 }}
               >
@@ -302,7 +302,7 @@ export default function FormularioEntrega({
             disabled={!empleadoId || !entregadoPor.trim()}
             style={{
               ...e.btn,
-              background: !empleadoId || !entregadoPor.trim() ? 'var(--borde-fuerte)' : color,
+              background: !empleadoId || !entregadoPor.trim() ? 'var(--borde-fuerte)' : 'var(--marca)',
               marginTop: 18,
             }}
           >
@@ -473,7 +473,7 @@ export default function FormularioEntrega({
               disabled={lineas.length === 0 || errores.length > 0}
               style={{
                 ...e.btn,
-                background: lineas.length === 0 || errores.length > 0 ? 'var(--borde-fuerte)' : color,
+                background: lineas.length === 0 || errores.length > 0 ? 'var(--borde-fuerte)' : 'var(--marca)',
               }}
             >
               Revisar
@@ -555,7 +555,7 @@ export default function FormularioEntrega({
             <button
               onClick={guardar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
             >
               {pendiente
                 ? 'Guardando…'

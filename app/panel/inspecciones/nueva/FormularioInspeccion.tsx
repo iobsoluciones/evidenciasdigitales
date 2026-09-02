@@ -99,7 +99,7 @@ export default function FormularioInspeccion({
         </p>
         <Link
           href="/panel/inspecciones/plantillas"
-          style={{ ...e.btn, background: color, marginTop: 14 }}
+          style={{ ...e.btn, background: 'var(--marca)', marginTop: 14 }}
         >
           Ir a listas de verificación
         </Link>
@@ -241,7 +241,7 @@ export default function FormularioInspeccion({
           disabled={pendiente || !plantillaId}
           style={{
             ...e.btn,
-            background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : color,
+            background: pendiente || !plantillaId ? 'var(--borde-fuerte)' : 'var(--marca)',
             border: 'none',
             cursor: pendiente || !plantillaId ? 'not-allowed' : 'pointer',
           }}

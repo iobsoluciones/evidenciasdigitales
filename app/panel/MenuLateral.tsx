@@ -27,7 +27,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { EVENTO_MENU } from './BotonMenu';
-import { paraTexto, aclarar } from '@/lib/color';
 
 type Enlace = { href: string; texto: string };
 type Fase = 'planear' | 'hacer' | 'verificar' | 'actuar';
@@ -204,17 +203,6 @@ export default function MenuLateral({
 }) {
   const ruta = usePathname();
 
-  // El color de la empresa se usa aquí como TEXTO sobre la superficie
-  // del lateral. En tema claro hay que oscurecerlo —un amarillo sería
-  // ilegible— y en tema oscuro hay que aclararlo —un azul marino se
-  // perdería—. Se calculan los dos y decide el CSS: el servidor no sabe
-  // qué tema tiene guardado el navegador. El color de fondo de los
-  // botones sí usa el original, que ahí sí se ve.
-  const variablesMarca = {
-    '--marca-empresa-claro': paraTexto(color),
-    '--marca-empresa-oscuro': aclarar(color),
-  } as React.CSSProperties;
-
   const moduloActivo =
     MODULOS.find((m) => m.enlaces.some((x) => ruta === x.href || ruta.startsWith(x.href + '/')))?.id
     ?? 'capacitaciones';
@@ -242,7 +230,7 @@ export default function MenuLateral({
   return (
     <>
       <nav
-        style={{ ...e.lateral, ...variablesMarca }}
+        style={e.lateral}
         className={movil ? 'lateral abierto' : 'lateral'}
       >
         {/* ---------- El profesional ---------- */}
@@ -273,9 +261,9 @@ export default function MenuLateral({
               style={{
                 ...e.cartera,
                 marginTop: i === 0 ? 0 : 6,
-                background: x.activo ? color : 'var(--superficie)',
+                background: x.activo ? 'var(--marca)' : 'var(--superficie)',
                 color: x.activo ? 'var(--sobre-marca)' : 'var(--texto)',
-                borderColor: x.activo ? color : 'var(--borde-fuerte)',
+                borderColor: x.activo ? 'var(--marca)' : 'var(--borde-fuerte)',
               }}
             >
               <span style={e.iconoCartera} aria-hidden="true">{x.icono}</span>
@@ -331,7 +319,12 @@ export default function MenuLateral({
                             style={{
                               ...e.item,
                               ...(activo
-                                ? { color, fontWeight: 600, borderLeftColor: color, background: 'var(--superficie)' }
+                                ? {
+                                    color: 'var(--marca-empresa)',
+                                    fontWeight: 600,
+                                    borderLeftColor: 'var(--marca)',
+                                    background: 'var(--superficie)',
+                                  }
                                 : {}),
                             }}
                           >
@@ -359,9 +352,9 @@ export default function MenuLateral({
             style={{
               ...e.cartera,
               marginBottom: 6,
-              background: enPerfil ? color : 'var(--superficie)',
+              background: enPerfil ? 'var(--marca)' : 'var(--superficie)',
               color: enPerfil ? 'var(--sobre-marca)' : 'var(--texto)',
-              borderColor: enPerfil ? color : 'var(--borde-fuerte)',
+              borderColor: enPerfil ? 'var(--marca)' : 'var(--borde-fuerte)',
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">◉</span>
@@ -373,9 +366,9 @@ export default function MenuLateral({
             onClick={() => setMovil(false)}
             style={{
               ...e.cartera,
-              background: enConfig ? color : 'var(--superficie)',
+              background: enConfig ? 'var(--marca)' : 'var(--superficie)',
               color: enConfig ? 'var(--sobre-marca)' : 'var(--texto)',
-              borderColor: enConfig ? color : 'var(--borde-fuerte)',
+              borderColor: enConfig ? 'var(--marca)' : 'var(--borde-fuerte)',
             }}
           >
             <span style={e.iconoCartera} aria-hidden="true">⚙</span>

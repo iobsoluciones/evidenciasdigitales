@@ -133,7 +133,7 @@ function Lista({
                 <button
                   onClick={agregar}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: 'var(--superficie)' }}
+                  style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)' }}
                 >
                   +
                 </button>
@@ -155,7 +155,7 @@ function Lista({
                 <button
                   onClick={agregarVarios}
                   disabled={pendiente}
-                  style={{ ...est.btn, background: color, color: 'var(--superficie)', flex: 1 }}
+                  style={{ ...est.btn, background: 'var(--marca)', color: 'var(--sobre-empresa)', flex: 1 }}
                 >
                   {pendiente ? 'Cargando…' : 'Cargar'}
                 </button>

@@ -167,9 +167,9 @@ export default function VistaPeligros({
       {resumen && (
         <div style={s.tarjetas}>
           <Tarjeta n={resumen.total} t="Peligros identificados" c={color} />
-          <Tarjeta n={resumen.nivel_i} t="Nivel I — no aceptable" c={resumen.nivel_i ? 'var(--mal)' : color} />
-          <Tarjeta n={resumen.nivel_ii} t="Nivel II" c={resumen.nivel_ii ? 'var(--aviso)' : color} />
-          <Tarjeta n={resumen.sin_controles} t="Sin controles enlazados" c={resumen.sin_controles ? 'var(--aviso)' : color} />
+          <Tarjeta n={resumen.nivel_i} t="Nivel I — no aceptable" c={resumen.nivel_i ? 'var(--mal)' : 'var(--marca-empresa)'} />
+          <Tarjeta n={resumen.nivel_ii} t="Nivel II" c={resumen.nivel_ii ? 'var(--aviso)' : 'var(--marca-empresa)'} />
+          <Tarjeta n={resumen.sin_controles} t="Sin controles enlazados" c={resumen.sin_controles ? 'var(--aviso)' : 'var(--marca-empresa)'} />
         </div>
       )}
 
@@ -192,7 +192,7 @@ export default function VistaPeligros({
         {!form && (
           <button
             onClick={() => { setForm({ ...VACIO }); setAviso(null); }}
-            style={{ ...s.botonLleno, background: color }}
+            style={{ ...s.botonLleno, background: 'var(--marca)' }}
             type="button"
           >
             Identificar peligro
@@ -331,7 +331,7 @@ export default function VistaPeligros({
           <div style={s.acciones}>
             <button onClick={() => setForm(null)} style={s.botonPlano} type="button">Cancelar</button>
             <button onClick={guardar} disabled={pendiente} type="button"
-              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}>
+              style={{ ...s.botonLleno, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}>
               {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar peligro'}
             </button>
           </div>
@@ -357,7 +357,7 @@ export default function VistaPeligros({
                     <button key={o.id} onClick={() => alternar(tipo, o.id)} type="button"
                       style={{
                         ...s.opcion,
-                        ...(marcado ? { borderColor: color, background: 'var(--superficie)', color, fontWeight: 700 } : {}),
+                        ...(marcado ? { borderColor: 'var(--marca)', background: 'var(--superficie)', color, fontWeight: 700 } : {}),
                       }}>
                       {marcado ? '✓ ' : ''}{o.nombre}
                     </button>
@@ -370,7 +370,7 @@ export default function VistaPeligros({
             <button onClick={() => { setEnlazando(null); setSeleccion([]); }}
               style={s.botonPlano} type="button">Cancelar</button>
             <button onClick={guardarEnlaces} disabled={pendiente} type="button"
-              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : color }}>
+              style={{ ...s.botonLleno, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}>
               Guardar controles
             </button>
           </div>
@@ -504,7 +504,7 @@ function Selector({
           <button key={o.v} onClick={() => onChange(o.v)} type="button" title={o.d}
             style={{
               ...s.opcion,
-              ...(valor === o.v ? { borderColor: 'var(--marca)', background: 'var(--marca)', color: 'var(--superficie)', fontWeight: 700 } : {}),
+              ...(valor === o.v ? { borderColor: 'var(--marca)', background: 'var(--marca)', color: 'var(--sobre-empresa)', fontWeight: 700 } : {}),
             }}>
             {o.v} · {o.t}
           </button>

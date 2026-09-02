@@ -244,7 +244,7 @@ export default function EditorContratista({
           <button type="button" onClick={guardar} disabled={pendiente}
             style={{
               ...s.botonLleno,
-              background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color,
+              background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
             }}>
             {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : 'Guardar'}
           </button>
@@ -323,7 +323,7 @@ export default function EditorContratista({
                   style={{
                     ...s.opcion,
                     ...(editandoReq.estado === x.v
-                      ? { borderColor: color, background: `${color}12`, fontWeight: 700 }
+                      ? { borderColor: 'var(--marca)', background: `${color}12`, fontWeight: 700 }
                       : {}),
                   }}>
                   {x.t}
@@ -349,7 +349,7 @@ export default function EditorContratista({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => responderRequisito(
                     editandoReq.id, editandoReq.estado, editandoReq.vence,
@@ -477,7 +477,7 @@ export default function EditorContratista({
                 Cancelar
               </button>
               <button type="button" disabled={pendiente}
-                style={{ ...s.botonLleno, background: color }}
+                style={{ ...s.botonLleno, background: 'var(--marca)' }}
                 onClick={() => {
                   correr(() => guardarPersona(contratista.id, formP));
                   setFormP(null);

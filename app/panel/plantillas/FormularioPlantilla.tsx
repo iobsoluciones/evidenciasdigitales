@@ -55,13 +55,13 @@ export default function FormularioPlantilla({
       <div style={e.pestanas}>
         <button
           onClick={() => setTipo('capacitacion')}
-          style={{ ...e.pestana, ...(tipo === 'capacitacion' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(tipo === 'capacitacion' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Capacitación
         </button>
         <button
           onClick={() => setTipo('evaluacion')}
-          style={{ ...e.pestana, ...(tipo === 'evaluacion' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(tipo === 'evaluacion' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Evaluación
         </button>
@@ -164,7 +164,7 @@ export default function FormularioPlantilla({
           <button
             onClick={crear}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
           >
             {pendiente ? 'Creando…' : 'Crear plantilla'}
           </button>

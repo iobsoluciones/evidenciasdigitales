@@ -155,7 +155,7 @@ function Fila({ k, v, mono, color }: { k: string; v: string; mono?: boolean; col
         fontSize: mono ? 12 : 13,
         display: 'flex', alignItems: 'center', gap: 7, justifyContent: 'flex-end',
       }}>
-        {color && <span style={{ width: 11, height: 11, borderRadius: 2, background: color, display: 'inline-block' }} />}
+        {color && <span style={{ width: 11, height: 11, borderRadius: 2, background: 'var(--marca)', display: 'inline-block' }} />}
         {v}
       </dd>
     </div>

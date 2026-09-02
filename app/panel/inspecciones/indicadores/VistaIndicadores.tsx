@@ -144,7 +144,7 @@ export default function VistaIndicadores({
                 sufijo={ac.dias_cierre_promedio !== null ? 'd' : ''}
               />
             </div>
-            <Link href="/panel/acciones" style={{ ...e.enlace, color }}>
+            <Link href="/panel/acciones" style={{ ...e.enlace, color: 'var(--marca-empresa)' }}>
               Ver el plan de acción completo →
             </Link>
           </Panel>

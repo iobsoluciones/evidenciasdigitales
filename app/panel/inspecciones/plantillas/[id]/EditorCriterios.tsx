@@ -176,7 +176,7 @@ export default function EditorCriterios({
         return (
           <div key={i}>
             {nuevaSeccion && it.seccion && (
-              <div style={{ ...e.tituloSeccion, color }}>{it.seccion}</div>
+              <div style={{ ...e.tituloSeccion, color: 'var(--marca-empresa)' }}>{it.seccion}</div>
             )}
 
             <section style={{
@@ -294,7 +294,7 @@ export default function EditorCriterios({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {pendiente ? 'Guardando…' : 'Guardar lista'}
         </button>

@@ -220,7 +220,7 @@ export default function VistaArticulo({
             <button
               onClick={ingresar}
               disabled={pendiente}
-              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color }}
+              style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
             >
               Registrar
             </button>
@@ -294,7 +294,7 @@ export default function VistaArticulo({
               <button
                 onClick={agregarUnidad}
                 disabled={pendiente}
-                style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}
+                style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 12 }}
               >
                 {pendiente ? 'Guardando…' : 'Registrar unidad'}
               </button>

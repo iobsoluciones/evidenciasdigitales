@@ -202,7 +202,7 @@ export default function RejillaHoras({
         <button
           onClick={guardar}
           disabled={pendiente}
-          style={{ ...e.boton, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : color }}
+          style={{ ...e.boton, background: hecho ? 'var(--bien)' : pendiente ? 'var(--borde-fuerte)' : 'var(--marca)' }}
         >
           {hecho ? '✓ Guardado' : pendiente ? 'Guardando…' : `Guardar ${anio}`}
         </button>
@@ -215,7 +215,7 @@ function Dato({ etiqueta, valor, color }: { etiqueta: string; valor: string; col
   return (
     <div style={e.tarjeta}>
       <span style={e.tarjetaEtiqueta}>{etiqueta}</span>
-      <span style={{ ...e.tarjetaValor, color }}>{valor}</span>
+      <span style={{ ...e.tarjetaValor, color: 'var(--marca-empresa)' }}>{valor}</span>
     </div>
   );
 }

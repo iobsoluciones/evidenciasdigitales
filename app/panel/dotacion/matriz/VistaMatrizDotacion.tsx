@@ -84,7 +84,7 @@ export default function VistaMatrizDotacion({
         </p>
         <Link
           href={matriz.empleados.length === 0 ? '/panel/empleados' : '/panel/dotacion'}
-          style={{ ...s.btn, background: color }}
+          style={{ ...s.btn, background: 'var(--marca)' }}
         >
           {matriz.empleados.length === 0 ? 'Ir a Empleados' : 'Ir al inventario'}
         </Link>

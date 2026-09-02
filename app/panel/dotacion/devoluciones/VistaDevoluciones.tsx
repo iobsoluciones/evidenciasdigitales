@@ -148,13 +148,13 @@ export default function VistaDevoluciones({
       <div style={e.pestanas}>
         <button
           onClick={() => setPestana('pendientes')}
-          style={{ ...e.pestana, ...(pestana === 'pendientes' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(pestana === 'pendientes' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Por devolver ({pendientes.length})
         </button>
         <button
           onClick={() => setPestana('historial')}
-          style={{ ...e.pestana, ...(pestana === 'historial' ? { ...e.activa, color, borderBottomColor: color } : {}) }}
+          style={{ ...e.pestana, ...(pestana === 'historial' ? { ...e.activa, color: 'var(--marca-empresa)', borderBottomColor: 'var(--marca)' } : {}) }}
         >
           Devueltos ({historial.length})
         </button>
@@ -186,7 +186,7 @@ export default function VistaDevoluciones({
               que incluya al menos un equipo.
             </p>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16, flexWrap: 'wrap' }}>
-              <Link href="/panel/dotacion/entregas/nueva" style={{ ...e.btn, background: color, textDecoration: 'none' }}>
+              <Link href="/panel/dotacion/entregas/nueva" style={{ ...e.btn, background: 'var(--marca)', textDecoration: 'none' }}>
                 Nueva entrega
               </Link>
               <Link href="/panel/dotacion?tipo=retornable" style={{ ...e.btnSec, textDecoration: 'none' }}>
@@ -239,7 +239,7 @@ export default function VistaDevoluciones({
                   {abierto !== it.id && (
                     <button
                       onClick={() => abrir(it)}
-                      style={{ ...e.btn, background: color }}
+                      style={{ ...e.btn, background: 'var(--marca)' }}
                     >
                       Registrar devolución
                     </button>
@@ -359,7 +359,7 @@ export default function VistaDevoluciones({
                       <button
                         onClick={() => registrar(it)}
                         disabled={ocupado}
-                        style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : color }}
+                        style={{ ...e.btn, background: ocupado ? 'var(--borde-fuerte)' : 'var(--marca)' }}
                       >
                         {pendiente ? 'Registrando…' : 'Confirmar devolución'}
                       </button>

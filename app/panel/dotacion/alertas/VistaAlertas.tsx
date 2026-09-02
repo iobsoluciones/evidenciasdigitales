@@ -48,9 +48,9 @@ export default function VistaAlertas({
             href={`/panel/dotacion/alertas?dias=${d}`}
             style={{
               ...e.botonPeriodo,
-              background: dias === d ? color : 'var(--superficie)',
+              background: dias === d ? 'var(--marca)' : 'var(--superficie)',
               color: dias === d ? 'var(--sobre-marca)' : 'var(--texto-suave)',
-              borderColor: dias === d ? color : 'var(--borde-fuerte)',
+              borderColor: dias === d ? 'var(--marca)' : 'var(--borde-fuerte)',
             }}
           >
             {d} días
@@ -237,7 +237,7 @@ export default function VistaAlertas({
                 </table>
               </div>
 
-              <Link href="/panel/dotacion/devoluciones" style={{ ...e.btn, background: color }}>
+              <Link href="/panel/dotacion/devoluciones" style={{ ...e.btn, background: 'var(--marca)' }}>
                 Ir a devoluciones
               </Link>
             </section>
@@ -299,7 +299,7 @@ function Contador({
       disabled={n === 0}
       style={{
         ...e.contador,
-        borderColor: activo ? color : 'var(--borde)',
+        borderColor: activo ? 'var(--marca)' : 'var(--borde)',
         background: activo ? color + '10' : 'var(--superficie)',
         cursor: n === 0 ? 'default' : 'pointer',
         opacity: n === 0 ? 0.55 : 1,

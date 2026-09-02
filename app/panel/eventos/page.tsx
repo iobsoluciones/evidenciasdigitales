@@ -39,7 +39,7 @@ export default async function PaginaEventos() {
             {empresa.nombre} · la investigación vence a los 15 días del hecho
           </p>
         </div>
-        <Link href="/panel/eventos/nuevo" style={{ ...s.boton, background: color }}>
+        <Link href="/panel/eventos/nuevo" style={{ ...s.boton, background: 'var(--marca)' }}>
           Registrar evento
         </Link>
       </div>

@@ -220,7 +220,7 @@ export default function EditorPreguntasPlantilla({
               onClick={() => actualizar(i, {
                 opciones: [...p.opciones, { texto: '', es_correcta: false }],
               })}
-              style={{ ...e.enlace, color }}
+              style={{ ...e.enlace, color: 'var(--marca-empresa)' }}
             >
               + Agregar opción
             </button>
@@ -251,7 +251,7 @@ export default function EditorPreguntasPlantilla({
           disabled={pendiente || excede}
           style={{
             ...e.btn,
-            background: pendiente || excede ? 'var(--borde-fuerte)' : color,
+            background: pendiente || excede ? 'var(--borde-fuerte)' : 'var(--marca)',
             cursor: pendiente || excede ? 'not-allowed' : 'pointer',
           }}
           title={excede ? 'La suma de puntajes supera 100' : ''}

@@ -112,7 +112,7 @@ export default function VistaAcciones({
       )}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
-        <button onClick={() => setCreando((v) => !v)} style={{ ...e.btn, background: color }}>
+        <button onClick={() => setCreando((v) => !v)} style={{ ...e.btn, background: 'var(--marca)' }}>
           {creando ? 'Cerrar' : '+ Acción manual'}
         </button>
       </div>
@@ -328,7 +328,7 @@ function FormularioNueva({
       <button
         onClick={() => onCrear(f, limpiar)}
         disabled={pendiente}
-        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 12 }}
+        style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 12 }}
       >
         {pendiente ? 'Guardando…' : 'Crear acción'}
       </button>

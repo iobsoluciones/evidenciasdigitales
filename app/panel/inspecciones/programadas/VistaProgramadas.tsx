@@ -118,7 +118,7 @@ export default function VistaProgramadas({
 
         <button
           onClick={() => { setAviso(null); setAbierto(!abierto); }}
-          style={{ ...e.btn, background: abierto ? 'var(--texto-tenue)' : color }}
+          style={{ ...e.btn, background: abierto ? 'var(--texto-tenue)' : 'var(--marca)' }}
         >
           {abierto ? 'Cancelar' : '+ Programar inspección'}
         </button>
@@ -213,7 +213,7 @@ export default function VistaProgramadas({
           <button
             onClick={guardar}
             disabled={pendiente}
-            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color, marginTop: 14 }}
+            style={{ ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)', marginTop: 14 }}
           >
             {pendiente ? 'Guardando…' : 'Programar'}
           </button>

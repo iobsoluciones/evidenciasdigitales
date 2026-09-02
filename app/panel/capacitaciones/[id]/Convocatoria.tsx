@@ -277,7 +277,7 @@ export default function Convocatoria({
                         style={{
                           ...e.persona,
                           background: elegidos.has(em.id) ? 'var(--info-fondo)' : 'var(--superficie)',
-                          borderColor: elegidos.has(em.id) ? color : 'var(--superficie-3)',
+                          borderColor: elegidos.has(em.id) ? 'var(--marca)' : 'var(--superficie-3)',
                         }}
                       >
                         <input
@@ -312,7 +312,7 @@ export default function Convocatoria({
               disabled={pendiente || !hayCambios || soloLectura}
               style={{
                 ...e.btn,
-                background: pendiente || !hayCambios || soloLectura ? 'var(--borde-fuerte)' : color,
+                background: pendiente || !hayCambios || soloLectura ? 'var(--borde-fuerte)' : 'var(--marca)',
                 cursor: pendiente || !hayCambios || soloLectura ? 'not-allowed' : 'pointer',
               }}
             >

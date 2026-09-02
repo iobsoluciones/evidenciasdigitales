@@ -74,7 +74,7 @@ export default function AccionesEjecutivo({
         {/* Enlace directo: el navegador gestiona la descarga */}
         <a
           href={`/api/pdf-ejecutivo/${empresaId}?meses=${meses}`}
-          style={{ ...e.btn, background: color }}
+          style={{ ...e.btn, background: 'var(--marca)' }}
         >
           Descargar PDF
         </a>
@@ -112,7 +112,7 @@ export default function AccionesEjecutivo({
             onClick={enviar}
             disabled={pendiente}
             style={{
-              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : color,
+              ...e.btn, background: pendiente ? 'var(--borde-fuerte)' : 'var(--marca)',
               marginTop: 12, width: '100%', border: 'none', cursor: 'pointer',
             }}
           >
