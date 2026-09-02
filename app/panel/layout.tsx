@@ -117,6 +117,11 @@ const est: Record<string, React.CSSProperties> = {
     gap: 12, padding: '11px 26px',
     borderBottomWidth: 1, borderBottomStyle: 'solid',
     flexWrap: 'wrap', transition: 'background .18s ease',
+    // Fija arriba: el selector de empresa y los accesos transversales se
+    // usan desde cualquier punto de una pantalla larga, y el color de la
+    // barra es la senal de en que empresa estas trabajando. Una senal
+    // que hay que ir a buscar desplazando hacia arriba no avisa de nada.
+    position: 'sticky', top: 0, zIndex: 40,
   },
   acciones: { display: 'flex', alignItems: 'center', gap: 8, marginLeft: 'auto' },
   alerta: {

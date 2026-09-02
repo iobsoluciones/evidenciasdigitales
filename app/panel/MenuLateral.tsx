@@ -391,8 +391,15 @@ export default function MenuLateral({
         .accesos-lateral { display: none; }
         @media (max-width: 900px) {
           .solo-movil { display: flex; }
+          /* Los !important son obligatorios: el lateral lleva
+             \`position: sticky\` y \`height: 100vh\` EN LINEA, y un estilo en
+             linea le gana a la hoja. Sin ellos la regla se escribe, no da
+             error y no hace nada — comprobado con getComputedStyle, que
+             devolvia \`sticky\` en movil. Es el mismo tropiezo que ya paso
+             con la barra de accesos. */
           .lateral {
-            position: fixed; top: 0; left: 0; bottom: 0; z-index: 60;
+            position: fixed !important; top: 0; left: 0; bottom: 0; z-index: 60;
+            height: auto !important; overflow-y: auto;
             transform: translateX(-100%); transition: transform .22s ease;
           }
           .lateral.abierto { transform: translateX(0); }
@@ -406,8 +413,15 @@ export default function MenuLateral({
 const e: Record<string, React.CSSProperties> = {
   lateral: {
     width: 246, flexShrink: 0, background: 'var(--superficie-2)',
-    borderRight: '1px solid var(--borde)', minHeight: '100vh',
+    borderRight: '1px solid var(--borde)',
+    // Se queda pegado arriba y se desplaza POR DENTRO. Antes crecia con
+    // la pagina: en una pantalla baja, para llegar a ACTUAR habia que
+    // desplazar el documento entero y la barra superior se iba con el.
+    position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
     padding: '22px 0', display: 'flex', flexDirection: 'column',
+    // scrollbar-gutter reserva el hueco de la barra: sin esto, el menu
+    // se encoge 8 px cuando aparece y los modulos bailan.
+    scrollbarGutter: 'stable',
   },
   cabecera: { padding: '0 20px 16px', borderBottom: '1px solid var(--borde)' },
   nombre: { fontSize: 14.5, fontWeight: 700, lineHeight: 1.3, letterSpacing: -0.1, color: 'var(--texto)' },

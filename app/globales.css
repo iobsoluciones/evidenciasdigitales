@@ -267,3 +267,25 @@ a[href]:hover, button:not(:disabled):hover, [role='button']:hover, summary:hover
   filter: brightness(1.14);
 }
 button:not(:disabled):active, a[href]:active { filter: brightness(.92); }
+
+/* ================================================================ *
+ *  Barra de desplazamiento del menú lateral
+ * ================================================================ *
+ * El lateral se desplaza por su cuenta, así que tiene su propia barra.
+ * Se dibuja aquí y no en el componente porque `::-webkit-scrollbar` es
+ * un pseudo-elemento: la propiedad `style` de React no sabe expresarlo.
+ *
+ * Discreta en reposo y marcada al pasar por encima: una barra a todo
+ * contraste compite con los módulos, que es lo que hay que leer.
+ */
+.lateral::-webkit-scrollbar { width: 10px; }
+.lateral::-webkit-scrollbar-track { background: transparent; }
+.lateral::-webkit-scrollbar-thumb {
+  background: var(--borde-fuerte);
+  border-radius: 8px;
+  /* El borde del color del fondo adelgaza el pulgar sin que pierda
+     superficie donde agarrarlo con el ratón. */
+  border: 3px solid var(--superficie-2);
+}
+.lateral:hover::-webkit-scrollbar-thumb { background: var(--texto-tenue); }
+.lateral { scrollbar-color: var(--borde-fuerte) transparent; }
