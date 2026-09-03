@@ -45,10 +45,10 @@ export const MANUALES: FichaManual[] = [
   {
     id: 'ingreso',
     titulo: 'Ingreso y primeros pasos',
-    resumen: 'Crear la cuenta, entrar, entender la barra de arriba y el menú por PHVA.',
+    resumen: 'Crear la cuenta, entrar, entender la barra de arriba, el menú por PHVA y el tema.',
     color: 'var(--texto)',
     fase: 'inicio',
-    cubre: ['Registro', 'Ingreso', 'Selector de empresa', 'Menú'],
+    cubre: ['Registro', 'Ingreso', 'Selector de empresa', 'Menú', 'Tema'],
   },
   {
     id: 'empresas',
@@ -202,7 +202,7 @@ export const MANUALES: FichaManual[] = [
   {
     id: 'reportes',
     titulo: 'Reportes, calendario e indicadores',
-    resumen: 'Lo que se entrega a la ARL o al cliente: PDF, Excel y tableros.',
+    resumen: 'Lo que se entrega a la ARL o al cliente, agrupado por fase: PDF, Excel y tableros.',
     color: 'var(--texto-suave)',
     fase: 'cierre',
     cubre: ['Reportes', 'Calendario', 'Indicadores', 'Matrices'],
@@ -305,6 +305,7 @@ function ManualIngreso() {
             '*Selector de empresa:* es el contexto. Todo lo que crees se guarda contra la empresa elegida aquí.',
             '*Accesos rápidos:* Panel principal, Empleados, Calendario, Reportes y Plantillas. Son transversales —no pertenecen a ninguna fase— y por eso viven arriba.',
             '*Menú lateral:* los módulos, agrupados por las cuatro fases del ciclo PHVA, cada una con su color.',
+            '*Manual, Salir y el interruptor de tema*, que es el icono de sol o luna.',
             '*Área de trabajo:* el módulo que hayas abierto.',
           ]}
         >
@@ -315,10 +316,10 @@ function ManualIngreso() {
                 <Boton fantasma marca={2}>Panel</Boton>
                 <Boton fantasma>Empleados</Boton>
                 <Boton fantasma>Calendario</Boton>
-                <Boton fantasma>Reportes</Boton>
+                <Boton fantasma marca={4}>☀</Boton>
               </Fila>
             </Fila>
-            <Titulo marca={4}>Panel principal</Titulo>
+            <Titulo marca={5}>Panel principal</Titulo>
             <Fila gap={8}>
               <Tarjeta titulo="Empresas" dato="3" />
               <Tarjeta titulo="Empleados" dato="128" />
@@ -355,6 +356,52 @@ function ManualIngreso() {
           Es deliberado: casi nadie lee el nombre, pero todo el mundo nota que
           cambió el color. Si el color no es el que esperas, estás en otra
           empresa — revisa el selector antes de guardar.
+        </Ojo>
+        <Regla titulo="La barra no se va y el menú se desplaza aparte">
+          La barra superior queda <strong>fija</strong> aunque bajes por una
+          lista larga, y el menú lateral tiene <strong>su propio
+          desplazamiento</strong>: se mueve por dentro sin arrastrar la página.
+          El motivo es el mismo de siempre: el color de la barra es la señal de
+          en qué empresa estás trabajando, y una señal que hay que ir a buscar
+          hacia arriba no avisa de nada.
+        </Regla>
+      </Seccion>
+
+      <Seccion titulo="Tema claro y oscuro">
+        <P>
+          El interruptor está en la barra de arriba, al lado de <em>Salir</em>.
+          Cambia entre tema claro y oscuro, y <strong>recuerda tu elección</strong>
+          en ese navegador. Si nunca lo tocas, la aplicación usa el tema que
+          tenga configurado tu sistema operativo.
+        </P>
+        <Figura
+          pasos={[
+            'Un sol significa que estás en claro y que al pulsar pasarás a oscuro.',
+            'Una luna significa lo contrario.',
+            'El cambio es inmediato y no recarga nada de lo que estés escribiendo.',
+          ]}
+        >
+          <Flujo
+            pasos={[
+              { titulo: 'Sin elegir', detalle: 'Sigue a tu sistema' },
+              { titulo: 'Pulsas', detalle: 'Cambia al instante' },
+              { titulo: 'Se guarda', detalle: 'En ese navegador' },
+            ]}
+          />
+        </Figura>
+        <Regla titulo="El color de tu cliente se adapta, no se ignora">
+          Los botones siguen llevando el color de la empresa, pero
+          <strong> ajustado al tema</strong>: un azul marino que en fondo blanco
+          se ve perfecto, sobre fondo oscuro serían dos oscuros juntos y el botón
+          desaparecería. El sistema lo aclara lo justo para que se separe del
+          fondo y la etiqueta se siga leyendo. No es que cambie el color de la
+          marca: es el mismo color, puesto donde se ve.
+        </Regla>
+        <Ojo>
+          El tema es <strong>tuyo y de ese navegador</strong>, no de la empresa
+          ni de la cuenta. Si entras desde otro equipo, empieza otra vez por el
+          del sistema. Y los <strong>PDF salen siempre sobre papel blanco</strong>
+          aunque trabajes en oscuro: un acta se imprime.
         </Ojo>
       </Seccion>
     </>
@@ -961,33 +1008,71 @@ function ManualAcciones() {
 function ManualReportes() {
   return (
     <>
-      <Seccion titulo="Qué se puede descargar">
+      <Seccion titulo="Cómo está organizada la pantalla">
+        <P>
+          Los reportes van agrupados por <strong>fase del PHVA</strong>, igual
+          que el menú: el reporte se busca donde se busca el módulo que lo
+          produce. Arriba, aparte, van los que miran el sistema completo.
+        </P>
         <Figura
           pasos={[
-            '*Documentos PDF:* actas de capacitación y de entrega, informes de inspección, cronograma, reporte ejecutivo y tu hoja de vida.',
-            '*Reporte de matriz:* capacitaciones y dotación, ambos en Excel.',
-            '*Inspecciones y plan de acción:* un libro con tres hojas.',
-            '*Kardex de dotación:* movimientos cronológicos con saldo corrido.',
+            '*Del sistema completo:* reporte ejecutivo, indicadores del artículo 30, personal y bitácora de envíos.',
+            '*Planear:* matriz de peligros, cronograma, plan anual y matriz legal.',
+            '*Hacer:* salud, contratistas y alto riesgo, matrices por empleado y capacitaciones.',
+            '*Verificar y actuar:* inspecciones con su plan de acción, accidentalidad y autoevaluación.',
           ]}
         >
           <Ventana titulo="panel / reportes">
             <Titulo>Reportes</Titulo>
             <Fila gap={9}>
-              <Tarjeta titulo="Documentos PDF" pie="Actas e informes" color="#4338CA" marca={1} />
-              <Tarjeta titulo="Reporte de matriz" pie="Capacitaciones · Dotación" color="#4338CA" marca={2} />
+              <Tarjeta titulo="Indicadores art. 30" pie="PDF · los seis de ley" marca={1} />
+              <Tarjeta titulo="Matriz de peligros" pie="Excel · GTC 45" color="#2A6F97" marca={2} />
             </Fila>
             <Fila gap={9}>
-              <Tarjeta titulo="Inspecciones" pie="3 hojas de Excel" color="#4338CA" marca={3} />
-              <Tarjeta titulo="Kardex" pie="Entradas y salidas" color="#4338CA" marca={4} />
+              <Tarjeta titulo="Salud" pie="Excel · 3 hojas" color="#1B5E4A" marca={3} />
+              <Tarjeta titulo="Accidentalidad" pie="Excel · eventos del año" color="#B45309" marca={4} />
             </Fila>
           </Ventana>
         </Figura>
+        <Tabla
+          columnas={['Reporte', 'Formato', 'Para qué sirve']}
+          filas={[
+            ['Indicadores del artículo 30', 'PDF', 'Los seis que exige el Decreto 1072, con su fórmula al lado'],
+            ['Matriz de peligros', 'Excel', 'La identificación GTC 45 completa y el resumen por nivel'],
+            ['Salud de los trabajadores', 'Excel', 'Exámenes, ausentismo y horas-hombre'],
+            ['Accidentalidad', 'Excel', 'Eventos del año, con reporte a la ARL e investigación'],
+            ['Contratistas y alto riesgo', 'Excel', 'Soportes con su fecha de vencimiento y permisos'],
+            ['Personal', 'Excel', 'Activos y retirados, en hojas separadas'],
+            ['Inspecciones y plan de acción', 'Excel', 'Veredicto, hallazgos y estado de cada acción'],
+            ['Matrices por empleado', 'Excel', 'Formación y dotación, rejilla y hoja plana'],
+            ['Kardex de dotación', 'Excel', 'Movimientos cronológicos con saldo corrido'],
+            ['Cronograma y ejecutivo', 'PDF', 'Lo programado del periodo y el resumen para el cliente'],
+          ]}
+        />
         <Regla titulo="Cada matriz trae la rejilla y una hoja plana">
           La rejilla es la que ves en pantalla: sirve para mirar. La hoja
           <strong> Detalle</strong> trae una fila por cada cruce empleado ×
           elemento, y es la que puedes filtrar, ordenar y llevar a una tabla
           dinámica. Una rejilla es un dibujo; una tabla larga es información.
         </Regla>
+      </Seccion>
+
+      <Seccion titulo="Los que dependen de un año o de un documento">
+        <P>
+          El <strong>plan anual</strong>, la <strong>matriz legal</strong> y la
+          <strong> autoevaluación</strong> se descargan desde su propia pantalla,
+          y desde Reportes solo hay un enlace que lleva allí. No es un olvido:
+          cada uno pertenece a un año y a una versión concretos, así que desde
+          aquí habría que preguntarte cuál — y ya lo tenías delante cuando lo
+          abriste. Lo mismo pasa con el acta de una capacitación o el informe de
+          una inspección.
+        </P>
+        <Ojo>
+          Los <strong>indicadores del artículo 30</strong> se dividen entre las
+          horas-hombre del periodo. Si faltan meses por cargar, el informe
+          <strong> lo advierte en vez de dar un cero limpio</strong>: un cero que
+          en realidad significa «no hay datos» se lee como si todo fuera bien.
+        </Ojo>
       </Seccion>
 
       <Seccion titulo="Calendario">
